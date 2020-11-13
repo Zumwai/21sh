@@ -21,12 +21,12 @@ SOUS_FIL = main.c \
 		   builtin/environ.c \
 		   builtin/shelp_cd.c \
 		   builtin/shelp_echo.c \
-		   signals/shelp_signal.c \
 		   builtin/shelp_env.c \
 		   builtin/shelp_ppid.c \
 		   builtin/shelp_exit.c \
 		   builtin/shelp_un_set_env.c \
-		   builtin/shelp_help.c
+		   builtin/shelp_help.c \
+		   signals/shelp_signal.c
 OBJS = $(SOUS_FIL:.c=.o)
 SOUS_F = $(addprefix $(SOUS), $(SOUS_FIL))
 OBJS_F = $(addprefix $(BIN), $(OBJS))

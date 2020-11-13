@@ -12,6 +12,14 @@
 
 #include "shell.h"
 
+static void terminate_child(char *av)
+{
+	ft_putstr_fd("Execve failed to execute ", STDERR_FILENO);
+	ft_putstr_fd(av, STDERR_FILENO);
+	ft_putstr_fd("\nProcess returned code -1\n", STDERR_FILENO);
+	exit(-1);
+}
+
 static char	**ft_convert_back(t_env **ev)
 {
 	char	**tab;
@@ -56,7 +64,7 @@ int			create_child_cmd(t_env **ev, char **av, char *path)
 	if (!f)
 	{
 		if ((execve(path, av, tmp)) == -1)
-			ret = FIN;
+			terminate_child(av[0]);
 	}
 	else if (f > 0)
 		waitpid(f, &status, 0);
