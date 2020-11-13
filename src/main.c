@@ -28,7 +28,7 @@ int		main(int ac, char **av, char **env)
 	{
 		ft_putstr("shelp$>");
 		handle_all_signal(1);
-		status = ft_reader(&ev);
+		status = register_input(&ev);
 		if (!status || status == FIN)
 			break ;
 	}

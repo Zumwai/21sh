@@ -42,7 +42,7 @@ typedef struct	s_env
 	struct s_env *next;
 }				t_env;
 
-int				ft_reader(t_env **ev);
+int				register_input(t_env **ev);
 int				go_do(char **com, t_env **env);
 int				ft_pwd(void);
 int				ft_echo(char **av, t_env **ev);
@@ -69,7 +69,7 @@ int				ft_help(void);
 void			ft_concat(char *str, char **path, char *name);
 char			*get_full_path(char *path, char *name);
 void			handle_empty_error(char *name, char *description);
-int				handle_cd_err(int num, char *name);
+void				handle_cd_err(int num, char *name);
 int				handle_return_error(int num, char *name);
 
 #endif

@@ -12,14 +12,12 @@
 
 #include "minishell.h"
 
-static int		ft_comm(char **com, t_env **env)
+static int		call_commands(char **com, t_env **env)
 {
 	char	**seq;
 	int		call;
 	int		i;
-	int		j;
 
-	j = 0;
 	i = 0;
 	call = 1;
 	while (com[i])
@@ -37,7 +35,7 @@ static int		ft_comm(char **com, t_env **env)
 	return (call);
 }
 
-static int		ft_parse_inp(char *line, char **tmp)
+static int		parse_input(char *line, char **tmp)
 {
 	if (!line)
 		return (0);
@@ -52,7 +50,7 @@ static int		ft_parse_inp(char *line, char **tmp)
 	return (1);
 }
 
-int				ft_reader(t_env **ev)
+int				register_input(t_env **ev)
 {
 	char	*line;
 	char	*tmp;
@@ -62,10 +60,10 @@ int				ft_reader(t_env **ev)
 	line = NULL;
 	tmp = NULL;
 	i = get_next_line(0, &line);
-	if (ft_parse_inp(line, &tmp))
+	if (parse_input(line, &tmp))
 	{
 		com = ft_strsplit(tmp, ';');
-		i = ft_comm(com, ev);
+		i = call_commands(com, ev);
 		ft_free_tab(com);
 		if (tmp)
 			free(tmp);

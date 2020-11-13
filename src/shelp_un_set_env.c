@@ -53,7 +53,7 @@ t_env			*ft_last_env(char *name, char *value)
 	return (tmp);
 }
 
-static int		ft_find_exist(t_env **ev, char **com)
+static int		find_exitsing_env(t_env **ev, char **com)
 {
 	t_env	*curr;
 	t_env	*tmp;
@@ -86,7 +86,7 @@ int				set_env(char **com, t_env **ev)
 		handle_empty_error(com[1], ": Variable name should start with a letter\n");
 		return (1);
 	}
-	return (ft_find_exist(ev, com));
+	return (find_exitsing_env(ev, com));
 }
 
 int				display_env_list(char **com, t_env **ev)

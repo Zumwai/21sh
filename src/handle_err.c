@@ -33,7 +33,7 @@ int		handle_return_error(int num, char *name)
 	return (num);
 }
 
-int		handle_cd_err(int num, char *name)
+void		handle_cd_err(int num, char *name)
 {
 	ft_putstr_fd("-shelp!: ", 2);
 	ft_putstr_fd(name, 2);
