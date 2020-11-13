@@ -1,10 +1,10 @@
-NAME = minishell
+NAME = 21sh
 COM = gcc
-HEAD_MINI = ./includes/
+HEAD_21sh = ./includes/
 HEAD_L = ./libft/
 HEAD_LIB = libft.h
-HEAD_H = minishell.h
-HEAD_F = $(HEAD_MINI) \
+HEAD_H = shell.h
+HEAD_F = $(HEAD_21sh) \
 		$(HEAD_L)
 HEADS = $(addprefix -I, $(HEAD_F))
 LIB_F = ./libft/
@@ -31,15 +31,15 @@ OBJS = $(SOUS_FIL:.c=.o)
 SOUS_F = $(addprefix $(SOUS), $(SOUS_FIL))
 OBJS_F = $(addprefix $(BIN), $(OBJS))
 BIN = ./bin/
-TRASH = minishell.h.gch \
-		minishell.dSYM
+TRASH = shell.h.gch \
+		shell.dSYM
 FLAGS = -Wall -Wextra -Werror
 REMOVE = rm -rf
 
 .PHONY: all clean re
 
 all: $(NAME)
-$(NAME): $(OBJS_F) $(HEAD_MINI)$(HEAD_H) $(LIB_D)
+$(NAME): $(OBJS_F) $(HEAD_21sh)$(HEAD_H) $(LIB_D)
 	$(COM) $(FLAGS) -o $@ $(OBJS_F) $(HEADS) $(LIB_C)
 $(LIB_D): $(LIB_F)
 	$(MAKE) -sC $(LIB_F) all

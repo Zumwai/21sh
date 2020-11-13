@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "shell.h"
 
 void	handle_empty_error(char *name, char *description)
 {
@@ -24,11 +24,11 @@ int		handle_return_error(int num, char *name)
 {
 	ft_putstr_fd("-shelp!: ", 2);
 	ft_putstr_fd(name, 2);
-	if (num == -4 || num == -14)
+	if (num == -4)
 		ft_putstr_fd(": Permission denied\n", 2);
 	else if (num == -6)
 		ft_putstr_fd(": Not an executable\n", 2);
-	else if (num == -12 || num == -13)
+	else if (num == -2 || num == -3)
 		ft_putstr_fd(": No such file or directory\n", 2);
 	return (num);
 }
