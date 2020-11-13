@@ -13,20 +13,20 @@ LIB_D = $(addprefix $(LIB_F), $(LIB))
 LIB_C = -L $(LIB_F) -lft
 SOUS = ./src/
 SOUS_FIL = main.c \
-		   handle_line.c \
-		   command.c \
-		   shelp_exec.c \
-		   handle_err.c \
-		   environ.c \
-		   misc.c \
-		   shelp_cd.c \
-		   shelp_echo.c \
-		   shelp_un_set_env.c \
-		   shelp_signal.c \
-		   shelp_env.c \
-		   shelp_ppid.c \
-		   shelp_exit.c \
-		   shelp_help.c
+		   reader/handle_line.c \
+		   cmd/command.c \
+		   cmd/shelp_exec.c \
+		   utils/handle_err.c \
+		   utils/misc.c \
+		   builtin/environ.c \
+		   builtin/shelp_cd.c \
+		   builtin/shelp_echo.c \
+		   builtin/shelp_signal.c \
+		   builtin/shelp_env.c \
+		   builtin/shelp_ppid.c \
+		   builtin/shelp_exit.c \
+		   builtin/shelp_un_set_env.c \
+		   builtin/shelp_help.c
 OBJS = $(SOUS_FIL:.c=.o)
 SOUS_F = $(addprefix $(SOUS), $(SOUS_FIL))
 OBJS_F = $(addprefix $(BIN), $(OBJS))
@@ -44,7 +44,11 @@ $(NAME): $(OBJS_F) $(HEAD_MINI)$(HEAD_H) $(LIB_D)
 $(LIB_D): $(LIB_F)
 	$(MAKE) -sC $(LIB_F) all
 $(BIN)%.o: $(SOUS)%.c
-	mkdir -p $(BIN) && \
+	@ mkdir -p $(BIN) && \
+	mkdir -p $(BIN)/builtin && \
+	mkdir -p $(BIN)/cmd && \
+	mkdir -p $(BIN)/reader && \
+	mkdir -p $(BIN)/utils && \
 	$(COM) $(FLAGS) -c $< -o $@ $(HEADS)
 clean:
 	@$(REMOVE) $(OBJS_F) $(BIN) $(TRASH)
