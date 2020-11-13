@@ -21,7 +21,7 @@ SOUS_FIL = main.c \
 		   builtin/environ.c \
 		   builtin/shelp_cd.c \
 		   builtin/shelp_echo.c \
-		   builtin/shelp_signal.c \
+		   signals/shelp_signal.c \
 		   builtin/shelp_env.c \
 		   builtin/shelp_ppid.c \
 		   builtin/shelp_exit.c \
@@ -49,6 +49,7 @@ $(BIN)%.o: $(SOUS)%.c
 	mkdir -p $(BIN)/cmd && \
 	mkdir -p $(BIN)/reader && \
 	mkdir -p $(BIN)/utils && \
+	mkdir -p $(BIN)/signals && \
 	$(COM) $(FLAGS) -c $< -o $@ $(HEADS)
 clean:
 	@$(REMOVE) $(OBJS_F) $(BIN) $(TRASH)
