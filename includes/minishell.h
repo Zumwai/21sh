@@ -15,7 +15,7 @@
 
 # include <unistd.h>
 # include <limits.h>
-# include <linux/limits.h>
+# include <linux/limits.h>		//temporary solution for some macros in linux
 # include <dirent.h>
 # include <string.h>
 # include <sys/wait.h>
@@ -28,11 +28,12 @@
 # define HOME	("HOME")
 # define OLDPWD ("OLDPWD")
 # define PWD	("PWD")
-# define FIN	(-42)
-# define LSTA	(-2)
-# define EXIS	(-3)
-# define IXUS	(-4)
-# define NOEX	(-6)
+# define FIN	(0)		//return code for program tewrmination, shoud be in a structure, d-uh(previous value was -42(in case for an error))
+# define LSTA	(-2)	//lstat returned error
+# define EXIS	(-3)	//doesnt exist
+# define IXUS	(-4)	//cant execute by owner
+# define NOEX	(-6)	//couldnt be executed(dir for example)
+# define NODIR	(-7)	//not a dir
 
 typedef struct	s_env
 {

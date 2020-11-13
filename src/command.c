@@ -31,7 +31,7 @@ int					check_rights(char *path, int cd)
 			return (NOEX);
 	if (cd)
 		if (!S_ISDIR(tmp))
-			return (-7);
+			return (NODIR);
 	return (0);
 }
 

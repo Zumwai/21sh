@@ -33,7 +33,7 @@ OBJS_F = $(addprefix $(BIN), $(OBJS))
 BIN = ./bin/
 TRASH = minishell.h.gch \
 		minishell.dSYM
-FLAGS = -g
+FLAGS = -Wall -Wextra -Werror
 REMOVE = rm -rf
 
 .PHONY: all clean re
