@@ -12,10 +12,10 @@
 
 #include "shell.h"
 
-static void terminate_child(char *av)
+static void terminate_child(char *command)
 {
 	ft_putstr_fd("Execve failed to execute ", STDERR_FILENO);
-	ft_putstr_fd(av, STDERR_FILENO);
+	ft_putstr_fd(command, STDERR_FILENO);
 	ft_putstr_fd("\nProcess returned code -1\n", STDERR_FILENO);
 	exit(-1);
 }

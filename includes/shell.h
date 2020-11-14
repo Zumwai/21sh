@@ -24,6 +24,8 @@
 # include <stdio.h>
 # include "libft.h"
 # include <signal.h>
+# include <termios.h>
+# include <termcap.h>
 
 # define HOME	("HOME")
 # define OLDPWD ("OLDPWD")
