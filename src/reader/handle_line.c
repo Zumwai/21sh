@@ -50,16 +50,19 @@ static int		parse_input(char *line, char **tmp)
 	return (1);
 }
 
-int				register_input(t_env **ev)
+int				register_input(t_env **ev, char *line)
 {
-	char	*line;
+//	char	*line;
 	char	*tmp;
 	char	**com;
 	int		i;
 
-	line = NULL;
+//	line = NULL;
 	tmp = NULL;
-	i = get_next_line(0, &line);
+//	i = get_next_line(0, &line);
+	i = 1;
+	if (!line)
+		return (1);
 	if (parse_input(line, &tmp))
 	{
 		com = ft_strsplit(tmp, ';');
@@ -68,6 +71,5 @@ int				register_input(t_env **ev)
 		if (tmp)
 			free(tmp);
 	}
-	free(line);
 	return (i);
 }

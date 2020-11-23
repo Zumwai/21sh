@@ -49,3 +49,11 @@ void	ft_free_tab(char **tab)
 	}
 	free(tab);
 }
+
+int		putchar_like(int n)
+{
+	size_t	size;
+
+	size = write(STDIN_FILENO, &n, 1);
+	return (size);
+}

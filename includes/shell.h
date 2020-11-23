@@ -26,6 +26,7 @@
 # include <signal.h>
 # include <termios.h>
 # include <termcap.h>
+# include <fcntl.h>
 
 # define HOME	("HOME")
 # define OLDPWD ("OLDPWD")
@@ -68,7 +69,7 @@ t_env			*ft_last_env(char *name, char *value);
 	READER
 */
 
-int				register_input(t_env **ev);
+int				register_input(t_env **ev, char *line);
 
 
 /*
@@ -94,5 +95,7 @@ void			handle_empty_error(char *name, char *description);
 void			handle_cd_err(int num, char *name);
 int				handle_return_error(int num, char *name);
 void			ft_free_tab(char **tab);
+void			handle_exit_errors(char *description);
+int				putchar_like(int n);
 
 #endif

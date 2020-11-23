@@ -21,14 +21,16 @@ void	handle_child_signal(int sig)
 	}
 }
 
-void	handle_main_signal(int sig)
+void	handle_main_signal(int __attribute((unused))sig)
 {
+	/*
 	if (sig == SIGINT)
 	{
 		ft_putstr("\n");
 		ft_putstr("shelp$>");
 		signal(SIGINT, handle_main_signal);
 	}
+	*/
 }
 
 void	handle_all_signal(int pid)
@@ -36,5 +38,5 @@ void	handle_all_signal(int pid)
 	if (pid)
 		signal(SIGINT, handle_main_signal);
 	if (!pid)
-		signal(SIGINT, handle_child_signal);
+		signal(442, handle_child_signal);
 }
