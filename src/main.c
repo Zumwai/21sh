@@ -67,21 +67,30 @@ static char	*get_input(void)
 	//tputs(tgetstr("sc", NULL), 1, putchar_like);
 	while (1)
 	{
+			if (!new)
+				new = ft_strnew(buf_size);
 			red = read(STDIN_FILENO, &key, sizeof(key));
 		//	ft_putnbr(key);
 		//	ft_putchar('\n');
-			if (key == 4479771)
+			if (key == 127)
+			{
+				if (index >= 1)
+				{
+					new[--index] = '\0';
+									tputs(tgetstr("le", NULL), 0, putchar_like);
+				}
+			}
+			else if (key == 4479771)
 				tputs(tgetstr("le", NULL), 0, putchar_like);
-			if (key == 4414235)
+			else if (key == 4414235)
 				tputs(tgetstr("nd", NULL), 0, putchar_like);
-			if (key == 27)
+			else if (key == 27)
 			{
 				tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
 				exit(1);
 			}
-			if (!new)
-				new = ft_strnew(buf_size);
-			if (key == '\n')
+
+			else if (key == '\n')
 			{
 				ft_putchar_fd('\n', 1);
 				tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
