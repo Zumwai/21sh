@@ -57,9 +57,9 @@ static char	*get_input(void)
 //	tty.c_lflag &= ~(ECHO | IEXTEN | ISIG);
 	tty.c_cc[VMIN] = 1;
 	tty.c_cc[VTIME] = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &tty);	
+	tcsetattr(STDIN_FILENO, TCSADRAIN, &tty);	
 //	tputs(tgetstr("ti", NULL), 1, putchar_like);
-		ft_putstr_fd("shelp$>", 1);
+	ft_putstr_fd("shelp$>", 1);
 	buf_size = 20;
 	key = 0;
 	new = NULL;
@@ -72,6 +72,7 @@ static char	*get_input(void)
 			red = read(STDIN_FILENO, &key, sizeof(key));
 		//	ft_putnbr(key);
 		//	ft_putchar('\n');
+		//	printf("%d\n", key);
 			if (key == 127)
 			{
 				if (index >= 1)
@@ -81,22 +82,24 @@ static char	*get_input(void)
 				}
 			}
 			else if (key == 4479771)
+				{
 				tputs(tgetstr("le", NULL), 0, putchar_like);
+				}
 			else if (key == 4414235)
 				tputs(tgetstr("nd", NULL), 0, putchar_like);
 			else if (key == 27)
 			{
-				tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
+				tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
 				exit(1);
 			}
 
 			else if (key == '\n')
 			{
 				ft_putchar_fd('\n', 1);
-				tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
+				tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
 				return (new);
 			}
-			else
+			else if (key >= 32 && key <= 127)
 			{
 				if (index >= buf_size)
 				{
@@ -106,6 +109,7 @@ static char	*get_input(void)
 				new[index] = (char)key;
 				index++;
 			}
+
 		//	ft_putstr_fd(tgetstr("cl", NULL), 1);
 
 			tputs(tgetstr("cb", NULL), 1, putchar_like);
@@ -116,8 +120,16 @@ static char	*get_input(void)
 				tputs(tgetstr("#4", NULL), 1, putchar_like);
 			ft_putstr_fd("shelp$>", 1);
 			ft_putstr_fd(new, 1);
-			red = 0;
+
+
+			if (key == 4479771)
+			{
+				tputs(tgetstr("le", NULL), 0, putchar_like);
+			}
+							red = 0;
 			key = 0;
+		//	ft_putstr_fd("   ", 1);
+		//	ft_putstr_fd(ft_itoa(key), 1);
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
 	return (new);
