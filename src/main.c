@@ -49,15 +49,24 @@ static void draw_cursor_line(char *new, t_term *pos)
 {
 	int i = 0;
 	int	tmp = pos->index + pos->prompt;
-	int tmp2 = tmp;
+	//int tmp2 = tmp;
+/*
 	while (tmp2 > pos->x)
 	{
 		tputs(tgetstr("nd", NULL), 0, putchar_like);
 		tmp2--;
 	}
+	*/
+
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
-	while (i++ < pos->prompt + pos->index)
+	tputs(tgetstr("ce", NULL), 1, putchar_like);
+	int left = pos->x;
+	while (i++ < pos->prompt + pos->index){
 		tputs(tgetstr("#4", NULL), 1, putchar_like);
+		left--;
+	}
+	//while (left-- > 0)
+	//	tputs(tgetstr("#4", NULL), 1, putchar_like);
 	ft_putstr_fd("shelp$>", 1);
 	ft_putstr_fd(new, 1);
 	while (tmp-- > pos->x)
@@ -166,9 +175,16 @@ static void insert_char (char *new, t_term *pos, char c)
 static void delete_char(char *new, t_term *pos)
 {
 	int		tmp = pos->index + pos->prompt;
-	if (pos->x == pos->prompt)
-	{
 
+	if (pos->x == pos->prompt && new[0])
+	{
+		char *sub;
+		sub = ft_strdup(&new[1]);
+	//	free(new);
+		new = ft_strcpy(new, sub);
+		new[pos->index] = '\0';
+		free(sub);
+		pos->index--;
 	}
 	else if (pos->x < tmp)
 	{
@@ -182,9 +198,10 @@ static void delete_char(char *new, t_term *pos)
 		{
 				new[curs] = new[curs + 1];
 			//	new[curs] = '\0';
+				printf("aa\n");
 				curs++;
 		}
-		//if (pos->index > 0)
+		if (pos->index > 0)
 			pos->index--;
 	//	pos->x--;
 		new[pos->index] = '\0';
@@ -250,6 +267,10 @@ static char	*get_input(void)
 				move_left(&pos);
 			else if (key == RIGHT)
 				move_right(&pos);
+			else if (key == START)
+				pos.x = pos.prompt;
+			else if (key == END)
+				pos.x = pos.index + pos.prompt;
 			draw_cursor_line(new, &pos);
 			red = 0;
 			key = 0;
