@@ -341,7 +341,6 @@ int		main(int ac, char **av, char **env)
 	line = NULL;
 	while (status)
 	{
-
 		handle_all_signal(1);
 		line = get_input();
 		status = register_input(&ev, line);
