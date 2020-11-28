@@ -45,7 +45,7 @@ static void key_exit(struct termios old_tty)
 	exit(1);
 }
 
-static void draw_cursor_line(char *new, __attribute__((unused))t_term *pos)
+static void draw_cursor_line(char *new, t_term *pos)
 {
 	int i = 0;
 	int	tmp = pos->index + pos->prompt;
@@ -127,20 +127,38 @@ static void insert_char (char *new, t_term *pos, char c)
 	}
 	else
 	{
+		/*
+		int curs = tmp - pos->x;
+		curs = pos->index - curs - 1;
+		if (curs < 0)
+			curs = 0;
+		char	t1;
+		int	t2;
+
+		t1 = new[curs];
+		pos->index++;
+		t2 = pos->index;
+		new[curs] = c;
+		while (t2 >= 0 && curs <= t2 - 1)
+		{
+			new[t2] = new[t2 - 1];
+			t2--;
+		}
+		if (t2 == -1)
+			new[0] = 'Y';
+		else if(t2 >= 0)
+			new[t2] = t1;
+		pos->x++;
+		*/
 		int curs = tmp - pos->x;
 		curs = pos->index - curs;
-		char	teemo;
-		char	beemo;
-		teemo = new[curs];
+		char	*sub;
+		sub = ft_strsub(new, curs, tmp - pos->x + 1);
 		new[curs] = c;
-		curs++;
-		while (new[curs])
-		{
-			beemo = new[curs + 1];
-			new[curs] = teemo;
-			curs++;
-		}
+		new = ft_strcpy(&new[curs + 1], sub);
 		pos->index++;
+		pos->x++;
+		free(sub);
 	}
 }
 

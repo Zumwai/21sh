@@ -44,7 +44,7 @@ $(NAME): $(OBJS_F) $(HEAD_21sh)$(HEAD_H) $(LIB_D)
 $(LIB_D): $(LIB_F)
 	$(MAKE) -sC $(LIB_F) all
 $(BIN)%.o: $(SOUS)%.c
-	@ mkdir -p $(BIN) && \
+	mkdir -p $(BIN) && \
 	mkdir -p $(BIN)/builtin && \
 	mkdir -p $(BIN)/cmd && \
 	mkdir -p $(BIN)/reader && \
