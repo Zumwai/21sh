@@ -74,6 +74,8 @@ t_env			*ft_last_env(char *name, char *value);
 int				register_input(t_env **ev, char *line);
 
 
+
+
 /*
 	CMD
 */

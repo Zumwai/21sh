@@ -47,34 +47,39 @@ static void key_exit(struct termios old_tty)
 
 static void reset_cursor_line(int index, char *new, __attribute__((unused))t_term *pos)
 {
-				int i = 0;
-	while (i++ < 8 + index)
+	int i = 0;
+	int	tmp = index + pos->prompt;
+	tputs(tgetstr("cb", NULL), 1, putchar_like);
+	while (i++ < pos->prompt + index)
 		tputs(tgetstr("#4", NULL), 1, putchar_like);
 	ft_putstr_fd("shelp$>", 1);
 	ft_putstr_fd(new, 1);
+	while (tmp-- > pos->x)
+			tputs(tgetstr("le", NULL), 0, putchar_like);
+
 //	pos->x = 7 + index;
 //	pos->y = 0;
 }
 
 static void move_left(int index, t_term *pos)
 {
-	if (index)
+	if (pos->x > pos->prompt)
 	{
 		pos->x--;
 		int i = pos->x;
-		while (i++ < index + 8)
+		while (i++ < index + pos->prompt)
 			tputs(tgetstr("le", NULL), 0, putchar_like);
 	}
 }
 
 static void move_right(int index, t_term *pos)
 {
-	if (pos->x > index + 7)
+	if (pos->x < index + pos->prompt)
 	{
 		pos->x++;
-		int j = pos->x;
-		while (j++ < index + 8)
-			tputs(tgetstr("nd", NULL), 0, putchar_like);
+	//	int j = pos->x;
+	//	while (j++ < index + pos->prompt)
+	//		tputs(tgetstr("nd", NULL), 0, putchar_like);
 	}
 }
 
@@ -105,6 +110,7 @@ static char	*get_input(void)
 	index = 0;
 	pos.x = 8;
 	pos.y = 0;
+	pos.prompt = ft_strlen("shelp$>") + 1;
 	while (1)
 	{
 			if (!new)
@@ -141,12 +147,11 @@ static char	*get_input(void)
 				pos.x++;
 				index++;
 			}
-			tputs(tgetstr("cb", NULL), 1, putchar_like);
-			reset_cursor_line(index, new, &pos);
-			if (key == LEFT)
+			else if (key == LEFT)
 				move_left(index, &pos);
 			else if (key == RIGHT)
 				move_right(index, &pos);
+			reset_cursor_line(index, new, &pos);
 			red = 0;
 			key = 0;
 	}
