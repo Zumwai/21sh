@@ -46,6 +46,7 @@ static char	*get_input(void)
 	int		index;
 	int		buf_size;
 	char	*new;
+	int		pos = 0;
 	struct termios	old_tty;
 	struct termios	tty;
 
@@ -81,7 +82,6 @@ static char	*get_input(void)
 									tputs(tgetstr("le", NULL), 0, putchar_like);
 				}
 			}
-
 			else if (key == 27)
 			{
 				tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
@@ -117,14 +117,18 @@ static char	*get_input(void)
 			ft_putstr_fd(new, 1);
 			if (key == 4479771)
 			{
-				tputs(tgetstr("le", NULL), 0, putchar_like);
-			}
-			else if (key == 4479771)
-			{
-				tputs(tgetstr("le", NULL), 0, putchar_like);
+				pos++;
+				int i = 0;
+				while (i++ < pos)
+					tputs(tgetstr("le", NULL), 0, putchar_like);
 			}
 			else if (key == 4414235)
-				tputs(tgetstr("nd", NULL), 0, putchar_like);
+			{
+				pos--;
+				int j = 0;
+				while (j > pos && j++ < 1)
+					tputs(tgetstr("nd", NULL), 0, putchar_like);
+			}
 							red = 0;
 			key = 0;
 		//	ft_putstr_fd("   ", 1);
