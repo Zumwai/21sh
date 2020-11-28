@@ -5,7 +5,9 @@
 
 # define LEFT	4479771
 # define RIGHT	4414235
-
+# define ENTER	10
+# define BACKSPACE 127
+# define DELETE	2117294875
 
 typedef struct s_term
 {

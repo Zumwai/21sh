@@ -89,7 +89,7 @@ static void move_right(t_term *pos)
 	}
 }
 
-static void	delete_char(char *new, t_term *pos)
+static void	backspace_char(char *new, t_term *pos)
 {
 	int		tmp = pos->index + pos->prompt;
 
@@ -159,6 +159,35 @@ static void insert_char (char *new, t_term *pos, char c)
 		pos->index++;
 		pos->x++;
 		free(sub);
+		sub = NULL;
+	}
+}
+
+static void delete_char(char *new, t_term *pos)
+{
+	int		tmp = pos->index + pos->prompt;
+	if (pos->x == pos->prompt)
+	{
+
+	}
+	else if (pos->x < tmp)
+	{
+		//new[pos->index] = '\0';
+		//int curs = pos->index - 1 - tmp - pos->x;
+		int curs = tmp - pos->x;
+		curs = pos->index - curs - 1;
+		if (curs < 0)
+			curs = 0;
+		while (curs >= 0 && new[curs] != '\0')
+		{
+				new[curs] = new[curs + 1];
+			//	new[curs] = '\0';
+				curs++;
+		}
+		//if (pos->index > 0)
+			pos->index--;
+	//	pos->x--;
+		new[pos->index] = '\0';
 	}
 }
 
@@ -205,23 +234,18 @@ static char	*get_input(void)
 		//	printf("%d\n", key);
 			if (key == 27)
 				key_exit(old_tty);
-			else if (key == 127)
-				delete_char(new, &pos);
-			else if (key == '\n')
+			else if (key == BACKSPACE)
+				backspace_char(new, &pos);
+			else if (key == ENTER)
 			{
 				ft_putchar_fd('\n', 1);
 				tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
 				return (new);
 			}
+			else if (key == DELETE)
+				delete_char(new, &pos);
 			else if (key >= 32 && key <= 127)
-			{
 				insert_char(new, &pos, key);
-				/*
-				new[pos.index] = (char)key;
-				pos.x++;
-				pos.index++;
-				*/
-			}
 			else if (key == LEFT)
 				move_left(&pos);
 			else if (key == RIGHT)
