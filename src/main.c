@@ -101,15 +101,46 @@ static void	delete_char(char *new, t_term *pos)
 	else if (pos->x > pos->prompt)
 	{
 		//new[pos->index] = '\0';
+		//int curs = pos->index - 1 - tmp - pos->x;
 		int curs = tmp - pos->x;
+		curs = pos->index - curs - 1;
 		while (new[curs] != '\0')
 		{
 				new[curs] = new[curs + 1];
+				//new[curs] = '\0';
 				curs++;
 		}
 		pos->index--;
 		pos->x--;
 		new[pos->index] = '\0';
+	}
+}
+
+static void insert_char (char *new, t_term *pos, char c)
+{
+	int		tmp = pos->index + pos->prompt;
+	if (pos->x == tmp && pos->index >= 0)
+	{
+		new[pos->index] = c;
+		pos->x++;
+		pos->index++;
+	}
+	else
+	{
+		int curs = tmp - pos->x;
+		curs = pos->index - curs;
+		char	teemo;
+		char	beemo;
+		teemo = new[curs];
+		new[curs] = c;
+		curs++;
+		while (new[curs])
+		{
+			beemo = new[curs + 1];
+			new[curs] = teemo;
+			curs++;
+		}
+		pos->index++;
 	}
 }
 
@@ -138,14 +169,14 @@ static char	*get_input(void)
 	key = 0;
 	new = NULL;
 	pos.index = 0;
-	pos.x = 8;
 	pos.y = 0;
 	pos.prompt = ft_strlen("shelp$>") + 1;
+	pos.x = pos.prompt;
 	while (1)
 	{
 			if (!new)
 				new = ft_strnew(buf_size);
-			if (pos.index + 1 >= buf_size)
+			if (pos.index + 2 >= buf_size)
 			{
 				new = get_buf_line(&new, buf_size);
 				buf_size+=20;
@@ -166,9 +197,12 @@ static char	*get_input(void)
 			}
 			else if (key >= 32 && key <= 127)
 			{
+				insert_char(new, &pos, key);
+				/*
 				new[pos.index] = (char)key;
 				pos.x++;
 				pos.index++;
+				*/
 			}
 			else if (key == LEFT)
 				move_left(&pos);
