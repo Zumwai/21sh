@@ -49,6 +49,12 @@ static void draw_cursor_line(char *new, __attribute__((unused))t_term *pos)
 {
 	int i = 0;
 	int	tmp = pos->index + pos->prompt;
+	int tmp2 = tmp;
+	while (tmp2 > pos->x)
+	{
+		tputs(tgetstr("nd", NULL), 0, putchar_like);
+		tmp2--;
+	}
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
 	while (i++ < pos->prompt + pos->index)
 		tputs(tgetstr("#4", NULL), 1, putchar_like);
@@ -92,15 +98,18 @@ static void	delete_char(char *new, t_term *pos)
 		new[--pos->index] = '\0';
 		pos->x--;
 	}
-	else
+	else if (pos->x > pos->prompt)
 	{
-		pos->index--;
-		int curs = pos->x - pos->index;
-		while (new[curs + 1] != '\0')
+		//new[pos->index] = '\0';
+		int curs = tmp - pos->x;
+		while (new[curs] != '\0')
 		{
 				new[curs] = new[curs + 1];
 				curs++;
 		}
+		pos->index--;
+		pos->x--;
+		new[pos->index] = '\0';
 	}
 }
 
@@ -125,7 +134,7 @@ static char	*get_input(void)
 	tty.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &tty);	
 	ft_putstr_fd("shelp$>", 1);
-	buf_size = 50;
+	buf_size = 20;
 	key = 0;
 	new = NULL;
 	pos.index = 0;
@@ -136,6 +145,11 @@ static char	*get_input(void)
 	{
 			if (!new)
 				new = ft_strnew(buf_size);
+			if (pos.index + 1 >= buf_size)
+			{
+				new = get_buf_line(&new, buf_size);
+				buf_size+=20;
+			}
 			red = read(STDIN_FILENO, &key, sizeof(key));
 		//	ft_putnbr(key);
 		//	ft_putchar('\n');
@@ -152,11 +166,6 @@ static char	*get_input(void)
 			}
 			else if (key >= 32 && key <= 127)
 			{
-				if (pos.index >= buf_size)
-				{
-					new = get_buf_line(&new, buf_size);
-					buf_size+=50;
-				}
 				new[pos.index] = (char)key;
 				pos.x++;
 				pos.index++;

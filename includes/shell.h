@@ -32,7 +32,7 @@
 # define HOME	("HOME")
 # define OLDPWD ("OLDPWD")
 # define PWD	("PWD")
-# define FIN	(-42)		//return code for program termination, shoud be in a structure, d-uh(previous value was -42(in case for an error))
+# define FIN	(-42)		//return code for program termination. For personal challenge of not using exit in minishell
 # define LSTA	(-2)	//lstat returned error
 # define EXIS	(-3)	//doesnt exist
 # define IXUS	(-4)	//cant be executed by owner
