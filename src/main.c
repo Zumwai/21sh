@@ -45,12 +45,12 @@ static void key_exit(struct termios old_tty)
 	exit(1);
 }
 
-static void reset_cursor_line(int index, char *new, __attribute__((unused))t_term *pos)
+static void draw_cursor_line(char *new, __attribute__((unused))t_term *pos)
 {
 	int i = 0;
-	int	tmp = index + pos->prompt;
+	int	tmp = pos->index + pos->prompt;
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
-	while (i++ < pos->prompt + index)
+	while (i++ < pos->prompt + pos->index)
 		tputs(tgetstr("#4", NULL), 1, putchar_like);
 	ft_putstr_fd("shelp$>", 1);
 	ft_putstr_fd(new, 1);
@@ -61,20 +61,20 @@ static void reset_cursor_line(int index, char *new, __attribute__((unused))t_ter
 //	pos->y = 0;
 }
 
-static void move_left(int index, t_term *pos)
+static void move_left(t_term *pos)
 {
 	if (pos->x > pos->prompt)
 	{
 		pos->x--;
-		int i = pos->x;
-		while (i++ < index + pos->prompt)
-			tputs(tgetstr("le", NULL), 0, putchar_like);
+	//	int i = pos->x;
+	//	while (i++ < index + pos->prompt)
+	//		tputs(tgetstr("le", NULL), 0, putchar_like);
 	}
 }
 
-static void move_right(int index, t_term *pos)
+static void move_right(t_term *pos)
 {
-	if (pos->x < index + pos->prompt)
+	if (pos->x < pos->index + pos->prompt)
 	{
 		pos->x++;
 	//	int j = pos->x;
@@ -83,11 +83,31 @@ static void move_right(int index, t_term *pos)
 	}
 }
 
+static void delete_char(char *new, t_term *pos)
+{
+	int		tmp = pos->index + pos->prompt;
+
+	if (pos->x == tmp && pos->index > 0)
+	{
+		new[--pos->index] = '\0';
+		pos->x--;
+	}
+	else
+	{
+		char	*sub;
+		sub = ft_strsub(new, tmp - pos->x - 1, tmp - pos->x);
+		new[tmp - pos->x - 1] = '\0';
+		new = ft_strncpy(&new[tmp - pos->x - 1], sub, tmp - pos->x);
+		pos->index--;
+		free(sub);
+	}
+}
+
 static char	*get_input(void)
 {
 	int		red;
 	int		key;
-	int		index;
+//	int		index;
 	int		buf_size;
 	char	*new;
 	struct termios	old_tty;
@@ -104,10 +124,10 @@ static char	*get_input(void)
 	tty.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &tty);	
 	ft_putstr_fd("shelp$>", 1);
-	buf_size = 20;
+	buf_size = 50;
 	key = 0;
 	new = NULL;
-	index = 0;
+	pos.index = 0;
 	pos.x = 8;
 	pos.y = 0;
 	pos.prompt = ft_strlen("shelp$>") + 1;
@@ -122,14 +142,7 @@ static char	*get_input(void)
 			if (key == 27)
 				key_exit(old_tty);
 			else if (key == 127)
-			{
-				if (index > 0)
-				{
-					new[--index] = '\0';
-						tputs(tgetstr("le", NULL), 0, putchar_like);
-					pos.x--;
-				}
-			}
+				delete_char(new, &pos);
 			else if (key == '\n')
 			{
 				ft_putchar_fd('\n', 1);
@@ -138,20 +151,20 @@ static char	*get_input(void)
 			}
 			else if (key >= 32 && key <= 127)
 			{
-				if (index >= buf_size)
+				if (pos.index >= buf_size)
 				{
 					new = get_tmp_line(&new, buf_size);
-					buf_size+=20;
+					buf_size+=50;
 				}
-				new[index] = (char)key;
+				new[pos.index] = (char)key;
 				pos.x++;
-				index++;
+				pos.index++;
 			}
 			else if (key == LEFT)
-				move_left(index, &pos);
+				move_left(&pos);
 			else if (key == RIGHT)
-				move_right(index, &pos);
-			reset_cursor_line(index, new, &pos);
+				move_right(&pos);
+			draw_cursor_line(new, &pos);
 			red = 0;
 			key = 0;
 	}

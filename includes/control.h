@@ -11,6 +11,7 @@ typedef struct s_term
 {
 	int			x;
 	int			y;
+	int			index;
 	int			prompt;
 }				t_term;
 
