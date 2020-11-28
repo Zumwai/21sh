@@ -12,7 +12,7 @@
 
 #include "shell.h"
 
-static char	*get_tmp_line(char **line, int size)
+static char	*get_buf_line(char **line, int size)
 {
 	char	*new;
 
@@ -83,7 +83,7 @@ static void move_right(t_term *pos)
 	}
 }
 
-static void delete_char(char *new, t_term *pos)
+static void	delete_char(char *new, t_term *pos)
 {
 	int		tmp = pos->index + pos->prompt;
 
@@ -94,12 +94,13 @@ static void delete_char(char *new, t_term *pos)
 	}
 	else
 	{
-		char	*sub;
-		sub = ft_strsub(new, tmp - pos->x - 1, tmp - pos->x);
-		new[tmp - pos->x - 1] = '\0';
-		new = ft_strncpy(&new[tmp - pos->x - 1], sub, tmp - pos->x);
 		pos->index--;
-		free(sub);
+		int curs = pos->x - pos->index;
+		while (new[curs + 1] != '\0')
+		{
+				new[curs] = new[curs + 1];
+				curs++;
+		}
 	}
 }
 
@@ -153,7 +154,7 @@ static char	*get_input(void)
 			{
 				if (pos.index >= buf_size)
 				{
-					new = get_tmp_line(&new, buf_size);
+					new = get_buf_line(&new, buf_size);
 					buf_size+=50;
 				}
 				new[pos.index] = (char)key;
