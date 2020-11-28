@@ -27,6 +27,7 @@
 # include <termios.h>
 # include <termcap.h>
 # include <fcntl.h>
+# include "control.h"
 
 # define HOME	("HOME")
 # define OLDPWD ("OLDPWD")
@@ -37,6 +38,7 @@
 # define IXUS	(-4)	//cant be executed by owner
 # define NOEX	(-6)	//couldnt be executed(dir for example)
 # define NODIR	(-7)	//not a dir
+
 
 typedef struct	s_env
 {
@@ -66,7 +68,7 @@ int				display_env_list(char **com, t_env **env);
 t_env			*ft_last_env(char *name, char *value);
 
 /*
-	READER
+	READER, the old one
 */
 
 int				register_input(t_env **ev, char *line);

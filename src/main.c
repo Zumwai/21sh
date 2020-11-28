@@ -22,6 +22,7 @@ static char	*get_tmp_line(char **line, int size)
 	*line = NULL;
 	return (new);
 }
+
 /*
 static int check_arrows(int key)
 {
@@ -38,6 +39,44 @@ static int check_arrows(int key)
 	return (0);
 }
 */
+static void key_exit(struct termios old_tty)
+{
+	tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
+	exit(1);
+}
+
+static void reset_cursor_line(int index, char *new, __attribute__((unused))t_term *pos)
+{
+				int i = 0;
+	while (i++ < 8 + index)
+		tputs(tgetstr("#4", NULL), 1, putchar_like);
+	ft_putstr_fd("shelp$>", 1);
+	ft_putstr_fd(new, 1);
+//	pos->x = 7 + index;
+//	pos->y = 0;
+}
+
+static void move_left(int index, t_term *pos)
+{
+	if (index)
+	{
+		pos->x--;
+		int i = pos->x;
+		while (i++ < index + 8)
+			tputs(tgetstr("le", NULL), 0, putchar_like);
+	}
+}
+
+static void move_right(int index, t_term *pos)
+{
+	if (pos->x > index + 7)
+	{
+		pos->x++;
+		int j = pos->x;
+		while (j++ < index + 8)
+			tputs(tgetstr("nd", NULL), 0, putchar_like);
+	}
+}
 
 static char	*get_input(void)
 {
@@ -46,9 +85,9 @@ static char	*get_input(void)
 	int		index;
 	int		buf_size;
 	char	*new;
-	int		pos = 0;
 	struct termios	old_tty;
 	struct termios	tty;
+	t_term	pos;
 
 	tcgetattr(STDIN_FILENO, &old_tty);
 	tcgetattr(STDIN_FILENO, &tty);
@@ -59,13 +98,13 @@ static char	*get_input(void)
 	tty.c_cc[VMIN] = 1;
 	tty.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &tty);	
-//	tputs(tgetstr("ti", NULL), 1, putchar_like);
 	ft_putstr_fd("shelp$>", 1);
 	buf_size = 20;
 	key = 0;
 	new = NULL;
 	index = 0;
-	//tputs(tgetstr("sc", NULL), 1, putchar_like);
+	pos.x = 8;
+	pos.y = 0;
 	while (1)
 	{
 			if (!new)
@@ -74,20 +113,17 @@ static char	*get_input(void)
 		//	ft_putnbr(key);
 		//	ft_putchar('\n');
 		//	printf("%d\n", key);
-			if (key == 127)
+			if (key == 27)
+				key_exit(old_tty);
+			else if (key == 127)
 			{
-				if (index >= 1)
+				if (index > 0)
 				{
 					new[--index] = '\0';
-									tputs(tgetstr("le", NULL), 0, putchar_like);
+						tputs(tgetstr("le", NULL), 0, putchar_like);
+					pos.x--;
 				}
 			}
-			else if (key == 27)
-			{
-				tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
-				exit(1);
-			}
-
 			else if (key == '\n')
 			{
 				ft_putchar_fd('\n', 1);
@@ -102,37 +138,17 @@ static char	*get_input(void)
 					buf_size+=20;
 				}
 				new[index] = (char)key;
+				pos.x++;
 				index++;
 			}
-
-		//	ft_putstr_fd(tgetstr("cl", NULL), 1);
-
 			tputs(tgetstr("cb", NULL), 1, putchar_like);
-		//	tputs(tgetstr("rc", NULL), 1, putchar_like);
-		//	tputs(tgetstr("cl", NULL), 1, putchar_like);
-			int i = 0;
-			while (i++ <7 + index)
-				tputs(tgetstr("#4", NULL), 1, putchar_like);
-			ft_putstr_fd("shelp$>", 1);
-			ft_putstr_fd(new, 1);
-			if (key == 4479771)
-			{
-				pos++;
-				int i = 0;
-				while (i++ < pos)
-					tputs(tgetstr("le", NULL), 0, putchar_like);
-			}
-			else if (key == 4414235)
-			{
-				pos--;
-				int j = 0;
-				while (j > pos && j++ < 1)
-					tputs(tgetstr("nd", NULL), 0, putchar_like);
-			}
-							red = 0;
+			reset_cursor_line(index, new, &pos);
+			if (key == LEFT)
+				move_left(index, &pos);
+			else if (key == RIGHT)
+				move_right(index, &pos);
+			red = 0;
 			key = 0;
-		//	ft_putstr_fd("   ", 1);
-		//	ft_putstr_fd(ft_itoa(key), 1);
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
 	return (new);
