@@ -12,14 +12,21 @@
 
 #include "shell.h"
 
-static char	*get_buf_line(char **line, int size)
+static char	*get_buf_line(char **line, int *size)
 {
 	char	*new;
 
-	new = ft_strnew(size + 20);
-	ft_strcpy(new, *line);
-	free(*line);
-	*line = NULL;
+	struct winsize dimensions;
+
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
+	new = ft_strnew(*size + dimensions.ws_col);
+	*size += dimensions.ws_col;
+	if (*line != NULL)
+	{
+		ft_strcpy(new, *line);
+		free(*line);
+		*line = NULL;
+	}
 	return (new);
 }
 
@@ -59,11 +66,13 @@ static void draw_cursor_line(char *new, t_term *pos)
 	}
 	*/
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
+	/*
 	if (pos->x + 2 == dimensions.ws_col)
 	{
 		tputs(tgetstr("do", NULL), 1, putchar_like);
 		pos->down = 1;
 	}
+	*/
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
 	tputs(tgetstr("ce", NULL), 1, putchar_like);
 	int left = pos->x;
@@ -287,7 +296,7 @@ static char	*get_input(void)
 	tty.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &tty);	
 	ft_putstr_fd("shelp$>", 1);
-	buf_size = 20;
+	buf_size = 0;
 	key = 0;
 	new = NULL;
 	pos.index = 0;
@@ -295,14 +304,16 @@ static char	*get_input(void)
 	pos.prompt = ft_strlen("shelp$>") + 1;
 	pos.x = pos.prompt;
 	pos.down = 0;
+	new = NULL;
 	while (1)
 	{
 			if (!new)
-				new = ft_strnew(buf_size);
+				new = get_buf_line(&new, &buf_size);
+			//	new = ft_strnew(buf_size);
 			if (pos.index + 2 >= buf_size)
 			{
-				new = get_buf_line(&new, buf_size);
-				buf_size+=20;
+				new = get_buf_line(&new, &buf_size);
+			//	buf_size+=20;
 			}
 			red = read(STDIN_FILENO, &key, sizeof(key));
 		//	ft_putnbr(key);
