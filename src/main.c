@@ -172,6 +172,57 @@ static void insert_char (char *new, t_term *pos, char c)
 	}
 }
 
+static void go_next_word(char __attribute__((unused))*new, t_term __attribute__((unused))*pos)
+{
+	int		tmp = pos->index + pos->prompt;
+	int curs = tmp - pos->x;
+	curs = pos->index - curs;
+
+//	printf("%d\n", curs);
+	while (new[curs] != '\0' && new[curs] == ' ')
+		curs++;
+	while (new[curs] && ft_ischar(new[curs]))
+		curs++;
+//	curs--;
+//	printf("%d\n", curs);
+	pos->x = pos->prompt + curs;
+}
+
+
+static void go_prev_word(char *new, t_term *pos)
+{
+
+	//int		dif = 0;
+	int		tmp = pos->index + pos->prompt;
+	int curs = tmp - pos->x;
+	curs = pos->index - curs - 1;
+	/*
+	if (curs <= 0)
+	{
+		pos->x = pos->prompt;
+		return ;
+	}
+	//printf("%d\n", curs);
+
+	int curs = pos->index + pos->prompt - pos->x;
+	printf("%d\n", curs);
+		*/
+	while (curs > 0 && new[curs] == ' ')
+		curs--;
+	while (curs > 0 && ft_ischar(new[curs]))
+		curs--;
+	//curs++;
+	//		printf("%d\n", curs);
+	if (curs > 0)
+		pos->x = curs + pos->prompt + 1;
+	else
+	{
+		pos->x = pos->prompt;
+	}
+	
+}
+
+
 static void delete_char(char *new, t_term *pos)
 {
 	int		tmp = pos->index + pos->prompt;
@@ -191,14 +242,14 @@ static void delete_char(char *new, t_term *pos)
 		//new[pos->index] = '\0';
 		//int curs = pos->index - 1 - tmp - pos->x;
 		int curs = tmp - pos->x;
-		curs = pos->index - curs - 1;
+		curs = pos->index - curs;
 		if (curs < 0)
 			curs = 0;
 		while (curs >= 0 && new[curs] != '\0')
 		{
 				new[curs] = new[curs + 1];
 			//	new[curs] = '\0';
-				printf("aa\n");
+			//	printf("aa\n");
 				curs++;
 		}
 		if (pos->index > 0)
@@ -211,7 +262,7 @@ static void delete_char(char *new, t_term *pos)
 static char	*get_input(void)
 {
 	int		red;
-	int		key;
+	long long		key;
 //	int		index;
 	int		buf_size;
 	char	*new;
@@ -248,7 +299,8 @@ static char	*get_input(void)
 			red = read(STDIN_FILENO, &key, sizeof(key));
 		//	ft_putnbr(key);
 		//	ft_putchar('\n');
-		//	printf("%d\n", key);
+		
+		//	printf("%lld\n", key);
 			if (key == 27)
 				key_exit(old_tty);
 			else if (key == BACKSPACE)
@@ -271,6 +323,10 @@ static char	*get_input(void)
 				pos.x = pos.prompt;
 			else if (key == END)
 				pos.x = pos.index + pos.prompt;
+			else if (key == L_WORD)
+				go_prev_word(new, &pos);
+			else if (key == R_WORD)
+				go_next_word(new, &pos);
 			draw_cursor_line(new, &pos);
 			red = 0;
 			key = 0;

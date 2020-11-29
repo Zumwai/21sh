@@ -28,6 +28,7 @@
 # include <termcap.h>
 # include <fcntl.h>
 # include "control.h"
+# include <stdbool.h>
 
 # define HOME	("HOME")
 # define OLDPWD ("OLDPWD")
