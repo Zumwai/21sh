@@ -49,6 +49,7 @@ static void draw_cursor_line(char *new, t_term *pos)
 {
 	int i = 0;
 	int	tmp = pos->index + pos->prompt;
+	struct winsize dimensions;
 	//int tmp2 = tmp;
 /*
 	while (tmp2 > pos->x)
@@ -57,7 +58,12 @@ static void draw_cursor_line(char *new, t_term *pos)
 		tmp2--;
 	}
 	*/
-
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
+	if (pos->x + 2 == dimensions.ws_col)
+	{
+		tputs(tgetstr("do", NULL), 1, putchar_like);
+		pos->down = 1;
+	}
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
 	tputs(tgetstr("ce", NULL), 1, putchar_like);
 	int left = pos->x;
@@ -67,7 +73,8 @@ static void draw_cursor_line(char *new, t_term *pos)
 	}
 	//while (left-- > 0)
 	//	tputs(tgetstr("#4", NULL), 1, putchar_like);
-	ft_putstr_fd("shelp$>", 1);
+	if (!pos->down)
+		ft_putstr_fd("shelp$>", 1);
 	ft_putstr_fd(new, 1);
 	while (tmp-- > pos->x)
 			tputs(tgetstr("le", NULL), 0, putchar_like);
@@ -287,6 +294,7 @@ static char	*get_input(void)
 	pos.y = 0;
 	pos.prompt = ft_strlen("shelp$>") + 1;
 	pos.x = pos.prompt;
+	pos.down = 0;
 	while (1)
 	{
 			if (!new)

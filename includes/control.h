@@ -3,6 +3,7 @@
 
 # include "shell.h"
 # include <stdbool.h>
+# include <sys/ioctl.h>
 
 # define LEFT	4479771
 # define RIGHT	4414235
@@ -21,6 +22,7 @@ typedef struct s_term
 	int			index;
 	int			prompt;
 	bool		current;
+	bool		down;
 }				t_term;
 
 
