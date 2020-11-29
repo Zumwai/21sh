@@ -72,7 +72,7 @@ static void draw_line(char *new, t_term *pos)
 	struct winsize dimensions;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	ft_putstr_fd("shelp$>", 1);
-	while (new[i])
+	while (i < pos->index)
 	{
 		while (new[i] && i < dimensions.ws_col)
 		{
@@ -84,8 +84,9 @@ static void draw_line(char *new, t_term *pos)
 			pos->y++;
 			tputs(tgetstr("do", NULL), 0, putchar_like);
 			int j = 0;
-			while (j++ < dimensions.ws_col)
-				tputs(tgetstr("le", NULL), 0, putchar_like);
+			printf("going %d\n", j);
+		//	while (j++ < dimensions.ws_col)
+		//		tputs(tgetstr("le", NULL), 0, putchar_like);
 		}
 	}
 }
