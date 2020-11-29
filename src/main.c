@@ -69,7 +69,7 @@ static void clear_line_y(t_term *pos)
 static void draw_line(char *new, t_term __attribute__((unused))*pos)
 {
 	int		i  = 0;
-	int		j = -pos->prompt;
+	int		j = 8;
 	struct winsize dimensions;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	ft_putstr_fd("shelp$>", 1);
@@ -79,10 +79,13 @@ static void draw_line(char *new, t_term __attribute__((unused))*pos)
 	{
 		ft_putchar_fd(new[i], 1);
 		i++;
-		if (i - j + 1 >= dimensions.ws_col)
+		if (i + j + 1 >= dimensions.ws_col)
 		{
 			j = i;
 			pos->y++;
+			pos->x = 0;
+			tputs(tgetstr("do", NULL), 1, putchar_like);
+			tputs(tgetstr("do", NULL), 1, putchar_like);
 		}
 	}
 }
