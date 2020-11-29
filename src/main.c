@@ -66,6 +66,29 @@ static void clear_line_y(t_term *pos)
 	}
 }
 */
+static void draw_line(char *new, t_term *pos)
+{
+	int		i  = 0;
+	struct winsize dimensions;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
+	ft_putstr_fd("shelp$>", 1);
+	while (new[i])
+	{
+		while (new[i] && i < dimensions.ws_col)
+		{
+			ft_putchar_fd(new[i], 1);
+			i++;
+		}
+		if (new[i])
+		{
+			pos->y++;
+			tputs(tgetstr("do", NULL), 0, putchar_like);
+			int j = 0;
+			while (j++ < dimensions.ws_col)
+				tputs(tgetstr("le", NULL), 0, putchar_like);
+		}
+	}
+}
 
 static void draw_cursor_line(char *new, t_term *pos)
 {
@@ -100,11 +123,15 @@ static void draw_cursor_line(char *new, t_term *pos)
 	//while (left-- > 0)
 	//	tputs(tgetstr("#4", NULL), 1, putchar_like);
 	//if (!pos->down)
-	ft_putstr_fd("shelp$>", 1);
-	ft_putstr_fd(new, 1);
+	//ft_putstr_fd("shelp$>", 1);
+	//ft_putstr_fd(new, 1);
+	draw_line(new, pos);
+	int y = 0;
+	while (y++ < pos->y)
+			tputs(tgetstr("up", NULL), 0, putchar_like);
 	while (tmp-- > pos->x)
 			tputs(tgetstr("le", NULL), 0, putchar_like);
-
+	pos->y = 0;
 //	pos->x = 7 + index;
 //	pos->y = 0;
 }
@@ -192,6 +219,8 @@ static void insert_char (char *new, t_term *pos, char c)
 			new[t2] = t1;
 		pos->x++;
 		*/
+		struct winsize dimensions;
+		ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 		int curs = tmp - pos->x;
 		curs = pos->index - curs;
 		char	*sub;
@@ -199,6 +228,8 @@ static void insert_char (char *new, t_term *pos, char c)
 		new[curs] = c;
 		new = ft_strcpy(&new[curs + 1], sub);
 		pos->index++;
+		if (pos->index + 1 > dimensions.ws_col)
+			pos->y++;
 		pos->x++;
 		free(sub);
 		sub = NULL;
