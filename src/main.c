@@ -66,27 +66,23 @@ static void clear_line_y(t_term *pos)
 	}
 }
 */
-static void draw_line(char *new, t_term *pos)
+static void draw_line(char *new, t_term __attribute__((unused))*pos)
 {
 	int		i  = 0;
+	int		j = -pos->prompt;
 	struct winsize dimensions;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	ft_putstr_fd("shelp$>", 1);
-	while (i < pos->index)
+//	ft_putstr_fd(new, 1);
+	pos->y = 0;
+	while (new[i])
 	{
-		while (new[i] && i < dimensions.ws_col)
+		ft_putchar_fd(new[i], 1);
+		i++;
+		if (i - j + 1 >= dimensions.ws_col)
 		{
-			ft_putchar_fd(new[i], 1);
-			i++;
-		}
-		if (new[i])
-		{
+			j = i;
 			pos->y++;
-			tputs(tgetstr("do", NULL), 0, putchar_like);
-			int j = 0;
-			printf("going %d\n", j);
-		//	while (j++ < dimensions.ws_col)
-		//		tputs(tgetstr("le", NULL), 0, putchar_like);
 		}
 	}
 }
