@@ -52,6 +52,21 @@ static void key_exit(struct termios old_tty)
 	exit(1);
 }
 
+/*
+static void clear_line_y(t_term *pos)
+{
+	int		y;
+
+	y = 0;
+	while (y <= pos->y)
+	{
+			tputs(tgetstr("cb", NULL), 1, putchar_like);
+			tputs(tgetstr("cd", NULL), 1, putchar_like);
+			y++;
+	}
+}
+*/
+
 static void draw_cursor_line(char *new, t_term *pos)
 {
 	int i = 0;
@@ -74,7 +89,9 @@ static void draw_cursor_line(char *new, t_term *pos)
 	}
 	*/
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
-	tputs(tgetstr("ce", NULL), 1, putchar_like);
+	tputs(tgetstr("cd", NULL), 1, putchar_like);
+//	tputs(tgetstr("cb", NULL), 1, putchar_like);
+	//tputs(tgetstr("ce", NULL), 1, putchar_like);
 	int left = pos->x;
 	while (i++ < pos->prompt + pos->index){
 		tputs(tgetstr("#4", NULL), 1, putchar_like);
@@ -82,8 +99,8 @@ static void draw_cursor_line(char *new, t_term *pos)
 	}
 	//while (left-- > 0)
 	//	tputs(tgetstr("#4", NULL), 1, putchar_like);
-	if (!pos->down)
-		ft_putstr_fd("shelp$>", 1);
+	//if (!pos->down)
+	ft_putstr_fd("shelp$>", 1);
 	ft_putstr_fd(new, 1);
 	while (tmp-- > pos->x)
 			tputs(tgetstr("le", NULL), 0, putchar_like);
@@ -237,7 +254,6 @@ static void go_prev_word(char *new, t_term *pos)
 	}
 	
 }
-
 
 static void delete_char(char *new, t_term *pos)
 {
