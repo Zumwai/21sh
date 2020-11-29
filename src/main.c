@@ -19,8 +19,8 @@ static char	*get_buf_line(char **line, int *size)
 	struct winsize dimensions;
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-	new = ft_strnew(*size + dimensions.ws_col);
-	*size += dimensions.ws_col;
+	new = ft_strnew(*size + dimensions.ws_col + 10);
+	*size += dimensions.ws_col + 10;
 	if (*line != NULL)
 	{
 		ft_strcpy(new, *line);
@@ -85,7 +85,7 @@ static void draw_line(char *new, t_term __attribute__((unused))*pos)
 			pos->y++;
 			pos->x = 0;
 			tputs(tgetstr("do", NULL), 1, putchar_like);
-			tputs(tgetstr("do", NULL), 1, putchar_like);
+		//	tputs(tgetstr("do", NULL), 1, putchar_like);
 		}
 	}
 }
@@ -188,7 +188,7 @@ static void	backspace_char(char *new, t_term *pos)
 static void insert_char (char *new, t_term *pos, char c)
 {
 	int		tmp = pos->index + pos->prompt;
-	if (pos->x == tmp && pos->index >= 0)
+	if ((pos->x == tmp && pos->index >= 0) || pos->x == 0)
 	{
 		new[pos->index] = c;
 		pos->x++;
@@ -224,6 +224,7 @@ static void insert_char (char *new, t_term *pos, char c)
 		int curs = tmp - pos->x;
 		curs = pos->index - curs;
 		char	*sub;
+		printf("%d\n%d\n", tmp, pos->x);
 		sub = ft_strsub(new, curs, tmp - pos->x + 1);
 		new[curs] = c;
 		new = ft_strcpy(&new[curs + 1], sub);
