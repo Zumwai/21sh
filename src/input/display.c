@@ -30,16 +30,16 @@ static void draw_line(char *new, t_term __attribute__((unused))*pos)
 	{
 		ft_putchar_fd(new[i], 1);
 		i++;
-		if (i - j + 1 >= dimensions.ws_col)
+		if (i - j >= dimensions.ws_col)
 		{
 			j += i;
 			pos->y++;
 			pos->x = 0;
 			tputs(tgetstr("do", NULL), 1, putchar_like);
 			int k = 0;
-			while (k++ <= dimensions.ws_col)
+			while (k++ <= dimensions.ws_col - 1)
 					tputs(tgetstr("le", NULL), 1, putchar_like);
-		//	tputs(tgetstr("do", NULL), 1, putchar_like);
+			//tputs(tgetstr("do", NULL), 1, putchar_like);
 		}
 	}
 }
@@ -52,18 +52,21 @@ static void draw_cursor_line(char *new, t_term *pos)
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
 	tputs(tgetstr("cd", NULL), 1, putchar_like);
-	int left = pos->x;
-	while (i++ < pos->prompt + pos->index){
-		tputs(tgetstr("#4", NULL), 1, putchar_like);
-		left--;
+//	int left = pos->x;
+//	if (pos->y == 0)
+//	{
+		while (i++ < pos->prompt + pos->index){
+			tputs(tgetstr("le", NULL), 1, putchar_like);
+//		left--;
 	}
+//	}
 	draw_line(new, pos);
 	int y = 0;
 	while (y++ < pos->y)
 			tputs(tgetstr("up", NULL), 0, putchar_like);
 	while (tmp-- > pos->x)
 			tputs(tgetstr("le", NULL), 0, putchar_like);
-	pos->y = 0;
+//	pos->y = 0;
 }
 
 
