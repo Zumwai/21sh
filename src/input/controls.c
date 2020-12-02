@@ -88,7 +88,6 @@ static void go_next_word(char __attribute__((unused))*new, t_term __attribute__(
 	pos->x = pos->prompt + curs;
 }
 
-
 static void go_prev_word(char *new, t_term *pos)
 {
 	int		tmp = pos->index + pos->prompt;
@@ -138,7 +137,6 @@ static void delete_char(char *new, t_term *pos)
 
 int 	read_key(char *new, long long key, t_term *pos, struct termios old)
 {
-
 			if (key == 27)
 				key_exit(old);
 			else if (key == BACKSPACE)

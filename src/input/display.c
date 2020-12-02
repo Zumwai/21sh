@@ -30,13 +30,16 @@ static void draw_line(char *new, t_term __attribute__((unused))*pos)
 	{
 		ft_putchar_fd(new[i], 1);
 		i++;
-		if (i + j + 1 >= dimensions.ws_col)
+		if (i - j + 1 >= dimensions.ws_col)
 		{
-			j = i;
+			j += i;
 			pos->y++;
 			pos->x = 0;
 			tputs(tgetstr("do", NULL), 1, putchar_like);
-			tputs(tgetstr("do", NULL), 1, putchar_like);
+			int k = 0;
+			while (k++ <= dimensions.ws_col)
+					tputs(tgetstr("le", NULL), 1, putchar_like);
+		//	tputs(tgetstr("do", NULL), 1, putchar_like);
 		}
 	}
 }

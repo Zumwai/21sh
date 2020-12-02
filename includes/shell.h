@@ -103,10 +103,5 @@ void			ft_free_tab(char **tab);
 void			handle_exit_errors(char *description);
 int				putchar_like(int n);
 
-/*
-	CONTROLS
-*/
-int 	read_key(char *new, long long key, t_term *pos, struct termios old);
-void	init_tty(void);
-char	*get_input(void);
+
 #endif
