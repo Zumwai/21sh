@@ -21,9 +21,17 @@ typedef struct s_term
 	int			y;
 	int			index;
 	int			prompt;
+	int			buf_size;
 	bool		current;
 	bool		down;
 }				t_term;
 
+/*
+	CONTROLS
+*/
+
+int 	read_key(char *new, long long key, t_term *pos, struct termios old);
+void	init_tty(void);
+char	*get_input(void);
 
 #endif

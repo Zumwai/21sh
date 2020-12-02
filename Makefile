@@ -26,7 +26,9 @@ SOUS_FIL = main.c \
 		   builtin/shelp_exit.c \
 		   builtin/shelp_un_set_env.c \
 		   builtin/shelp_help.c \
-		   signals/shelp_signal.c
+		   signals/shelp_signal.c \
+		   input/controls.c \
+		   input/display.c
 OBJS = $(SOUS_FIL:.c=.o)
 SOUS_F = $(addprefix $(SOUS), $(SOUS_FIL))
 OBJS_F = $(addprefix $(BIN), $(OBJS))
@@ -50,6 +52,7 @@ $(BIN)%.o: $(SOUS)%.c
 	mkdir -p $(BIN)/reader && \
 	mkdir -p $(BIN)/utils && \
 	mkdir -p $(BIN)/signals && \
+	mkdir -p $(BIN)/input && \
 	$(COM) $(FLAGS) -c $< -o $@ $(HEADS)
 clean:
 	@$(REMOVE) $(OBJS_F) $(BIN) $(TRASH)
