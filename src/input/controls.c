@@ -75,7 +75,7 @@ static void insert_char (char *new, t_term *pos, char c)
 	}
 }
 
-static void go_next_word(char __attribute__((unused))*new, t_term __attribute__((unused))*pos)
+static void go_next_word(char __attribute__((unused))*new, t_term *pos)
 {
 	int		tmp = pos->index + pos->prompt;
 	int curs = tmp - pos->x;

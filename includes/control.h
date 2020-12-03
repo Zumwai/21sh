@@ -19,6 +19,8 @@ typedef struct s_term
 {
 	int			x;
 	int			y;
+	int			cur_x;
+	int			cur_y;
 	int			index;
 	int			prompt;
 	int			buf_size;

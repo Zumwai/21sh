@@ -52,24 +52,25 @@ static void draw_cursor_line(char *new, t_term *pos)
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
 	tputs(tgetstr("cd", NULL), 1, putchar_like);
-//	int left = pos->x;
-//	if (pos->y == 0)
-//	{
-		while (i++ < pos->prompt + pos->index){
-			tputs(tgetstr("le", NULL), 1, putchar_like);
-//		left--;
+	while (i++ < pos->prompt + pos->index - 1)
+	{
+		tputs(tgetstr("le", NULL), 1, putchar_like);
 	}
-//	}
 	draw_line(new, pos);
-	int y = 0;
-	while (y++ < pos->y)
-			tputs(tgetstr("up", NULL), 0, putchar_like);
+//	int y = 0;
+//	while (y++ < pos->y)
+//			tputs(tgetstr("up", NULL), 0, putchar_like);
 	while (tmp-- > pos->x)
 			tputs(tgetstr("le", NULL), 0, putchar_like);
 //	pos->y = 0;
 }
 
-
+static int getCursor(void) {
+	int x = 0, y = 0;
+	ft_putstr_fd("\033[6n", 1);
+  	scanf("\033[%d;%dR", &y, &x);
+   return (y);
+}
 
 static t_term init_prompt(struct termios *old_tty)
 {
@@ -86,11 +87,12 @@ static t_term init_prompt(struct termios *old_tty)
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &tty);	
 	ft_putstr_fd("shelp$>", 1);
 	pos.index = 0;
-	pos.y = 0;
 	pos.prompt = ft_strlen("shelp$>") + 1;
+	pos.y = getCursor();
 	pos.x = pos.prompt;
 	pos.down = 0;
 	pos.buf_size = 0;
+//	tputs (tgoto (tgetstr("cm", NULL), 2, 2), 1, putchar_like);
 	return (pos);
 }
 
