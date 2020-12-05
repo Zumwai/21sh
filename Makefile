@@ -35,7 +35,7 @@ OBJS_F = $(addprefix $(BIN), $(OBJS))
 BIN = ./bin/
 TRASH = shell.h.gch \
 		shell.dSYM
-FLAGS = -g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined
+FLAGS = -g -fsanitize=address -fsanitize=undefined
 REMOVE = rm -rf
 
 .PHONY: all clean re

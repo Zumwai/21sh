@@ -65,10 +65,23 @@ static void draw_cursor_line(char *new, t_term *pos)
 //	pos->y = 0;
 }
 
+static void coordinates(__attribute((unused))int *x, __attribute((unused))int *y)
+{
+	char	buf[7];
+	int		red = 0;
+	ft_bzero(buf, 7);
+	red = read(STDIN_FILENO, buf, 7);
+	*x = ft_atoi(&buf[2]);
+	*y = ft_atoi(&buf[5]);
+	printf("%d;%d\n", *x, *y);
+//	printf("%d\n", red);
+}
 static int getCursor(void) {
 	int x = 0, y = 0;
 	ft_putstr_fd("\033[6n", 1);
-  	scanf("\033[%d;%dR", &y, &x);
+  	//scanf("\033[%d;%dR", &y, &x);
+	coordinates(&x, &y);
+	//printf("%d - x; %d - y", x, y);
    return (y);
 }
 

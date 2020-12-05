@@ -11,6 +11,36 @@
 /* ************************************************************************** */
 
 #include "shell.h"
+/*
+char	*exp_input(void)
+{
+
+	char *t;
+	char c;
+
+	t = NULL;
+	t = ft_strnew(200);
+	ft_bzero(t, 200);
+	while(1)
+	{
+		read(STDIN_FILENO, &c, sizeof(c));
+		if (c == 127)
+		{
+			printf("\010 \010");
+			*t = '\0';
+			t--;
+		}
+		else if (c == '\n')
+			return (t);
+		else 
+		{
+			*t = c;
+			t++;
+		}
+	}
+	return (NULL);
+}
+*/
 
 int		main(int ac, char **av, char **env)
 {
@@ -31,6 +61,9 @@ int		main(int ac, char **av, char **env)
 	{
 		handle_all_signal(1);
 		line = get_input();
+		/* For real this time
+		line = exp_input();
+		*/
 		status = register_input(&ev, line);
 		if (line)
 		{
