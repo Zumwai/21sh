@@ -64,7 +64,7 @@ static void draw_cursor_line(char *new, t_term *pos)
 			tputs(tgetstr("le", NULL), 0, putchar_like);
 //	pos->y = 0;
 }
-
+/*
 static void coordinates(__attribute((unused))int *x, __attribute((unused))int *y)
 {
 	char	buf[7];
@@ -84,7 +84,7 @@ static int getCursor(void) {
 	//printf("%d - x; %d - y", x, y);
    return (y);
 }
-
+*/
 static t_term init_prompt(struct termios *old_tty)
 {
 	
@@ -101,7 +101,7 @@ static t_term init_prompt(struct termios *old_tty)
 	ft_putstr_fd("shelp$>", 1);
 	pos.index = 0;
 	pos.prompt = ft_strlen("shelp$>") + 1;
-	pos.y = getCursor();
+//	pos.y = getCursor();
 	pos.x = pos.prompt;
 	pos.down = 0;
 	pos.buf_size = 0;
