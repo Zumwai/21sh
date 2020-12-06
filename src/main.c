@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "shell.h"
-/*
+
 char	*exp_input(void)
 {
 
@@ -42,7 +42,7 @@ char	*exp_input(void)
 	}
 	return (NULL);
 }
-*/
+
 
 int		main(int ac, char **av, char **env)
 {
@@ -62,13 +62,12 @@ int		main(int ac, char **av, char **env)
 	while (status)
 	{
 		handle_all_signal(1);
-
+		/*
 		line = get_input();
-			/*
 		 For real this time
-		 
+		 	*/
 		line = exp_input();
-	*/
+	
 		status = register_input(&ev, line);
 		if (line)
 		{
