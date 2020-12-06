@@ -36,17 +36,3 @@ fclean: clean
 	$(REMOVE) $(NAME)
 
 re: fclean all
-
-#
-#$(NAME): $(STUFF)
-#
-#	@ar rc $(NAME) $(STUFF)
-#	@ranlib $(NAME)
-#%.o: %.c $(HEAD)
-#	@$(COM) -I . $(FLAGS) $< -c -o $@
-#	@$(COM) -I $(SOUS_PRINT) $(FLAGS) $< -c -o $@
-#clean:
-#	@$(REMOVE) $(STUFF)
-#fclean: clean
-#	@$(REMOVE) $(NAME)
-#re: fclean all
