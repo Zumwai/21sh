@@ -12,6 +12,8 @@
 
 #include "get_next_line.h"
 
+
+
 static int		ft_new_node(t_glist **curs, int fd, char **mem)
 {
 	t_glist		*list;

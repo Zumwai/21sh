@@ -11,15 +11,17 @@
 /* ************************************************************************** */
 
 #include "shell.h"
-/*
+
 char	*exp_input(void)
 {
 
 	char *t;
+	char	*head;
 	char c;
 
 	t = NULL;
 	t = ft_strnew(200);
+	head = t;
 	ft_bzero(t, 200);
 	while(1)
 	{
@@ -31,7 +33,7 @@ char	*exp_input(void)
 			t--;
 		}
 		else if (c == '\n')
-			return (t);
+			return (head);
 		else 
 		{
 			*t = c;
@@ -40,7 +42,7 @@ char	*exp_input(void)
 	}
 	return (NULL);
 }
-*/
+
 
 int		main(int ac, char **av, char **env)
 {
@@ -60,10 +62,12 @@ int		main(int ac, char **av, char **env)
 	while (status)
 	{
 		handle_all_signal(1);
+		/*
 		line = get_input();
-		/* For real this time
+		 For real this time
+		 	*/
 		line = exp_input();
-		*/
+	
 		status = register_input(&ev, line);
 		if (line)
 		{
