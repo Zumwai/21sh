@@ -28,6 +28,7 @@ static void	backspace_char(char *new, t_term *pos)
 
 	if (pos->x == tmp && pos->index > 0)
 	{
+		ft_printf("\010 \010");
 		new[--pos->index] = '\0';
 		pos->x--;
 	}

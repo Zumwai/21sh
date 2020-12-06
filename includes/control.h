@@ -4,6 +4,9 @@
 # include "shell.h"
 # include <stdbool.h>
 # include <sys/ioctl.h>
+# include <wchar.h>
+# include <locale.h>
+
 
 # define LEFT	4479771
 # define RIGHT	4414235

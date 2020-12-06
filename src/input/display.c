@@ -76,6 +76,7 @@ static void coordinates(__attribute((unused))int *x, __attribute((unused))int *y
 	printf("%d;%d\n", *x, *y);
 //	printf("%d\n", red);
 }
+/*
 static int getCursor(void) {
 	int x = 0, y = 0;
 	ft_putstr_fd("\033[6n", 1);
@@ -84,7 +85,7 @@ static int getCursor(void) {
 	//printf("%d - x; %d - y", x, y);
    return (y);
 }
-
+*/
 static t_term init_prompt(struct termios *old_tty)
 {
 	
@@ -101,7 +102,8 @@ static t_term init_prompt(struct termios *old_tty)
 	ft_putstr_fd("shelp$>", 1);
 	pos.index = 0;
 	pos.prompt = ft_strlen("shelp$>") + 1;
-	pos.y = getCursor();
+//	pos.y = getCursor();
+	pos.y = 0;
 	pos.x = pos.prompt;
 	pos.down = 0;
 	pos.buf_size = 0;
@@ -138,8 +140,12 @@ char	*get_input(void)
 	key = 0;
 	new = NULL;
 	red = 0;
+	wchar_t abc = 0x20A1;
+	setlocale(LC_CTYPE, "");
+	printf("%lc\n", abc);
 	while (1)
 	{
+		printf("%lc", abc);
 			if (!new)
 				new = get_buf_line(&new, &pos.buf_size);
 			if (pos.index + 2 >= pos.buf_size)

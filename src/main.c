@@ -11,13 +11,13 @@
 /* ************************************************************************** */
 
 #include "shell.h"
-
+/*
 char	*exp_input(void)
 {
 
 	char *t;
 	char	*head;
-	char c;
+	int c;
 
 	t = NULL;
 	t = ft_strnew(200);
@@ -34,16 +34,21 @@ char	*exp_input(void)
 		}
 		else if (c == '\n')
 			return (head);
+		else if (c == LEFT)
+		{
+			printf("\033[1D");
+		}
 		else 
 		{
 			*t = c;
 			t++;
 		}
+		printf("%d\n", c);
 	}
 	return (NULL);
 }
 
-
+*/
 int		main(int ac, char **av, char **env)
 {
 	t_env	*ev;
@@ -62,13 +67,14 @@ int		main(int ac, char **av, char **env)
 	while (status)
 	{
 		handle_all_signal(1);
-		/*
+		
 		line = get_input();
+		/*
 		 For real this time
 		 This is INPUT branch
-		 	*/
+		 
 		line = exp_input();
-	
+		*/
 		status = register_input(&ev, line);
 		if (line)
 		{

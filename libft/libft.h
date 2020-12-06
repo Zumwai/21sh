@@ -90,5 +90,7 @@ t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 int					get_next_line(int fd, char **line);
 int					ft_isletter(char c);
 char				**ft_splitword(char *l);
+int				ft_printf(const char *ft, ...);
+
 
 #endif
