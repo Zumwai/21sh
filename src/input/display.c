@@ -68,8 +68,8 @@ static void draw_cursor_line(char *new, t_term *pos)
 		if (rem == 0)
 			break ;
 	}
-	if (pos->delta_y)
-		temp.delta_y = pos->delta_y - 1;
+//	if (pos->delta_y)
+//		temp.delta_y = pos->delta_y - 1;
 	*pos = temp;
 //	tputs (tgoto (tgetstr("cm", NULL), pos->x - 1, pos->y - 1), 1, putchar_like);
 }
