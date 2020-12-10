@@ -53,7 +53,7 @@ static void draw_cursor_line(char *new, t_term *pos)
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
 	tputs(tgetstr("cd", NULL), 1, putchar_like);
-	tputs (tgoto (tgetstr("cm", NULL), 0, pos->y), 1, putchar_like);
+	tputs (tgoto (tgetstr("cm", NULL), 0, pos->y - 1), 1, putchar_like);
 	ft_putstr_fd("shelp$>", 1);
 	//tputs (tgoto (tgetstr("cm", NULL), pos->x - 1, pos->y), 1, putchar_like);
 //	while (i++ < pos->prompt + pos->index - 1)
@@ -64,6 +64,7 @@ static void draw_cursor_line(char *new, t_term *pos)
 		if (rem == 0)
 			break ;
 	}
+	tputs (tgoto (tgetstr("cm", NULL), pos->x - 1, pos->y - 1), 1, putchar_like);
 //	while (tmp-- > pos->x)
 //			tputs(tgetstr("le", NULL), 0, putchar_like);
 }
