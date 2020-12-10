@@ -18,30 +18,25 @@ static char	*get_buf_line(char **line, int *size)
 	return (new);
 }
 
-static void draw_line(char *new, t_term __attribute__((unused))*pos)
+static void ft_putstr_size(char *new, int size)
 {
-	int		i  = 0;
-	int		j = 8;
+	write(1, new, size);
+}
+
+static void draw_line(char *new, t_term *pos)
+{
+	int		printed = 0;
 	struct winsize dimensions;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-	ft_putstr_fd("shelp$>", 1);
-	pos->y = 0;
-	while (new[i])
+	if (pos->index + pos->prompt >= dimensions.ws_col)
 	{
-		ft_putchar_fd(new[i], 1);
-		i++;
-		if (i - j >= dimensions.ws_col)
-		{
-			j += i;
-			pos->y++;
-			pos->x = 0;
-			tputs(tgetstr("do", NULL), 1, putchar_like);
-			int k = 0;
-			while (k++ <= dimensions.ws_col - 1)
-					tputs(tgetstr("le", NULL), 1, putchar_like);
-			//tputs(tgetstr("do", NULL), 1, putchar_like);
-		}
+		printed += pos->index + pos->prompt;
+		ft_putstr_size(new, printed);
+		tputs(tgoto (tgetstr("cm", NULL), 0, pos->y + 1), 1, putchar_like);
+		pos->y += 1;
 	}
+	else
+		ft_putstr_size(new, pos->index);
 }
 
 static void draw_cursor_line(char *new, t_term *pos)
@@ -53,39 +48,28 @@ static void draw_cursor_line(char *new, t_term *pos)
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
 	tputs(tgetstr("cd", NULL), 1, putchar_like);
 	while (i++ < pos->prompt + pos->index - 1)
-	{
 		tputs(tgetstr("le", NULL), 1, putchar_like);
-	}
 	draw_line(new, pos);
-//	int y = 0;
-//	while (y++ < pos->y)
-//			tputs(tgetstr("up", NULL), 0, putchar_like);
-	while (tmp-- > pos->x)
-			tputs(tgetstr("le", NULL), 0, putchar_like);
-//	pos->y = 0;
+//	while (tmp-- > pos->x)
+//			tputs(tgetstr("le", NULL), 0, putchar_like);
 }
 
-static void coordinates(__attribute((unused))int *x, __attribute((unused))int *y)
+static void coordinates(t_term *pos)
 {
 	char	buf[7];
 	int		red = 0;
 	ft_bzero(buf, 7);
+	ft_printf("\033[6n");
 	red = read(STDIN_FILENO, buf, 7);
-	*x = ft_atoi(&buf[2]);
-	*y = ft_atoi(&buf[5]);
-	printf("%d;%d\n", *x, *y);
-//	printf("%d\n", red);
+	int	i = 0;
+	while (!ft_isdigit(buf[i]))
+		i++;
+	pos->y = ft_atoi(&buf[i]);
+	while(ft_isdigit(buf[i]))
+		i++;
+	pos->x = ft_atoi(&buf[i]);
 }
-/*
-static int getCursor(void) {
-	int x = 0, y = 0;
-	ft_putstr_fd("\033[6n", 1);
-  	//scanf("\033[%d;%dR", &y, &x);
-	coordinates(&x, &y);
-	//printf("%d - x; %d - y", x, y);
-   return (y);
-}
-*/
+
 static t_term init_prompt(struct termios *old_tty)
 {
 	
@@ -98,14 +82,14 @@ static t_term init_prompt(struct termios *old_tty)
 //	tty.c_lflag &= ~(ECHO | IEXTEN | ISIG);
 	tty.c_cc[VMIN] = 1;
 	tty.c_cc[VTIME] = 0;
-	tcsetattr(STDIN_FILENO, TCSADRAIN, &tty);	
+	tcsetattr(STDIN_FILENO, TCSANOW, &tty);	
 	ft_putstr_fd("shelp$>", 1);
 	pos.index = 0;
 	pos.prompt = ft_strlen("shelp$>") + 1;
-//	pos.y = getCursor();
-	pos.y = 0;
-	pos.x = pos.prompt;
-	pos.down = 0;
+	coordinates(&pos);
+	pos.x += pos.prompt;
+	pos.delta_x = 0;
+	pos.delta_y = 0;
 	pos.buf_size = 0;
 //	tputs (tgoto (tgetstr("cm", NULL), 2, 2), 1, putchar_like);
 	return (pos);
@@ -140,12 +124,8 @@ char	*get_input(void)
 	key = 0;
 	new = NULL;
 	red = 0;
-	wchar_t abc = 0x20A1;
-	setlocale(LC_CTYPE, "");
-	printf("%lc\n", abc);
 	while (1)
 	{
-		printf("%lc", abc);
 			if (!new)
 				new = get_buf_line(&new, &pos.buf_size);
 			if (pos.index + 2 >= pos.buf_size)
