@@ -28,17 +28,18 @@ static int draw_line(char *new, t_term *pos, int remainder)
 	int		printed = 0;
 	int		curr = 0;
 	struct winsize dimensions;
-	if (dimensions.ws_col > remainder - pos->x)
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
+	if (dimensions.ws_col >= remainder - pos->x)
 	{
 		ft_putstr_size(new, pos->index);
 		return (0);
 	}
 	else {
-		printed = dimensions.ws_col - pos->x;
+		printed = dimensions.ws_col;
 		ft_putstr_size(new, printed);
-		tputs (tgoto (tgetstr("cm", NULL), 0, pos->y + 1), 1, putchar_like);
+		tputs (tgoto (tgetstr("cm", NULL), 0, pos->y), 1, putchar_like);
 		pos->y += 1;
-		pos->x = 0;
+	//	pos->x = 0;
 		return (remainder - printed);
 	}
 }
@@ -55,9 +56,6 @@ static void draw_cursor_line(char *new, t_term *pos)
 	tputs(tgetstr("cd", NULL), 1, putchar_like);
 	tputs (tgoto (tgetstr("cm", NULL), 0, pos->y - 1), 1, putchar_like);
 	ft_putstr_fd("shelp$>", 1);
-	//tputs (tgoto (tgetstr("cm", NULL), pos->x - 1, pos->y), 1, putchar_like);
-//	while (i++ < pos->prompt + pos->index - 1)
-//		tputs(tgetstr("le", NULL), 1, putchar_like);
 	while (1)
 	{
 		rem = fin = (draw_line(new, pos, rem));
@@ -65,8 +63,6 @@ static void draw_cursor_line(char *new, t_term *pos)
 			break ;
 	}
 	tputs (tgoto (tgetstr("cm", NULL), pos->x - 1, pos->y - 1), 1, putchar_like);
-//	while (tmp-- > pos->x)
-//			tputs(tgetstr("le", NULL), 0, putchar_like);
 }
 
 static void coordinates(t_term *pos)
