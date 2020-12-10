@@ -23,33 +23,47 @@ static void ft_putstr_size(char *new, int size)
 	write(1, new, size);
 }
 
-static void draw_line(char *new, t_term *pos)
+static int draw_line(char *new, t_term *pos, int remainder)
 {
 	int		printed = 0;
+	int		curr = 0;
 	struct winsize dimensions;
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-	if (pos->index + pos->prompt >= dimensions.ws_col)
+	if (dimensions.ws_col > remainder - pos->x)
 	{
-		printed += pos->index + pos->prompt;
-		ft_putstr_size(new, printed);
-		tputs(tgoto (tgetstr("cm", NULL), 0, pos->y + 1), 1, putchar_like);
-		pos->y += 1;
-	}
-	else
 		ft_putstr_size(new, pos->index);
+		return (0);
+	}
+	else {
+		printed = dimensions.ws_col - pos->x;
+		ft_putstr_size(new, printed);
+		tputs (tgoto (tgetstr("cm", NULL), 0, pos->y + 1), 1, putchar_like);
+		pos->y += 1;
+		pos->x = 0;
+		return (remainder - printed);
+	}
 }
 
 static void draw_cursor_line(char *new, t_term *pos)
 {
 	int i = 0;
+	int	rem = pos->index;
+	int	fin = 0;
 	int	tmp = pos->index + pos->prompt;
 	struct winsize dimensions;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
 	tputs(tgetstr("cd", NULL), 1, putchar_like);
-	while (i++ < pos->prompt + pos->index - 1)
-		tputs(tgetstr("le", NULL), 1, putchar_like);
-	draw_line(new, pos);
+	tputs (tgoto (tgetstr("cm", NULL), 0, pos->y), 1, putchar_like);
+	ft_putstr_fd("shelp$>", 1);
+	//tputs (tgoto (tgetstr("cm", NULL), pos->x - 1, pos->y), 1, putchar_like);
+//	while (i++ < pos->prompt + pos->index - 1)
+//		tputs(tgetstr("le", NULL), 1, putchar_like);
+	while (1)
+	{
+		rem = fin = (draw_line(new, pos, rem));
+		if (rem == 0)
+			break ;
+	}
 //	while (tmp-- > pos->x)
 //			tputs(tgetstr("le", NULL), 0, putchar_like);
 }
