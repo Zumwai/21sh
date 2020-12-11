@@ -57,7 +57,7 @@ static void set_cursor(t_term *pos, t_term tmp)
 		{
 			ch_y--;
 			ch_x = dimensions.ws_col + pos->delta_x;
-			pos->x = ch_x + 1;
+			pos->x = ch_x;
 		}
 	}
 	else

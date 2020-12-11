@@ -20,61 +20,29 @@ static void move_right(t_term *pos)
 
 static void	backspace_char(char *new, t_term *pos)
 {
-	int		tmp = pos->index + pos->prompt;
-
-	if (pos->x == tmp && pos->index > 0)
+	int abs = ft_abs(pos->delta_x);
+	if (!pos->delta_x && pos->index)
 	{
 		ft_printf("\010 \010");
 		new[--pos->index] = '\0';
 		pos->x--;
 	}
-	else if (pos->x > pos->prompt)
+	else if (abs < pos->index)
 	{
-		int curs = tmp - pos->x;
-		curs = pos->index - curs - 1;
-		while (new[curs] != '\0')
-		{
-				new[curs] = new[curs + 1];
-				curs++;
-		}
+		ft_memmove(&new[pos->index - abs - 1], &new[pos->index - abs], abs);
 		pos->index--;
 		pos->x--;
-		new[pos->index] = '\0';
 	}
 }
 
 static void insert_char (char *new, t_term *pos, char c)
 {
-	struct winsize dimensions;
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-	int		tmp = pos->index + pos->prompt;
-	if (pos->delta_x == 0)
-	{
-		new[pos->index] = c;
-		pos->x++;
-		pos->index++;
-	}
-	else
-	{
-			/*
-		struct winsize dimensions;
-		ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-		int curs = tmp - pos->x;
-		curs = pos->index - curs;
-		char	*sub;
-	//	printf("%d\n%d\n", tmp, pos->x);
-		sub = ft_strsub(new, curs, tmp - pos->x + 1);
-		new[curs] = c;
-		new = ft_strcpy(&new[curs + 1], sub);
-		pos->index++;
-		if (pos->index + 1 > dimensions.ws_col)
-			pos->y++;
-		pos->x++;
-		free(sub);
-		sub = NULL;
-		*/
+	int abs = ft_abs(pos->delta_x);
 
-	}
+	ft_memmove(&new[pos->index - abs + 1], &new[pos->index - abs], abs);
+	new[pos->index - abs] = c;
+	pos->x++;
+	pos->index++;
 }
 
 static void go_next_word(char __attribute__((unused))*new, t_term *pos)
@@ -109,31 +77,18 @@ static void go_prev_word(char *new, t_term *pos)
 
 static void delete_char(char *new, t_term *pos)
 {
-	int		tmp = pos->index + pos->prompt;
-
-	if (pos->x == pos->prompt && new[0])
+	int abs = ft_abs(pos->delta_x);
+	if (abs == pos->index && pos->index)
 	{
-		char *sub;
-		sub = ft_strdup(&new[1]);
-		new = ft_strcpy(new, sub);
-		new[pos->index] = '\0';
-		free(sub);
+		new = ft_memmove(new, &new[1], pos->index - 1);
 		pos->index--;
+		pos->delta_x++;
 	}
-	else if (pos->x < tmp)
+	else if (abs && abs < pos->index)
 	{
-		int curs = tmp - pos->x;
-		curs = pos->index - curs;
-		if (curs < 0)
-			curs = 0;
-		while (curs >= 0 && new[curs] != '\0')
-		{
-				new[curs] = new[curs + 1];
-				curs++;
-		}
-		if (pos->index > 0)
-			pos->index--;
-		new[pos->index] = '\0';
+		ft_memmove(&new[pos->index - abs], &new[pos->index - abs + 1], abs);
+		pos->index--;
+		pos->delta_x++;
 	}
 }
 
