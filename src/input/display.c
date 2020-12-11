@@ -60,6 +60,10 @@ static void set_cursor(t_term *pos, t_term tmp)
 			pos->x = ch_x + 1;
 		}
 	}
+	else
+	{
+		pos->x += pos->delta_x;
+	}
 	/*
 	else if (pos->delta_x < pos->x)
 	{

@@ -1,5 +1,10 @@
 #include "shell.h"
 
+static int ft_abs(int i)
+{
+	return ((i > 0) ? i : -i);
+}
+
 static void key_exit(struct termios old_tty)
 {
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
@@ -8,16 +13,14 @@ static void key_exit(struct termios old_tty)
 
 static void move_left(t_term *pos)
 {
-	if (pos->delta_x != pos->index)
+	if ((ft_abs(pos->delta_x) - pos->index) != 0)
 	pos->delta_x--;
 }
 
 static void move_right(t_term *pos)
 {
-	if (pos->x < pos->index + pos->prompt)
-	{
-		pos->delta_x++;
-	}
+	if	(pos->delta_x != 0)
+			pos->delta_x++;
 }
 
 static void	backspace_char(char *new, t_term *pos)
