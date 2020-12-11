@@ -17,7 +17,6 @@ static void move_left(t_term *pos)
 		//ft_printf("\a");
 		tputs(tgetstr("bl", NULL), 1, putchar_like);
 	}
-	
 }
 
 static void move_right(t_term *pos)
@@ -113,7 +112,7 @@ static void change_line_down(t_term *pos)
 	if (tmp > 0)
 		return ;
 	else{
-		pos->delta_x = tmp - 1;
+		pos->delta_x = tmp;
 				pos->delta_y++;
 	}
 }
@@ -131,7 +130,7 @@ static void change_line_up(t_term *pos)
 		return ;
 	else
 	{
-		pos->delta_x = -tmp + 1;
+		pos->delta_x = -tmp;
 		pos->delta_y--;
 	}
 }

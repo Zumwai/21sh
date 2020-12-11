@@ -52,20 +52,25 @@ static void set_cursor(t_term *pos, t_term tmp)
 	tempo = dimensions;
 	if (ft_abs(pos->delta_x) > pos->x)
 	{
+		/*
 		int tmp = pos->delta_x + pos->x - 1 ;
-//		if (pos->delta_x < 0)
-//		{
 		int tmp2 = ft_abs(pos->delta_x);
-		
-			while (tmp2 + 1 >= dimensions.ws_col)
-			{
-				tmp2 -= dimensions.ws_col;
-				ch_y--;
-			}
-			pos->x = dimensions.ws_col + tmp;
-		//	ch_y--;
-		//	pos->x = ch_x;
-//		}
+		while (tmp2 + 1 >= dimensions.ws_col)
+		{
+			tmp2 -= dimensions.ws_col;
+			ch_y--;
+		}
+		pos->x = dimensions.ws_col + tmp;
+		*/
+		ch_y--;
+		int tmp = ft_abs(pos->delta_x);
+		tmp -= pos->x;
+		while (tmp >= dimensions.ws_col)
+		{
+			tmp -= dimensions.ws_col;
+			ch_y--;
+		}
+		pos->x = dimensions.ws_col - tmp - 1;
 	}
 	else
 	{
