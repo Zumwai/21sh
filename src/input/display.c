@@ -50,7 +50,7 @@ static void set_cursor(t_term *pos, t_term tmp)
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 //	coordinates(&pos->y, &pos->x);
 	tempo = dimensions;
-	if (pos->delta_x > pos->x)
+	if (ft_abs(pos->delta_x) > pos->x)
 	{
 		pos->delta_x += pos->x;
 		if (pos->delta_x < 0)
@@ -64,20 +64,12 @@ static void set_cursor(t_term *pos, t_term tmp)
 	{
 		pos->x += pos->delta_x;
 	}
-	/*
-	else if (pos->delta_x < pos->x)
-	{
-		pos->x +=pos->delta_x;
-	}
-	*/
+	/* Costul' */
 	int j;
 	if (pos->y == pos->start_y)
 		j = 1;
 	else
-	{
-		j = 0;
-	}
-	
+		j = 0;	
 	tputs (tgoto (tgetstr("cm", NULL), pos->x - j, pos->y + ch_y - 1), 1, putchar_like);
 }
 
@@ -125,10 +117,8 @@ static void draw_cursor_line(char *new, t_term *pos)
 		if (rem == 0)
 			break ;
 	}
-//	*pos = temp;
 	set_cursor(pos, temp);
 	*pos = temp;
-//	tputs (tgoto (tgetstr("cm", NULL), pos->x - 1, pos->y - 1), 1, putchar_like);
 }
 
 
@@ -154,7 +144,6 @@ static t_term init_prompt(struct termios *old_tty)
 	pos.delta_x = 0;
 	pos.delta_y = 0;
 	pos.buf_size = 0;
-//	tputs (tgoto (tgetstr("cm", NULL), 2, 2), 1, putchar_like);
 	return (pos);
 }
 

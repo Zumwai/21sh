@@ -57,3 +57,8 @@ int		putchar_like(int n)
 	size = write(STDIN_FILENO, &n, 1);
 	return (size);
 }
+
+int ft_abs(int i)
+{
+	return ((i > 0) ? i : -i);
+}

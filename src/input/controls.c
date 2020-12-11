@@ -1,10 +1,5 @@
 #include "shell.h"
 
-static int ft_abs(int i)
-{
-	return ((i > 0) ? i : -i);
-}
-
 static void key_exit(struct termios old_tty)
 {
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);

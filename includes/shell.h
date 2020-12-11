@@ -102,6 +102,8 @@ int				handle_return_error(int num, char *name);
 void			ft_free_tab(char **tab);
 void			handle_exit_errors(char *description);
 int				putchar_like(int n);
+int 			ft_abs(int i);
+
 
 
 #endif
