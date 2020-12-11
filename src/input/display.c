@@ -41,10 +41,12 @@ static void set_cursor(t_term *pos, t_term tmp)
 			pos->x = ch_x;
 		}
 	}
+	/*
 	else if (pos->delta_x < pos->x)
 	{
 		pos->x +=pos->delta_x;
 	}
+	*/
 	tputs (tgoto (tgetstr("cm", NULL), pos->x - 1, pos->y + ch_y - 1), 1, putchar_like);
 }
 
@@ -55,9 +57,9 @@ static int draw_line(char *new, t_term *pos, int remainder)
 	struct winsize dimensions;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	curr = 0;
-	if (pos->delta_y == 0)
+	if (pos->y== pos->start_y)
 		curr = pos->prompt;
-	if (dimensions.ws_col >= remainder + curr)
+	if (dimensions.ws_col > remainder + curr)
 	{
 		ft_putstr_size(&new[pos->index - remainder], remainder);
 		pos->x = remainder + curr;
@@ -94,6 +96,7 @@ static void draw_cursor_line(char *new, t_term *pos)
 	}
 //	*pos = temp;
 	set_cursor(pos, temp);
+	*pos = temp;
 //	tputs (tgoto (tgetstr("cm", NULL), pos->x - 1, pos->y - 1), 1, putchar_like);
 }
 
