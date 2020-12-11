@@ -8,10 +8,8 @@ static void key_exit(struct termios old_tty)
 
 static void move_left(t_term *pos)
 {
-	if (pos->x > pos->prompt)
-	{
-		pos->delta_x--;
-	}
+	if (pos->delta_x != pos->index)
+	pos->delta_x--;
 }
 
 static void move_right(t_term *pos)
