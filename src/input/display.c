@@ -52,13 +52,20 @@ static void set_cursor(t_term *pos, t_term tmp)
 	tempo = dimensions;
 	if (ft_abs(pos->delta_x) > pos->x)
 	{
-		pos->delta_x += pos->x - 1 ;
-		if (pos->delta_x < 0)
-		{
-			ch_y--;
-			ch_x = dimensions.ws_col + pos->delta_x;
-			pos->x = ch_x;
-		}
+		int tmp = pos->delta_x + pos->x - 1 ;
+//		if (pos->delta_x < 0)
+//		{
+		int tmp2 = ft_abs(pos->delta_x);
+		
+			while (tmp2 + 1 >= dimensions.ws_col)
+			{
+				tmp2 -= dimensions.ws_col;
+				ch_y--;
+			}
+			pos->x = dimensions.ws_col + tmp;
+		//	ch_y--;
+		//	pos->x = ch_x;
+//		}
 	}
 	else
 	{
@@ -100,7 +107,9 @@ static int draw_line(char *new, t_term *pos, int remainder)
 		}
 		tputs (tgoto (tgetstr("cm", NULL), 0, pos->y), 1, putchar_like);
 		if (!j)
+		{
 			pos->y += 1;
+		}
 		pos->x = 1;
 		return (remainder - printed);
 	}

@@ -9,7 +9,15 @@ static void key_exit(struct termios old_tty)
 static void move_left(t_term *pos)
 {
 	if ((ft_abs(pos->delta_x) - pos->index) != 0)
-	pos->delta_x--;
+		pos->delta_x--;
+	else
+	{
+		/* sound doesn't work */
+		//ft_printf("%c", 7);
+		//ft_printf("\a");
+		tputs(tgetstr("bl", NULL), 1, putchar_like);
+	}
+	
 }
 
 static void move_right(t_term *pos)
@@ -104,8 +112,10 @@ static void change_line_down(t_term *pos)
 
 	if (tmp > 0)
 		return ;
-	else
+	else{
 		pos->delta_x = tmp - 1;
+				pos->delta_y++;
+	}
 }
 
 static void change_line_up(t_term *pos)
@@ -120,7 +130,10 @@ static void change_line_up(t_term *pos)
 	if (tmp > pos->index)
 		return ;
 	else
+	{
 		pos->delta_x = -tmp + 1;
+		pos->delta_y--;
+	}
 }
 
 int 	read_key(char *new, long long key, t_term *pos, struct termios old)
