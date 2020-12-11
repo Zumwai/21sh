@@ -52,7 +52,7 @@ static void set_cursor(t_term *pos, t_term tmp)
 	tempo = dimensions;
 	if (ft_abs(pos->delta_x) > pos->x)
 	{
-		pos->delta_x += pos->x;
+		pos->delta_x += pos->x - 1 ;
 		if (pos->delta_x < 0)
 		{
 			ch_y--;
@@ -183,6 +183,7 @@ char	*get_input(void)
 			if (pos.index + 2 >= pos.buf_size)
 				new = get_buf_line(&new, &pos.buf_size);
 			red = read(STDIN_FILENO, &key, sizeof(key));
+
 			if (read_key(new, key, &pos, old_tty) == -1)
 			{
 				ft_putchar_fd('\n', 1);

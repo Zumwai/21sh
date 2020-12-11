@@ -45,34 +45,37 @@ static void insert_char (char *new, t_term *pos, char c)
 	pos->index++;
 }
 
-static void go_next_word(char __attribute__((unused))*new, t_term *pos)
+static void go_next_word(char *new, t_term *pos)
 {
-	int		tmp = pos->index + pos->prompt;
-	int curs = tmp - pos->x;
-	curs = pos->index - curs;
-	
+	int abs = ft_abs(pos->delta_x);
+
+	int curs = pos->index - abs;
 	while (new[curs] != '\0' && new[curs] == ' ')
 		curs++;
 	while (new[curs] && ft_ischar(new[curs]))
 		curs++;
-	pos->x = pos->prompt + curs;
+	curs = pos->index - curs;
+	pos->delta_x = -curs;
+	if (pos->delta_x > 0)
+		pos->delta_x = 0;
 }
 
 static void go_prev_word(char *new, t_term *pos)
 {
-	int		tmp = pos->index + pos->prompt;
-	int curs = tmp - pos->x;
-	curs = pos->index - curs - 1;
+	int abs = ft_abs(pos->delta_x);
+
+	int curs = pos->index - abs - 1;
 	while (curs > 0 && new[curs] == ' ')
 		curs--;
 	while (curs > 0 && ft_ischar(new[curs]))
 		curs--;
 	if (curs > 0)
-		pos->x = curs + pos->prompt + 1;
-	else
 	{
-		pos->x = pos->prompt;
+		curs = pos->index - curs;
+		pos->delta_x = -curs;
 	}
+	else
+		pos->delta_x = -pos->index;
 }
 
 static void delete_char(char *new, t_term *pos)
@@ -91,6 +94,35 @@ static void delete_char(char *new, t_term *pos)
 		pos->delta_x++;
 	}
 }
+static void change_line_down(t_term *pos)
+{
+	struct winsize dimensions;
+
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
+
+	int tmp = pos->delta_x - dimensions.ws_col;
+
+	if (tmp > 0)
+		return ;
+	else
+		pos->delta_x += tmp;
+}
+
+static void change_line_up(t_term *pos)
+{
+	struct winsize dimensions;
+
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
+
+	int tmp = pos->delta_x - dimensions.ws_col;
+
+	tmp = ft_abs(tmp);
+	if (tmp > pos->index)
+		return ;
+	else
+		pos->delta_x = -tmp;
+	
+}
 
 int 	read_key(char *new, long long key, t_term *pos, struct termios old)
 {
@@ -108,13 +140,18 @@ int 	read_key(char *new, long long key, t_term *pos, struct termios old)
 				move_left(pos);
 			else if (key == RIGHT)
 				move_right(pos);
-			else if (key == START)
-				pos->x = pos->prompt;
-			else if (key == END)
-				pos->x = pos->index + pos->prompt;
 			else if (key == L_WORD)
 				go_prev_word(new, pos);
 			else if (key == R_WORD)
 				go_next_word(new, pos);
+			else if (key == START)
+				pos->delta_x = -pos->index;
+			else if (key == END)
+				pos->delta_x = 0;
+			else if (key == L_UP )
+				change_line_up(pos);
+			else if (key == L_DOWN)
+				change_line_down(pos);
+
 			return (0);
 }

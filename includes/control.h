@@ -17,13 +17,13 @@
 # define END	4610843
 # define L_WORD 74995417045787
 # define R_WORD 73895905418011
+# define L_UP	71696882162459
+# define L_DOWN	72796393790235
 
 typedef struct s_term
 {
 	int			start_x;
 	int			start_y;
-//	int			last_x;
-//	int			last_y;
 	int			x;
 	int			y;
 	int			delta_x;
@@ -31,8 +31,8 @@ typedef struct s_term
 	int			index;
 	int			prompt;
 	int			buf_size;
-	bool		current;
-	bool		down;
+//	bool		current;
+//	bool		down;
 }				t_term;
 
 /*
