@@ -41,7 +41,11 @@ static void set_cursor(t_term *pos, t_term tmp)
 			pos->x = ch_x;
 		}
 	}
-	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + ch_y - 1), 1, putchar_like);
+	else if (pos->delta_x < pos->x)
+	{
+		pos->x +=pos->delta_x;
+	}
+	tputs (tgoto (tgetstr("cm", NULL), pos->x - 1, pos->y + ch_y - 1), 1, putchar_like);
 }
 
 static int draw_line(char *new, t_term *pos, int remainder)
@@ -55,9 +59,8 @@ static int draw_line(char *new, t_term *pos, int remainder)
 		curr = pos->prompt;
 	if (dimensions.ws_col >= remainder + curr)
 	{
-	//	pos->x = remainder;
 		ft_putstr_size(&new[pos->index - remainder], remainder);
-	//	pos->x += remainder;
+		pos->x = remainder + curr;
 		return (0);
 	}
 	else {
@@ -65,7 +68,7 @@ static int draw_line(char *new, t_term *pos, int remainder)
 		ft_putstr_size(&new[pos->index - remainder], printed);
 		tputs (tgoto (tgetstr("cm", NULL), 0, pos->y), 1, putchar_like);
 		pos->y += 1;
-		pos->x = 1;
+		pos->x = 0;
 		return (remainder - printed);
 	}
 }
