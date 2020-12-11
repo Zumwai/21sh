@@ -20,6 +20,10 @@
 
 typedef struct s_term
 {
+	int			start_x;
+	int			start_y;
+//	int			last_x;
+//	int			last_y;
 	int			x;
 	int			y;
 	int			delta_x;

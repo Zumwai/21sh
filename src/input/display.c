@@ -22,6 +22,27 @@ static void ft_putstr_size(char *new, int size)
 {
 	write(1, new, size);
 }
+static void set_cursor(t_term *pos, t_term tmp)
+{
+	struct winsize dimensions;
+	struct winsize tempo;
+	int		ch_x = 0;
+	int		ch_y = 0;
+
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
+	tempo = dimensions;
+	if (pos->delta_x > pos->x)
+	{
+			pos->delta_x += pos->x;
+		if (pos->delta_x < 0)
+		{
+			ch_y--;
+			ch_x = dimensions.ws_col + pos->delta_x;
+			pos->x = ch_x;
+		}
+	}
+	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + ch_y - 1), 1, putchar_like);
+}
 
 static int draw_line(char *new, t_term *pos, int remainder)
 {
@@ -34,16 +55,17 @@ static int draw_line(char *new, t_term *pos, int remainder)
 		curr = pos->prompt;
 	if (dimensions.ws_col >= remainder + curr)
 	{
+	//	pos->x = remainder;
 		ft_putstr_size(&new[pos->index - remainder], remainder);
+	//	pos->x += remainder;
 		return (0);
 	}
 	else {
 		printed = dimensions.ws_col - curr;
 		ft_putstr_size(&new[pos->index - remainder], printed);
 		tputs (tgoto (tgetstr("cm", NULL), 0, pos->y), 1, putchar_like);
-		pos->delta_y += 1;
 		pos->y += 1;
-		pos->x = 0;
+		pos->x = 1;
 		return (remainder - printed);
 	}
 }
@@ -57,20 +79,18 @@ static void draw_cursor_line(char *new, t_term *pos)
 	struct winsize dimensions;
 	t_term		temp = *pos;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-	tputs (tgoto (tgetstr("cm", NULL), 0, pos->y - 1 - pos->delta_y), 1, putchar_like);
+	tputs (tgoto (tgetstr("cm", NULL), 0, pos->start_y - 1), 1, putchar_like);
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
 	tputs(tgetstr("cd", NULL), 1, putchar_like);
 	ft_putstr_fd("shelp$>", 1);
-	pos->delta_y = 0;
 	while (1)
 	{
 		rem = (draw_line(new, pos, rem));
 		if (rem == 0)
 			break ;
 	}
-//	if (pos->delta_y)
-//		temp.delta_y = pos->delta_y - 1;
-	*pos = temp;
+//	*pos = temp;
+	set_cursor(pos, temp);
 //	tputs (tgoto (tgetstr("cm", NULL), pos->x - 1, pos->y - 1), 1, putchar_like);
 }
 
@@ -84,10 +104,10 @@ static void coordinates(t_term *pos)
 	int	i = 0;
 	while (!ft_isdigit(buf[i]))
 		i++;
-	pos->y = ft_atoi(&buf[i]);
+	pos->start_y = ft_atoi(&buf[i]);
 	while(ft_isdigit(buf[i]))
 		i++;
-	pos->x = ft_atoi(&buf[i]);
+	pos->start_x = ft_atoi(&buf[i]);
 }
 
 static t_term init_prompt(struct termios *old_tty)
@@ -108,6 +128,7 @@ static t_term init_prompt(struct termios *old_tty)
 	pos.prompt = ft_strlen("shelp$>") + 1;
 	coordinates(&pos);
 	pos.x += pos.prompt;
+	pos.y = pos.start_y;
 	pos.delta_x = 0;
 	pos.delta_y = 0;
 	pos.buf_size = 0;

@@ -10,7 +10,7 @@ static void move_left(t_term *pos)
 {
 	if (pos->x > pos->prompt)
 	{
-		pos->x--;
+		pos->delta_x--;
 	}
 }
 
@@ -18,7 +18,7 @@ static void move_right(t_term *pos)
 {
 	if (pos->x < pos->index + pos->prompt)
 	{
-		pos->x++;
+		pos->delta_x++;
 	}
 }
 
@@ -49,8 +49,10 @@ static void	backspace_char(char *new, t_term *pos)
 
 static void insert_char (char *new, t_term *pos, char c)
 {
+	struct winsize dimensions;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	int		tmp = pos->index + pos->prompt;
-	if ((pos->x == tmp && pos->index >= 0) || pos->x == 0)
+	if (pos->delta_x == 0)
 	{
 		new[pos->index] = c;
 		pos->x++;
@@ -58,6 +60,7 @@ static void insert_char (char *new, t_term *pos, char c)
 	}
 	else
 	{
+			/*
 		struct winsize dimensions;
 		ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 		int curs = tmp - pos->x;
@@ -73,6 +76,8 @@ static void insert_char (char *new, t_term *pos, char c)
 		pos->x++;
 		free(sub);
 		sub = NULL;
+		*/
+
 	}
 }
 
