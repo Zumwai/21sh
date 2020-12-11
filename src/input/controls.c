@@ -100,12 +100,12 @@ static void change_line_down(t_term *pos)
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 
-	int tmp = pos->delta_x - dimensions.ws_col;
+	int tmp = pos->delta_x + dimensions.ws_col;
 
 	if (tmp > 0)
 		return ;
 	else
-		pos->delta_x += tmp;
+		pos->delta_x = tmp - 1;
 }
 
 static void change_line_up(t_term *pos)
@@ -120,8 +120,7 @@ static void change_line_up(t_term *pos)
 	if (tmp > pos->index)
 		return ;
 	else
-		pos->delta_x = -tmp;
-	
+		pos->delta_x = -tmp + 1;
 }
 
 int 	read_key(char *new, long long key, t_term *pos, struct termios old)

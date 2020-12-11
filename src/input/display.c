@@ -91,8 +91,16 @@ static int draw_line(char *new, t_term *pos, int remainder)
 	else {
 		printed = dimensions.ws_col - curr;
 		ft_putstr_size(&new[pos->index - remainder], printed);
+		int j = 0;
+		if (dimensions.ws_row == pos->y)
+		{
+			tputs(tgetstr("sf", NULL), 1, putchar_like);
+			pos->start_y--;
+			j = 1;
+		}
 		tputs (tgoto (tgetstr("cm", NULL), 0, pos->y), 1, putchar_like);
-		pos->y += 1;
+		if (!j)
+			pos->y += 1;
 		pos->x = 1;
 		return (remainder - printed);
 	}
@@ -118,6 +126,7 @@ static void draw_cursor_line(char *new, t_term *pos)
 			break ;
 	}
 	set_cursor(pos, temp);
+	temp.start_y = pos->start_y;
 	*pos = temp;
 }
 
