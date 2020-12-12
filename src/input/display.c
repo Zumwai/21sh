@@ -31,7 +31,6 @@ static void coordinates(int *start_y, int *start_x)
 	ft_printf("\033[6n");
 	red = read(STDIN_FILENO, buf, 8);
 	buf[red] ='\0';
-	//	ft_bzero(buf, 8);
 	int	i = 0;
 	while (buf[i] && !ft_isdigit(buf[i]))
 		i++;
@@ -91,15 +90,18 @@ static int draw_line(char *new, t_term *pos, int remainder)
 		int j = 0;
 		if (dimensions.ws_row == pos->y && printed + curr== dimensions.ws_col)
 		{
-			tputs(tgetstr("sf", NULL), 1, putchar_like);
+		//	tputs(tgetstr("sf", NULL), 1, putchar_like);
+			ft_printf("\033[S");
 			pos->start_y--;
+			pos->delta_y++;
 			j = 1;
 		}
-		tputs (tgoto (tgetstr("cm", NULL), 0, pos->y), 1, putchar_like);
+		tputs (tgoto (tgetstr("cm", NULL), 0, pos->y - pos->delta_y), 1, putchar_like);
 		if (!j)
 		{
 			pos->y += 1;
 		}
+
 		pos->x = 0; //or 1?
 		return (remainder - printed);
 	}
@@ -125,6 +127,8 @@ static void draw_cursor_line(char *new, t_term *pos)
 			break ;
 	}
 	set_cursor(pos, temp);
+	temp.delta_y = pos->delta_y;
+//	temp.y = pos->y;
 	*pos = temp;
 }
 
@@ -142,7 +146,7 @@ static t_term init_prompt(struct termios *old_tty)
 	tty.c_cc[VMIN] = 1;
 	tty.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &tty);	
-	ft_putstr_fd("shelp$>", 1);
+	ft_putstr_size("shelp$>", 7);
 	pos.index = 0;
 	pos.prompt = ft_strlen("shelp$>");
 	coordinates(&pos.start_y, &pos.start_x);
@@ -174,7 +178,7 @@ char	*get_input(void)
 {
 	size_t		red;
 	struct termios	old_tty;
-	long long		key;
+	long		key;
 	char	*new;
 	t_term	pos;
 

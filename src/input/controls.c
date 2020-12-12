@@ -113,7 +113,7 @@ static void change_line_down(t_term *pos)
 		return ;
 	else{
 		pos->delta_x = tmp;
-				pos->delta_y++;
+	//			pos->delta_y++;
 	}
 }
 
@@ -131,7 +131,7 @@ static void change_line_up(t_term *pos)
 	else
 	{
 		pos->delta_x = -tmp;
-		pos->delta_y--;
+	//	pos->delta_y--;
 	}
 }
 

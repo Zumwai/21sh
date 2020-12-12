@@ -11,44 +11,7 @@
 /* ************************************************************************** */
 
 #include "shell.h"
-/*
-char	*exp_input(void)
-{
 
-	char *t;
-	char	*head;
-	int c;
-
-	t = NULL;
-	t = ft_strnew(200);
-	head = t;
-	ft_bzero(t, 200);
-	while(1)
-	{
-		read(STDIN_FILENO, &c, sizeof(c));
-		if (c == 127)
-		{
-			printf("\010 \010");
-			*t = '\0';
-			t--;
-		}
-		else if (c == '\n')
-			return (head);
-		else if (c == LEFT)
-		{
-			printf("\033[1D");
-		}
-		else 
-		{
-			*t = c;
-			t++;
-		}
-		printf("%d\n", c);
-	}
-	return (NULL);
-}
-
-*/
 int		main(int ac, char **av, char **env)
 {
 	t_env	*ev;
