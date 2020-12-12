@@ -87,7 +87,7 @@ static int draw_line(char *new, t_term *pos, int remainder)
 	else {
 		printed = dimensions.ws_col - curr;
 		ft_putstr_size(&new[pos->index - remainder], printed);
-		if (dimensions.ws_row == pos->y && printed + curr== dimensions.ws_col)
+		if (dimensions.ws_row == pos->y && printed + curr== dimensions.ws_col && pos->x >= dimensions.ws_col)
 		{
 		//	tputs(tgetstr("sf", NULL), 1, putchar_like);
 			ft_printf("\033[S");
