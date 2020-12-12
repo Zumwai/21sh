@@ -31,6 +31,7 @@ static void coordinates(int *start_y, int *start_x)
 	ft_printf("\033[6n");
 	red = read(STDIN_FILENO, buf, 8);
 	buf[red] ='\0';
+	//	ft_bzero(buf, 8);
 	int	i = 0;
 	while (buf[i] && !ft_isdigit(buf[i]))
 		i++;
@@ -38,6 +39,7 @@ static void coordinates(int *start_y, int *start_x)
 	while(buf[i] && ft_isdigit(buf[i]))
 		i++;
 	*start_x = ft_atoi(&buf[i]);
+			ft_bzero(buf, 8);
 }
 
 static void set_cursor(t_term *pos, t_term tmp)
@@ -48,20 +50,9 @@ static void set_cursor(t_term *pos, t_term tmp)
 	int		ch_y = 0;
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-//	coordinates(&pos->y, &pos->x);
 	tempo = dimensions;
 	if (ft_abs(pos->delta_x) > pos->x)
 	{
-		/*
-		int tmp = pos->delta_x + pos->x - 1 ;
-		int tmp2 = ft_abs(pos->delta_x);
-		while (tmp2 + 1 >= dimensions.ws_col)
-		{
-			tmp2 -= dimensions.ws_col;
-			ch_y--;
-		}
-		pos->x = dimensions.ws_col + tmp;
-		*/
 		ch_y--;
 		int tmp = ft_abs(pos->delta_x);
 		tmp -= pos->x;
@@ -70,19 +61,13 @@ static void set_cursor(t_term *pos, t_term tmp)
 			tmp -= dimensions.ws_col;
 			ch_y--;
 		}
-		pos->x = dimensions.ws_col - tmp - 1;
+		pos->x = dimensions.ws_col - tmp;
 	}
 	else
 	{
 		pos->x += pos->delta_x;
 	}
-	/* Costul' */
-	int j;
-	if (pos->y == pos->start_y)
-		j = 1;
-	else
-		j = 0;	
-	tputs (tgoto (tgetstr("cm", NULL), pos->x - j, pos->y + ch_y - 1), 1, putchar_like);
+	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + ch_y - 1), 1, putchar_like);
 }
 
 static int draw_line(char *new, t_term *pos, int remainder)
@@ -104,7 +89,7 @@ static int draw_line(char *new, t_term *pos, int remainder)
 		printed = dimensions.ws_col - curr;
 		ft_putstr_size(&new[pos->index - remainder], printed);
 		int j = 0;
-		if (dimensions.ws_row == pos->y)
+		if (dimensions.ws_row == pos->y && printed + curr== dimensions.ws_col)
 		{
 			tputs(tgetstr("sf", NULL), 1, putchar_like);
 			pos->start_y--;
@@ -115,7 +100,7 @@ static int draw_line(char *new, t_term *pos, int remainder)
 		{
 			pos->y += 1;
 		}
-		pos->x = 1;
+		pos->x = 0; //or 1?
 		return (remainder - printed);
 	}
 }
@@ -140,7 +125,6 @@ static void draw_cursor_line(char *new, t_term *pos)
 			break ;
 	}
 	set_cursor(pos, temp);
-	temp.start_y = pos->start_y;
 	*pos = temp;
 }
 
@@ -160,7 +144,7 @@ static t_term init_prompt(struct termios *old_tty)
 	tcsetattr(STDIN_FILENO, TCSANOW, &tty);	
 	ft_putstr_fd("shelp$>", 1);
 	pos.index = 0;
-	pos.prompt = ft_strlen("shelp$>") + 1;
+	pos.prompt = ft_strlen("shelp$>");
 	coordinates(&pos.start_y, &pos.start_x);
 	pos.x += pos.prompt;
 	pos.y = pos.start_y;
@@ -206,7 +190,6 @@ char	*get_input(void)
 			if (pos.index + 2 >= pos.buf_size)
 				new = get_buf_line(&new, &pos.buf_size);
 			red = read(STDIN_FILENO, &key, sizeof(key));
-
 			if (read_key(new, key, &pos, old_tty) == -1)
 			{
 				ft_putchar_fd('\n', 1);
