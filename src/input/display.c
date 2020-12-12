@@ -23,7 +23,7 @@ static void ft_putstr_size(char *new, int size)
 	write(1, new, size);
 }
 
-static void coordinates(int *start_y, int *start_x)
+static void coordinates(int *start_y, int *start_x) //stackoverflow ./21sh./21sh./21sh esc esc esc
 {
 	char	buf[8];
 	int		red = 0;
@@ -92,9 +92,9 @@ static int draw_line(char *new, t_term *pos, int remainder)
 		//	tputs(tgetstr("sf", NULL), 1, putchar_like);
 			ft_printf("\033[S");
 			pos->start_y--;
-			pos->delta_y--;
+		//	pos->delta_y--;
 		}
-		else
+		else if (printed + curr == dimensions.ws_col)
 		{
 			pos->delta_y += 1;
 		}
