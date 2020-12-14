@@ -76,7 +76,7 @@ static int draw_line(char *new, t_term *pos, int remainder)
 	struct winsize dimensions;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	curr = 0;
-	if (pos->y + pos->delta_y== pos->start_y) // delta_y
+	if (!pos->delta_y) // delta_y
 		curr = pos->prompt;
 	if (dimensions.ws_col > remainder + curr)
 	{
@@ -123,6 +123,7 @@ static void draw_cursor_line(char *new, t_term *pos)
 			break ;
 	}
 	set_cursor(pos, temp);
+	pos->delta_y = 0;
 //	temp.delta_y = pos->delta_y;
 //	temp.y = pos->y;
 //	*pos = temp;
