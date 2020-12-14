@@ -45,20 +45,18 @@ static void set_cursor(t_term *pos, t_term tmp)
 {
 	struct winsize dimensions;
 	struct winsize tempo;
-	int		ch_x = 0;
-	int		ch_y = 0;
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	tempo = dimensions;
 	if (ft_abs(pos->delta_x) > pos->x)
 	{
-		ch_y--;
+		pos->delta_y--;
 		int tmp = ft_abs(pos->delta_x);
 		tmp -= pos->x;
 		while (tmp >= dimensions.ws_col)
 		{
+			pos->delta_y--;
 			tmp -= dimensions.ws_col;
-			ch_y--;
 		}
 		pos->x = dimensions.ws_col - tmp;
 	}
@@ -66,7 +64,7 @@ static void set_cursor(t_term *pos, t_term tmp)
 	{
 		pos->x += pos->delta_x;
 	}
-	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y + ch_y - 1), 1, putchar_like);
+	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->start_y + pos->delta_y - 1), 1, putchar_like);
 }
 
 static int draw_line(char *new, t_term *pos, int remainder)
@@ -76,7 +74,7 @@ static int draw_line(char *new, t_term *pos, int remainder)
 	struct winsize dimensions;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	curr = 0;
-	if (!pos->delta_y) // delta_y
+	if (!pos->delta_y)
 		curr = pos->prompt;
 	if (dimensions.ws_col > remainder + curr)
 	{
@@ -92,7 +90,7 @@ static int draw_line(char *new, t_term *pos, int remainder)
 		//	tputs(tgetstr("sf", NULL), 1, putchar_like);
 			ft_printf("\033[S");
 			pos->start_y--;
-		//	pos->delta_y--;
+			pos->delta_y--;
 		}
 		else if (printed + curr == dimensions.ws_col)
 		{
