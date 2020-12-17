@@ -52,3 +52,4 @@ void	handle_exit_errors(char *description)
 //	reset_tty();
 	exit(EXIT_FAILURE);
 }
+

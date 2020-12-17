@@ -103,6 +103,7 @@ void			ft_free_tab(char **tab);
 void			handle_exit_errors(char *description);
 int				putchar_like(int n);
 int 			ft_abs(int i);
+void 			ft_putstr_size(char *line, size_t size);
 
 
 

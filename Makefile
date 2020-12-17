@@ -18,6 +18,7 @@ SOUS_FIL = main.c \
 		   cmd/shelp_exec.c \
 		   utils/handle_err.c \
 		   utils/misc.c \
+		   utils/utils.c \
 		   builtin/environ.c \
 		   builtin/shelp_cd.c \
 		   builtin/shelp_echo.c \
@@ -28,7 +29,8 @@ SOUS_FIL = main.c \
 		   builtin/shelp_help.c \
 		   signals/shelp_signal.c \
 		   input/controls.c \
-		   input/display.c
+		   input/display.c \
+		   input/reader.c
 OBJS = $(SOUS_FIL:.c=.o)
 SOUS_F = $(addprefix $(SOUS), $(SOUS_FIL))
 OBJS_F = $(addprefix $(BIN), $(OBJS))

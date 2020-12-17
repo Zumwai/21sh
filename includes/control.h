@@ -42,5 +42,7 @@ typedef struct s_term
 int 	read_key(char *new, long long key, t_term *pos, struct termios old);
 void	init_tty(void);
 char	*get_input(void);
+void	draw_cursor_line(char *new, t_term *pos);
+
 
 #endif

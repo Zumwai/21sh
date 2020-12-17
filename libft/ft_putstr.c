@@ -14,8 +14,9 @@
 
 void	ft_putstr(char const *s)
 {
+	int		i = 0;
 	if (!s)
 		return ;
-	while (*s)
-		write(1, s++, 1);
+	i = ft_strlen(s);
+	write(1, s, i);
 }
