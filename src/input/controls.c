@@ -16,15 +16,19 @@ void	cut_word(char *new, t_term *pos)
 
 	if (pos->yanked)
 		set_free_null(pos->yanked);
-	curr = pos->index - abs;
+	if (pos->index == 0)
+		return ;
+	curr = pos->index - abs - 1;
 	end = curr;
 	while(curr > 0 && new[curr] == ' ')
 		curr--;
 	while(curr > 0 && ft_ischar(new[curr]))
 		curr--;
+	curr++;
 	pos->yanked = ft_strsub(new, curr, end - curr);
 	ft_memmove(&new[curr], &new[end], pos->index - end);
-	pos->index -= pos->index - end;
+	pos->index -= (end - curr) + 1;
+	ft_memset(&new[pos->index], 0, end - curr);
 		/*
 	ft_memmove(new, &new[curr], end - curr);
 	ft_memset(&new[pos->index - curr], 0, curr);
