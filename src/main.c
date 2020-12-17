@@ -12,6 +12,22 @@
 
 #include "shell.h"
 
+static void		init_tty(void)
+{
+	int		res;
+	char	*tty_name;
+
+	if (!(tty_name = getenv("TERM")))
+		handle_exit_errors("terminal type is not defined\n");
+	if (!isatty(STDIN_FILENO))
+		handle_exit_errors("should be run in a terminal\n");
+	res = tgetent(NULL, tty_name);
+	if (res < 0)
+		handle_exit_errors("could not access the termcap data base\n");
+	if (!res)
+		handle_exit_errors("specify a valid terminal name with setenv\n");
+}
+
 int		main(int ac, char **av, char **env)
 {
 	t_env	*ev;

@@ -1,14 +1,15 @@
 #include "shell.h"
 
-static char	*get_buf_line(char **line, int *size)
+char	*get_buf_line(char **line, int *size, int increase)
 {
 	char	*new;
+	int		diff;
 
 	struct winsize dimensions;
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-	new = ft_strnew(*size + dimensions.ws_col + 10);
-	*size += dimensions.ws_col + 10;
+	new = ft_strnew(*size + dimensions.ws_col + increase);
+	*size += dimensions.ws_col + increase;
 	if (*line != NULL)
 	{
 		ft_strcpy(new, *line);
@@ -18,7 +19,7 @@ static char	*get_buf_line(char **line, int *size)
 	return (new);
 }
 
-static void coordinates(int *start_y, int *start_x) //stackoverflow ./21sh./21sh./21sh esc esc esc //sizeof buf
+static void coordinates(int *start_y, int *start_x)
 {
 	char	buf[8];
 	int		red = 0;
@@ -61,22 +62,6 @@ static t_term init_prompt(struct termios *old_tty)
 	return (pos);
 }
 
-void		init_tty(void)
-{
-	int		res;
-	char	*tty_name;
-
-	if (!(tty_name = getenv("TERM")))
-		handle_exit_errors("terminal type is not defined\n");
-	if (!isatty(STDIN_FILENO))
-		handle_exit_errors("should be run in a terminal\n");
-	res = tgetent(NULL, tty_name);
-	if (res < 0)
-		handle_exit_errors("could not access the termcap data base\n");
-	if (!res)
-		handle_exit_errors("specify a valid terminal name with setenv\n");
-}
-
 char	*get_input(void)
 {
 	size_t		red;
@@ -93,13 +78,14 @@ char	*get_input(void)
 	while (1)
 	{
 			if (!new)
-				new = get_buf_line(&new, &pos.buf_size);
+				new = get_buf_line(&new, &pos.buf_size, 20);
 			if (pos.index + 2 >= pos.buf_size)
-				new = get_buf_line(&new, &pos.buf_size);
+				new = get_buf_line(&new, &pos.buf_size, 20);
 			red = read(STDIN_FILENO, &key, sizeof(key));
+	//		printf("%ld\n", key);
 			if (read_key(new, key, &pos, old_tty) == -1)
 			{
-				ft_putchar_fd('\n', 1);
+				ft_putchar_fd('\n', 1); // shoud've move cursor before \n
 				break ;
 			}
 			draw_cursor_line(new, &pos);

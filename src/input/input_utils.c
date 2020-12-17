@@ -12,8 +12,10 @@ void set_free_null(char *line)
 	line = NULL;
 }
 
-void key_exit(struct termios old_tty)
+void key_exit(struct termios old_tty, t_term *pos)
 {
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
+	if (pos->yanked)
+		set_free_null(pos->yanked);
 	exit(1);
 }
