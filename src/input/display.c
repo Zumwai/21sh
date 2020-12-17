@@ -28,8 +28,6 @@ static void set_cursor(t_term *pos)
 	}
 	else
 		pos->x += pos->delta_x;
-//	if (pos->delta_y < 0)
-//		pos->delta_y = 0;
 	if (pos->start_y + pos->delta_y >dimensions.ws_row)
 		ft_printf("\033[S");
 	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->start_y + pos->delta_y - 1), 1, putchar_like);
@@ -49,12 +47,12 @@ static int draw_line(char *new, t_term *pos, int remainder)
 	else {
 		printed = dimensions.ws_col - curr;
 		ft_putstr_size(&new[pos->index - remainder], printed);
-		if (dimensions.ws_row == pos->start_y + pos->delta_y) // && printed + curr == dimensions.ws_col
+		if (dimensions.ws_row == pos->start_y + pos->delta_y)
 		{
 		//	tputs(tgetstr("sf", NULL), 1, putchar_like);
 			ft_printf("\033[S");
 			pos->start_y--;
-			pos->delta_y--;
+			pos->delta_y++;
 		}
 		else if (printed + curr == dimensions.ws_col)
 			pos->delta_y += 1;

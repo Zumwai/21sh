@@ -99,6 +99,7 @@ char	*get_input(void)
 			red = read(STDIN_FILENO, &key, sizeof(key));
 			if (read_key(new, key, &pos, old_tty) == -1)
 			{
+			//	return (new);
 				ft_putchar_fd('\n', 1);
 				break ;
 			}

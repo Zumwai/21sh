@@ -43,6 +43,12 @@ int 	read_key(char *new, long long key, t_term *pos, struct termios old);
 void	init_tty(void);
 char	*get_input(void);
 void	draw_cursor_line(char *new, t_term *pos);
-
+void	move_left(t_term *pos);
+void 	move_right(t_term *pos);
+void 	change_line_down(t_term *pos);
+void 	change_line_up(t_term *pos);
+void	backspace_char(char *new, t_term *pos);
+void	insert_char (char *new, t_term *pos, char c);
+void	delete_char(char *new, t_term *pos);
 
 #endif

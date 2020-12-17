@@ -30,7 +30,9 @@ SOUS_FIL = main.c \
 		   signals/shelp_signal.c \
 		   input/controls.c \
 		   input/display.c \
-		   input/reader.c
+		   input/reader.c \
+		   input/arrow_movement.c \
+		   input/edition.c
 OBJS = $(SOUS_FIL:.c=.o)
 SOUS_F = $(addprefix $(SOUS), $(SOUS_FIL))
 OBJS_F = $(addprefix $(BIN), $(OBJS))
