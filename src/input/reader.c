@@ -52,12 +52,12 @@ static t_term init_prompt(struct termios *old_tty)
 	ft_putstr_size("shelp$>", 7);
 	pos.index = 0;
 	pos.prompt = ft_strlen("shelp$>");
-	coordinates(&pos.start_y, &pos.start_x);
+	coordinates(&pos.y, &pos.x);
 	pos.x += pos.prompt;
-	pos.y = pos.start_y;
 	pos.delta_x = 0;
 	pos.delta_y = 0;
 	pos.buf_size = 0;
+	pos.yanked = NULL;
 	return (pos);
 }
 
@@ -99,7 +99,6 @@ char	*get_input(void)
 			red = read(STDIN_FILENO, &key, sizeof(key));
 			if (read_key(new, key, &pos, old_tty) == -1)
 			{
-			//	return (new);
 				ft_putchar_fd('\n', 1);
 				break ;
 			}
@@ -107,6 +106,7 @@ char	*get_input(void)
 			red = 0;
 			key = 0;
 	}
+	set_free_null(pos.yanked);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
 	return (new);
 }

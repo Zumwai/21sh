@@ -22,8 +22,6 @@
 
 typedef struct s_term
 {
-	int			start_x;
-	int			start_y;
 	int			x;
 	int			y;
 	int			delta_x;
@@ -31,8 +29,7 @@ typedef struct s_term
 	int			index;
 	int			prompt;
 	int			buf_size;
-//	bool		current;
-//	bool		down;
+	char		*yanked;
 }				t_term;
 
 /*
@@ -50,5 +47,9 @@ void 	change_line_up(t_term *pos);
 void	backspace_char(char *new, t_term *pos);
 void	insert_char (char *new, t_term *pos, char c);
 void	delete_char(char *new, t_term *pos);
+void	go_prev_word(char *new, t_term *pos);
+void 	go_next_word(char *new, t_term *pos);
+void	 key_exit(struct termios old_tty);
+
 
 #endif
