@@ -9,6 +9,8 @@ char	*get_buf_line(char **line, int *size, int increase)
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	new = ft_strnew(*size + dimensions.ws_col + increase);
+	if (new == NULL)
+		handle_exit_errors("Malloc returned NULL"); // add limitation to the input later
 	*size += dimensions.ws_col + increase;
 	if (*line != NULL)
 	{
@@ -16,7 +18,8 @@ char	*get_buf_line(char **line, int *size, int increase)
 		free(*line);
 		*line = NULL;
 	}
-	return (new);
+	*line = new;
+	return (*line);
 }
 
 static void coordinates(int *start_y, int *start_x)
