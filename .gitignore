@@ -4,3 +4,5 @@ make
 .vscode
 .idea
 a.out
+*.o
+*.swp

@@ -1,13 +1,5 @@
 #include "shell.h"
-/*
-static int calculate_position(t_term *pos)
-{
-	int		curr;
 
-	curr = pos->index + pos->delta_x;
-	return (curr);
-}
-*/
 void	cut_word(char *new, t_term *pos)
 {
 	int		curr;
@@ -57,6 +49,7 @@ void	cut_before(char *new, t_term *pos)
 	if (pos->yanked)
 		set_free_null(pos->yanked);
 	curr = pos->index - abs;
+	pos->yanked = ft_strsub(new, 0, curr);
 	ft_memmove(new, &new[curr], abs);
 	ft_memset(&new[pos->index - curr], 0, curr);
 	pos->index -= (pos->index + pos->delta_x);
@@ -72,11 +65,11 @@ void	yank_buffer(char *new, t_term *pos)
 		return ;
 	if (pos->yanked[0] == 0)
 		return ;
-	size = ft_strlen(pos->yanked);
+	size = ft_strlen(pos->yanked); //calc at creation time, not here
 	if (size + pos->index >= pos->buf_size)
 		new = get_buf_line(&new, &pos->buf_size, size);
 	curr = pos->index - abs;
-	ft_memmove(&new[curr + size], &new[curr], size);
+	ft_memmove(&new[curr + size], &new[curr], abs);
 	ft_memmove(&new[curr], pos->yanked, size);
 	pos->index += size;
 	pos->delta_x -= size;
@@ -88,7 +81,7 @@ int 	read_key(char *new, long long key, t_term *pos, struct termios old)
 				key_exit(old, pos);
 			else if (key == BACKSPACE)
 				backspace_char(new, pos);
-			else if (key == ENTER)
+			else if (key == ENTER) //depends on a state
 				return (-1);
 			else if (key == DELETE)
 				delete_char(new, pos);
