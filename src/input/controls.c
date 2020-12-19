@@ -67,7 +67,7 @@ void	yank_buffer(char *new, t_term *pos)
 		return ;
 	size = ft_strlen(pos->yanked); //calc at creation time, not here
 	if (size + pos->index >= pos->buf_size)
-		new = get_buf_line(&new, &pos->buf_size, size);
+		new = get_buf_line(&new, &pos->buf_size, size); //pointer loss, same problem with history
 	curr = pos->index - abs;
 	ft_memmove(&new[curr + size], &new[curr], abs);
 	ft_memmove(&new[curr], pos->yanked, size);
