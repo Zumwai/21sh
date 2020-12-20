@@ -3,7 +3,9 @@ COM = clang
 HEAD_21sh = ./includes/
 HEAD_L = ./libft/
 HEAD_LIB = libft.h
-HEAD_H = shell.h
+HEAD_H = shell.h \
+		 control.h \
+		 ./libft/libft.h 
 HEAD_F = $(HEAD_21sh) \
 		$(HEAD_L)
 HEADS = $(addprefix -I, $(HEAD_F))
@@ -18,6 +20,7 @@ SOUS_FIL = main.c \
 		   cmd/shelp_exec.c \
 		   utils/handle_err.c \
 		   utils/misc.c \
+		   utils/ft_free.c \
 		   builtin/environ.c \
 		   builtin/shelp_cd.c \
 		   builtin/shelp_echo.c \

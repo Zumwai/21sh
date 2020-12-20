@@ -24,6 +24,11 @@
 # define YANK	25				//ctrl + y
 # define W_CUT	23				//ctrl + w
 
+typedef struct s_yank
+{
+	char		*yanked;
+	int			size;
+}				t_yank;
 typedef struct s_term
 {
 	int			x;
@@ -31,29 +36,31 @@ typedef struct s_term
 	int			delta_x;
 	int			delta_y;
 	int			index;
-	int			prompt;
+	int			prompt; //dont need yet
 	int			buf_size;
-	char		*yanked;
+	char		*new;
+	t_yank		*yank;
+	t_env		*ptr;
 }				t_term;
 
 /*
 	CONTROLS
 */
 
-int 	read_key(char *new, long long key, t_term *pos, struct termios old);
+int 	read_key(long long key, t_term *pos, struct termios old, t_env *ptr, t_yank *buf);
 //void	init_tty(void);
-char	*get_input(void);
-void	draw_cursor_line(char *new, t_term *pos);
+char	*get_input(t_env *ptr, t_yank *buffer);
+void	draw_cursor_line(t_term *pos);
 void	move_left(t_term *pos);
 void 	move_right(t_term *pos);
 void 	change_line_down(t_term *pos);
 void 	change_line_up(t_term *pos);
-void	backspace_char(char *new, t_term *pos);
-void	insert_char (char *new, t_term *pos, char c);
-void	delete_char(char *new, t_term *pos);
-void	go_prev_word(char *new, t_term *pos);
-void 	go_next_word(char *new, t_term *pos);
-void	 key_exit(struct termios old_tty, t_term *pos);
+void	backspace_char(t_term *pos);
+void	insert_char (t_term *pos, char c);
+void	delete_char(t_term *pos);
+void	go_prev_word(t_term *pos);
+void 	go_next_word(t_term *pos);
+void	key_exit(struct termios old_tty, t_term *pos, t_env *ptr, t_yank *buffer);
 char	*get_buf_line(char **line, int *size, int increase);
 
 

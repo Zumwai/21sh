@@ -61,41 +61,38 @@ static t_term init_prompt(struct termios *old_tty)
 	pos.delta_x = 0;
 	pos.delta_y = 0;
 	pos.buf_size = 0;
-	pos.yanked = NULL;
+	pos.new = NULL;
 	return (pos);
 }
 
-char	*get_input(void)
+char	*get_input(t_env *ptr, t_yank *buffer)
 {
 	size_t		red;
 	struct termios	old_tty;
 	long		key;
-	char	*new;
 	t_term	pos;
 
 	ft_bzero(&old_tty, sizeof(struct termios));
 	pos = init_prompt(&old_tty);
 	key = 0;
-	new = NULL;
 	red = 0;
 	while (1)
 	{
-			if (!new)
-				new = get_buf_line(&new, &pos.buf_size, 20);
+			if (!pos.new)
+				pos.new = get_buf_line(&pos.new, &pos.buf_size, 20);
 			if (pos.index + 2 >= pos.buf_size)
-				new = get_buf_line(&new, &pos.buf_size, 20);
+				pos.new = get_buf_line(&pos.new, &pos.buf_size, 20);
 			red = read(STDIN_FILENO, &key, sizeof(key));
 	//		printf("%ld\n", key);
-			if (read_key(new, key, &pos, old_tty) == -1)
+			if (read_key(key, &pos, old_tty, ptr, buffer) == -1)
 			{
 				ft_putchar_fd('\n', 1); // shoud've move cursor before \n
 				break ;
 			}
-			draw_cursor_line(new, &pos);
+			draw_cursor_line(&pos);
 			red = 0;
 			key = 0;
 	}
-	set_free_null(pos.yanked);
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
-	return (new);
+	return (pos.new);
 }

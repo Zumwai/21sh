@@ -36,20 +36,6 @@ char	*get_full_path(char *path, char *name)
 	return (path);
 }
 
-void	ft_free_tab(char **tab)
-{
-	int		i;
-
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		tab[i] = NULL;
-		i++;
-	}
-	free(tab);
-}
-
 int		putchar_like(int n)
 {
 	size_t	size;

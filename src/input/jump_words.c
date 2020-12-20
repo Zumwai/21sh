@@ -1,13 +1,13 @@
 #include "shell.h"
 
-void go_next_word(char *new, t_term *pos)
+void go_next_word(t_term *pos)
 {
 	int abs = ft_abs(pos->delta_x);
 
 	int curs = pos->index - abs;
-	while (new[curs] != '\0' && new[curs] == ' ')
+	while (pos->new[curs] != '\0' && pos->new[curs] == ' ')
 		curs++;
-	while (new[curs] && ft_ischar(new[curs]))
+	while (pos->new[curs] && ft_ischar(pos->new[curs]))
 		curs++;
 	curs = pos->index - curs;
 	pos->delta_x = -curs;
@@ -15,14 +15,14 @@ void go_next_word(char *new, t_term *pos)
 		pos->delta_x = 0;
 }
 
-void go_prev_word(char *new, t_term *pos)
+void go_prev_word(t_term *pos)
 {
 	int abs = ft_abs(pos->delta_x);
 
 	int curs = pos->index - abs - 1;
-	while (curs > 0 && new[curs] == ' ')
+	while (curs > 0 && pos->new[curs] == ' ')
 		curs--;
-	while (curs > 0 && ft_ischar(new[curs]))
+	while (curs > 0 && ft_ischar(pos->new[curs]))
 		curs--;
 	if (curs > 0)
 	{

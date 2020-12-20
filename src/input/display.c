@@ -1,8 +1,8 @@
 #include "shell.h"
 
-static int draw_finale_line(t_term *pos, int remainder, int curr, char *new)
+static int draw_finale_line(t_term *pos, int remainder, int curr)
 {
-		ft_putstr(&new[pos->index - remainder]);
+		ft_putstr(&pos->new[pos->index - remainder]);
 		pos->x = remainder + curr;
 		return (0);
 }
@@ -33,7 +33,7 @@ static void set_cursor(t_term *pos)
 	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y - 1), 1, putchar_like);
 }
 
-static int draw_line(char *new, t_term *pos, int remainder)
+static int draw_line(t_term *pos, int remainder)
 {
 	int		printed = 0;
 	int		curr = 0;
@@ -43,10 +43,10 @@ static int draw_line(char *new, t_term *pos, int remainder)
 	if (!pos->delta_y)
 		curr = pos->prompt;
 	if (dimensions.ws_col > remainder + curr)
-		return (draw_finale_line(pos,remainder, curr, new));
+		return (draw_finale_line(pos,remainder, curr));
 	else {
 		printed = dimensions.ws_col - curr;
-		ft_putstr_size(&new[pos->index - remainder], printed);
+		ft_putstr_size(&pos->new[pos->index - remainder], printed);
 		if (dimensions.ws_row == pos->y + pos->delta_y)
 		{
 		//	tputs(tgetstr("sf", NULL), 1, putchar_like);
@@ -61,7 +61,7 @@ static int draw_line(char *new, t_term *pos, int remainder)
 	}
 }
 
-void draw_cursor_line(char *new, t_term *pos)
+void draw_cursor_line(t_term *pos)
 {
 	int i = 0;
 	int	rem = pos->index;
@@ -69,6 +69,8 @@ void draw_cursor_line(char *new, t_term *pos)
 	int	tmp = pos->index + pos->prompt;
 	struct winsize dimensions;
 	t_term		temp = *pos;
+	if (!pos->new)
+		return ;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	tputs (tgoto (tgetstr("cm", NULL), 0, pos->y - 1), 1, putchar_like);
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
@@ -76,7 +78,7 @@ void draw_cursor_line(char *new, t_term *pos)
 	ft_putstr_fd("shelp$>", 1);
 	while (1)
 	{
-		rem = (draw_line(new, pos, rem));
+		rem = (draw_line(pos, rem));
 		if (rem == 0)
 			break ;
 	}
