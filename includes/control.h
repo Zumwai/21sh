@@ -1,9 +1,9 @@
 #ifndef CONTROL_H
 # define CONTROL_H
 
-# include "shell.h"
 # include <stdbool.h>
 # include <sys/ioctl.h>
+# include "shell.h"
 //# include <wchar.h>
 //# include <locale.h>
 
@@ -23,6 +23,7 @@
 # define L_CUT	21				//ctrl + u
 # define YANK	25				//ctrl + y
 # define W_CUT	23				//ctrl + w
+# define CLEAR	12				//ctrl + l
 
 typedef struct s_yank
 {
@@ -40,16 +41,15 @@ typedef struct s_term
 	int			buf_size;
 	char		*new;
 	t_yank		*yank;
-	t_env		*ptr;
 }				t_term;
 
 /*
 	CONTROLS
 */
 
-int 	read_key(long long key, t_term *pos, struct termios old, t_env *ptr, t_yank *buf);
+int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf);
 //void	init_tty(void);
-char	*get_input(t_env *ptr, t_yank *buffer);
+char	*get_input(t_yank *buffer);
 void	draw_cursor_line(t_term *pos);
 void	move_left(t_term *pos);
 void 	move_right(t_term *pos);
@@ -60,7 +60,7 @@ void	insert_char (t_term *pos, char c);
 void	delete_char(t_term *pos);
 void	go_prev_word(t_term *pos);
 void 	go_next_word(t_term *pos);
-void	key_exit(struct termios old_tty, t_term *pos, t_env *ptr, t_yank *buffer);
+int		key_exit(struct termios old_tty, t_term *pos, t_yank *buffer);
 char	*get_buf_line(char **line, int *size, int increase);
 
 

@@ -72,16 +72,23 @@ void	yank_buffer(t_term *pos, t_yank *buffer)
 	ft_memmove(&pos->new[curr + size], &pos->new[curr], abs);
 	ft_memmove(&pos->new[curr], buffer->yanked, size);
 	pos->index += size;
-	pos->delta_x += size;
+//	pos->delta_x += size;
 	if (pos->delta_x >0)
 		pos->delta_x = 0;
 	pos->x += size;
 }
 
-int 	read_key(long long key, t_term *pos, struct termios old, t_env *ptr, t_yank *buf)
+void	ft_clear(t_term *pos)
+{
+		ft_printf("%s", "\033[2J");
+		tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
+		pos->y = 0;
+}
+
+int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf)
 {
 			if (key == 27)
-				key_exit(old, pos, ptr, buf);
+				return (key_exit(old, pos, buf));
 			else if (key == BACKSPACE)
 				backspace_char(pos);
 			else if (key == ENTER) //depends on a state
@@ -114,5 +121,7 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_env *ptr, t_yank
 				yank_buffer(pos, buf);
 			else if (key == W_CUT)
 				cut_word(pos, buf);
+			else if (key == CLEAR)
+				ft_clear(pos);
 			return (0);
 }

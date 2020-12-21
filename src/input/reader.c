@@ -1,4 +1,5 @@
 #include "shell.h"
+#include <time.h>
 
 char	*get_buf_line(char **line, int *size, int increase)
 {
@@ -65,11 +66,36 @@ static t_term init_prompt(struct termios *old_tty)
 	return (pos);
 }
 
-char	*get_input(t_env *ptr, t_yank *buffer)
+void	print_value_into_file(int key)
+{
+	FILE *fptr;
+	fptr = fopen("input_log", "aw");
+	fprintf(fptr, "%d", key);
+	if (ft_ischar(key))
+		fprintf(fptr, "%c", (char)key);
+	fprintf(fptr, "%c", '\n');
+}
+
+int msleep(long msec)
+{
+    struct timespec ts;
+    int res;
+
+    ts.tv_sec = msec / 1000;
+    ts.tv_nsec = (msec % 1000) * 1000000;
+
+    do {
+        res = nanosleep(&ts, &ts);
+    } while (res);
+
+    return res;
+}
+
+char	*get_input(t_yank *buffer)
 {
 	size_t		red;
 	struct termios	old_tty;
-	long		key;
+	int		key;
 	t_term	pos;
 
 	ft_bzero(&old_tty, sizeof(struct termios));
@@ -83,12 +109,16 @@ char	*get_input(t_env *ptr, t_yank *buffer)
 			if (pos.index + 2 >= pos.buf_size)
 				pos.new = get_buf_line(&pos.new, &pos.buf_size, 20);
 			red = read(STDIN_FILENO, &key, sizeof(key));
-	//		printf("%ld\n", key);
-			if (read_key(key, &pos, old_tty, ptr, buffer) == -1)
+			print_value_into_file(key);
+			if (red < 0)
+				handle_exit_errors("read returned error");
+			if ((red = (read_key(key, &pos, old_tty, buffer))) == -1)
 			{
 				ft_putchar_fd('\n', 1); // shoud've move cursor before \n
 				break ;
 			}
+			else if (red == -2)
+				return (NULL);
 			draw_cursor_line(&pos);
 			red = 0;
 			key = 0;

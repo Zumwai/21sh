@@ -61,7 +61,9 @@ int		main(int ac, char **av, char **env)
 	while (status)
 	{
 		handle_all_signal(1);
-		line = get_input(ev, buffer);
+		line = get_input(buffer);
+		if (!line)
+			break ;
 		/*
 		 For real this time
 		 This is INPUT branch

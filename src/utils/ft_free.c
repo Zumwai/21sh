@@ -7,7 +7,11 @@ void	set_free_all(t_env *ev, t_yank *buffer)
 	if (buffer->yanked)
 		set_free_null(buffer->yanked);
 	if (buffer)
+	{
 		free(buffer);
+		buffer = NULL;
+	}
+	
 }
 
 void	ft_free_tab(char **tab)
@@ -22,6 +26,7 @@ void	ft_free_tab(char **tab)
 		i++;
 	}
 	free(tab);
+	tab = NULL;
 }
 
 void set_free_null(char *line)

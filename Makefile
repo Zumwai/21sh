@@ -3,9 +3,7 @@ COM = clang
 HEAD_21sh = ./includes/
 HEAD_L = ./libft/
 HEAD_LIB = libft.h
-HEAD_H = shell.h \
-		 control.h \
-		 ./libft/libft.h 
+HEAD_H = shell.h
 HEAD_F = $(HEAD_21sh) \
 		$(HEAD_L)
 HEADS = $(addprefix -I, $(HEAD_F))
@@ -43,7 +41,7 @@ OBJS_F = $(addprefix $(BIN), $(OBJS))
 BIN = ./bin/
 TRASH = shell.h.gch \
 		shell.dSYM
-FLAGS = -g -fsanitize=address -fsanitize=undefined
+FLAGS = -g 
 REMOVE = rm -rf
 
 .PHONY: all clean re
