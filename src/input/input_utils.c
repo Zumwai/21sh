@@ -11,5 +11,5 @@ int key_exit(struct termios old_tty, t_term *pos, t_yank *buffer)
 	if (pos->new)
 		set_free_null(pos->new);
 	set_free_all(NULL, buffer);
-	return(1);
+	return(-2);
 }

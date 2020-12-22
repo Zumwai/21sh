@@ -75,7 +75,7 @@ void	yank_buffer(t_term *pos, t_yank *buffer)
 //	pos->delta_x += size;
 	if (pos->delta_x >0)
 		pos->delta_x = 0;
-	pos->x += size;
+//	pos->x += size;
 }
 
 void	ft_clear(t_term *pos)

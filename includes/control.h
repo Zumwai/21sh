@@ -30,6 +30,7 @@ typedef struct s_yank
 	char		*yanked;
 	int			size;
 }				t_yank;
+
 typedef struct s_term
 {
 	int			x;
@@ -39,8 +40,8 @@ typedef struct s_term
 	int			index;
 	int			prompt; //dont need yet
 	int			buf_size;
+	int			state;
 	char		*new;
-	t_yank		*yank;
 }				t_term;
 
 /*

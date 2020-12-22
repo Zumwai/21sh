@@ -22,9 +22,9 @@ void		delete_env_list(t_env **ev)
 	{
 		tmp = curs->next;
 		if (curs->name)
-			free(curs->name);
+			set_free_null(curs->name);
 		if (curs->value)
-			free(curs->value);
+			set_free_null(curs->value);
 		free(curs);
 		curs = tmp;
 	}
