@@ -25,6 +25,12 @@
 # define W_CUT	23				//ctrl + w
 # define CLEAR	12				//ctrl + l
 
+typedef struct s_subline
+{
+	char		*line;
+	int			index;
+	struct t_subline	*next;
+}				t_subline;
 typedef struct s_yank
 {
 	char		*yanked;
@@ -42,6 +48,7 @@ typedef struct s_term
 	int			buf_size;
 	int			state;
 	char		*new;
+	struct t_subline	*subline;
 }				t_term;
 
 /*
@@ -63,6 +70,11 @@ void	go_prev_word(t_term *pos);
 void 	go_next_word(t_term *pos);
 int		key_exit(struct termios old_tty, t_term *pos, t_yank *buffer);
 char	*get_buf_line(char **line, int *size, int increase);
+void	cut_word(t_term *pos, t_yank *buffer);
+void	cut_after(t_term *pos, t_yank *buffer);
+void	cut_before(t_term *pos, t_yank *buffer);
+void	yank_buffer(t_term *pos, t_yank *buffer);
+t_term	*create_new_io_struct(void);
 
 
 #endif

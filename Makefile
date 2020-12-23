@@ -34,7 +34,8 @@ SOUS_FIL = main.c \
 		   input/arrow_movement.c \
 		   input/edition.c \
 		   input/jump_words.c \
-		   input/input_utils.c
+		   input/input_utils.c \
+		   input/cut_paste.c
 OBJS = $(SOUS_FIL:.c=.o)
 SOUS_F = $(addprefix $(SOUS), $(SOUS_FIL))
 OBJS_F = $(addprefix $(BIN), $(OBJS))
