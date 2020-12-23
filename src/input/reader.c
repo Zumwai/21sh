@@ -4,14 +4,13 @@
 char	*get_buf_line(char **line, int *size, int increase)
 {
 	char	*new;
-	int		diff;
 
 	struct winsize dimensions;
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	new = ft_strnew(*size + dimensions.ws_col + increase);
 	if (new == NULL)
-		handle_exit_errors("Malloc returned NULL"); // add limitation to the input later
+		handle_exit_errors("Malloc returned NULL"); // add limitation to the input later && invalid size
 	*size += dimensions.ws_col + increase;
 	if (*line != NULL)
 	{
@@ -22,7 +21,37 @@ char	*get_buf_line(char **line, int *size, int increase)
 	*line = new;
 	return (*line);
 }
+static void get_coordinates(int *start_y, int *start_x)
+{
+	char	buf[24];
+	size_t	index = 0;
+	int		red = 0;
+	ft_bzero(buf, 24);
+	if (write(1, "\033[6n", 4) != 4)
+		handle_exit_errors("Write returns Error");
+	while (index < sizeof(buf) - 1)
+	{
+		if (read(STDIN_FILENO, buf + index, 1) != 1)
+			break ;
+		if (buf[index] == 'R')
+			break ;
+		index++;
+	}
+	buf[red] ='\0';
+	if (!ft_isdigit(*(buf + 2)))
+		return ;
+	*start_y = ft_atoi(buf + 2);
+	*start_x = 0;
+//	red = read(STDIN_FILENO, buf, 8);
 
+	/*
+	int	i = 0;
+	while (buf[i] && !ft_isdigit(buf[i]))
+		i++;
+	*start_y = ft_atoi(&buf[i]);
+	*start_x = 0;
+	*/
+}
 
 static t_term init_prompt(struct termios *old_tty)
 {
@@ -37,12 +66,13 @@ static t_term init_prompt(struct termios *old_tty)
 	tty.c_cc[VMIN] = 1;
 	tty.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &tty);	
-//	coordinates(&pos.y, &pos.x);
+	get_coordinates(&pos.y, &pos.x);
 	ft_putstr_size("shelp$>", 7);
 	pos.index = 0;
 	pos.prompt = ft_strlen("shelp$>");
-//	pos.x = pos.prompt;
-	pos.y = 0;
+	pos.x += pos.prompt;
+//	pos.y = 0;
+	pos.state = 0;
 	pos.delta_x = 0;
 	pos.delta_y = 0;
 	pos.buf_size = 0;
@@ -50,7 +80,7 @@ static t_term init_prompt(struct termios *old_tty)
 	return (pos);
 }
 
-void	print_value_into_file(int key, int x, int y)
+void	print_value_into_file(long long key, int x, int y)
 {
 	FILE *fptr;
 	fptr = fopen("input_log", "aw");
@@ -58,7 +88,7 @@ void	print_value_into_file(int key, int x, int y)
 	{
 			fprintf(fptr, "%s\n", "--------------------------------");
 	} else {
-	fprintf(fptr, "%d: key, %d:x, %d:y", key, x, y);
+	fprintf(fptr, "%lld: key, %d:x, %d:y", key, x, y);
 	if (ft_ischar(key))
 		fprintf(fptr, ";%c - char key", (char)key);
 	fprintf(fptr, "%c", '\n');
@@ -82,64 +112,44 @@ int msleep(long msec)
 */
 
 
-static void coordinates(int *start_y, int *start_x)
+
+
+__attribute__((noinline))long long	incapsulate_read(void)
 {
-	char	buf[8];
-	int		red = 0;
-	ft_bzero(buf, 8);
-	ft_putstr_size("\033[6n", 5);
-	red = read(STDIN_FILENO, buf, 8);
-	buf[red] ='\0';
-	int	i = 0;
-	while (buf[i] && !ft_isdigit(buf[i]))
-		i++;
-	*start_y = ft_atoi(&buf[i]);
-	/* BROKEN FIX FOR prompt->prompt->
-	while(buf[i] && ft_isdigit(buf[i]))
-		i++;
-	*start_x = ft_atoi(&buf[i]);
-			ft_bzero(buf, 8);
-			*/
-//	*start_x = 0;
-	ft_bzero(buf, 8);
+	long long key;
+	key = 0;
+	read(STDIN_FILENO, &key, sizeof(key));
+	return (key);
 }
 
 char	*get_input(t_yank *buffer)
 {
-	size_t		red;
+	ssize_t		red;
 	struct termios	old_tty;
-	long	key;
+	long long	key;
 	t_term	pos;
 
 	ft_bzero(&old_tty, sizeof(struct termios));
 	pos = init_prompt(&old_tty);
 	key = 0;
 	red = 0;
-			coordinates(&pos.y, &pos.x);
+//	coordinates(&pos.y, &pos.x); //winsize
 	while (1)
 	{
 			if (!pos.new)
 				pos.new = get_buf_line(&pos.new, &pos.buf_size, 20);
 			if (pos.index + 2 >= pos.buf_size)
 				pos.new = get_buf_line(&pos.new, &pos.buf_size, 20);
-			red = read(STDIN_FILENO, &key, sizeof(key));
+			key = incapsulate_read(); //remake into a char *, overflow
 			print_value_into_file(key, pos.x, pos.y);
-			if (pos.x < 0)
-				handle_exit_errors("read error");
-			if (red < 0)
-				handle_exit_errors("read returned error");
-			if ((red = (read_key(key, &pos, old_tty, buffer))) == -1)
-			{
-				ft_putchar_fd('\n', 1); // shoud've move cursor before \n
+			red = (read_key(key, &pos, old_tty, buffer));
+			if (red == -1)
 				break ;
-			}
 			else if (red == -2)
 				return (NULL);
 			red = 0;
 			key = 0;
-
 			draw_cursor_line(&pos);
-
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
 	return (pos.new);

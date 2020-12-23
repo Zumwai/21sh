@@ -2,16 +2,15 @@
 
 void	set_free_all(t_env *ev, t_yank *buffer)
 {
-	if (ev)
+	if (ev != NULL)
 		delete_env_list(&ev);
-	if (buffer->yanked)
+	if (buffer->yanked != NULL)
 		set_free_null(buffer->yanked);
-	if (buffer)
+	if (buffer != NULL)
 	{
 		free(buffer);
 		buffer = NULL;
 	}
-	
 }
 
 void	ft_free_tab(char **tab)

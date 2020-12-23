@@ -57,7 +57,7 @@ void	cut_before(t_term *pos, t_yank *buffer)
 
 void	yank_buffer(t_term *pos, t_yank *buffer)
 {
-	size_t	size;
+	int	size;
 	int		curr;
 	int 	abs = ft_abs(pos->delta_x);
 
@@ -85,14 +85,39 @@ void	ft_clear(t_term *pos)
 		pos->y = 0;
 }
 
+int		consult_state(long long key, t_term *pos)
+{
+	if (!pos->state)
+	{
+		ft_putchar_fd((char)key, 1);
+		return (-1);
+	}
+	if (pos->state == 1)
+	{
+		insert_char(pos, (char)key);
+		return (0);
+	}
+	return (1);
+}
+
+void	move_home(t_term *pos)
+{
+	pos->delta_x = -pos->index;
+}
+
+void	move_end(t_term *pos)
+{
+	pos->delta_x = 0;
+}
+
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf)
 {
 			if (key == 27)
 				return (key_exit(old, pos, buf));
+			else if (key == ENTER)
+				return (consult_state(key, pos));
 			else if (key == BACKSPACE)
 				backspace_char(pos);
-			else if (key == ENTER) //depends on a state
-				return (-1);
 			else if (key == DELETE)
 				delete_char(pos);
 			else if (key >= 32 && key <= 127)
@@ -106,9 +131,9 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf)
 			else if (key == R_WORD)
 				go_next_word(pos);
 			else if (key == START)
-				pos->delta_x = -pos->index;
+				move_home(pos);
 			else if (key == END)
-				pos->delta_x = 0;
+				move_end(pos);
 			else if (key == L_UP )
 				change_line_up(pos);
 			else if (key == L_DOWN)

@@ -64,15 +64,10 @@ static int draw_line(t_term *pos, int remainder)
 
 void draw_cursor_line(t_term *pos)
 {
-	int i = 0;
 	int	rem = pos->index;
-	int	fin = 0;
-	int	tmp = pos->index + pos->prompt;
 	struct winsize dimensions;
-	t_term		temp = *pos;
 	if (!pos->new)
 		return ;
-
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	tputs (tgoto (tgetstr("cm", NULL), 0, pos->y - 1), 1, putchar_like);
 	tputs(tgetstr("cb", NULL), 1, putchar_like);

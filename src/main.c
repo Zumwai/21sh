@@ -79,7 +79,7 @@ int		main(int ac, char **av, char **env)
 		if (!status || status == FIN)
 			break ;
 	}
-//	set_free_all(ev, buffer);
+	set_free_all(ev, buffer);
 
 	return (EXIT_SUCCESS);
 }
