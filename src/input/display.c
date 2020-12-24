@@ -61,18 +61,23 @@ static int draw_line(t_term *pos, int remainder)
 	}
 }
 
-
-void draw_cursor_line(t_term *pos)
+static void set_empty_line(int y)
 {
-	int	rem = pos->index;
 	struct winsize dimensions;
-	if (!pos->new)
-		return ;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-	tputs (tgoto (tgetstr("cm", NULL), 0, pos->y - 1), 1, putchar_like);
+	tputs (tgoto (tgetstr("cm", NULL), 0, y - 1), 1, putchar_like);
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
 	tputs(tgetstr("cd", NULL), 1, putchar_like);
 	ft_putstr_fd("shelp$>", 1);
+}
+
+void display_input(t_term *pos, int delta)
+{
+	int	rem = pos->index;
+	if (!pos->new)
+		return ;
+	pos->y += delta;
+	set_empty_line(pos->y);
 	while (1)
 	{
 		rem = (draw_line(pos, rem));
@@ -80,6 +85,8 @@ void draw_cursor_line(t_term *pos)
 			break ;
 	}
 	set_cursor(pos);
+	if (pos->next)
+		display_input(pos->next, pos->delta_y);
 	pos->delta_y = 0;
 }
 

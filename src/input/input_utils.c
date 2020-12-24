@@ -52,6 +52,6 @@ t_term	*create_new_io_struct(void)
 	pos->delta_y = 0;
 	pos->buf_size = 0;
 	pos->new = NULL;
-	pos->subline = 0;
+	pos->next = NULL;
 	return (pos);
 }

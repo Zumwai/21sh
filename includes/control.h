@@ -25,31 +25,35 @@
 # define W_CUT	23				//ctrl + w
 # define CLEAR	12				//ctrl + l
 
-typedef struct s_subline
-{
-	char		*line;
-	int			index;
-	struct t_subline	*next;
-}				t_subline;
 typedef struct s_yank
 {
-	char		*yanked;
-	int			size;
-}				t_yank;
+	char			*yanked;
+	int				size; 
+	struct t_term	*current;
+	struct t_term	*ptr;
+}					t_yank;
 
-typedef struct s_term
+typedef struct 		s_term
 {
-	int			x;
-	int			y;
-	int			delta_x;
-	int			delta_y;
-	int			index;
-	int			prompt; //dont need yet
-	int			buf_size;
-	int			state;
-	char		*new;
-	struct t_subline	*subline;
-}				t_term;
+	int				x;
+	int				y;
+	int				delta_x;
+	int				delta_y;
+	int				index;
+	int				prompt; //dont need yet
+	int				buf_size;
+	int				state;
+	char			*new;
+	struct s_term	*next;
+}					t_term;
+
+enum				e_state
+{
+	DEFAULT,
+	QUOTES,
+	HEREDOC,
+	HISTORY
+};
 
 /*
 	CONTROLS
@@ -58,7 +62,7 @@ typedef struct s_term
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf);
 //void	init_tty(void);
 char	*get_input(t_yank *buffer);
-void	draw_cursor_line(t_term *pos);
+void	display_input(t_term *pos, int delta);
 void	move_left(t_term *pos);
 void 	move_right(t_term *pos);
 void 	change_line_down(t_term *pos);
