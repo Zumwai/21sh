@@ -8,8 +8,10 @@ void ft_putstr_size(char *line, size_t size)
 int key_exit(struct termios old_tty, t_term *pos, __attribute((unused))t_yank *buffer)
 {
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
-	if (pos->new)
-		set_free_null(pos->new);
+//	if (pos->new)
+//		set_free_null(pos->new);
+	free(pos->new);
+	pos->new = NULL;
 //	set_free_all(NULL, buffer);
 	return(-2);
 }
@@ -22,7 +24,7 @@ static void get_coordinates(int *start_y, int *start_x)
 	ft_bzero(buf, 24);
 	if (write(1, "\033[6n", 4) != 4)
 		handle_exit_errors("Write returns Error");
-	while (index < sizeof(buf) - 1)
+	while (index < sizeof(buf) - 1) //rewrite cycle, fixed y, but not x
 	{
 		if (read(STDIN_FILENO, buf + index, 1) != 1)
 			break ;
@@ -44,9 +46,9 @@ t_term	*create_new_io_struct(void)
 		handle_exit_errors("Malloc returned NULL");
 	get_coordinates(&pos->y, &pos->x);
 	pos->index = 0;
+//	pos->y = 0;
 	pos->prompt = ft_strlen("shelp$>");
 	pos->x += pos->prompt;
-//	pos->y = 0;
 	pos->state = 0;
 	pos->delta_x = 0;
 	pos->delta_y = 0;

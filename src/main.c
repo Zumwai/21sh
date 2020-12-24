@@ -80,6 +80,5 @@ int		main(int ac, char **av, char **env)
 			break ;
 	}
 	set_free_all(ev, buffer);
-
 	return (EXIT_SUCCESS);
 }

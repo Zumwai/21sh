@@ -73,20 +73,20 @@ static void set_empty_line(int y)
 
 void display_input(t_term *pos, int delta)
 {
-	int	rem = pos->index;
+	int	remainder = pos->index;
+	t_term	temp;
+
+	temp = *pos;
 	if (!pos->new)
 		return ;
-	pos->y += delta;
+	if (delta)
+		pos->y += delta;
 	set_empty_line(pos->y);
-	while (1)
-	{
-		rem = (draw_line(pos, rem));
-		if (rem == 0)
-			break ;
-	}
+	while (remainder)
+		remainder = (draw_line(pos, remainder));
 	set_cursor(pos);
 	if (pos->next)
-		display_input(pos->next, pos->delta_y);
-	pos->delta_y = 0;
+		display_input(pos->next, delta + pos->delta_y);
+	*pos = temp;
 }
 

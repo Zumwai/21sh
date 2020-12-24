@@ -99,7 +99,7 @@ char	*get_input(t_yank *buffer)
 			key = incapsulate_read(); //remake into a char *?
 			print_value_into_file(key, pos->x, pos->y);
 			red = (read_key(key, pos, old_tty, buffer));
-			if (red == -1 || red == -2)
+			if (red == -1 || red == -2) 
 				break ;
 			red = 0;
 			key = 0;
