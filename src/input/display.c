@@ -30,6 +30,11 @@ static void set_cursor(t_term *pos)
 		pos->x += pos->delta_x;
 	if (pos->y + pos->delta_y >dimensions.ws_row)
 		ft_printf("\033[S");
+	if (pos->next && pos->next->new == NULL)
+	{
+		pos->delta_y++;
+		pos->x = 0;
+	}
 	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y - 1), 1, putchar_like);
 }
 
@@ -68,7 +73,6 @@ static void set_empty_line(int y)
 	tputs (tgoto (tgetstr("cm", NULL), 0, y - 1), 1, putchar_like);
 	tputs(tgetstr("cb", NULL), 1, putchar_like);
 	tputs(tgetstr("cd", NULL), 1, putchar_like);
-	ft_putstr_fd("shelp$>", 1);
 }
 
 void display_input(t_term *pos, int delta)
@@ -82,11 +86,16 @@ void display_input(t_term *pos, int delta)
 	if (delta)
 		pos->y += delta;
 	set_empty_line(pos->y);
+	if (!delta)
+		ft_putstr_fd("shelp$>", 1);
 	while (remainder)
 		remainder = (draw_line(pos, remainder));
 	set_cursor(pos);
 	if (pos->next)
-		display_input(pos->next, delta + pos->delta_y);
-	*pos = temp;
+		display_input(pos->next, delta + pos->delta_y + 1);
+	pos->delta_y = 0;
+	if (delta)
+		pos->y = temp.y;
+//	*pos = temp;
 }
 

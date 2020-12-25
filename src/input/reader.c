@@ -35,7 +35,6 @@ static t_term *init_prompt(struct termios *old_tty)
 	tty.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 	pos = create_new_io_struct();
-	ft_putstr_size("shelp$>", 7);
 	return (pos);
 }
 
@@ -53,6 +52,7 @@ void	print_value_into_file(long long key, int x, int y)
 	fprintf(fptr, "%c", '\n');
 	}
 }
+
 /*
 int msleep(long msec)
 {
@@ -78,24 +78,23 @@ __attribute__((noinline))long long	incapsulate_read(void)
 	return (key);
 }
 
-char	*get_input(t_yank *buffer)
+t_term *get_input(t_yank *buffer)
 {
 	ssize_t		red;
 	struct termios	old_tty;
 	long long	key;
 	t_term	*pos;
+	t_term	*head;
 
 	ft_bzero(&old_tty, sizeof(struct termios));
 	pos = init_prompt(&old_tty);
+	ft_putstr_size("shelp$>", 7);
+	head = pos;
 	key = 0;
 	red = 0;
 //	coordinates(&pos->y, &pos->x); //winsize
 	while (1)
 	{
-			if (!pos->new)
-				pos->new = get_buf_line(&pos->new, &pos->buf_size, 20);
-			if (pos->index + 2 >= pos->buf_size)
-				pos->new = get_buf_line(&pos->new, &pos->buf_size, 20);
 			key = incapsulate_read(); //remake into a char *?
 			print_value_into_file(key, pos->x, pos->y);
 			red = (read_key(key, pos, old_tty, buffer));
@@ -106,5 +105,5 @@ char	*get_input(t_yank *buffer)
 			display_input(pos, 0);
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
-	return (pos->new);
+	return (head);
 }

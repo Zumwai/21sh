@@ -25,34 +25,40 @@
 # define W_CUT	23				//ctrl + w
 # define CLEAR	12				//ctrl + l
 
-typedef struct s_yank
-{
-	char			*yanked;
-	int				size; 
-	struct t_term	*current;
-	struct t_term	*ptr;
-}					t_yank;
+
 
 typedef struct 		s_term
 {
 	int				x;
 	int				y;
+	char			stack[2];
 	int				delta_x;
 	int				delta_y;
 	int				index;
 	int				prompt; //dont need yet
 	int				buf_size;
 	int				state;
+	int				heredoc;
+	char			*substr;
 	char			*new;
 	struct s_term	*next;
+	struct s_term	*prev;
 }					t_term;
+
+typedef struct s_yank
+{
+	char			*yanked;
+	int				size; 
+	t_term	*input;
+}					t_yank;
 
 enum				e_state
 {
 	DEFAULT,
 	QUOTES,
+	DOUBLE_QUOTES,
 	HEREDOC,
-	HISTORY
+	POST_DOC
 };
 
 /*
@@ -61,7 +67,7 @@ enum				e_state
 
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf);
 //void	init_tty(void);
-char	*get_input(t_yank *buffer);
+t_term	*get_input(t_yank *buffer);
 void	display_input(t_term *pos, int delta);
 void	move_left(t_term *pos);
 void 	move_right(t_term *pos);

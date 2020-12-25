@@ -7,12 +7,100 @@ void	ft_clear(t_term *pos)
 		pos->y = 0;
 }
 
+int		determine_state(char *line, int prev, t_term *pos)
+{
+	size_t	index = 0;
+	int		state;
+
+	state = prev;
+	while (line[index])
+	{
+		if (line[index] == '\'')
+		{
+			if (state == DEFAULT)
+				state = QUOTES;
+			else if (state == QUOTES)
+				state = DEFAULT;
+		}
+		if (line[index] == '\"')
+		{
+			if (state == DEFAULT)
+				state = DOUBLE_QUOTES;
+			else if (state == DOUBLE_QUOTES)
+				state = DEFAULT;
+		}
+		if (line[index] == '<' && line[index + 1] == '<')
+		{
+			if (state == DEFAULT)
+			{
+				pos->heredoc = index + 1;
+				state = HEREDOC;
+				return (state);
+			}
+		}
+		index++;
+	}
+	return (state);
+}
+
+char	*get_heredoc_ptr(int heredoc, char *new, int index)
+{
+	char	*substr = NULL;
+
+	while (new[heredoc] && new[heredoc] == ' ')
+		heredoc++;
+	if (heredoc != index - 1)
+		substr = ft_strsub(new, heredoc + 1, index - heredoc);
+	return (substr); 
+}
+
 int		consult_state(__attribute((unused))long long key, __attribute((unused))t_term *pos)
 {
-	if (!pos->state)
+	pos->state = determine_state(pos->new, pos->state, pos);
+	if (pos->state == DEFAULT)
 	{
 		ft_putchar_fd('\n', STDIN_FILENO);
 		return (-1);
+	}
+	else if (pos->state == QUOTES || pos->state == DOUBLE_QUOTES || pos->state == HEREDOC)
+	{
+		pos->next = create_new_io_struct();
+		pos->next->y = pos->y;
+		pos->next->new = NULL;
+		pos->next->x = 0;
+		pos->next->delta_x = 0;
+		pos->next->prompt = 0;
+		pos->next->state = pos->state;
+		pos->next->prev = pos;
+		if (pos->state == HEREDOC)
+		{
+			pos->next->state = POST_DOC;
+			pos->substr = get_heredoc_ptr(pos->heredoc, pos->new, pos->index);
+			if (pos->substr == NULL)
+				return (handle_return_error(-2, "syntax error near unexpected token `newline"));
+		}
+	}
+	else if (pos->state == POST_DOC)
+	{
+		t_term	*curs;
+		curs = pos;
+		while (curs->state != HEREDOC)
+			curs = curs->prev;
+		if (pos->new && !ft_strcmp(pos->new, curs->substr))
+			return (-1);
+		else
+		{
+			pos->next = create_new_io_struct();
+			pos->next->y = pos->y;
+			pos->next->new = NULL;
+			pos->next->x = 0;
+			pos->next->delta_x = 0;
+			pos->next->prompt = 0;
+			pos->next->state = pos->state;
+			pos->next->prev = pos;
+			return (1);
+		}
+		
 	}
 	return (1);
 }
@@ -30,13 +118,12 @@ void	move_end(t_term *pos)
 	pos->delta_x = 0;
 }
 
-
 t_term *get_last_pos(t_term *pos)
 {
 	t_term *curs;
 
 	curs = pos;
-	while (curs->next)
+	while (curs->next != NULL)
 		curs = curs->next;
 	return (curs);
 }
@@ -46,6 +133,10 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf)
 	t_term	*curs;
 
 	curs = get_last_pos(pos);
+	if (!curs->new)
+		curs->new = get_buf_line(&curs->new, &curs->buf_size, 20);
+	if (curs->index + 2 >= curs->buf_size)
+		curs->new = get_buf_line(&curs->new, &curs->buf_size, 20);
 	if (key == 27)
 		return (key_exit(old, pos, buf));
 	else if (key == ENTER)

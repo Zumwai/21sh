@@ -39,6 +39,38 @@ t_yank	*init_buffer(void)
 	return (new);
 }
 
+char	*concat_lines(t_term *input)
+{
+	t_term	*curs;
+	char	*line;
+	char	*tmp;
+
+	curs = input;
+	line = NULL;
+	while(curs)
+	{
+		tmp = line;
+		if (!line && curs->new)
+			line = ft_strdup(curs->new);
+		else
+			line = ft_strjoin(line, curs->new);
+		free(tmp);
+		curs = curs->next;
+	}
+	return (line);
+}
+
+void temp_free(t_term *input)
+{
+	if (input->next)
+		temp_free(input->next);
+	if (input->new)
+		free(input->new);
+	if (input->state == HEREDOC)
+		free(input->substr);
+	free(input);
+}
+
 int		main(int ac, char **av, char **env)
 {
 	t_env	*ev;
@@ -61,16 +93,13 @@ int		main(int ac, char **av, char **env)
 	while (status)
 	{
 		handle_all_signal(1);
-		line = get_input(buffer);
+		buffer->input = get_input(buffer);
+		line = concat_lines(buffer->input);
+		temp_free(buffer->input);
 		if (!line)
-			break ;
-		/*
-		 For real this time
-		 This is INPUT branch
-		 
-		line = exp_input();
-		*/
-		status = register_input(&ev, line);
+			status = register_input(&ev, "exit");
+		else
+			status = register_input(&ev, line);
 		if (line)
 		{
 			free(line);
