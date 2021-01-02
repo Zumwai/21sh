@@ -47,6 +47,8 @@ static int draw_line(t_term *pos, int remainder)
 	curr = 0;
 	if (!pos->delta_y)
 		curr = pos->prompt;
+	if (!pos->y) //very dangerous. Need check for head struct inb4 everything shuts down
+		pos->y++;
 	if (dimensions.ws_col > remainder + curr)
 		return (draw_finale_line(pos,remainder, curr));
 	else {
