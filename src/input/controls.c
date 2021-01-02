@@ -118,7 +118,7 @@ void	move_end(t_term *pos)
 	pos->delta_x = 0;
 }
 
-t_term *get_last_pos(t_term *pos)
+static t_term *get_last_pos(t_term *pos)
 {
 	t_term *curs;
 
@@ -126,6 +126,16 @@ t_term *get_last_pos(t_term *pos)
 	while (curs->next != NULL)
 		curs = curs->next;
 	return (curs);
+}
+
+static int	ft_history_up(void)
+{
+	return (-3);
+}
+
+static int	ft_history_down(void)
+{
+	return (-4);
 }
 
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf)
@@ -173,5 +183,9 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf)
 		cut_word(curs, buf);
 	else if (key == CLEAR)
 			ft_clear(curs);
+	else if (key == HISTORY_UP)
+			return (ft_history_up());
+	else if (key == HISTORY_DOWN)
+			return (ft_history_down());
 	return (0);
 }

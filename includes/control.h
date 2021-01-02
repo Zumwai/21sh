@@ -24,6 +24,8 @@
 # define YANK	25				//ctrl + y
 # define W_CUT	23				//ctrl + w
 # define CLEAR	12				//ctrl + l
+# define HISTORY_UP	4283163
+# define HISTORY_DOWN	4348699
 
 
 
@@ -31,7 +33,6 @@ typedef struct 		s_term
 {
 	int				x;
 	int				y;
-	char			stack[2];
 	int				delta_x;
 	int				delta_y;
 	int				index;
@@ -45,11 +46,22 @@ typedef struct 		s_term
 	struct s_term	*prev;
 }					t_term;
 
+typedef struct 		s_history
+{
+	t_term				*line;	
+	struct s_history	*next;
+	struct s_history	*prev;
+}					t_history;
+
 typedef struct s_yank
 {
 	char			*yanked;
-	int				size; 
-	t_term	*input;
+	int				size;
+	int				counter;
+	t_term			*input;
+	t_term			*current;
+	t_term			*saved;
+	void			*history;
 }					t_yank;
 
 enum				e_state

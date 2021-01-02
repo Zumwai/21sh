@@ -40,7 +40,6 @@
 # define NOEX	(-6)	//couldnt be executed(dir for example)
 # define NODIR	(-7)	//not a dir
 
-
 typedef struct	s_env
 {
 	char		*name;

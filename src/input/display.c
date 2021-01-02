@@ -27,25 +27,11 @@ static void set_cursor(t_term *pos)
 	else
 		pos->x += pos->delta_x;
 //	if (pos->y + pos->delta_y > dimensions.ws_row)
-//		ft_printf("\033[S");
+//		tputs(tgetstr("sf", NULL), 1, putchar_like);
 	if (pos->next && pos->next->new == NULL)
 	{
 		pos->delta_y++;
 		pos->x = 0;
-		/*
-		if (pos->y + pos->delta_y >= dimensions.ws_row)
-		{
-			t_term *curs = pos;
-			while (curs->prev)
-			{
-				curs = curs->prev;
-				curs->delta_y++;
-				curs->y--;
-			}
-			pos->delta_y++;
-		}
-		*/
-		//ft_printf("\033[S");
 		tputs(tgetstr("sf", NULL), 1, putchar_like);
 	}
 	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y - 1), 1, putchar_like);

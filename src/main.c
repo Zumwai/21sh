@@ -36,6 +36,9 @@ t_yank	*init_buffer(void)
 		return (NULL);
 	new->size = 0;
 	new->yanked = 0;
+	new->history = NULL;
+	new->current = NULL;
+	new->saved = NULL;
 	return (new);
 }
 
@@ -69,6 +72,59 @@ void temp_free(t_term *input)
 	if (input->state == HEREDOC)
 		free(input->substr);
 	free(input);
+}
+
+void	push_history(t_history **history)
+{
+	t_history *new;
+
+	if (!(new = (t_history *)malloc(sizeof(t_history))))
+		handle_exit_errors("Malloc returned NULL");
+	if (!(*history))
+	{
+		(*history) = (t_history *)new;
+		new->next = NULL;
+		new->prev = NULL;
+	}
+	else
+	{
+		new->next = (*history);
+		new->prev = (*history)->prev;
+		(*history)->prev = new;
+		(*history) = new;
+	}
+}
+
+t_term *save_command(t_term *current)
+{
+	t_term *head;
+	t_term	*curs;
+
+	curs = (t_term *)malloc(sizeof(t_term));
+	head = curs;
+	curs->prev = NULL;
+	while (current)
+	{
+		memcpy(curs, current, sizeof(t_term));
+		if (current->new)
+			curs->new = ft_strdup(current->new);
+		if (current->substr)
+			curs->substr = ft_strdup(current->new);
+		current = current->next;
+	}
+	return (head);
+}
+
+void	save_history(t_yank *buffer)
+{
+	t_history	*temp;
+	temp = (t_history *)buffer->history;
+	push_history(&(temp));
+
+	t_history *tmp;
+
+	tmp = (t_history *)buffer->history;
+	tmp->line = save_command(buffer->current);
 }
 
 int		main(int ac, char **av, char **env)

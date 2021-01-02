@@ -92,12 +92,14 @@ t_term *get_input(t_yank *buffer)
 	head = pos;
 	key = 0;
 	red = 0;
+	buffer->current = pos;
+	buffer->saved = pos;
 //	coordinates(&pos->y, &pos->x); //winsize
 	while (1)
 	{
 			key = incapsulate_read(); //remake into a char *?
-			print_value_into_file(key, pos->x, pos->y);
-			red = (read_key(key, pos, old_tty, buffer));
+			print_value_into_file(key, buffer->current->x, buffer->current->y);
+			red = (read_key(key, buffer->current, old_tty, buffer));
 			if (red == -1 || red == -2) 
 				break ;
 			red = 0;
