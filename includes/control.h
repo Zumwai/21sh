@@ -68,7 +68,7 @@ enum				e_state
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf);
 //void	init_tty(void);
 t_term	*get_input(t_yank *buffer);
-void	display_input(t_term *pos, int delta);
+int		display_input(t_term *pos, int delta);
 void	move_left(t_term *pos);
 void 	move_right(t_term *pos);
 void 	change_line_down(t_term *pos);

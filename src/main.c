@@ -109,6 +109,5 @@ int		main(int ac, char **av, char **env)
 			break ;
 	}
 	set_free_all(ev, buffer);
-	char __attribute__((unused))*a = malloc(10);
 	return (EXIT_SUCCESS);
 }

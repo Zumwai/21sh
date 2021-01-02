@@ -10,10 +10,8 @@ static int draw_finale_line(t_term *pos, int remainder, int curr)
 static void set_cursor(t_term *pos)
 {
 	struct winsize dimensions;
-	struct winsize tempo;
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-	tempo = dimensions;
 	if (ft_abs(pos->delta_x) > pos->x)
 	{
 		pos->delta_y--;
@@ -28,12 +26,27 @@ static void set_cursor(t_term *pos)
 	}
 	else
 		pos->x += pos->delta_x;
-	if (pos->y + pos->delta_y >dimensions.ws_row)
-		ft_printf("\033[S");
+//	if (pos->y + pos->delta_y > dimensions.ws_row)
+//		ft_printf("\033[S");
 	if (pos->next && pos->next->new == NULL)
 	{
 		pos->delta_y++;
 		pos->x = 0;
+		/*
+		if (pos->y + pos->delta_y >= dimensions.ws_row)
+		{
+			t_term *curs = pos;
+			while (curs->prev)
+			{
+				curs = curs->prev;
+				curs->delta_y++;
+				curs->y--;
+			}
+			pos->delta_y++;
+		}
+		*/
+		//ft_printf("\033[S");
+		tputs(tgetstr("sf", NULL), 1, putchar_like);
 	}
 	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y - 1), 1, putchar_like);
 }
@@ -53,12 +66,19 @@ static int draw_line(t_term *pos, int remainder)
 		return (draw_finale_line(pos,remainder, curr));
 	else {
 		printed = dimensions.ws_col - curr;
-		ft_putstr_size(&pos->new[pos->index - remainder], printed);
+	//	if (pos->y > 0 && pos->y + pos->delta_y > 0)
+			ft_putstr_size(&pos->new[pos->index - remainder], printed);
 		if (dimensions.ws_row == pos->y + pos->delta_y)
 		{
-		//	tputs(tgetstr("sf", NULL), 1, putchar_like);
-			ft_printf("\033[S");
+			tputs(tgetstr("sf", NULL), 1, putchar_like);
 			pos->y--;
+			t_term *curs = pos;
+			while (curs->prev)
+			{
+				curs = curs->prev;
+				pos->delta_y++;
+				curs->y--;
+			}
 			pos->delta_y++;
 		}
 		else if (printed + curr == dimensions.ws_col)
@@ -77,14 +97,15 @@ static void set_empty_line(int y)
 	tputs(tgetstr("cd", NULL), 1, putchar_like);
 }
 
-void display_input(t_term *pos, int delta)
+int display_input(t_term *pos, int delta)
 {
 	int	remainder = pos->index;
+//	int		y = 0;
 	t_term	temp;
 
 	temp = *pos;
 	if (!pos->new)
-		return ;
+		return (0);
 	if (delta)
 		pos->y += delta;
 	set_empty_line(pos->y);
@@ -96,8 +117,11 @@ void display_input(t_term *pos, int delta)
 	if (pos->next)
 		display_input(pos->next, delta + pos->delta_y + 1);
 	pos->delta_y = 0;
+//	y = pos->y;
 	if (delta)
 		pos->y = temp.y;
+	return (0);
+//	return (temp.y - y);
 //	*pos = temp;
 }
 

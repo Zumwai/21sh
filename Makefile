@@ -1,5 +1,5 @@
 NAME = 21sh
-COM = clang
+COM = gcc
 HEAD_21sh = ./includes/
 HEAD_L = ./libft/
 HEAD_LIB = libft.h
@@ -42,7 +42,9 @@ OBJS_F = $(addprefix $(BIN), $(OBJS))
 BIN = ./bin/
 TRASH = shell.h.gch \
 		shell.dSYM
-FLAGS = -g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined
+FLAGS = -g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined -g3 -Wshadow -Wformat=2 -Wfloat-equal -Wlogical-op -Wshift-overflow=2 \
+		-Wduplicated-cond -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 -fno-sanitize-recover -fstack-protector \
+		-Wno-pointer-arith -Wno-cast-qual -Wno-unused-result
 REMOVE = rm -rf
 
 .PHONY: all clean re
