@@ -1,6 +1,6 @@
 #include "shell.h"
 
-t_history	*push_history(t_history **history)
+t_history	*push_history(t_history **history, t_history **ptr)
 {
 	t_history *new;
 
@@ -11,6 +11,7 @@ t_history	*push_history(t_history **history)
 		(*history) = (t_history *)new;
 		new->next = NULL;
 		new->prev = NULL;
+		(*ptr) = new;
 	}
 	else
 	{
@@ -63,7 +64,7 @@ t_history	*save_history(t_yank *buffer)
 		return (temp);
 	if (buffer->current->new[0] == 0)
 		return (temp);
-	temp = push_history(&(temp));
+	temp = push_history(&(temp), &buffer->hist_ptr);
 	temp->line = save_command(buffer->current);
 	return (temp);
 }
