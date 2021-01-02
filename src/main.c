@@ -88,7 +88,7 @@ int		main(int ac, char **av, char **env)
 		handle_all_signal(1);
 		buffer->current = get_input(buffer);
 		line = concat_lines(buffer->current);
-		save_history(buffer);
+		buffer->history = save_history(buffer);
 		free_input_line(buffer->current);
 		if (!line)
 			status = register_input(&ev, "exit");

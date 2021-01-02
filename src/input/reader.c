@@ -42,8 +42,7 @@ void	print_value_into_file(long long key, int x, int y)
 {
 	FILE *fptr;
 	fptr = fopen("input_log", "aw");
-	if (key == '\n')
-	{
+	if (key == '\n') {
 			fprintf(fptr, "%s\n", "--------------------------------");
 	} else {
 	fprintf(fptr, "%lld: key, %d:x, %d:y", key, x, y);
@@ -78,6 +77,28 @@ __attribute__((noinline))long long	incapsulate_read(void)
 	return (key);
 }
 
+void	envoke_history(t_yank *buffer, int key)
+{
+	if (buffer->saved == NULL)
+		buffer->saved = buffer->current;
+	if(key == -3)
+	{
+		if (buffer->hist_ptr && buffer->hist_ptr->next)
+		{
+			buffer->hist_ptr = buffer->hist_ptr->next;
+			buffer->current = buffer->hist_ptr->line;
+		}
+	}
+	if(key == -4)
+	{
+		if (buffer->hist_ptr && buffer->hist_ptr->prev)
+		{
+			buffer->hist_ptr = buffer->hist_ptr->prev;
+			buffer->current = buffer->hist_ptr->line;
+		}
+	}
+}
+
 t_term *get_input(t_yank *buffer)
 {
 	ssize_t		red;
@@ -94,17 +115,18 @@ t_term *get_input(t_yank *buffer)
 	red = 0;
 	buffer->current = pos;
 	buffer->saved = pos;
-//	coordinates(&pos->y, &pos->x); //winsize
 	while (1)
 	{
-			key = incapsulate_read(); //remake into a char *?
+			key = incapsulate_read();
 			print_value_into_file(key, buffer->current->x, buffer->current->y);
 			red = (read_key(key, buffer->current, old_tty, buffer));
 			if (red == -1 || red == -2) 
 				break ;
+			if (red == -3 || red == -4)
+				envoke_history(buffer, red);
 			red = 0;
 			key = 0;
-			display_input(pos, 0);
+			display_input(buffer->current, 0);
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
 	return (head);

@@ -1,6 +1,6 @@
 #include "shell.h"
 
-void	push_history(t_history **history)
+t_history	*push_history(t_history **history)
 {
 	t_history *new;
 
@@ -19,6 +19,7 @@ void	push_history(t_history **history)
 		(*history)->prev = new;
 		(*history) = new;
 	}
+	return (new);
 }
 
 t_term *save_command(t_term *current)
@@ -51,11 +52,18 @@ t_term *save_command(t_term *current)
 	return (head);
 }
 
-void	save_history(t_yank *buffer)
+t_history	*save_history(t_yank *buffer)
 {
 	t_history	*temp;
 
-	temp = (t_history *)buffer->history;
-	push_history(&(temp));
+	temp = buffer->history;
+	if (!buffer->current)
+		return (temp);
+	if (!buffer->current->new)
+		return (temp);
+	if (buffer->current->new[0] == 0)
+		return (temp);
+	temp = push_history(&(temp));
 	temp->line = save_command(buffer->current);
+	return (temp);
 }

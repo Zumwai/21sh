@@ -7,7 +7,7 @@ void	set_free_all(t_env *ev, t_yank *buffer)
 	if (buffer->yanked != NULL)
 		set_free_null(buffer->yanked);
 	if (buffer->history)
-		free_history(buffer->history);
+		free_history(&(buffer->history));
 	if (buffer != NULL)
 	{
 		free(buffer);
@@ -43,21 +43,27 @@ void free_input_line(t_term *input)
 	if (input->next)
 		free_input_line(input->next);
 	if (input->new)
-		free(input->new);
+		set_free_null(input->new);
 	if (input->state == HEREDOC)
-		free(input->substr);
+		set_free_null(input->substr);
 	free(input);
+	input = NULL;
 }
 
-void free_history(void *history)
+void free_history(t_history **history)
 {
 	t_history *curs;
+	t_history *tmp;
 
-	curs = (t_history *)history;
+	curs = (*history);
+	
 	while (curs)
 	{
+		tmp = curs;
 		if (curs->line)
 			free_input_line(curs->line);
 		curs = curs->next;
+		free(tmp);
+		tmp = NULL;
 	}
 }
