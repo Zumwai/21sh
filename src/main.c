@@ -39,6 +39,7 @@ t_yank	*init_buffer(void)
 	new->history = NULL;
 	new->current = NULL;
 	new->saved = NULL;
+	new->hist_ptr = NULL;
 	return (new);
 }
 

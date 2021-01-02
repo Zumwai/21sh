@@ -83,9 +83,15 @@ void	envoke_history(t_yank *buffer, int key)
 		buffer->saved = buffer->current;
 	if(key == HISTORY_UP)
 	{
-		if (buffer->hist_ptr && buffer->hist_ptr->next)
+		if (buffer->history)
 		{
-			buffer->hist_ptr = buffer->hist_ptr->next;
+			if (buffer->hist_ptr)
+			{
+				if (buffer->hist_ptr->next)
+					buffer->hist_ptr = buffer->hist_ptr->next;
+			}
+			else
+				buffer->hist_ptr = buffer->history;
 			buffer->current = buffer->hist_ptr->line;
 			buffer->current->y = buffer->saved->y;
 		}
@@ -101,6 +107,7 @@ void	envoke_history(t_yank *buffer, int key)
 		else if (buffer->hist_ptr && !buffer->hist_ptr->prev)
 		{
 			buffer->current = buffer->saved;
+			buffer->hist_ptr = NULL;
 		}
 	}
 }
@@ -111,12 +118,12 @@ t_term *get_input(t_yank *buffer)
 	struct termios	old_tty;
 	long long	key;
 	t_term	*pos;
-	t_term	*head;
+//	t_term	*head;
 
 	ft_bzero(&old_tty, sizeof(struct termios));
 	pos = init_prompt(&old_tty);
 	ft_putstr_size("shelp$>", 7);
-	head = pos;
+//	head = pos;
 	key = 0;
 	red = 0;
 	buffer->current = pos;
@@ -135,5 +142,5 @@ t_term *get_input(t_yank *buffer)
 			display_input(buffer->current, 0);
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
-	return (head);
+	return (buffer->current);
 }

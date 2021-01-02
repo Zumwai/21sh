@@ -1,6 +1,6 @@
 #include "shell.h"
 
-t_history	*push_history(t_history **history, t_history **ptr)
+t_history	*push_history(t_history **history, __attribute__((unused))t_history **ptr)
 {
 	t_history *new;
 
@@ -11,7 +11,6 @@ t_history	*push_history(t_history **history, t_history **ptr)
 		(*history) = (t_history *)new;
 		new->next = NULL;
 		new->prev = NULL;
-		(*ptr) = new;
 	}
 	else
 	{
