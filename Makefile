@@ -1,5 +1,5 @@
 NAME = 21sh
-COM = gcc
+COM = clang
 HEAD_21sh = ./includes/
 HEAD_L = ./libft/
 HEAD_LIB = libft.h
@@ -35,16 +35,15 @@ SOUS_FIL = main.c \
 		   input/edition.c \
 		   input/jump_words.c \
 		   input/input_utils.c \
-		   input/cut_paste.c
+		   input/cut_paste.c \
+		   input/history.c
 OBJS = $(SOUS_FIL:.c=.o)
 SOUS_F = $(addprefix $(SOUS), $(SOUS_FIL))
 OBJS_F = $(addprefix $(BIN), $(OBJS))
 BIN = ./bin/
 TRASH = shell.h.gch \
 		shell.dSYM
-FLAGS = -g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined -g3 -Wshadow -Wformat=2 -Wfloat-equal -Wlogical-op -Wshift-overflow=2 \
-		-Wduplicated-cond -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 -fno-sanitize-recover -fstack-protector \
-		-Wno-pointer-arith -Wno-cast-qual -Wno-unused-result
+FLAGS = -g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined 
 REMOVE = rm -rf
 
 .PHONY: all clean re

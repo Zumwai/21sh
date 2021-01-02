@@ -97,6 +97,9 @@ void	cut_after(t_term *pos, t_yank *buffer);
 void	cut_before(t_term *pos, t_yank *buffer);
 void	yank_buffer(t_term *pos, t_yank *buffer);
 t_term	*create_new_io_struct(void);
+void	save_history(t_yank *buffer);
+void 	free_input_line(t_term *input);
+void	free_history(void *history);
 
 
 #endif

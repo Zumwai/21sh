@@ -106,4 +106,5 @@ void 			ft_putstr_size(char *line, size_t size);
 void 			set_free_null(char *line);
 void			set_free_all(t_env *ev, t_yank *buffer);
 
+
 #endif
