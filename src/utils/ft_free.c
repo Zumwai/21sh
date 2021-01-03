@@ -56,7 +56,7 @@ void free_history(t_history **history)
 	t_history *tmp;
 
 	curs = (*history);
-	
+
 	while (curs)
 	{
 		tmp = curs;

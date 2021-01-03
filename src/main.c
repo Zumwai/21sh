@@ -64,7 +64,6 @@ char	*concat_lines(t_term *input)
 	return (line);
 }
 
-
 int		main(int ac, char **av, char **env)
 {
 	t_env	*ev;
@@ -79,27 +78,26 @@ int		main(int ac, char **av, char **env)
 	if (!(ev = create_env_list(env)))
 		return (-1);
 	init_tty();
-	buffer = init_buffer();
-	if (!buffer)
-		handle_exit_errors("Malloc returned NULL");
+	if (!(buffer = init_buffer()))
+		return (-1);
 	status = 1;
 	line = NULL;
 	while (status)
 	{
 		handle_all_signal(1);
 		buffer->current = get_input(buffer);
-		line = concat_lines(buffer->current);
 		buffer->history = save_history(buffer);
-		free_input_line(buffer->current);
+		line = concat_lines(buffer->current);
+//		free_input_line(buffer->current);
+		buffer->current = NULL;
+		if (buffer->saved != NULL)
+			free_input_line(buffer->saved);
 		if (!line)
 			status = register_input(&ev, "exit");
 		else
 			status = register_input(&ev, line);
 		if (line)
-		{
-			free(line);
-			line = NULL;
-		}
+			set_free_null(line);
 		if (!status || status == FIN)
 			break ;
 	}

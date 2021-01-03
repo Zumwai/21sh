@@ -77,41 +77,6 @@ __attribute__((noinline))long long	incapsulate_read(void)
 	return (key);
 }
 
-void	envoke_history(t_yank *buffer, int key)
-{
-	if (buffer->saved == NULL)
-		buffer->saved = buffer->current;
-	if(key == HISTORY_UP)
-	{
-		if (buffer->history)
-		{
-			if (buffer->hist_ptr)
-			{
-				if (buffer->hist_ptr->next)
-					buffer->hist_ptr = buffer->hist_ptr->next;
-			}
-			else
-				buffer->hist_ptr = buffer->history;
-			buffer->current = buffer->hist_ptr->line;
-			buffer->current->y = buffer->saved->y;
-		}
-	}
-	if(key == HISTORY_DOWN)
-	{
-		if (buffer->hist_ptr && buffer->hist_ptr->prev)
-		{
-			buffer->hist_ptr = buffer->hist_ptr->prev;
-			buffer->current = buffer->hist_ptr->line;
-			buffer->current->y = buffer->saved->y;
-		}
-		else if (buffer->hist_ptr && !buffer->hist_ptr->prev)
-		{
-			buffer->current = buffer->saved;
-			buffer->hist_ptr = NULL;
-		}
-	}
-}
-
 t_term *get_input(t_yank *buffer)
 {
 	ssize_t		red;
