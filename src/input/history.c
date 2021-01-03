@@ -81,11 +81,17 @@ t_history	*save_history(t_yank *buffer)
 
 int		climb_up_history(__attribute__((unused))t_yank *buffer)
 {
+	if (buffer->hist_ptr->next)
+		buffer->current = save_command(buffer->hist_ptr->next->line);
+	buffer->hist_ptr = buffer->hist_ptr->next;
 	return (0);
 }
 
 int		climb_down_history(__attribute__((unused))t_yank *buffer)
 {
+	if (buffer->hist_ptr->prev)
+		buffer->current = save_command(buffer->hist_ptr->next->line);
+	buffer->hist_ptr = buffer->hist_ptr->prev;
 	return (0);
 }
 
@@ -93,12 +99,18 @@ int		climb_down_history(__attribute__((unused))t_yank *buffer)
 void	envoke_history(t_yank *buffer, int key)
 {
 	int	ret = 0;
+	t_term	*save;
 
+	if (buffer->hist_ptr == NULL)
+		return ;
+	save = buffer->current;
 	if (key == HISTORY_DOWN)
 		ret = climb_down_history(buffer);
 	if (key == HISTORY_UP)
 		ret = climb_up_history(buffer);
 	buffer->current->state = ret;
+	if (buffer->saved == NULL)
+		buffer->saved = save;
 }
 
 //	int  stupid_flat = 0;
