@@ -92,7 +92,7 @@ t_term *get_input(t_yank *buffer)
 	key = 0;
 	red = 0;
 	buffer->current = pos;
-	buffer->saved = pos;
+	buffer->saved = NULL;
 	while (1)
 	{
 			key = incapsulate_read();

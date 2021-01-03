@@ -86,21 +86,24 @@ int		main(int ac, char **av, char **env)
 	{
 		handle_all_signal(1);
 		buffer->current = get_input(buffer);
-		buffer->history = save_history(buffer);
 		line = concat_lines(buffer->current);
-//		free_input_line(buffer->current);
-		buffer->current = NULL;
+		buffer->history = save_history(buffer);
+	//	if (buffer->current != NULL)
+	//		free_input_data(buffer->current);
+	//	buffer->current = NULL;
 		if (buffer->saved != NULL)
-			free_input_line(buffer->saved);
+			free_input_data(&buffer->saved);
+		if (buffer->current != NULL)
+			free_input_data(&buffer->current);
 		if (!line)
 			status = register_input(&ev, "exit");
 		else
 			status = register_input(&ev, line);
 		if (line)
-			set_free_null(line);
+			set_free_null(&line);
 		if (!status || status == FIN)
 			break ;
 	}
-	set_free_all(ev, buffer);
+	set_free_all(ev, &buffer);
 	return (EXIT_SUCCESS);
 }

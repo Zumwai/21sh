@@ -68,24 +68,51 @@ t_history	*save_history(t_yank *buffer)
 	t_history	*temp;
 
 	temp = buffer->history;
-	if (!buffer->current)
+	if (!buffer->current || !buffer->current->new || buffer->current->new[0] == 0)
+	{
+	//	free_input_data(&(*buffer)->current);
 		return (temp);
-	if (!buffer->current->new)
-		return (temp);
-	if (buffer->current->new[0] == 0)
-		return (temp);
+	}
 	temp = push_history(&(temp), &buffer->hist_ptr);
 	temp->line = save_command(buffer->current);
 	buffer->hist_ptr = temp;
 	return (temp);
 }
 
+int		climb_up_history(__attribute__((unused))t_yank *buffer)
+{
+	return (0);
+}
+
+int		climb_down_history(__attribute__((unused))t_yank *buffer)
+{
+	return (0);
+}
 
 
 void	envoke_history(t_yank *buffer, int key)
 {
+	int	ret = 0;
+
+	if (key == HISTORY_DOWN)
+		ret = climb_down_history(buffer);
+	if (key == HISTORY_UP)
+		ret = climb_up_history(buffer);
+	buffer->current->state = ret;
+}
+
+//	int  stupid_flat = 0;
+//	t_term	*curr;
+
+//	curr = NULL;
+/*
 	if (buffer->saved == NULL)
 		buffer->saved = buffer->current;
+	else
+	{
+		free_input_data(buffer->current);
+		buffer->current = NULL;
+	}
 	if(key == HISTORY_UP)
 	{
 		if (buffer->history)
@@ -97,7 +124,7 @@ void	envoke_history(t_yank *buffer, int key)
 			}
 			else
 				buffer->hist_ptr = buffer->history;
-			buffer->current = buffer->hist_ptr->line;
+			buffer->current = save_command(buffer->hist_ptr->line);
 			buffer->current->y = buffer->saved->y;
 		}
 	}
@@ -106,7 +133,7 @@ void	envoke_history(t_yank *buffer, int key)
 		if (buffer->hist_ptr && buffer->hist_ptr->prev)
 		{
 			buffer->hist_ptr = buffer->hist_ptr->prev;
-			buffer->current = buffer->hist_ptr->line;
+			buffer->current = save_command(buffer->hist_ptr->line);
 			buffer->current->y = buffer->saved->y;
 		}
 		else if (buffer->hist_ptr && !buffer->hist_ptr->prev)
@@ -115,4 +142,4 @@ void	envoke_history(t_yank *buffer, int key)
 			buffer->hist_ptr = NULL;
 		}
 	}
-}
+	*/
