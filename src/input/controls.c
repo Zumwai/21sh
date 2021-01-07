@@ -130,12 +130,12 @@ static t_term *get_last_pos(t_term *pos)
 
 static int	ft_history_up(void)
 {
-	return (HISTORY_UP);
+	return (-3);
 }
 
 static int	ft_history_down(void)
 {
-	return (HISTORY_DOWN);
+	return (-4);
 }
 
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf)

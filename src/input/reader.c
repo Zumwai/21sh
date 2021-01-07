@@ -76,12 +76,12 @@ __attribute__((noinline))long long	incapsulate_read(void)
 	read(STDIN_FILENO, &key, sizeof(key));
 	return (key);
 }
-
+/*
 void	envoke_history(t_yank *buffer, int key)
 {
 	if (buffer->saved == NULL)
 		buffer->saved = buffer->current;
-	if(key == HISTORY_UP)
+	if(key == -3)
 	{
 		if (buffer->history)
 		{
@@ -96,7 +96,7 @@ void	envoke_history(t_yank *buffer, int key)
 			buffer->current->y = buffer->saved->y;
 		}
 	}
-	if(key == HISTORY_DOWN)
+	if(key == -4)
 	{
 		if (buffer->hist_ptr && buffer->hist_ptr->prev)
 		{
@@ -109,6 +109,95 @@ void	envoke_history(t_yank *buffer, int key)
 			buffer->current = buffer->saved;
 			buffer->hist_ptr = NULL;
 		}
+	}
+}
+*/
+
+char	*ft_strdup_size(char *old, size_t size)
+{
+	char	*new;
+
+	if (!(new = ft_strnew(size)))
+		handle_exit_errors("Malloc returned NULL");
+	ft_strcpy(new,old);
+	return (new);
+}
+
+t_term *copy_input_struct(t_term *current)
+{
+	t_term *head;
+	t_term	*curs;
+	t_term	*tmp;
+
+	curs = (t_term *)malloc(sizeof(t_term));
+	head = curs;
+	tmp = head;
+	curs->prev = NULL;
+	while (current)
+	{
+		ft_memcpy(curs, current, sizeof(t_term));
+		if (tmp != head)
+			curs->prev = tmp;
+		if (current->new)
+			curs->new = ft_strdup_size(current->new, current->buf_size);
+		if (current->substr)
+			curs->substr = ft_strdup_size(current->new, current->buf_size);
+		current = current->next;
+		if (current)
+		{
+			curs->next = (t_term *)malloc(sizeof(t_term));
+			tmp = curs;
+			curs = curs->next;
+		}
+	}
+	return (head);
+}
+
+t_history		*scroll_history_down(t_yank *buffer)
+{
+	t_history *ptr;
+
+	ptr = buffer->hist_ptr;
+	if (ptr->prev != NULL) {
+		return (ptr);
+	}
+	return (NULL);
+}
+
+t_history		*scroll_history_up(t_yank *buffer)
+{
+	t_history *ptr;
+
+	ptr = buffer->hist_ptr;
+	if (ptr->next != NULL) {
+		return (ptr);
+	}
+	return (NULL);
+}
+
+void	envoke_history(t_yank *buffer, int key)
+{
+	t_history	*temp;
+
+	temp = NULL;
+	if (key == -4) {
+		temp = scroll_history_down(buffer);
+	}
+	if (key == -3) {
+		temp = scroll_history_up(buffer);
+	}
+	if (temp != NULL) {
+		if (buffer->current != buffer->saved && buffer->saved != NULL) {
+			free_input_line(buffer->current);
+		}
+		if (buffer->saved == NULL)
+			buffer->saved = buffer->current;
+		buffer->current = copy_input_struct(buffer->hist_ptr->line);
+	}
+	if (temp == NULL)
+	{
+		if (buffer->saved != NULL)
+			buffer->current = buffer->saved;
 	}
 }
 
@@ -127,15 +216,15 @@ t_term *get_input(t_yank *buffer)
 	key = 0;
 	red = 0;
 	buffer->current = pos;
-	buffer->saved = pos;
+	buffer->saved = NULL;
 	while (1)
 	{
 			key = incapsulate_read();
-			print_value_into_file(key, buffer->current->x, buffer->current->y);
+//			print_value_into_file(key, buffer->current->x, buffer->current->y);
 			red = (read_key(key, buffer->current, old_tty, buffer));
 			if (red == -1 || red == -2) 
 				break ;
-			if (red == HISTORY_UP || red == HISTORY_DOWN)
+			if (red == -3 || red == -4)
 				envoke_history(buffer, red);
 			red = 0;
 			key = 0;

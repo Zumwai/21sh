@@ -91,6 +91,8 @@ int		main(int ac, char **av, char **env)
 		line = concat_lines(buffer->current);
 		buffer->history = save_history(buffer);
 		free_input_line(buffer->current);
+		if (buffer->saved)
+			free_input_line(buffer->saved);
 		if (!line)
 			status = register_input(&ev, "exit");
 		else
