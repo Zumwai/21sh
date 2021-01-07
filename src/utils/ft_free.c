@@ -5,7 +5,7 @@ void	set_free_all(t_env *ev, t_yank *buffer)
 	if (ev != NULL)
 		delete_env_list(&ev);
 	if (buffer->yanked != NULL)
-		set_free_null(buffer->yanked);
+		set_free_null(&buffer->yanked);
 	if (buffer->history)
 		free_history(&(buffer->history));
 	if (buffer != NULL)
@@ -30,24 +30,26 @@ void	ft_free_tab(char **tab)
 	tab = NULL;
 }
 
-void set_free_null(char *line)
+void set_free_null(char **line)
 {
-	if (line)
-		free(line);
-	line = NULL;
+	if (*line)
+		free(*line);
+	*line = NULL;
 }
 
 
-void free_input_line(t_term *input)
+void free_input_line(t_term **input)
 {
-	if (input->next)
-		free_input_line(input->next);
-	if (input->new)
-		set_free_null(input->new);
-	if (input->state == HEREDOC)
-		set_free_null(input->substr);
-	free(input);
-	input = NULL;
+	if (!(*input))
+		return ;
+	if ((*input)->next)
+		free_input_line(&(*input)->next);
+	if ((*input)->new)
+		set_free_null(&(*input)->new);
+	if ((*input)->state == HEREDOC)
+		set_free_null(&(*input)->substr);
+	free(*input);
+	*input = NULL;
 }
 
 void free_history(t_history **history)
@@ -61,7 +63,7 @@ void free_history(t_history **history)
 	{
 		tmp = curs;
 		if (curs->line)
-			free_input_line(curs->line);
+			free_input_line(&curs->line);
 		curs = curs->next;
 		free(tmp);
 		tmp = NULL;

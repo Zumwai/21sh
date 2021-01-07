@@ -122,6 +122,17 @@ char	*ft_strdup_size(char *old, size_t size)
 	ft_strcpy(new,old);
 	return (new);
 }
+/*
+char	*duplicate_with_buffer_size(char *line, size_t size)
+{
+	char		*new;
+
+	new = ft_strnew(size);
+	//check for null?
+	ft_memcpy(new, line, size);
+	return (new);
+}
+*/
 
 t_term *copy_input_struct(t_term *current)
 {
@@ -158,8 +169,14 @@ t_history		*scroll_history_down(t_yank *buffer)
 	t_history *ptr;
 
 	ptr = buffer->hist_ptr;
-	if (ptr->prev != NULL) {
-		return (ptr);
+	if (ptr != NULL) {
+		if (!ptr->prev)
+			return (NULL);
+		else {
+			if (buffer->hist_ptr->prev)
+			buffer->hist_ptr = buffer->hist_ptr->prev;
+			return (ptr->prev);
+		}
 	}
 	return (NULL);
 }
@@ -169,8 +186,24 @@ t_history		*scroll_history_up(t_yank *buffer)
 	t_history *ptr;
 
 	ptr = buffer->hist_ptr;
-	if (ptr->next != NULL) {
-		return (ptr);
+	if (ptr == NULL)
+	{
+		if (buffer->history == NULL)
+			return (NULL);
+		buffer->hist_ptr = buffer->history;
+		ptr = buffer->hist_ptr;
+		return ptr;
+	}
+	else {
+		if (ptr->next)
+		{
+			buffer->hist_ptr = buffer->hist_ptr->next;
+			ptr = buffer->hist_ptr;
+			return ptr;
+		}
+		else {
+			return ptr;
+		}
 	}
 	return (NULL);
 }
@@ -187,17 +220,21 @@ void	envoke_history(t_yank *buffer, int key)
 		temp = scroll_history_up(buffer);
 	}
 	if (temp != NULL) {
-		if (buffer->current != buffer->saved && buffer->saved != NULL) {
-			free_input_line(buffer->current);
-		}
 		if (buffer->saved == NULL)
 			buffer->saved = buffer->current;
+		if (buffer->current != buffer->saved) {
+			free_input_line(&buffer->current);
+			buffer->current = NULL;
+		}
 		buffer->current = copy_input_struct(buffer->hist_ptr->line);
 	}
 	if (temp == NULL)
 	{
-		if (buffer->saved != NULL)
+		if (buffer->saved != NULL){
+			free_input_line(&buffer->current);
 			buffer->current = buffer->saved;
+			buffer->saved = NULL;
+		}
 	}
 }
 
