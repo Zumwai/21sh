@@ -52,17 +52,14 @@ static int		parse_input(char *line, char **tmp)
 
 int				register_input(t_env **ev, char *line)
 {
-//	char	*line;
 	char	*tmp;
 	char	**com;
 	int		i;
 
-//	line = NULL;
 	tmp = NULL;
-//	i = get_next_line(0, &line);
 	i = 1;
 	if (!line)
-		return (1);
+		line = "exit";
 	if (parse_input(line, &tmp))
 	{
 		com = ft_strsplit(tmp, ';');

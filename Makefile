@@ -27,6 +27,7 @@ SOUS_FIL = main.c \
 		   builtin/shelp_exit.c \
 		   builtin/shelp_un_set_env.c \
 		   builtin/shelp_help.c \
+		   builtin/init.c \
 		   signals/shelp_signal.c \
 		   input/controls.c \
 		   input/display.c \
@@ -43,9 +44,7 @@ OBJS_F = $(addprefix $(BIN), $(OBJS))
 BIN = ./bin/
 TRASH = shell.h.gch \
 		shell.dSYM
-FLAGS = -g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined -g3 -Wshadow -Wformat=2 -Wfloat-equal -Wlogical-op -Wshift-overflow \
-		-Wduplicated-cond -Wcast-qual -Wcast-align -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 -fno-sanitize-recover=all -fstack-protector \
-		-Wno-pointer-arith -Wno-cast-qual -Wno-unused-result
+FLAGS = -g -Wall -Wextra -Werror -fsanitize=address -fsanitize=undefined
 REMOVE = rm -rf
 
 .PHONY: all clean re

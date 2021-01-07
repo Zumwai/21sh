@@ -47,7 +47,7 @@ void		handle_cd_err(int num, char *name)
 
 void	handle_exit_errors(char *description)
 {
-	ft_putstr_fd("ft_select: ", STDERR_FILENO);
+	ft_putstr_fd("-shelp!: ", STDERR_FILENO);
 	ft_putstr_fd(description, STDERR_FILENO);
 //	reset_tty();
 	exit(EXIT_FAILURE);

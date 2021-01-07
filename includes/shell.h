@@ -66,6 +66,7 @@ void			delete_env_list(t_env **ev);
 t_env			*find_env(t_env **ev, char *name);
 int				display_env_list(char **com, t_env **env);
 t_env			*ft_last_env(char *name, char *value);
+t_env			*init_shell(int ac, char **av, char **env, t_yank **buffer);
 
 /*
 	READER, the old one
@@ -105,6 +106,8 @@ int 			ft_abs(int i);
 void 			ft_putstr_size(char *line, size_t size);
 void 			set_free_null(char **line);
 void			set_free_all(t_env *ev, t_yank *buffer);
+char			*concat_lines(t_term *input);
+
 
 
 #endif

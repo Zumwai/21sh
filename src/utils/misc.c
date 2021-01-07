@@ -48,3 +48,25 @@ int ft_abs(int i)
 {
 	return ((i > 0) ? i : -i);
 }
+
+
+char	*concat_lines(t_term *input)
+{
+	t_term	*curs;
+	char	*line;
+	char	*tmp;
+
+	curs = input;
+	line = NULL;
+	while(curs)
+	{
+		tmp = line;
+		if (!line && curs->new)
+			line = ft_strdup(curs->new);
+		else
+			line = ft_strjoin(line, curs->new);
+		free(tmp);
+		curs = curs->next;
+	}
+	return (line);
+}

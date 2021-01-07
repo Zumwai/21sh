@@ -60,3 +60,13 @@ t_term	*create_new_io_struct(void)
 	pos->prev = NULL;
 	return (pos);
 }
+
+char	*ft_strdup_size(char *old, size_t size)
+{
+	char	*new;
+
+	if (!(new = ft_strnew(size)))
+		handle_exit_errors("Malloc returned NULL");
+	ft_strcpy(new,old);
+	return (new);
+}

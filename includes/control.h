@@ -101,6 +101,7 @@ t_term		*create_new_io_struct(void);
 t_history	*save_history(t_yank *buffer);
 void 		free_input_line(t_term **input);
 void free_history(t_history **history);
-t_term *copy_input_struct(t_term *current);
+void	envoke_history(t_yank *buffer, int key);
+char	*ft_strdup_size(char *old, size_t size);
 
 #endif
