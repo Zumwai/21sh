@@ -7,7 +7,7 @@ void	cut_word(t_term *pos, t_yank *buffer)
 	int 	abs = ft_abs(pos->delta_x);
 
 	if (buffer->yanked)
-		set_free_null(&buffer->yanked);
+		set_free_null(buffer->yanked);
 	if (pos->index == 0)
 		return ;
 	curr = pos->index - abs - 1;
@@ -29,7 +29,7 @@ void	cut_after(t_term *pos, t_yank *buffer)
 	int 	abs = ft_abs(pos->delta_x);
 
 	if (buffer->yanked)
-		set_free_null(&buffer->yanked);
+		set_free_null(buffer->yanked);
 	curr = pos->index - abs;
 	buffer->yanked = ft_strsub(pos->new, curr, abs);
 	ft_memset(&pos->new[curr], 0, abs);
@@ -42,7 +42,7 @@ void	cut_before(t_term *pos, t_yank *buffer)
 	int		curr;
 	int 	abs = ft_abs(pos->delta_x);
 	if (buffer->yanked)
-		set_free_null(&buffer->yanked);
+		set_free_null(buffer->yanked);
 	curr = pos->index - abs;
 	buffer->yanked = ft_strsub(pos->new, 0, curr);
 	ft_memmove(pos->new, &pos->new[curr], abs);

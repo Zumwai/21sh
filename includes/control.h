@@ -99,14 +99,8 @@ void		cut_before(t_term *pos, t_yank *buffer);
 void		yank_buffer(t_term *pos, t_yank *buffer);
 t_term		*create_new_io_struct(void);
 t_history	*save_history(t_yank *buffer);
-<<<<<<< HEAD
 void 		free_input_line(t_term *input);
 void free_history(t_history **history);
 t_term *copy_input_struct(t_term *current);
-=======
-void 		free_input_data(t_term **input);
-void	 free_history(t_history **history);
-void	envoke_history(t_yank *buffer, int key);
->>>>>>> 4268e47320fc63f172a6dfb4e0222cd70fc35079
 
 #endif
