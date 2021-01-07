@@ -52,23 +52,42 @@ static t_term *copy_input_struct(t_term *current)
 	return (head);
 }
 
+void	remove_last_command(t_history **head)
+{
+	t_history *curs;
+
+	curs = *head;
+	while (curs->next)
+		curs = curs->next;
+	curs->prev->next = NULL;
+	free_input_line(&curs->line);
+	free(curs);
+	curs = NULL;
+}
+
 t_history	*save_history(t_yank *buffer)
 {
 	t_history	*temp;
 
 	temp = buffer->history;
 	if (!buffer->current || !buffer->current->new || buffer->current->new[0] == 0)
-	{
-	//	free_input_data(&(*buffer)->current);
 		return (temp);
-	}
+	if (buffer->history)
+		if (!ft_strcmp(buffer->current->new, buffer->history->line->new))
+			return (temp);
 	temp = push_history(&(temp), &buffer->hist_ptr);
 	temp->line = copy_input_struct(buffer->current);
+	buffer->counter++;
+	if (buffer->counter > 50)
+	{
+		remove_last_command(&buffer->history);
+		buffer->counter--;
+	}
 	buffer->hist_ptr = NULL;
 	return (temp);
 }
 
-t_history		*scroll_history_down(t_yank *buffer)
+static t_history		*scroll_history_down(t_yank *buffer)
 {
 	t_history *ptr;
 
@@ -78,14 +97,14 @@ t_history		*scroll_history_down(t_yank *buffer)
 			return (NULL);
 		else {
 			if (buffer->hist_ptr->prev)
-			buffer->hist_ptr = buffer->hist_ptr->prev;
+				buffer->hist_ptr = buffer->hist_ptr->prev;
 			return (ptr->prev);
 		}
 	}
 	return (NULL);
 }
 
-t_history		*scroll_history_up(t_yank *buffer)
+static t_history		*scroll_history_up(t_yank *buffer)
 {
 	t_history *ptr;
 

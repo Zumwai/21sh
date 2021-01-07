@@ -28,6 +28,7 @@ static t_yank	*init_buffer(void)
 	new->current = NULL;
 	new->saved = NULL;
 	new->hist_ptr = NULL;
+	new->counter = 0;
 	return (new);
 }
 
