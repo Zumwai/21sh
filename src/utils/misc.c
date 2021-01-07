@@ -15,10 +15,10 @@
 void	ft_concat(char *str, char **path, char *name)
 {
 	ft_strclr((*path));
-	(*path) = ft_strcpy((*path), str);
-	(*path) = ft_strcat((*path), "/");
+	(*path) = strcpy((*path), str);
+	(*path) = strcat((*path), "/");
 	if (name)
-		(*path) = ft_strcat((*path), name);
+		(*path) = strcat((*path), name);
 }
 
 char	*get_full_path(char *path, char *name)

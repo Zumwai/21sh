@@ -7,7 +7,7 @@ void go_next_word(t_term *pos)
 	int curs = pos->index - abs;
 	while (pos->new[curs] != '\0' && pos->new[curs] == ' ')
 		curs++;
-	while (pos->new[curs] && ft_ischar(pos->new[curs]))
+	while (pos->new[curs] && ft_isalnum(pos->new[curs]))
 		curs++;
 	curs = pos->index - curs;
 	pos->delta_x = -curs;
@@ -22,7 +22,7 @@ void go_prev_word(t_term *pos)
 	int curs = pos->index - abs - 1;
 	while (curs > 0 && pos->new[curs] == ' ')
 		curs--;
-	while (curs > 0 && ft_ischar(pos->new[curs]))
+	while (curs > 0 && ft_isalnum(pos->new[curs]))
 		curs--;
 	if (curs > 0)
 	{

@@ -177,6 +177,8 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf)
 		cut_after(curs, buf);
 	else if (key == L_CUT)
 		cut_before(curs, buf);
+	else if (key == COPY_W)
+		copy_word(curs, buf);
 	else if (key == YANK)
 		yank_buffer(curs, buf);
 	else if (key == W_CUT)
