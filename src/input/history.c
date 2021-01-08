@@ -94,7 +94,10 @@ static t_history		*scroll_history_down(t_yank *buffer)
 	ptr = buffer->hist_ptr;
 	if (ptr != NULL) {
 		if (!ptr->prev)
+		{
+			buffer->hist_ptr = NULL;
 			return (NULL);
+		}
 		else {
 			if (buffer->hist_ptr->prev)
 				buffer->hist_ptr = buffer->hist_ptr->prev;
@@ -122,11 +125,8 @@ static t_history		*scroll_history_up(t_yank *buffer)
 		{
 			buffer->hist_ptr = buffer->hist_ptr->next;
 			ptr = buffer->hist_ptr;
-			return ptr;
 		}
-		else {
-			return ptr;
-		}
+		return ptr;
 	}
 	return (NULL);
 }

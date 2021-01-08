@@ -68,5 +68,11 @@ char	*concat_lines(t_term *input)
 		free(tmp);
 		curs = curs->next;
 	}
+	if (line && ft_strlen(line) > 4095)
+	{
+		handle_empty_error("usage: length", "input line too long, must be under 4096\n");
+		set_free_null(&line);
+		return (NULL);
+	}
 	return (line);
 }

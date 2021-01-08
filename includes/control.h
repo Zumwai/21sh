@@ -80,7 +80,6 @@ enum				e_state
 
 int 		read_key(long long key, t_term *pos, struct termios old, t_yank *buf);
 //void		init_tty(void);
-t_term		*get_input(t_yank *buffer);
 int			display_input(t_term *pos, int delta);
 void		move_left(t_term *pos);
 void 		move_right(t_term *pos);
@@ -104,5 +103,6 @@ void free_history(t_history **history);
 void	envoke_history(t_yank *buffer, int key);
 char	*ft_strdup_size(char *old, size_t size);
 void	copy_word(t_term *pos, t_yank *buffer);
+char	*handle_input_stream(t_yank *buffer);
 
 #endif

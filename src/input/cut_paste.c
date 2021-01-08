@@ -8,7 +8,7 @@ void	copy_word(t_term *pos, t_yank *buffer)
 
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
-	if (pos->index == 0)
+	if (pos->index == 0 || pos->index - abs <= 0)
 		return ;
 	curr = pos->index - abs - 1;
 	end = curr;
@@ -29,18 +29,19 @@ void	cut_word(t_term *pos, t_yank *buffer)
 
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
-	if (pos->index == 0)
+	if (pos->index == 0 || pos->index - abs <= 0)
 		return ;
-	curr = pos->index - abs - 1;
+	curr = pos->index - abs;
 	end = curr;
-	while(curr > 0 && pos->new[curr] == ' ')
+	while(curr > 0 && pos->new[curr - 1] == ' ')
 		curr--;
-	while(curr > 0 && ft_ischar(pos->new[curr]))
+	while(curr > 0 && ft_ischar(pos->new[curr - 1]))
 		curr--;
 //	curr++;
 	buffer->yanked = ft_strsub(pos->new, curr, end - curr);
 	ft_memmove(&pos->new[curr], &pos->new[end], pos->index - end);
-	pos->index -= (end - curr) + 1;
+	pos->index -= (end - curr);
+	pos->x -= (end - curr);
 	ft_memset(&pos->new[pos->index], 0, end - curr);
 }
 

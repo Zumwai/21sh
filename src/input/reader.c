@@ -53,7 +53,7 @@ void	print_value_into_file(long long key, int x, int y)
 }
 
 
-__attribute__((noinline))long long	incapsulate_read(void)
+static __attribute__((noinline))long long	incapsulate_read(void)
 {
 	long long key;
 	key = 0;
@@ -61,7 +61,7 @@ __attribute__((noinline))long long	incapsulate_read(void)
 	return (key);
 }
 
-t_term *get_input(t_yank *buffer)
+static t_term *get_input(t_yank *buffer)
 {
 	ssize_t		red;
 	struct termios	old_tty;
@@ -93,4 +93,18 @@ t_term *get_input(t_yank *buffer)
 	}
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
 	return (buffer->current);
+}
+
+char	*handle_input_stream(t_yank *buffer)
+{
+	char	*line;
+
+	line =  NULL;
+	buffer->current = get_input(buffer);
+	line = concat_lines(buffer->current);
+	buffer->history = save_history(buffer);
+	free_input_line(&buffer->current);
+	if (buffer->saved)
+		free_input_line(&buffer->saved);
+	return (line);
 }

@@ -12,20 +12,6 @@
 
 #include "shell.h"
 
-char	*handle_input_stream(t_yank *buffer)
-{
-	char	*line;
-
-	line =  NULL;
-	buffer->current = get_input(buffer);
-	line = concat_lines(buffer->current);
-	buffer->history = save_history(buffer);
-	free_input_line(&buffer->current);
-	if (buffer->saved)
-		free_input_line(&buffer->saved);
-	return (line);
-}
-
 int		main(int ac, char **av, char **env)
 {
 	t_env	*ev;

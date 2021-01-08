@@ -59,7 +59,7 @@ int				register_input(t_env **ev, char *line)
 	tmp = NULL;
 	i = 1;
 	if (!line)
-		line = "exit";
+		return (1);
 	if (parse_input(line, &tmp))
 	{
 		com = ft_strsplit(tmp, ';');
