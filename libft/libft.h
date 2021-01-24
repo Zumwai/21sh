@@ -17,12 +17,12 @@
 # include <string.h>
 # include <stdio.h>
 
-typedef struct		s_list
+typedef struct		s_liblist
 {
 	void			*content;
 	size_t			content_size;
-	struct s_list	*next;
-}					t_list;
+	struct s_liblist	*next;
+}					t_liblist;
 
 int					ft_atoi(const char *str);
 void				ft_bzero(void *s, size_t n);
@@ -81,14 +81,18 @@ int					ft_toupper(int c);
 void				ft_print_tab(char **tab);
 char				**ft_newdim(size_t n);
 int					ft_sqrt(int nb);
-t_list				*ft_lstnew(void const *content, size_t content_size);
-void				ft_lstdelone(t_list **alst, void (*del)(void *, size_t));
-void				ft_lstdel(t_list **alst, void(*del)(void *, size_t));
-void				ft_lstadd(t_list **alst, t_list *new);
-void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
-t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
+t_liblist				*ft_lstnew(void const *content, size_t content_size);
+void				ft_lstdelone(t_liblist **alst, void (*del)(void *, size_t));
+void				ft_lstdel(t_liblist **alst, void(*del)(void *, size_t));
+void				ft_lstadd(t_liblist **alst, t_liblist *new);
+void				ft_lstiter(t_liblist *lst, void (*f)(t_liblist *elem));
+t_liblist				*ft_lstmap(t_liblist *lst, t_liblist *(*f)(t_liblist *elem));
 int					get_next_line(int fd, char **line);
 int					ft_isletter(char c);
 char				**ft_splitword(char *l);
+int				ft_printf(const char *ft, ...);
+size_t			ft_strsplit_len(char **strsplit);
+void	ft_strsplit_free(char ***strsplit);
+
 
 #endif

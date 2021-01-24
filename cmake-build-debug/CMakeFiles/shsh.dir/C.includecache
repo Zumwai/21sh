@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../libft/libft.h
+unistd.h
+-
+stdlib.h
+-
+string.h
+-
+unistd.h
+-
+fcntl.h
+-
+
+../sh.h
+stdlib.h
+-
+sys/wait.h
+-
+unistd.h
+-
+string.h
+-
+sys/types.h
+-
+sys/stat.h
+-
+libft/libft.h
+../libft/libft.h
+libft.h
+../libft.h
+
+/Users/cassunta/Desktop/shsh/exec/execute.c
+sh.h
+/Users/cassunta/Desktop/shsh/exec/sh.h
+

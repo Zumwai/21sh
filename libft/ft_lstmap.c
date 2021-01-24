@@ -12,14 +12,14 @@
 
 #include "libft.h"
 
-t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
+t_liblist	*ft_lstmap(t_liblist *lst, t_liblist *(*f)(t_liblist *elem))
 {
-	t_list		*new;
+	t_liblist		*new;
 
 	new = NULL;
 	if (!lst || !f)
 		return (NULL);
-	if (!(new = (t_list *)malloc(sizeof(t_list))))
+	if (!(new = (t_liblist *)malloc(sizeof(t_liblist))))
 		return (NULL);
 	new = f(lst);
 	new->next = ft_lstmap(lst->next, f);
