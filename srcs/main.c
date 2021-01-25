@@ -18,9 +18,16 @@ int		main(int ac, char **av, char **env)
 		token = NULL;
 		line = NULL;
 		line = handle_input_stream(buffer);
-		token = parsing_t(line);
-		cmd = get_cmd(token, ev);
-		loop = execute(cmd, &ev);
+		if (!line)
+			break ;
+		else if (line[0])
+		{
+			token = parsing_t(line);
+			cmd = get_cmd(token, ev);
+			loop = execute(cmd, &ev);
+			free_token_list(&token);
+			free_cmd_list(&cmd);
+		}
 		set_free_null(&line);
 	}
 	set_free_all(ev, buffer);

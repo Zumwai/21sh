@@ -10,8 +10,9 @@ int key_exit(struct termios old_tty, t_term *pos, __attribute((unused))t_yank *b
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
 //	if (pos->new)
 //		set_free_null(pos->new);
-	free(pos->new);
-	pos->new = NULL;
+	free_input_line(&pos);
+//	free(pos->new);
+//	pos->new = NULL;
 //	set_free_all(NULL, buffer);
 	return(-2);
 }

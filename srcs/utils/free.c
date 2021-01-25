@@ -1,37 +1,61 @@
 #include "sh.h"
 
 /* UNUSED */
-void			free_token(t_token *t)
+void		free_token_list(t_token **t)
 {
-	t_token		*cur;
+	t_token	*curs;
+	t_token	*tmp;
 
-	cur = t;
-	while (t)
+	curs = (*t);
+	while (curs)
 	{
-		cur = t;
-		t = t->next;
-		free(cur->data);
-		free(cur);
+		tmp = curs->next;
+		if (curs->data)
+			set_free_null(&curs->data);
+		free(curs);
+		curs = NULL;
+		curs = tmp;
 	}
 }
 
-/* UNUSED */
-void			free_cmd(t_cmd *cmd)
+void			free_cmd_list(t_cmd **cmd)
 {
-	t_cmd		*cur;
+	t_cmd		*curs;
+	t_cmd		*tmp;
 
-	while (cmd)
+	curs = (*cmd);
+	while (curs)
 	{
-		cur = cmd;
-		cmd = cmd->next;
-		if (cur->arr)
-			ft_strsplit_free(&cur->arr);
-		if (cur->target != NULL)
-			free(cur->target);
-		free(cur);
+		tmp = curs->next;
+		if (curs->arr)
+			ft_free_tab(&(*cmd)->arr);
+		if (curs->target)
+			set_free_null(&curs->target);
+		free(curs);
+		curs = NULL;
+		curs = tmp;
 	}
 }
+/*
+void			free_cmd_list(t_cmd **cmd)
+{
+	t_cmd		*curs;
 
+	curs = *cmd;
+	while (*cmd)
+	{
+		curs = *cmd;
+		if ((*cmd)->next)
+			*cmd = (*cmd)->next;
+		if (curs->arr)
+			ft_strsplit_free(&curs->arr);
+		if (curs->target != NULL)
+			free(curs->target);
+		free(curs);
+		curs = NULL;
+	}
+}
+*/
 /* Will be used later on temp env list for execve */
 static void		delete_env_list(t_env **ev)
 {
@@ -70,16 +94,18 @@ extern void	set_free_all(t_env *ev, t_yank *buffer)
 void	ft_free_tab(char ***tab)
 {
 	int		i;
+	char	**curs;
 
+	curs = *tab;
 	i = 0;
-	while (tab[i])
+	while (curs[i])
 	{
-		free(tab[i]);
-		tab[i] = NULL;
+		free(curs[i]);
+		curs[i] = NULL;
 		i++;
 	}
-	free(tab);
-	tab = NULL;
+	free(*tab);
+	*tab = NULL;
 }
 
 void set_free_null(char **line)
@@ -100,7 +126,8 @@ void free_input_line(t_term **input)
 		set_free_null(&(*input)->new);
 	if ((*input)->state == HEREDOC)
 		set_free_null(&(*input)->substr);
-	free(*input);
+	if (*input)
+		free(*input);
 	*input = NULL;
 }
 

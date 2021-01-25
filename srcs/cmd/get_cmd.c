@@ -132,6 +132,8 @@ t_cmd			*get_cmd(t_token *t, t_env *env)
 	cur_t = t;
 	head = init_cmd();
 	cur = head;
+	if (!head)
+		return NULL;
 	while (cur_t)
 	{
 		cur = get_data_cmd(cur_t, cur, env);

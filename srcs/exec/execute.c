@@ -1,6 +1,6 @@
 #include "sh.h"
 
-t_env				*clear_list(t_env *env)
+static t_env				*clear_list(t_env *env)
 {
 	t_env			*tmp;
 
@@ -19,7 +19,7 @@ t_env				*clear_list(t_env *env)
 	return (NULL);
 }
 
-int					is_it_avalible(char *s)
+static int					is_it_avalible(char *s)
 {
 	if (access(s, F_OK) == -1)
 	{
@@ -29,7 +29,7 @@ int					is_it_avalible(char *s)
 	return (1);
 }
 
-void				only_sp(char **line, char target, char change)
+static void				only_sp(char **line, char target, char change)
 {
 	int				i;
 
@@ -42,7 +42,7 @@ void				only_sp(char **line, char target, char change)
 	}
 }
 
-char				**get_ways(t_env *env)
+static char				**get_ways(t_env *env)
 {
 	char			**res;
 	char			*temp;
@@ -63,7 +63,7 @@ char				**get_ways(t_env *env)
 	return (res);
 }
 
-char			*it_path(char *s, t_env *env)
+static char			*it_path(char *s, t_env *env)
 {
 	char		**way;
 	int			i;
@@ -90,7 +90,7 @@ char			*it_path(char *s, t_env *env)
 	return (buf);
 }
 
-char				*get_path(char *s)
+static char				*get_path(char *s)
 {
 	t_env			*env;
 	char			*res;
@@ -106,7 +106,7 @@ char				*get_path(char *s)
 	return (NULL);
 }
 
-int					command(char *s)
+static	int					command(char *s)
 {
 	if (/*(ft_strcmp(s, ECHO) == 0) ||
 		(ft_strcmp(s, ENV) == 0) || */(ft_strcmp(s, SETENV) == 0) ||
@@ -174,6 +174,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 		}
 		if (execve(path, cmd->arr, environ) == -1)
 			terminate_child(path);
+//		ft_free_tab(&environ);
 		//// как-то завернуть процесс на выход
 	}
 	else

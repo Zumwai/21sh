@@ -55,7 +55,8 @@ extern t_token 			*parsing_t(char *line)
 	t_token *cur;
 
 	car = 0;
-	l = ft_strlen(line);
+	if (!(l = ft_strlen(line)))
+		return NULL;
 	token = init_token();
 	cur = token;
 	flag = init_flag();

@@ -141,14 +141,13 @@ static int	ft_history_down(void)
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf)
 {
 	t_term	*curs;
-
+	if (key == 27)
+		return (key_exit(old, pos, buf));
 	curs = get_last_pos(pos);
 	if (!curs->new)
 		curs->new = get_buf_line(&curs->new, &curs->buf_size, 20);
 	if (curs->index + 2 >= curs->buf_size)
 		curs->new = get_buf_line(&curs->new, &curs->buf_size, 20);
-	if (key == 27)
-		return (key_exit(old, pos, buf));
 	else if (key == ENTER)
 		return (consult_state(key, curs));
 	else if (key == BACKSPACE)

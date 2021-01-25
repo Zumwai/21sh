@@ -83,8 +83,10 @@ static t_term *get_input(t_yank *buffer)
 		//	print_value_into_file(key, buffer->current->x, buffer->current->y);
 			red = (read_key(key, buffer->current, old_tty, buffer));
 		//	printf("%lld\n", key);
-			if (red == -1 || red == -2) 
+			if (red == -1) 
 				break ;
+			if (red == -2)
+				return NULL;
 			if (red == -3 || red == -4)
 				envoke_history(buffer, red);
 			red = 0;
@@ -101,10 +103,12 @@ char	*handle_input_stream(t_yank *buffer)
 
 	line =  NULL;
 	buffer->current = get_input(buffer);
-	line = concat_lines(buffer->current);
-	buffer->history = save_history(buffer);
-	free_input_line(&buffer->current);
-	if (buffer->saved)
-		free_input_line(&buffer->saved);
+	if (buffer->current) {
+		line = concat_lines(buffer->current);
+		buffer->history = save_history(buffer);
+		free_input_line(&buffer->current);
+		if (buffer->saved)
+			free_input_line(&buffer->saved);
+	}
 	return (line);
 }
