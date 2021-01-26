@@ -48,6 +48,12 @@
 # define PWD "pwd"
 # define EXIT "exit"
 
+# define LSTA	(-2)	//lstat returned error
+# define EXIS	(-3)	//doesnt exist
+# define IXUS	(-4)	//cant be executed by owner
+# define NOEX	(-6)	//couldnt be executed(dir for example)
+# define NODIR	(-7)	//not a dir
+
 # define PATH_MAX 4096
 
 typedef struct	s_env
@@ -156,6 +162,7 @@ int				sh_setnew(char *nm, char *value, t_env **env);
 int				sh_exit(void);
 int				display_id_kid_parent(void);
 int				sh_pwd(void);
+int				check_rights(char *path, int cd);
 
 /* INIT */
 t_env			*init_shell(int ac, char **av, char **env, t_yank **buffer);

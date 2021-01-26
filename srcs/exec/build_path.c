@@ -1,6 +1,5 @@
 #include "sh.h"
 
-/* For future use
 int					check_rights(char *path, int cd)
 {
 	struct stat		per;
@@ -23,7 +22,7 @@ int					check_rights(char *path, int cd)
 			return (NODIR);
 	return (0);
 }
-*/
+
 static int					is_it_avalible(char *s)
 {
 	if (access(s, F_OK) == -1)

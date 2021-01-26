@@ -163,6 +163,7 @@ int			execute(t_cmd *cmd, t_env **env)
 				do_proc(read, fd[1], cmd->target, cmd, env);
 			close(fd[1]);
 			read = fd[0];
+			exit(1);
 		}
 		else
 			wait(&pid);

@@ -12,7 +12,7 @@ void		handle_cd_err(int num, char *name)
 		ft_putstr_fd(": Not a directory\n", STDERR_FILENO);
 }
 
-
+/*
 static void			mis_cd(char *p, int sig)
 {
 	if (sig == 1)
@@ -150,8 +150,31 @@ int			sh_cd(char **cmd, t_env **env)
 		mis_cd(NULL, 2);
 	return 1;
 }
+*/
 
-/*
+void	ft_concat(char *str, char **path, char *name)
+{
+	ft_strclr((*path));
+	(*path) = strcpy((*path), str);
+	(*path) = strcat((*path), "/");
+	if (name)
+		(*path) = strcat((*path), name);
+}
+
+char	*get_full_path(char *path, char *name)
+{
+	char	*str;
+	char	buf[PATH_MAX];
+
+	if (!(str = getcwd(buf, PATH_MAX)))
+		return (NULL);
+	path = ft_strnew(PATH_MAX);
+	ft_strclr(path);
+	path = ft_strcpy(path, str);
+	path = ft_strcat(path, "/");
+	path = ft_strcat(path, name);
+	return (path);
+}
 static int	find_old_pwd_home(char *com, char **tmp)
 {
 	int		i;
@@ -186,10 +209,10 @@ static char	*get_path_from_env(char *com, t_env **ev)
 	tmp = NULL;
 	if (!(index = find_old_pwd_home(com, &tmp)))
 		return (NULL);
-	value = find_env(ev, tmp);
+	value = find_env_variable(ev, tmp);
 	if (!value || !value->value)
 	{
-		free(tmp);
+		set_free_null(&tmp);
 		return (NULL);
 	}
 	path = ft_strnew(PATH_MAX);
@@ -208,13 +231,13 @@ static char	*determine_path(char *com, t_env **ev, int i)
 		return ((path = ft_strdup(com)));
 	if (com[0] == '~')
 	{ 
-		if ((cur = find_env(ev, "HOME")))
+		if ((cur = find_env_variable(ev, "HOME")))
 			path = ft_strjoin(cur->value, com + 1);
 		return (path);
 	}
 	if (com[0] == '-')
 	{
-		if ((cur = find_env(ev, "OLDPWD")))
+		if ((cur = find_env_variable(ev, "OLDPWD")))
 			path = ft_strjoin(cur->value, com + 1);
 		return (path);
 	}
@@ -225,8 +248,9 @@ static char	*determine_path(char *com, t_env **ev, int i)
 	return (path);
 }
 
-static void	change_working_dir(char *path, t_env **ev, char *com)
+static void	change_working_dir(char *path, t_env **env, char *com)
 {
+	/*
 	char	**set;
 
 	set = ft_newdim(4);
@@ -244,12 +268,29 @@ static void	change_working_dir(char *path, t_env **ev, char *com)
 	else
 	{
 		free(set[2]);
-		ft_free_tab(set);
+		ft_free_tab(&set);
 		handle_cd_err(check_rights(path, 1), com);
 	}
+	*/
+
+	char		*pwd;
+	char		*old_pwd;
+	t_env		*cur;
+
+	pwd = getcwd(pwd, PATH_MAX);
+	if (!chdir(path))
+	{
+		sh_setnew("OLDPWD", pwd, env);
+		sh_setnew("PWD", path, env);
+	} else {
+		//handle_cd_err
+		handle_cd_err(check_rights(path, 1), com);
+	}
+//	set_free_null(&pwd);
+	//set_free_null(&old_pwd);
 }
 
-int			ft_cd(char **com, t_env **ev)
+int			sh_cd(char **com, t_env **ev)
 {
 	char	*path;
 	int		i;
@@ -273,4 +314,3 @@ int			ft_cd(char **com, t_env **ev)
 		handle_empty_error(com[1], ": Variable not set\n");
 	return (1);
 }
-*/
