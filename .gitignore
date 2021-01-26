@@ -6,3 +6,7 @@ make
 *.o
 21sh
 changes
+cmake-build-debug
+vgcore.8426
+vgcore.8449
+CMakeLists.txt
