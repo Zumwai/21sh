@@ -91,30 +91,6 @@ static void			do_target(t_cmd *cmd, t_env **env)
 		cmd = cmd->next;
 	}
 }
-/*
-static void			*is_builtin(char **com)
-{
-	if (ft_strequ(com[0], "cd"))
-		return (&ft_cd);
-	if (ft_strequ(com[0], "pwd"))
-		return (&ft_pwd);
-	if (ft_strequ(com[0], "echo"))
-		return (&ft_echo);
-	if (ft_strequ(com[0], "setenv"))
-		return (&set_env);
-	if (ft_strequ(com[0], "unsetenv"))
-		return (&unset_env);
-	if (ft_strequ(com[0], "printenv"))
-		return (&display_env_list);
-	if (ft_strequ(com[0], "exit"))
-		return (&ft_exit);
-	if (ft_strequ(com[0], "ppid"))
-		return (&display_id_kid_parent);
-	if (ft_strequ(com[0], "env"))
-		return (&manage_env);
-	return (NULL);
-}
-*/
 
 static void *get_builtin(char *com)
 {
@@ -151,34 +127,30 @@ int			execute(t_cmd *cmd, t_env **env)
 	res = 1;
 	head = cmd;
 	read = 0;
-	do_target(cmd, env);
-	if (cmd->type != 2 && ((builtin = get_builtin(cmd->arr[0]))))
-				res = builtin(cmd->arr, env, fd);
-				else {
+	builtin = NULL;
 	while (cmd)
 	{
 		if ((pid = fork()) == 0)
 		{
 			pipe(fd);
-			/*
-			//if (command(cmd->arr[0]) && cmd->type != 2)
 			if (cmd->type != 2 && ((builtin = get_builtin(cmd->arr[0]))))
 			{
 				res = builtin(cmd->arr, env, fd);
 				exit(1);
 			}
-			else 
-			*/
-			do_proc(read, fd[1], cmd->target, cmd, env);
+			else {
+				cmd->target = get_path(cmd->arr[0], env);
+				if (cmd->target != NULL)
+					do_proc(read, fd[1], cmd->target, cmd, env);
+			}
 			close(fd[1]);
 			read = fd[0];
-		//	exit(1);
 		}
 		else
 			wait(&pid);
 		cmd = cmd->next;
 	}
-	}//free_cmd(head);
+	//free_cmd(head);
 	return (res);
 }
 
