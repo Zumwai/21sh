@@ -32,7 +32,7 @@ int		handle_return_error(int num, char *name)
 		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 	return (num);
 }
-
+/*
 void		handle_cd_err(int num, char *name)
 {
 	ft_putstr_fd("-shelp!: ", STDERR_FILENO);
@@ -44,6 +44,7 @@ void		handle_cd_err(int num, char *name)
 	else if (num == -7)
 		ft_putstr_fd(": Not a directory\n", STDERR_FILENO);
 }
+*/
 
 void	handle_exit_errors(char *description)
 {

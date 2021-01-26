@@ -28,7 +28,7 @@ static int					is_it_avalible(char *s)
 {
 	if (access(s, F_OK) == -1)
 	{
-        handle_empty_error(s, "invalid command");
+        handle_empty_error(s, "invalid command\n");
         return (0);
 	}
 	return (1);
@@ -48,7 +48,7 @@ static void				only_sp(char **line, char target, char change)
 	}
 }
 */
-static char				**get_ways(t_env **env)
+static char				**get_path_variable(t_env **env)
 {
 	char			**res;
     t_env           *curs;
@@ -69,7 +69,7 @@ static char			*it_path(char *s, t_env **env)
 
 	buf = NULL;
 	i = 0;
-	way = get_ways(env);
+	way = get_path_variable(env);
 	if (way == NULL)
 		return (s);
 	else if (way)

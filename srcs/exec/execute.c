@@ -91,15 +91,62 @@ static void			do_target(t_cmd *cmd, t_env **env)
 		cmd = cmd->next;
 	}
 }
+/*
+static void			*is_builtin(char **com)
+{
+	if (ft_strequ(com[0], "cd"))
+		return (&ft_cd);
+	if (ft_strequ(com[0], "pwd"))
+		return (&ft_pwd);
+	if (ft_strequ(com[0], "echo"))
+		return (&ft_echo);
+	if (ft_strequ(com[0], "setenv"))
+		return (&set_env);
+	if (ft_strequ(com[0], "unsetenv"))
+		return (&unset_env);
+	if (ft_strequ(com[0], "printenv"))
+		return (&display_env_list);
+	if (ft_strequ(com[0], "exit"))
+		return (&ft_exit);
+	if (ft_strequ(com[0], "ppid"))
+		return (&display_id_kid_parent);
+	if (ft_strequ(com[0], "env"))
+		return (&manage_env);
+	return (NULL);
+}
+*/
+static void		*get_builtin(char *com)
+{
 
+	if (ft_strequ(com, "cd"))
+		return (&sh_cd);
+	if (ft_strequ(com, "clear"))
+		return(&sh_clear);
+	if (ft_strequ(com, "echo"))
+		return(&sh_echo);
+	if (ft_strequ(com, "exit"))
+		return(&sh_exit);
+	if (ft_strequ(com, "clear"))
+		return(&sh_clear);
+	if (ft_strequ(com, "setenv"))
+		return(&sh_setenv);
+//	if (ft_strequ(com, "unsetenv"))
+//		return(&sh_unset);
+	if (ft_strequ(com, "ppid"))
+		return (&display_id_kid_parent);
+	if (ft_strequ(com, "pwd"))
+		return (&sh_pwd);
+	return NULL;
+}
 int			execute(t_cmd *cmd, t_env **env)
 {
 	int			read;
 	int			fd[2];
 	pid_t		pid;
 	t_cmd 		*head;
-	int			res;
+	int		(*f)(char **, t_env **);
 
+	int			
 	res = 1;
 	head = cmd;
 	read = 0;
@@ -109,9 +156,10 @@ int			execute(t_cmd *cmd, t_env **env)
 		if ((pid = fork()) == 0)
 		{
 			pipe(fd);
-			if (command(cmd->arr[0]) && cmd->type != 2)
-				res = do_builtin(cmd, env);
-			else
+			//if (command(cmd->arr[0]) && cmd->type != 2)
+			if (cmd->type != 2 && ((f = get_builtin(cmd->arr[0]))))
+				res = f(cmd->arr, env);
+			else 
 				do_proc(read, fd[1], cmd->target, cmd, env);
 			close(fd[1]);
 			read = fd[0];

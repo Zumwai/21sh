@@ -141,15 +141,21 @@ char			*get_redirect(char *line, int *i, char *res, int j);
 void			free_token_list(t_token **t);
 void			free_cmd_list(t_cmd **cmd);
 t_env			*env_list(void);
+/* BUILTIN */
+
+int				sh_clear(void);
 int				do_builtin(t_cmd *cmd, t_env **env);
-void			sh_env(int fd);
-void			sh_echo(t_cmd *cmd, int fd, t_env *env);
+int				sh_env(int fd);
+int				sh_echo(t_cmd *cmd, int fd, t_env *env);
 // static -> t_env			*clear_list(t_env *env);
-void			sh_setenv(char **cmd, t_env **env);
+int				sh_setenv(char **cmd, t_env **env);
 t_env			*sh_unset(char **nm, t_env **env);
-void			sh_cd(char **cmd, t_env *env);
+int				sh_cd(char **cmd, t_env **env);
 t_token 		*parsing_t(char *line);
 int				sh_setnew(char *nm, char *value, t_env **env);
+int				sh_exit(void);
+int				display_id_kid_parent(void);
+int				sh_pwd(void);
 
 /* INIT */
 t_env			*init_shell(int ac, char **av, char **env, t_yank **buffer);

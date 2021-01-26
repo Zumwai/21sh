@@ -49,7 +49,7 @@ static void			print_echo(char *s, int fd)
 	}
 }
 
-void			sh_echo(t_cmd *cmd, int fd, t_env *env)
+int			sh_echo(t_cmd *cmd, int fd, t_env *env)
 {
 	int			i;
 	int			sp;
@@ -67,9 +67,10 @@ void			sh_echo(t_cmd *cmd, int fd, t_env *env)
 		i++;
 	}
 	write(2, "\n", 1);
+	return 1;
 }
 
-void			sh_env(int fd)
+int			sh_env(int fd)
 {
 	extern char **environ;
 	int			i;
@@ -80,13 +81,20 @@ void			sh_env(int fd)
 		ft_putendl_fd(environ[i], fd);
 		i++;
 	}
+	return 1;
 }
 
-void				sh_clear(void)
+int				sh_clear(void)
 {
 	write(1, " \e[1;1H\e[2J", 12);
+	return 1;
 }
 
+int				do_builtin()
+{
+	return 1;
+}
+/*
 int				do_builtin(t_cmd *cmd, t_env **env)
 {
 	if (ft_strcmp(cmd->arr[0], EXIT) == 0)
@@ -103,3 +111,4 @@ int				do_builtin(t_cmd *cmd, t_env **env)
 		sh_cd(cmd->arr, *env);
 	return (1);
 }
+*/
