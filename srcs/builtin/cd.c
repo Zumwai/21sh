@@ -274,19 +274,23 @@ static void	change_working_dir(char *path, t_env **env, char *com)
 	*/
 
 	char		*pwd;
-	char		*old_pwd;
+	//char		*old_pwd;
 	t_env		*cur;
 
+	pwd = NULL;
 	pwd = getcwd(pwd, PATH_MAX);
 	if (!chdir(path))
 	{
 		sh_setnew("OLDPWD", pwd, env);
 		sh_setnew("PWD", path, env);
-	} else {
+	}
+	else
+		{
 		//handle_cd_err
 		handle_cd_err(check_rights(path, 1), com);
 	}
-//	set_free_null(&pwd);
+	free(pwd);
+	//set_free_null(&pwd);
 	//set_free_null(&old_pwd);
 }
 
@@ -295,6 +299,7 @@ int			sh_cd(char **com, t_env **ev)
 	char	*path;
 	int		i;
 
+	path = NULL;
 	i = 0;
 	if (com[1])
 	{
