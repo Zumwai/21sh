@@ -118,8 +118,10 @@ void				update_flag(t_flag *flag, char s);
 int 				semantica(t_flag *flag, char *line, int *i, int *j);
 int 				is_tokens_true(t_token *t);
 t_tree				*get_tree(t_token *token);
-int			execute(t_cmd *t, t_env **env);
 
+/* EXEC */
+int			execute(t_cmd *t, t_env **env);
+char				*get_path(char *s, t_env **env);
 
 void 				*init_tree(void);
 // static -> void 				*set_child(t_tree *child, t_tree *parent, int f);
@@ -162,4 +164,6 @@ void	ft_free_tab(char ***tab);
 
 /* UTILS */
 int ft_abs(int i);
+t_env	*find_env_variable(t_env **env, char *sought);
+
 #endif

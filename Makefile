@@ -7,6 +7,7 @@ SRCS =	main.c \
 		cmd/get_cmd.c \
 		exec/builtin_fd.c \
 		exec/execute.c \
+		exec/build_path.c \
 		tokens/ampersand.c \
 		tokens/eject_redirect.c \
 		tokens/flag.c \
@@ -53,4 +54,4 @@ clean:
 	$(REMOVE) $(OBJECT)
 fclean : clean
 	$(REMOVE) $(NAME)
-re: all clean
+re: fclean all

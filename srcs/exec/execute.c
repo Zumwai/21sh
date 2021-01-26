@@ -1,111 +1,5 @@
 #include "sh.h"
 
-static t_env				*clear_list(t_env *env)
-{
-	t_env			*tmp;
-
-	while (env)
-	{
-		tmp = env;
-		env = env->next;
-		free(tmp->name);
-		tmp->name = NULL;
-		free(tmp->value);
-		tmp->value = NULL;
-		free(tmp);
-		tmp = NULL;
-	}
-	free(env);
-	return (NULL);
-}
-
-static int					is_it_avalible(char *s)
-{
-	if (access(s, F_OK) == -1)
-	{
-		ft_putendl("Unavalible command.");
-		return (-1);
-	}
-	return (1);
-}
-
-static void				only_sp(char **line, char target, char change)
-{
-	int				i;
-
-	i = 0;
-	while ((*line)[i] != '\0')
-	{
-		if ((*line)[i] == target)
-			(*line)[i] = change;
-		i++;
-	}
-}
-
-static char				**get_ways(t_env *env)
-{
-	char			**res;
-	char			*temp;
-
-	res = NULL;
-	while (env != NULL)
-	{
-		if (ft_strcmp("PATH", env->name) == 0)
-		{
-			temp = ft_strdup(env->value);
-			//only_sp(&temp, ' ', ':');
-			res = ft_strsplit(temp, ':');
-			free(temp);
-			break ;
-		}
-		env = env->next;
-	}
-	return (res);
-}
-
-static char			*it_path(char *s, t_env *env)
-{
-	char		**way;
-	int			i;
-	char		*buf;
-
-	buf = NULL;
-	i = 0;
-	way = get_ways(env);
-	if (way == NULL)
-		return (s);
-	else if (way)
-	{
-		while (way[i] != NULL)
-		{
-			buf = ft_strdup(way[i]);
-			ft_strcat(buf, "/");
-			ft_strcat(buf, s);
-			if (access(buf, F_OK) != -1)
-				break ;
-			i++;
-		}
-	}
-	ft_strsplit_free(&way);
-	return (buf);
-}
-
-static char				*get_path(char *s)
-{
-	t_env			*env;
-	char			*res;
-
-	env = env_list();
-	res = it_path(s, env);
-	clear_list(env);
-	if (is_it_avalible(res))
-	{
-		return (res);
-	}
-	free(res);
-	return (NULL);
-}
-
 static	int					command(char *s)
 {
 	if (/*(ft_strcmp(s, ECHO) == 0) ||
@@ -179,18 +73,18 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	}
 	else
 		wait(&pid);
-	free(cmd->target);
+	set_free_null(&cmd->target);
 	ft_free_tab(&environ);
 }
 
-void			do_target(t_cmd *cmd)
+static void			do_target(t_cmd *cmd, t_env **env)
 {
 	while (cmd)
 	{
 		if ((!command(cmd->arr[0]) && cmd->arr[0][0] != '/') ||
 			(ft_strcmp("env", cmd->arr[0]) == 0 || ft_strcmp("echo", cmd->arr[0]) == 0))
 		{
-			cmd->target = get_path(cmd->arr[0]);
+			cmd->target = get_path(cmd->arr[0], env);
 			if (cmd->target == NULL)
 				return;
 		}
@@ -209,7 +103,7 @@ int			execute(t_cmd *cmd, t_env **env)
 	res = 1;
 	head = cmd;
 	read = 0;
-	do_target(cmd);
+	do_target(cmd, env);
 	while (cmd)
 	{
 		if ((pid = fork()) == 0)
