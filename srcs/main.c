@@ -26,7 +26,7 @@ int		main(int ac, char **av, char **env)
 			cmd = get_cmd(token, ev);
 			loop = execute(cmd, &ev);
 			free_token_list(&token);
-			free_cmd_list(&cmd);
+		//	free_cmd_list(&cmd);
 		}
 		set_free_null(&line);
 	}

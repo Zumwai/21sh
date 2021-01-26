@@ -115,7 +115,8 @@ static void			*is_builtin(char **com)
 	return (NULL);
 }
 */
-static void		*get_builtin(char *com)
+
+static void *get_builtin(char *com)
 {
 
 	if (ft_strequ(com, "cd"))
@@ -144,32 +145,40 @@ int			execute(t_cmd *cmd, t_env **env)
 	int			fd[2];
 	pid_t		pid;
 	t_cmd 		*head;
-	int		(*f)(char **, t_env **);
+	int		(*builtin)();
 
 	int			
 	res = 1;
 	head = cmd;
 	read = 0;
 	do_target(cmd, env);
+	if (cmd->type != 2 && ((builtin = get_builtin(cmd->arr[0]))))
+				res = builtin(cmd->arr, env, fd);
+				else {
 	while (cmd)
 	{
 		if ((pid = fork()) == 0)
 		{
 			pipe(fd);
+			/*
 			//if (command(cmd->arr[0]) && cmd->type != 2)
-			if (cmd->type != 2 && ((f = get_builtin(cmd->arr[0]))))
-				res = f(cmd->arr, env);
+			if (cmd->type != 2 && ((builtin = get_builtin(cmd->arr[0]))))
+			{
+				res = builtin(cmd->arr, env, fd);
+				exit(1);
+			}
 			else 
-				do_proc(read, fd[1], cmd->target, cmd, env);
+			*/
+			do_proc(read, fd[1], cmd->target, cmd, env);
 			close(fd[1]);
 			read = fd[0];
-			exit(1);
+		//	exit(1);
 		}
 		else
 			wait(&pid);
 		cmd = cmd->next;
 	}
-	//free_cmd(head);
+	}//free_cmd(head);
 	return (res);
 }
 

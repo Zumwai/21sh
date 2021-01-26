@@ -1,5 +1,5 @@
 #include "sh.h"
-
+/* UNUSED  */
 static char				*get_name(char *s)
 {
 	int				l;
@@ -17,23 +17,14 @@ static char				*get_name(char *s)
 	return (name);
 }
 
-static void			echo_env(char *s, t_env *env, int fd)
+static void			echo_env(char *s, t_env **env, int fd)
 {
 	char		*name;
 	t_env		*cur;
 
-	cur = env;
-	name = get_name(s);
-	while (cur)
-	{
-		if (ft_strcmp(name, cur->name) == 0)
-		{
-			ft_putstr_fd(cur->value, fd);
-			break ;
-		}
-		cur = cur->next;
-	}
-	free(name);
+	cur = find_env_variable(env, &s[1]);
+//	name = get_name(s);
+	ft_putstr_fd(cur->value, fd);
 }
 
 static void			print_echo(char *s, int fd)
@@ -49,42 +40,55 @@ static void			print_echo(char *s, int fd)
 	}
 }
 
-int			sh_echo(t_cmd *cmd, int fd, t_env *env)
+int			sh_echo(char **com, t_env **env, int fd)
 {
 	int			i;
 	int			sp;
+	int			n;
 
-	sp = ft_strsplit_len(cmd->arr) - 1;
 	i = 1;
-	while (cmd->arr[i])
+	n = 0;
+	sp = ft_strsplit_len(com) - 1;
+	fd = 1;
+	if (com[i] && ft_strequ(com[1], "-n"))
 	{
-		if (cmd->arr[i][0] == '$')
-			echo_env(cmd->arr[i], env, fd);
+		n = 1;
+		i++;
+	}
+	while (com[i])
+	{
+		if (com[i][0] == '$')
+			echo_env(com[i], env, fd);
 		else
-			print_echo(cmd->arr[i], fd);
+			print_echo(com[i], fd);
 		if (sp--)
 			ft_putchar_fd(' ', fd);
 		i++;
 	}
-	write(2, "\n", 1);
+	if (!n)
+		write(fd, "\n", 1);
 	return 1;
 }
 
-int			sh_env(int fd)
+int			sh_env(char **com, t_env **env, __attribute((unused))int fd)
 {
-	extern char **environ;
 	int			i;
+	t_env		*curs;
+
 
 	i = 0;
-	while (environ[i])
+	curs = *env;
+	while (curs)
 	{
-		ft_putendl_fd(environ[i], fd);
-		i++;
+		ft_putendl_fd(curs->name, fd);
+		ft_putendl_fd("=", fd);
+		ft_putendl_fd(curs->value, fd);
+		curs = curs->next;
 	}
 	return 1;
 }
 
-int				sh_clear(void)
+int				sh_clear(__attribute__((unused))char **com, __attribute__((unused))t_env **env)
 {
 	write(1, " \e[1;1H\e[2J", 12);
 	return 1;
