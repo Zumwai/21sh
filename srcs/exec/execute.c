@@ -76,7 +76,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	set_free_null(&cmd->target);
 	ft_free_tab(&environ);
 }
-
+/* UNUSED
 static void			do_target(t_cmd *cmd, t_env **env)
 {
 	while (cmd)
@@ -91,7 +91,7 @@ static void			do_target(t_cmd *cmd, t_env **env)
 		cmd = cmd->next;
 	}
 }
-
+*/
 static void *get_builtin(char *com)
 {
 

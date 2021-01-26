@@ -23,10 +23,10 @@ int		main(int ac, char **av, char **env)
 		else if (line[0])
 		{
 			token = parsing_t(line);
-			cmd = get_cmd(token, ev);
+			cmd = get_cmd(token, &ev);
 			loop = execute(cmd, &ev);
 			free_token_list(&token);
-		//	free_cmd_list(&cmd);
+			free_cmd_list(&cmd);
 		}
 		set_free_null(&line);
 	}

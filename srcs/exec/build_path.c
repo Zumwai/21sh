@@ -5,6 +5,8 @@ int					check_rights(char *path, int cd)
 	struct stat		per;
 	unsigned int	tmp;
 
+	if (!path)
+		return (-42);
 	if ((lstat(path, &per)) == -1)
 		return (LSTA);
 	if (access(path, F_OK) == -1)
@@ -22,7 +24,7 @@ int					check_rights(char *path, int cd)
 			return (NODIR);
 	return (0);
 }
-
+/*
 static int					is_it_avalible(char *s)
 {
 	if (access(s, F_OK) == -1)
@@ -32,7 +34,7 @@ static int					is_it_avalible(char *s)
 	}
 	return (1);
 }
-
+*/
 /* UNUSED
 static void				only_sp(char **line, char target, char change)
 {
@@ -91,12 +93,17 @@ static char			*it_path(char *s, t_env **env)
 char				*get_path(char *s, t_env **env)
 {
 	char			*res;
+	int				ret;
 
-	res = it_path(s, env);
-	if (is_it_avalible(res))
+	ret = 0;
+	if (!(res = it_path(s, env)))
+		return NULL;
+	if (!(ret = check_rights(res, 0)))
 	{
+		ft_putnbr_fd(ret, 1);
 		return (res);
 	}
+			ft_putnbr_fd(ret, 1);
     set_free_null(&res);
 	return (NULL);
 }

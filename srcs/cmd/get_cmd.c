@@ -3,38 +3,26 @@
 static char			*new_string(char *s)
 {
 	char		*n;
-	int			i;
+	size_t			i;
 
-	i = ft_strlen(s);
-	if (!(n = (char *)malloc(sizeof(char) * i)))
-		handle_exit_errors("Malloc returned NULL");
-	while (i >= 0)
-	{
-		n[i] = '\0';
-		i--;
-	}
+	i = ft_strlen(s) + 1;
+	n = ft_strnew(i);
 	return (n);
 }
 
-static char				*get_value(char *s, t_env *env)
+static char				*get_value(char *s, t_env **env)
 {
 	t_env			*cur;
 	char			*res;
 
-	cur = env;
-	while (cur)
-	{
-		if (ft_strcmp(s, cur->name) == 0)
-		{
-			res = ft_strdup(cur->value);
-			return (res);
-		}
-		cur = cur->next;
-	}
-	return (NULL);
+	cur = NULL;
+	cur = find_env_variable(env, s);
+	if (cur)
+		res = ft_strdup(cur->value);
+	return res;
 }
 
-static void			get_env_val(char *buf, int *j, char *t, int *i, t_env *env)
+static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env)
 {
 	char			tmp[246];
 	int				u;
@@ -69,7 +57,7 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env *env)
 		set_free_null(&t_tmp);
 }
 
-static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env *env)
+static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 {
 	int			i;
 	int 		q[2]; /// 0 для одинарного, 1 для двойного
@@ -81,6 +69,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env *env)
 	q[0] = 0;
 	q[1] = 0;
 	buf = new_string(t->data);
+//	buf = ft_strdup(t->data);
 	while (t->data[i])
 	{
 		if (t->data[i] != '"' && t->data[i] != '\'')
@@ -122,7 +111,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env *env)
 	return (c);
 }
 
-t_cmd			*get_cmd(t_token *t, t_env *env)
+t_cmd			*get_cmd(t_token *t, t_env **env)
 {
 	t_token		*cur_t;
 	t_cmd		*head;
