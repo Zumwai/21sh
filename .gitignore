@@ -5,3 +5,8 @@ make
 .idea
 *.o
 21sh
+
+cmake-build-debug
+vgcore.8426
+vgcore.8449
+CMakeLists.txt
