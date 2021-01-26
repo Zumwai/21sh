@@ -4,9 +4,11 @@ SRCS =	main.c \
 		builtin/cd.c \
 		builtin/env_list.c \
 		builtin/environ.c \
+		builtin/pwd_id_exit.c \
 		cmd/get_cmd.c \
 		exec/builtin_fd.c \
 		exec/execute.c \
+		exec/build_path.c \
 		tokens/ampersand.c \
 		tokens/eject_redirect.c \
 		tokens/flag.c \
@@ -53,4 +55,4 @@ clean:
 	$(REMOVE) $(OBJECT)
 fclean : clean
 	$(REMOVE) $(NAME)
-re: all clean
+re: fclean all

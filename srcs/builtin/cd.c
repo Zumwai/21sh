@@ -1,19 +1,18 @@
 #include "sh.h"
 
-static void			sh_pwd(char **cmd)
+void		handle_cd_err(int num, char *name)
 {
-	char		dir[256];
-
-	if (cmd[1] == NULL)
-	{
-		/* 256 max? */
-		getcwd(dir, 256);
-		ft_putendl(dir);
-	}
-	if (cmd[1] != NULL)
-		ft_putendl_fd("pwd: too many arguments", 2);
+	ft_putstr_fd("-shelp!: ", STDERR_FILENO);
+	ft_putstr_fd(name, STDERR_FILENO);
+	if (num == -4)
+		ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
+	else if (num == -2 || num == -3)
+		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+	else if (num == -7)
+		ft_putstr_fd(": Not a directory\n", STDERR_FILENO);
 }
 
+/*
 static void			mis_cd(char *p, int sig)
 {
 	if (sig == 1)
@@ -51,59 +50,48 @@ static char			*get_post(char *s)
 }
 
 
-static void			cd_rev(t_env *env)
+static void			cd_rev(t_env **env)
 {
-	char		*name;
-	char		*oname;
+	char		*pwd;
+	char		*old_pwd;
 	t_env		*cur;
 
-	cur = env;
-	while (cur)
+	cur = find_env_variable(env, "PWD");
+	pwd = ft_strdup(cur->value);
+	cur = find_env_variable(env, "OLDPWD");
+	old_pwd = ft_strdup(cur->value);
+	if (!chdir(old_pwd))
 	{
-		if (ft_strcmp("PWD", cur->name) == 0)
-			name = ft_strdup(cur->value);
-		if (ft_strcmp("OLDPWD", cur->name) == 0)
-			oname = ft_strdup(cur->value);
-		cur = cur->next;
+		sh_setnew("OLDPWD", pwd, env);
+		sh_setnew("PWD", old_pwd, env);
+		set_free_null(&pwd);
+		set_free_null(&old_pwd);
+	} else {
+		//handle_cd_err
+		handle_empty_error("CD", "chdir failed");
 	}
-	if (ft_strcmp(name, oname) == 0)
-		mis_cd(NULL, 3);
-	if (ft_strcmp(name, oname) != 0)
-	{
-		sh_setnew("OLDPWD", name, &env);
-		chdir(oname);
-		sh_setnew("PWD", oname, &env);
-		free(name);
-		free(oname);
-	}
+	set_free_null(&pwd);
+	set_free_null(&old_pwd);
 }
 
-static void			cd_home(t_env *env)
+static void			cd_home(t_env **env)
 {
 	t_env		*cur;
 	char		*way;
 	char		dir[256];
 
 	way = NULL;
-	cur = env;
 	getcwd(dir, 256);
-	while (cur)
-	{
-		if (ft_strcmp("HOME", cur->name) == 0)
-		{
-			way = ft_strdup(cur->value);
-			break ;
-		}
-		cur = cur->next;
-	}
-	sh_setnew("OLDPWD", dir, &env);
+	cur = find_env_variable(env, "HOME");
+	way = ft_strdup(cur->value);
+	sh_setnew("OLDPWD", dir, env);
 	chdir(way);
 	getcwd(dir, 256);
-	sh_setnew("PWD", dir, &env);
+	sh_setnew("PWD", dir, env);
 	free(way);
 }
 
-static void			cd_cd(char *way, t_env *env)
+static void			cd_cd(char *way, t_env **env)
 {
 	char		dir[256];
 	char		ndir[256];
@@ -116,12 +104,12 @@ static void			cd_cd(char *way, t_env *env)
 	if (sig == 0)
 	{
 		getcwd(ndir, 256);
-		sh_setnew("PWD", ndir, &env);
-		sh_setnew("OLDPWD", dir, &env);
+		sh_setnew("PWD", ndir, env);
+		sh_setnew("OLDPWD", dir, env);
 	}
 }
 
-static void			path_from_home(char *way, t_env *env)
+static void			path_from_home(char *way, t_env **env)
 {
 	char		*way1;
 	t_env		*cur;
@@ -129,23 +117,24 @@ static void			path_from_home(char *way, t_env *env)
 
 	post = get_post(way);
 	way1 = NULL;
-	cur = env;
-	while (cur)
+	if (!(cur = find_env_variable(env, "HOME")))
 	{
-		if (ft_strcmp("HOME", cur->name) == 0)
-		{
-			way1 = ft_strdup(cur->value);
-			break ;
-		}
-		cur = cur->next;
+		handle_empty_error("CD", "HOME variable is not defined");
 	}
-	ft_strcat(way1, post);
-	cd_cd(way1, env);
-	free(way1);
-	free(post);
+	if (!cur->value)
+	{
+		handle_empty_error("CD", "HOME variable is not defined");
+	}
+	else {
+		way1 = ft_strdup(cur->value);
+		ft_strcat(way1, post);
+		cd_cd(way1, env);
+		free(way1);
+		free(post);
+	}
 }
 
-void			sh_cd(char **cmd, t_env *env)
+int			sh_cd(char **cmd, t_env **env)
 {
 	if (cmd[1] == NULL)
 		cd_home(env);
@@ -159,9 +148,33 @@ void			sh_cd(char **cmd, t_env *env)
 		cd_cd(cmd[1], env);
 	else if (cmd[2] != NULL)
 		mis_cd(NULL, 2);
+	return 1;
+}
+*/
+
+void	ft_concat(char *str, char **path, char *name)
+{
+	ft_strclr((*path));
+	(*path) = strcpy((*path), str);
+	(*path) = strcat((*path), "/");
+	if (name)
+		(*path) = strcat((*path), name);
 }
 
-/*
+char	*get_full_path(char *path, char *name)
+{
+	char	*str;
+	char	buf[PATH_MAX];
+
+	if (!(str = getcwd(buf, PATH_MAX)))
+		return (NULL);
+	path = ft_strnew(PATH_MAX);
+	ft_strclr(path);
+	path = ft_strcpy(path, str);
+	path = ft_strcat(path, "/");
+	path = ft_strcat(path, name);
+	return (path);
+}
 static int	find_old_pwd_home(char *com, char **tmp)
 {
 	int		i;
@@ -196,10 +209,10 @@ static char	*get_path_from_env(char *com, t_env **ev)
 	tmp = NULL;
 	if (!(index = find_old_pwd_home(com, &tmp)))
 		return (NULL);
-	value = find_env(ev, tmp);
+	value = find_env_variable(ev, tmp);
 	if (!value || !value->value)
 	{
-		free(tmp);
+		set_free_null(&tmp);
 		return (NULL);
 	}
 	path = ft_strnew(PATH_MAX);
@@ -218,13 +231,13 @@ static char	*determine_path(char *com, t_env **ev, int i)
 		return ((path = ft_strdup(com)));
 	if (com[0] == '~')
 	{ 
-		if ((cur = find_env(ev, "HOME")))
+		if ((cur = find_env_variable(ev, "HOME")))
 			path = ft_strjoin(cur->value, com + 1);
 		return (path);
 	}
 	if (com[0] == '-')
 	{
-		if ((cur = find_env(ev, "OLDPWD")))
+		if ((cur = find_env_variable(ev, "OLDPWD")))
 			path = ft_strjoin(cur->value, com + 1);
 		return (path);
 	}
@@ -235,8 +248,9 @@ static char	*determine_path(char *com, t_env **ev, int i)
 	return (path);
 }
 
-static void	change_working_dir(char *path, t_env **ev, char *com)
+static void	change_working_dir(char *path, t_env **env, char *com)
 {
+	/*
 	char	**set;
 
 	set = ft_newdim(4);
@@ -254,12 +268,29 @@ static void	change_working_dir(char *path, t_env **ev, char *com)
 	else
 	{
 		free(set[2]);
-		ft_free_tab(set);
+		ft_free_tab(&set);
 		handle_cd_err(check_rights(path, 1), com);
 	}
+	*/
+
+	char		*pwd;
+	char		*old_pwd;
+	t_env		*cur;
+
+	pwd = getcwd(pwd, PATH_MAX);
+	if (!chdir(path))
+	{
+		sh_setnew("OLDPWD", pwd, env);
+		sh_setnew("PWD", path, env);
+	} else {
+		//handle_cd_err
+		handle_cd_err(check_rights(path, 1), com);
+	}
+//	set_free_null(&pwd);
+	//set_free_null(&old_pwd);
 }
 
-int			ft_cd(char **com, t_env **ev)
+int			sh_cd(char **com, t_env **ev)
 {
 	char	*path;
 	int		i;
@@ -283,4 +314,3 @@ int			ft_cd(char **com, t_env **ev)
 		handle_empty_error(com[1], ": Variable not set\n");
 	return (1);
 }
-*/

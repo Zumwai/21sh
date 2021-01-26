@@ -48,6 +48,12 @@
 # define PWD "pwd"
 # define EXIT "exit"
 
+# define LSTA	(-2)	//lstat returned error
+# define EXIS	(-3)	//doesnt exist
+# define IXUS	(-4)	//cant be executed by owner
+# define NOEX	(-6)	//couldnt be executed(dir for example)
+# define NODIR	(-7)	//not a dir
+
 # define PATH_MAX 4096
 
 typedef struct	s_env
@@ -118,8 +124,10 @@ void				update_flag(t_flag *flag, char s);
 int 				semantica(t_flag *flag, char *line, int *i, int *j);
 int 				is_tokens_true(t_token *t);
 t_tree				*get_tree(t_token *token);
-int			execute(t_cmd *t, t_env **env);
 
+/* EXEC */
+int			execute(t_cmd *t, t_env **env);
+char				*get_path(char *s, t_env **env);
 
 void 				*init_tree(void);
 // static -> void 				*set_child(t_tree *child, t_tree *parent, int f);
@@ -133,21 +141,28 @@ t_tree			*get_tree(t_token *token);
 // static -> t_cmd			*get_data_cmd(t_token *t, t_cmd *cmd, t_env *env);
 t_cmd			*new_cmd(t_cmd *prev);
 t_cmd			*init_cmd(void);
-t_cmd			*get_cmd(t_token *t, t_env *env);
+t_cmd			*get_cmd(t_token *t, t_env **env);
 t_cmd			*get_data_with_redirect(char *s, t_cmd *cmd);
 char			*get_redirect(char *line, int *i, char *res, int j);
 void			free_token_list(t_token **t);
 void			free_cmd_list(t_cmd **cmd);
 t_env			*env_list(void);
+/* BUILTIN */
+
+int				sh_clear(__attribute__((unused))char **com, __attribute__((unused))t_env **env);
 int				do_builtin(t_cmd *cmd, t_env **env);
-void			sh_env(int fd);
-void			sh_echo(t_cmd *cmd, int fd, t_env *env);
+int				sh_env(char **com, t_env **env, __attribute((unused))int fd);
+int				sh_echo(char **com, t_env **env, int fd);
 // static -> t_env			*clear_list(t_env *env);
-void			sh_setenv(char **cmd, t_env **env);
+int				sh_setenv(char **cmd, t_env **env);
 t_env			*sh_unset(char **nm, t_env **env);
-void			sh_cd(char **cmd, t_env *env);
+int				sh_cd(char **cmd, t_env **env);
 t_token 		*parsing_t(char *line);
 int				sh_setnew(char *nm, char *value, t_env **env);
+int				sh_exit(void);
+int				display_id_kid_parent(void);
+int				sh_pwd(void);
+int				check_rights(char *path, int cd);
 
 /* INIT */
 t_env			*init_shell(int ac, char **av, char **env, t_yank **buffer);
@@ -162,4 +177,6 @@ void	ft_free_tab(char ***tab);
 
 /* UTILS */
 int ft_abs(int i);
+t_env	*find_env_variable(t_env **env, char *sought);
+
 #endif

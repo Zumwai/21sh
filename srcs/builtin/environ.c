@@ -30,7 +30,7 @@ int					sh_setnew(char *nm, char *value, t_env **env)
 	return (1);
 }
 
-extern void				sh_setenv(char **cmd, t_env **env)
+extern int			sh_setenv(char **cmd, t_env **env)
 {
 	if (cmd[1] == NULL)
 		display_env_list(cmd, env);
@@ -44,9 +44,11 @@ extern void				sh_setenv(char **cmd, t_env **env)
 		ft_putstr("setenv: nothing to set for this variable ");
 		ft_putendl(cmd[1]);
 	}
+	return 1;
 }
 
-static void				do_unset(t_env **env, char *nm)
+/* UNUSED */
+static void				do_unset(char *nm, t_env **env)
 {
 	t_env			*tmp;
 	t_env			*prev;
@@ -70,6 +72,7 @@ static void				do_unset(t_env **env, char *nm)
 	}
 }
 
+/* UNUSED */
 extern t_env				*sh_unset(char **nm, t_env **env)
 {
 	t_env			*cur;
@@ -78,6 +81,6 @@ extern t_env				*sh_unset(char **nm, t_env **env)
 	i = 1;
 	cur = *env;
 	while (nm[i] != NULL)
-		do_unset(env, nm[i++]);
+		do_unset(nm[i++], env);
 	return (cur);
 }

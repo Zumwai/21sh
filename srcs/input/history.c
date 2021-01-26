@@ -28,7 +28,8 @@ static t_term *copy_input_struct(t_term *current)
 	t_term	*curs;
 	t_term	*tmp;
 
-	curs = (t_term *)malloc(sizeof(t_term));
+	if (!(curs = (t_term *)malloc(sizeof(t_term))))
+		handle_exit_errors("malloc returned NULL");
 	head = curs;
 	tmp = head;
 	curs->prev = NULL;

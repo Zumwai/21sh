@@ -28,7 +28,7 @@ void			free_cmd_list(t_cmd **cmd)
 	{
 		tmp = curs->next;
 		if (curs->arr)
-			ft_free_tab(&(*cmd)->arr);
+			ft_free_tab(&curs->arr);
 		if (curs->target)
 			set_free_null(&curs->target);
 		free(curs);
@@ -100,11 +100,13 @@ void	ft_free_tab(char ***tab)
 	i = 0;
 	while (curs[i])
 	{
-		free(curs[i]);
+		if (curs[i])
+			free(curs[i]);
 		curs[i] = NULL;
 		i++;
 	}
-	free(*tab);
+	if (*tab)
+		free(*tab);
 	*tab = NULL;
 }
 

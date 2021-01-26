@@ -3,43 +3,31 @@
 static char			*new_string(char *s)
 {
 	char		*n;
-	int			i;
+	size_t			i;
 
-	i = ft_strlen(s);
-	if (!(n = (char *)malloc(sizeof(char) * i)))
-		handle_exit_errors("Malloc returned NULL");
-	while (i >= 0)
-	{
-		n[i] = '\0';
-		i--;
-	}
+	i = ft_strlen(s) + 1;
+	n = ft_strnew(i);
 	return (n);
 }
 
-static char				*get_value(char *s, t_env *env)
+static char				*get_value(char *name, t_env **env)
 {
 	t_env			*cur;
 	char			*res;
 
-	cur = env;
-	while (cur)
-	{
-		if (ft_strcmp(s, cur->name) == 0)
-		{
-			res = ft_strdup(cur->value);
-			return (res);
-		}
-		cur = cur->next;
-	}
-	return (NULL);
+	cur = NULL;
+	cur = find_env_variable(env, name);
+	//if (cur)
+		res = ft_strdup(cur->value);
+	return res;
 }
 
-static void			get_env_val(char *buf, int *j, char *t, int *i, t_env *env)
+static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env)
 {
 	char			tmp[246];
 	int				u;
 	char			*t_tmp;
-	char			*f;
+//	char			*f;
 
 	u = 0;
 	*i = *i + 1;
@@ -51,8 +39,8 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env *env)
 		u++;
 	}
 	tmp[u] = '\0';
-	f = ft_strdup(tmp);
-	t_tmp = get_value(f, env);
+//	f = ft_strdup(tmp);
+	t_tmp = get_value(tmp, env);
 	if (t_tmp)
 	{
 		u = 0;
@@ -63,13 +51,13 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env *env)
 			u++;
 		}
 	}
-	if (f)
-		set_free_null(&f);
+//	if (f)
+	//	set_free_null(&f);
 	if (t_tmp)
 		set_free_null(&t_tmp);
 }
 
-static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env *env)
+static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 {
 	int			i;
 	int 		q[2]; /// 0 для одинарного, 1 для двойного
@@ -122,7 +110,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env *env)
 	return (c);
 }
 
-t_cmd			*get_cmd(t_token *t, t_env *env)
+t_cmd			*get_cmd(t_token *t, t_env **env)
 {
 	t_token		*cur_t;
 	t_cmd		*head;

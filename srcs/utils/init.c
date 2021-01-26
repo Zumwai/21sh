@@ -95,7 +95,7 @@ int				display_env_list(char **com, t_env **ev)
 	return (1);
 }
 
-static int		find_exitsing_env(t_env **ev, char **com)
+int		find_exitsing_env(t_env **ev, char **com)
 {
 	t_env	*curr;
 	t_env	*tmp;
