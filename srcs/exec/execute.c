@@ -130,8 +130,8 @@ int			execute(t_cmd *cmd, t_env **env)
 	builtin = NULL;
 	while (cmd)
 	{
-		if ((pid = fork()) == 0)
-		{
+		//if ((pid = fork()) == 0)
+		//{
 			pipe(fd);
 			if (cmd->type != 2 && ((builtin = get_builtin(cmd->arr[0]))))
 			{
@@ -145,9 +145,9 @@ int			execute(t_cmd *cmd, t_env **env)
 			}
 			close(fd[1]);
 			read = fd[0];
-		}
-		else
-			wait(&pid);
+		//}
+		//else
+			//wait(&pid);
 		cmd = cmd->next;
 	}
 	//free_cmd(head);
