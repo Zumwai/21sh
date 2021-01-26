@@ -10,14 +10,14 @@ static char			*new_string(char *s)
 	return (n);
 }
 
-static char				*get_value(char *s, t_env **env)
+static char				*get_value(char *name, t_env **env)
 {
 	t_env			*cur;
 	char			*res;
 
 	cur = NULL;
-	cur = find_env_variable(env, s);
-	if (cur)
+	cur = find_env_variable(env, name);
+	//if (cur)
 		res = ft_strdup(cur->value);
 	return res;
 }
@@ -27,7 +27,7 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env)
 	char			tmp[246];
 	int				u;
 	char			*t_tmp;
-	char			*f;
+//	char			*f;
 
 	u = 0;
 	*i = *i + 1;
@@ -39,8 +39,8 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env)
 		u++;
 	}
 	tmp[u] = '\0';
-	f = ft_strdup(tmp);
-	t_tmp = get_value(f, env);
+//	f = ft_strdup(tmp);
+	t_tmp = get_value(tmp, env);
 	if (t_tmp)
 	{
 		u = 0;
@@ -51,8 +51,8 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env)
 			u++;
 		}
 	}
-	if (f)
-		set_free_null(&f);
+//	if (f)
+	//	set_free_null(&f);
 	if (t_tmp)
 		set_free_null(&t_tmp);
 }
@@ -69,7 +69,6 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	q[0] = 0;
 	q[1] = 0;
 	buf = new_string(t->data);
-//	buf = ft_strdup(t->data);
 	while (t->data[i])
 	{
 		if (t->data[i] != '"' && t->data[i] != '\'')
