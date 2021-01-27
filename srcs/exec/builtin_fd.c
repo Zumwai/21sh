@@ -57,9 +57,9 @@ int			sh_echo(char **com, t_env **env, int fd)
 	}
 	while (com[i])
 	{
-		if (com[i][0] == '$')
+		/*if (com[i][0] == '$')
 			echo_env(com[i], env, fd);
-		else
+		else*/
 			print_echo(com[i], fd);
 		if (sp--)
 			ft_putchar_fd(' ', fd);

@@ -1,8 +1,21 @@
 #include "sh.h"
 
+/*int				sh_echo(char **com, t_env **env, int fd)
+{
+	int			i;
+	i = 1;
+	while(com[i])
+	{
+		ft_putstr(com[i]);
+		ft_putchar(' ');
+		i++;
+	}
+	ft_putchar('\n');
+}*/
+
 static	int					command(char *s)
 {
-	if (/*(ft_strcmp(s, ECHO) == 0) ||
+	if (/*ft_strcmp(s, ECHO) == 0) ||
 		(ft_strcmp(s, ENV) == 0) || */(ft_strcmp(s, SETENV) == 0) ||
 		(ft_strcmp(s, UNSETENV) == 0) || (ft_strcmp(s, CD) == 0) ||
 		(ft_strcmp(s, EXIT) == 0) || (ft_strcmp(s, "clear") == 0))

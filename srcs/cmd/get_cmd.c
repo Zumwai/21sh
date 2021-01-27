@@ -1,4 +1,5 @@
 #include "sh.h"
+#include <stdio.h>
 
 static char			*new_string(char *s)
 {
@@ -62,52 +63,53 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 {
 	int			i;
 	int 		q[2]; /// 0 для одинарного, 1 для двойного
-	char		*buf;
+	char		buf[10000];
 	int			j;
 
 	i = 0;
 	j = 0;
 	q[0] = 0;
 	q[1] = 0;
-	buf = new_string(t->data);
+	//buf = new_string(t->data);
 	while (t->data[i])
 	{
-		if (t->data[i] != '"' && t->data[i] != '\'')
+		if (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$')
 			buf[j++] = t->data[i++];
-		if (t->data[i] == '\'' && q[1] == 0)
+		if (t->data[i] == 39 && q[1] == 0)
 		{
 			q[0] = 1;
 			i++;
-			while (t->data[i] != '\'')
+			while (t->data[i] != 39)
 			{
 				buf[j] = t->data[i];
 				j++;
 				i++;
 			}
-			if(t->data[i] == '\'' && q[0] == 1)
+			if(t->data[i] == 39 && q[0] == 1)
 			{
 				q[0] = 0;
 				i++;
 			}
 		}
-		if (t->data[i] == '"')
+		if (t->data[i] == 34 && q[0] == 0)
 		{
 			q[1] = 1;
 			i++;
-			while (t->data[i] != '"')
+			while (t->data[i] && t->data[i] != 34)
 			{
-				if (t->data[i] == '&' && (t->data[i - 1] && t->data[i - 1] != 92))
+				if (t->data[i] == '$' && (t->data[i - 1] && t->data[i - 1] != 92))
 					get_env_val(buf, &j, t->data, &i, env);
 				buf[j] = t->data[i];
 				j++;
 				i++;
 			}
 		}
-		if (t->data[i] == '$' && t->data[i - 1] && t->data[i - 1] != 92)
+		if (t->data[i] == '$' && t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0)
 			get_env_val(buf, &j, t->data, &i, env);
 	}
+	buf[j] = '\0';
 	c->arr = ft_strsplit(buf, ' ');
-	free(buf);
+	//free(buf);
 	return (c);
 }
 
