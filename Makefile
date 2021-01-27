@@ -30,7 +30,8 @@ SRCS =	main.c \
 		input/jump_words.c \
 		input/input_utils.c \
 		input/cut_paste.c \
-		input/history.c
+		input/history.c \
+		input/auto_trie.c
 DIR_SRCS = srcs/
 SOURCE = $(addprefix $(DIR_SRCS), $(SRCS))
 OBJECT = $(patsubst %.c,%.o,$(SOURCE))

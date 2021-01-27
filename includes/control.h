@@ -31,6 +31,12 @@
 # define COPY_W	15				//ctrl + o
 # define TAB 	9
 
+typedef struct 		s_trie
+{
+	bool leaf;
+	char data;
+	struct s_trie	*asc[94];
+}					t_trie;
 
 typedef struct 		s_term
 {
