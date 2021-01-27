@@ -8,10 +8,10 @@ char						get_manage(char t)
 		return ('\t');
 	if (t == 'n')
 		return ('\n');
-	if (t == '\\')
+	if (t == 92)
 		return ('\\');
 	else
-		return ('\\');
+		return (t);
 }
 
 static char 				*get_data(char *line, int *n, t_flag *flag)
