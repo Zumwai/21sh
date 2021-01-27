@@ -6,10 +6,16 @@
 typedef struct s_trie
 {
 	bool leaf;
+    int  counter;
 	char	data;
 	struct s_trie *asc[94];
 }		t_trie;
 
+typedef struct s_list
+{
+    char *name;
+    struct s_list *next;
+}           t_list;
 
 t_trie *create_trie_node(char c) {
     t_trie  *new;
@@ -24,6 +30,7 @@ t_trie *create_trie_node(char c) {
         new->asc[i] = NULL;
         i++;
     }
+    new->counter = 0;
     new->leaf = 0;
     new->data = c;
     return new;
@@ -52,6 +59,7 @@ static int  convert_asc_value(char c)
     else
         return -1;    
 }
+
 t_trie    *insert_word_trie(t_trie *head, char *word)
 {
     int     index;
@@ -72,6 +80,7 @@ t_trie    *insert_word_trie(t_trie *head, char *word)
         }
         curs = curs->asc[value];
 		curs->data = word[index];
+        curs->counter++;
 		index++;
      //   curs->leaf = 0;
     }
@@ -79,33 +88,81 @@ t_trie    *insert_word_trie(t_trie *head, char *word)
     return head;
 }
 
-void print_trie(t_trie * root, char **av, int index) {
+t_list  *create_new_list(char *line)
+{
+    t_list *new;
+
+    new = (t_list *)malloc(sizeof(t_list));
+    new->next = NULL;
+    new->name = strdup(line);
+    return (new);
+}
+
+t_list  *find_last(t_list *head)
+{
+    t_list *curs;
+
+    curs = head;
+    while (curs->next)
+    {
+            curs = curs->next;
+    }
+    return curs;
+}
+
+void print_trie(t_trie * root, char **av, int index, t_list *var) {
+
 	int i = 0;
+    t_list  *curs;
+
     if (!root)
         return;
     t_trie* temp = root;
-	if (temp->leaf == true)
-			puts(*av);
+
 		 //   printf("%S\n", *av);
 	if (temp->data != -1) {
 		av[0][index] = temp->data;
 		av[0][index + 1] = '\0';
-		index++;
+        index++;
 	}
+    if (temp->leaf == true)
+    {
+        t_list *curs = find_last(var);
+        curs->next = create_new_list(*av);
+    }
    	while (i < 94) {
 		if (temp->asc[i])
-     	   print_trie(temp->asc[i], av, index);
+     	   print_trie(temp->asc[i], av, index, var);
 		i++;
     }
 }
 
-int main(void)
+char    *get_env(char **env)
+{
+    int i = 0;
+    char    *new;
+    while (env[i])
+    {
+        if (!strncmp(env[i], "PATH", 4)) {
+            new = strdup(&env[i][5]);
+            return new;
+        }
+        i++;
+    }
+    return NULL;
+}
+
+int main(int ac, char **av, char **env)
 {
 	t_trie	*test;
+    t_list  *head;
 	char	*tab;
 
 	int i = 0;
 	test = (t_trie *)malloc(sizeof(t_trie));
+    char    *value;
+    value = get_env(env);
+    printf("%s\n", value);
 	while (i < 94)
     {
         test->asc[i] = NULL;
@@ -121,15 +178,17 @@ int main(void)
 	test = insert_word_trie(test, "abcdefg");
 	test = insert_word_trie(test, "b");
 	test = insert_word_trie(test, "c");
-
-	
-	/*
-	test = insert_word_trie(test, "12345");
-	
-	test = insert_word_trie(test, "abc");
-	test = insert_word_trie(test, "1ABDE123");
-	*/
-	print_trie(test, &tab, 0);
+    head = (t_list *)malloc(sizeof(t_list));
+    head->name = NULL;
+    head->next = NULL;
+    t_list *curs;
+	print_trie(test, &tab, 0, head);
+    curs = head->next;
+    while (curs)
+    {
+        puts(curs->name);
+        curs = curs->next;
+    }
 //	printf("%zu\n", sizeof(test));
 	return (0);
 }
