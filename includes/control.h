@@ -28,8 +28,15 @@
 # define CLEAR	12				//ctrl + l
 # define HISTORY_UP	4283163
 # define HISTORY_DOWN	4348699
-# define COPY_W	9				//ctrl + i
+# define COPY_W	15				//ctrl + o
+# define TAB 	9
 
+typedef struct 		s_trie
+{
+	bool leaf;
+	char data;
+	struct s_trie	*asc[94];
+}					t_trie;
 
 typedef struct 		s_term
 {

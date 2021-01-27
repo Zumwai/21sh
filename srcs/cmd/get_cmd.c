@@ -16,8 +16,9 @@ static char				*get_value(char *name, t_env **env)
 	char			*res;
 
 	cur = NULL;
+	res = NULL;
 	cur = find_env_variable(env, name);
-	//if (cur)
+	if (cur)
 		res = ft_strdup(cur->value);
 	return res;
 }

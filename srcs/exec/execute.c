@@ -136,7 +136,7 @@ int			execute(t_cmd *cmd, t_env **env)
 			if (cmd->type != 2 && ((builtin = get_builtin(cmd->arr[0]))))
 			{
 				res = builtin(cmd->arr, env, fd);
-				exit(1);
+			//	exit(1);
 			}
 			else {
 				cmd->target = get_path(cmd->arr[0], env);

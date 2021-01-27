@@ -178,5 +178,7 @@ void	ft_free_tab(char ***tab);
 /* UTILS */
 int ft_abs(int i);
 t_env	*find_env_variable(t_env **env, char *sought);
+void	ft_concat(char *str, char **path, char *name);
+char	*get_full_path(char *path, char *name);
 
 #endif
