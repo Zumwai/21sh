@@ -48,7 +48,7 @@ static void				only_sp(char **line, char target, char change)
 		i++;
 	}
 }
-*/
+
 static char				**get_path_variable(t_env **env)
 {
 	char			**res;
@@ -77,13 +77,17 @@ static char			*it_path(char *s, t_env **env)
 	{
 		while (way[i] != NULL)
 		{
-			buf = ft_strdup(way[i]);
-			ft_strcat(buf, "/");
-			ft_strcat(buf, s);
-			if (access(buf, F_OK) != -1)
-				break ;
+			if ((buf = ft_strdup(way[i]))) {
+				ft_strcat(buf, "/");
+				ft_strcat(buf, s);
+				if (!check_rights(buf, 0))
+					break ;
+				set_free_null(&buf);
+		//	if (access(buf, F_OK) != -1)
+		//		break ;
+			}
 			i++;
-            set_free_null(&buf);
+
 		}
 	}
 	ft_strsplit_free(&way);
@@ -106,4 +110,73 @@ char				*get_path(char *s, t_env **env)
 			ft_putnbr_fd(ret, 1);
     set_free_null(&res);
 	return (NULL);
+}
+*/
+
+static char			*is_system_wide(char *com, t_env **ev, int *res)
+{
+	char	**env_path;
+	char	*path;
+	t_env	*curs;
+	int		i;
+
+	*res = 0;
+	path = ft_strnew(PATH_MAX);
+	if (!(curs = find_env_variable(ev, "PATH")))
+		return (0);
+	if (!(env_path = ft_strsplit(curs->value, ':')))
+		return (0);
+	i = 0;
+	while (env_path[i])
+	{
+		ft_concat(env_path[i], &path, com);
+		if (!(*res = check_rights(path, 0)))
+			break ;
+		i++;
+	}
+	if (*res <= IXUS)
+		handle_return_error(*res, com);
+	ft_free_tab(&env_path);
+	if ((*res))
+	set_free_null(&path);
+	return path;
+}
+
+static char			*is_local(char *com, t_env **ev, int *res)
+{
+	char	*path;
+
+	path = NULL;
+	if (com[0] != '.' && com[0] != '/')
+		return NULL;
+	*res = 0;
+	if (com[0] == '/')
+		path = ft_strdup(com);
+	else
+		path = get_full_path(path, com);
+	if (!(*res = check_rights(path, 0)))
+		return path;
+	if (*res <= IXUS)
+		handle_return_error(*res, com);
+	set_free_null(&path);
+	return NULL;
+}
+
+char	*get_path(char *com, t_env **env)
+{
+	char	*path;
+	int		search;
+
+	search = 0;
+	path = NULL;
+	if ((path = is_local(com, env, &search)))
+		return path;
+	if (search <= IXUS)
+		return NULL;
+	if ((path = is_system_wide(com, env, &search)))
+		return path;
+	if (search <= IXUS)
+		return NULL;
+	handle_empty_error(com, "no such command\n");
+	return NULL;
 }

@@ -152,29 +152,7 @@ int			sh_cd(char **cmd, t_env **env)
 }
 */
 
-void	ft_concat(char *str, char **path, char *name)
-{
-	ft_strclr((*path));
-	(*path) = strcpy((*path), str);
-	(*path) = strcat((*path), "/");
-	if (name)
-		(*path) = strcat((*path), name);
-}
 
-char	*get_full_path(char *path, char *name)
-{
-	char	*str;
-	char	buf[PATH_MAX];
-
-	if (!(str = getcwd(buf, PATH_MAX)))
-		return (NULL);
-	path = ft_strnew(PATH_MAX);
-	ft_strclr(path);
-	path = ft_strcpy(path, str);
-	path = ft_strcat(path, "/");
-	path = ft_strcat(path, name);
-	return (path);
-}
 static int	find_old_pwd_home(char *com, char **tmp)
 {
 	int		i;
