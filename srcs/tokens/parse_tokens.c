@@ -1,5 +1,19 @@
 #include "sh.h"
 
+char						get_manage(char t)
+{
+	if (t == '0')
+		return ('0');
+	if (t == 't')
+		return ('\t');
+	if (t == 'n')
+		return ('\n');
+	if (t == '\\')
+		return ('\\');
+	else
+		return ('\\');
+}
+
 static char 				*get_data(char *line, int *n, t_flag *flag)
 {
 	char 			res[1000];
@@ -14,7 +28,14 @@ static char 				*get_data(char *line, int *n, t_flag *flag)
 			   line[*n] != '<'  && line[*n] != '\0')
 		{
 			update_flag(flag, line[*n]);
-			res[j] = line[*n];
+			if (line[*n] == 92 && line[*n + 1])
+			{
+				res[j] = get_manage(line[*n + 1]);
+				if (res[j] != '\\')
+					*n = *n + 1;
+			}
+			else
+				res[j] = line[*n];
 			*n += 1;
 			j += 1;
 		}
