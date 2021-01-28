@@ -17,7 +17,7 @@ static t_trie *create_trie_node(char c) {
     return new;
 }
  
-static oid free_trie_node(t_trie* node) {
+static void free_trie_node(t_trie* node) {
     int     i;
 
     i = 0;
@@ -40,7 +40,7 @@ static int  convert_asc_value(char c)
     else
         return -1;    
 }
-void    insert_word_trie(t_trie *head, char *word)
+/*void    insert_word_trie(t_trie *head, char *word)
 {
     int     index;
     int     value;
@@ -62,4 +62,4 @@ void    insert_word_trie(t_trie *head, char *word)
     }
     curs->leaf = 1;
     return head;
-}
+}*/

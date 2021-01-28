@@ -15,7 +15,7 @@
 
 # include <unistd.h>
 # include <limits.h>
-# include <linux/limits.h>		//temporary solution for some macros in linux
+//# include <linux/limits.h>		//temporary solution for some macros in linux
 # include <dirent.h>
 # include <string.h>
 # include <sys/wait.h>
