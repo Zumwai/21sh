@@ -27,7 +27,7 @@ static void			echo_env(char *s, t_env **env, int fd)
 	ft_putstr_fd(cur->value, fd);
 }
 
-static void			print_echo(char *s, int fd)
+/*static void			print_echo(char *s, int fd)
 {
 	int			i;
 
@@ -38,7 +38,7 @@ static void			print_echo(char *s, int fd)
 			ft_putchar_fd(s[i], fd);
 		i++;
 	}
-}
+}*/
 
 int			sh_echo(char **com, t_env **env, int fd)
 {
@@ -59,8 +59,9 @@ int			sh_echo(char **com, t_env **env, int fd)
 	{
 		/*if (com[i][0] == '$')
 			echo_env(com[i], env, fd);
-		else*/
-			print_echo(com[i], fd);
+		else
+			print_echo(com[i], fd);*/
+		ft_putstr_fd(com[i], fd);
 		if (sp--)
 			ft_putchar_fd(' ', fd);
 		i++;
