@@ -138,12 +138,8 @@ static int	ft_history_down(void)
 	return (-4);
 }
 
-static int	autocomplete(t_term *pos)
-{
-	return 1;
-}
 
-int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf)
+int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env **env)
 {
 	t_term	*curs;
 	if (key == 27)
@@ -190,7 +186,7 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf)
 	else if (key == CLEAR)
 			ft_clear(curs);
 	else if (key == TAB)
-			autocomplete(curs);
+			autocomplete(curs, env);
 	else if (key == HISTORY_UP)
 			return (ft_history_up());
 	else if (key == HISTORY_DOWN)

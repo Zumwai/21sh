@@ -17,7 +17,7 @@ int		main(int ac, char **av, char **env)
 	{
 		token = NULL;
 		line = NULL;
-		line = handle_input_stream(buffer);
+		line = handle_input_stream(buffer, &ev);
 		if (!line)
 			break ;
 		else if (line[0])
