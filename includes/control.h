@@ -45,6 +45,6 @@ void	handle_exit_errors(char *description);
 void ft_putstr_size(char *line, size_t size);
 char	*concat_lines(t_term *input);
 t_trie    *find_best_match(char *orig, t_env **env);
-int	autocomplete(t_term *pos, t_env **env);
+int	autocomplete(t_term *pos, t_env **env, t_yank *buf);
 
 #endif

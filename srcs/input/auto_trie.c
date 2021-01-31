@@ -253,7 +253,7 @@ char	*get_incomplete(t_term *pos)
 	return incomplete;
 }
 
-int	autocomplete(t_term *pos, t_env **env)
+int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 {
 	t_trie *head;
 	char	*orig;
