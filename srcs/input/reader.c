@@ -61,7 +61,7 @@ static __attribute__((noinline))long long	incapsulate_read(void)
 	return (key);
 }
 
-static t_term *get_input(t_yank *buffer)
+static t_term *get_input(t_yank *buffer, t_env **env)
 {
 	ssize_t		red;
 	struct termios	old_tty;
@@ -81,7 +81,7 @@ static t_term *get_input(t_yank *buffer)
 	{
 			key = incapsulate_read();
 		//	print_value_into_file(key, buffer->current->x, buffer->current->y);
-			red = (read_key(key, buffer->current, old_tty, buffer));
+			red = (read_key(key, buffer->current, old_tty, buffer, env));
 		//	printf("%lld\n", key);
 			if (red == -1) 
 				break ;
@@ -97,12 +97,12 @@ static t_term *get_input(t_yank *buffer)
 	return (buffer->current);
 }
 
-char	*handle_input_stream(t_yank *buffer)
+char	*handle_input_stream(t_yank *buffer, t_env **env)
 {
 	char	*line;
 
 	line =  NULL;
-	buffer->current = get_input(buffer);
+	buffer->current = get_input(buffer, env);
 	if (buffer->current) {
 		line = concat_lines(buffer->current);
 		buffer->history = save_history(buffer);
