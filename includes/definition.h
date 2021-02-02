@@ -109,14 +109,21 @@ typedef struct			s_token
 	struct s_token		*next;
 	struct s_token		*prev;
 }						t_token;
-
 typedef struct s_trie
 {
-	bool leaf;
-    int  counter;
-	char	data;
-	struct s_trie *asc[94];
+	bool			leaf;
+    int				counter;
+	char			data;
+	struct s_trie **asc;
 }		t_trie;
+
+typedef struct	s_inherit
+{
+	bool		leaf;
+	int			counter;
+	char		*data;
+	int			wrong;
+}				t_inherit;
 
 typedef struct s_auto
 {
