@@ -22,8 +22,6 @@
 # include "libft.h"
 
 
-
-
 t_flag				*init_flag(void);
 t_flag 				*reset_flag(t_flag *flag);
 t_token 			*init_token(void);

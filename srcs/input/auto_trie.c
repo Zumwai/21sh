@@ -18,8 +18,8 @@ static t_trie **init_array(void)
         node[i] = NULL;
         i++;
     }
-   //  g_size += (sizeof(t_trie *) * 94);
-    printf("%lu - tire\n", sizeof(t_trie *));
+     g_size += (sizeof(t_trie *) * 94);
+  //\  printf("%lu - tire\n", sizeof(t_trie *));
      return node;
 }
 
@@ -60,7 +60,7 @@ void free_trie_node(t_trie* node) {
         free(node->asc);
     if (node->sub)
     {
-        printf("%s\n", node->sub);
+     //   printf("%s\n", node->sub);
         free(node->sub);
     }
     node->asc = NULL;
@@ -81,7 +81,7 @@ static t_trie    *insert_word_trie(t_trie *head, char *word)
 {
     int     index;
     int     value;
-    char    *temp;
+  //  char    *temp;
     t_trie  *curs;
 
     if (!head)
@@ -149,6 +149,7 @@ static t_auto  *find_last(t_auto *head)
             curs = curs->next;
     return curs;
 }
+
 /*
 static void create_names_list(t_trie * root, char **av, int index, t_auto *head) {
 
@@ -190,9 +191,11 @@ t_trie *fill_variant_list(char *orig, char *path, t_trie *head)
     len = ft_strlen(orig);
     while ((container = readdir(dir)))
     {
+        if(container->d_reclen == 0)
+            break ; //test
         if (ft_strnequ(container->d_name, orig, len)) {
             g_words++;
-            head = insert_word_trie(head, container->d_name);
+        head = insert_word_trie(head, container->d_name);
         }
     }
     free(dir);
@@ -207,13 +210,11 @@ t_trie    *init_auto_trie(char *original, t_env **env)
     char    **ways;
     char    *pwd;
     int     i;
-    char    *naming;
 
     i = 0;
     pwd = NULL;
     arg = NULL;
     head = NULL;
-    naming = ft_strnew(256);
     way = find_env_variable(env, "PATH");
     ways = ft_strsplit(way->value, ':');
     if (!(pwd = getcwd(pwd, 4096)))
@@ -224,12 +225,11 @@ t_trie    *init_auto_trie(char *original, t_env **env)
         head = fill_variant_list(original, ways[i], head);
         i++;
     }
-    free(naming);
     free(pwd);
     ft_strsplit_free(&ways);
     return head;
 }
-
+/*
 int  search_word(t_trie *root, char *word)
 {
     int     i = 0;
@@ -264,7 +264,7 @@ char *search_trie(t_trie *root, char *word)
     ft_strcpy(av, word);
     return av;
 }
-
+*/
 t_trie    *find_best_match(char *orig, t_env **env)
 {
     t_trie *head;
@@ -294,27 +294,86 @@ char	*get_incomplete(t_term *pos)
 	return incomplete;
 }
 
+
+void    print_remainders(t_trie *head)
+{
+
+}
+
+char    *parse_vertex(t_trie *head, char buf[256])
+{
+    t_trie *curs = head;
+    char       dbuf[1];
+    int     flag = 0;
+
+    while (curs)
+    {
+        if (curs->counter != 1) {
+            print_remainders(curs);
+            if (!flag)
+                return NULL;
+            return ft_strdup(buf);
+        }
+        if (!curs->sub) {
+            dbuf[0] = curs->data;
+            ft_strcat(buf, dbuf);
+            flag++;
+        } else
+        {
+            ft_strcat(buf, curs->sub);
+            flag++;
+        }
+    }
+    return ft_strdup(buf);
+}
+
+char    *search_trie(t_trie *head, char *orig)
+{
+    t_trie  *curs;
+    int     flag = 0;
+    int     i = 0;
+    int     value;
+    char    buf[256];
+    char    dbuf[1];
+    char    *ret;
+
+    ret = NULL;
+  //  buf = ft_strnew(256);
+    curs = head;
+    while(orig[i])
+    {
+        value = convert_asc_value(orig[i]);
+        if (!curs->asc || !curs->asc[value])
+            return NULL;
+        i++;
+    }
+    ft_strcpy(buf, orig);
+    ret = parse_vertex(curs, buf);
+    return ret;
+}
+
 int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 {
 	t_trie *head;
 	char	*orig;
 	char	*new;
 
-g_single = 0;
-g_words = 0;
+    g_single = 0;
+    g_words = 0;
 	new = NULL;
     g_size = 0;
      g_count = 0;
 	if (!(orig = get_incomplete(pos)))
         return 1;
 	head = find_best_match(orig, env);
-//	new = search_trie(head, orig);
+    if (head)
+    	new = search_trie(head, orig);
     set_free_null(&orig);
     if (head)
         free_trie_node(head);
+    printf("%lu -size\n", g_size);
     printf("%lu - total number\n", g_count);
     printf("%zu - single\n", g_single);
-    printf("%lu -size\n", g_size);
     printf("%lu - words\n", g_words);
 	return 1;
 }
