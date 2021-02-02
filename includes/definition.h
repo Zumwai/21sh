@@ -21,6 +21,7 @@
 # define HISTORY_DOWN	4348699 //arrow down
 # define COPY_W	15				//ctrl + o
 # define TAB 	9				//tab or ctrl + i, unfortunately
+# define BACK_TAB	5921563		//backtab
 
 # define BK "&"
 # define AND "&&"
@@ -46,6 +47,8 @@
 # define NODIR	(-7)	//not a dir
 
 # define PATH_MAX 4096
+
+
 
 typedef struct	s_env
 {
@@ -155,6 +158,7 @@ typedef struct s_yank
 	t_term			*current;
 	t_term			*saved;
 	t_history		*history;
+	t_auto			*completion;
 }					t_yank;
 
 enum				e_state

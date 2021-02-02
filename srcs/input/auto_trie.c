@@ -1,4 +1,8 @@
 #include "sh.h"
+/* DEBUG GLOBAL */
+static size_t	g_size;
+static size_t	g_count;
+static size_t   g_single;
 
 static t_trie *create_trie_node(char c) {
     t_trie  *new;
@@ -15,6 +19,8 @@ static t_trie *create_trie_node(char c) {
     new->counter = 0;
     new->leaf = 0;
     new->data = c;
+    g_size += sizeof(t_trie);
+    g_count++;
     return new;
 }
  
@@ -22,23 +28,35 @@ void free_trie_node(t_trie* node) {
     int     i;
 
     i = 0;
+    if (!node)
+        return ;
     while (i < 94)
     {
-        if (node->asc[i] != NULL)
-            free_trie_node(node->asc[i]);
+          if (node->asc[i] != NULL){
+         if (node->counter == 1)
+               g_single++;
+                free_trie_node(node->asc[i]);
+          }
+
         i++;
     }
+    g_count++;
+    g_size += sizeof(t_trie);
     free(node);
 }
 
 static int  convert_asc_value(char c)
 {
+    /*
     if (c >= 48 && c <= 57)
         return c - 48;
     else if (c >= 65 && c <= 90)
         return c - 65 + 10;
     else if (c >= 97 && c <= 122)
         return c - 97 + 36;
+        */
+    if (c >= 32 && c <= 127)
+        return c - 32;
     else
         return -1;    
 }
@@ -88,6 +106,8 @@ static t_auto  *find_last(t_auto *head)
     t_auto *curs;
 
     curs = head;
+    if (!curs)
+        return NULL;
     while (curs->next)
             curs = curs->next;
     return curs;
@@ -127,7 +147,7 @@ t_auto  *fill_variant_list(char *orig, char *path, t_auto *arg)
     int     len;
 
     len = 0;
-    source = arg;
+    source = find_last(arg);
     dir = opendir(path);
     if (!dir)
         return arg;
@@ -136,8 +156,8 @@ t_auto  *fill_variant_list(char *orig, char *path, t_auto *arg)
     len = ft_strlen(orig);
     while ((container = readdir(dir)))
     {
-        if (!ft_strncmp(container->d_name, orig, len))
-        {
+        if (ft_strnequ(container->d_name, orig, len))
+        { 
             if (!source)
             {
                 source = create_new_list(container->d_name);
@@ -150,7 +170,8 @@ t_auto  *fill_variant_list(char *orig, char *path, t_auto *arg)
             }
         }
     }
-    return head;
+    free(dir);
+    return arg;
 }
 
 t_trie    *init_auto_trie(char *original, t_env **env)
@@ -162,7 +183,6 @@ t_trie    *init_auto_trie(char *original, t_env **env)
     char    *pwd;
     int     i;
     char    *naming;
-
 
     i = 0;
     pwd = NULL;
@@ -178,11 +198,25 @@ t_trie    *init_auto_trie(char *original, t_env **env)
         arg = fill_variant_list(original, ways[i], arg);
         i++;
     }
+    t_auto *saved = arg;
+    head = create_trie_node(0);
     while (arg)
     {
         head = insert_word_trie(head, arg->name);
         arg = arg->next;
     }
+    free(naming);
+    free(pwd);
+    t_auto *curs;
+    arg = saved;
+    while (arg)
+    {
+        curs = arg;
+        arg = arg->next;
+        free(curs->name);
+        free(curs);
+    }
+    ft_strsplit_free(&ways);
     return head;
 }
 
@@ -224,13 +258,10 @@ char *search_trie(t_trie *root, char *word)
 t_trie    *find_best_match(char *orig, t_env **env)
 {
     t_trie *head;
-    char    *new;
+
     head = init_auto_trie(orig, env);
     if (!head)
         return NULL;
-    if (!new)
-        return NULL;
-     //   print_possibilities(head, )
     return head;
 }
 
@@ -259,10 +290,20 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 	char	*orig;
 	char	*new;
 
+g_single = 0;
 	new = NULL;
+    g_size = 0;
+     g_count = 0;
 	if (!(orig = get_incomplete(pos)))
         return 1;
 	head = find_best_match(orig, env);
-	new = search_trie(head, orig);
+//	new = search_trie(head, orig);
+    set_free_null(&orig);
+    if (head)
+        free_trie_node(head);
+            printf("%lu - total number\n", g_count);
+    printf("%zu - single\n", g_single);
+    printf("%lu  -size\n", g_size);
+
 	return 1;
 }
