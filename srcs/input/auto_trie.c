@@ -18,7 +18,8 @@ static t_trie **init_array(void)
         node[i] = NULL;
         i++;
     }
-     g_size += (sizeof((*node)->asc) * 94);
+   //  g_size += (sizeof(t_trie *) * 94);
+    printf("%lu - tire\n", sizeof(t_trie *));
      return node;
 }
 
@@ -33,11 +34,11 @@ static t_trie *create_trie_node(char c) {
     new->leaf = 0;
     new->data = c;
     new->asc = NULL;
+    new->sub = NULL;
     g_size += sizeof(t_trie);
     g_count++;
     return new;
 }
-
  
 void free_trie_node(t_trie* node) {
     int     i;
@@ -48,16 +49,24 @@ void free_trie_node(t_trie* node) {
     while (i < 94)
     {
           if (node->asc && node->asc[i] != NULL){
-              if (node->counter == 1)
-               g_single++;
-             free_trie_node(node->asc[i]);
+            if (node->counter == 1)
+                g_single++;
+            free_trie_node(node->asc[i]);
           }
         i++;
     }
+
     if (node->asc)
-     free(node->asc);
+        free(node->asc);
+    if (node->sub)
+    {
+        printf("%s\n", node->sub);
+        free(node->sub);
+    }
     node->asc = NULL;
-    free(node);
+    if (node)
+        free(node);
+    node = NULL;
 }
 
 static int  convert_asc_value(char c)
@@ -72,8 +81,12 @@ static t_trie    *insert_word_trie(t_trie *head, char *word)
 {
     int     index;
     int     value;
+    char    *temp;
     t_trie  *curs;
 
+    if (!head)
+        head = create_trie_node(0);
+ //   temp = ft_strnew(256);
     curs = head;
     index = 0;
     value = 0;
@@ -82,12 +95,27 @@ static t_trie    *insert_word_trie(t_trie *head, char *word)
         value = convert_asc_value(word[index]);
         if (value < 0)
             handle_exit_errors("Trie value is negative!\n");
-        if (!curs->asc)
+        if (!curs->asc) {
             curs->asc = init_array();
+        }
         if (!curs->asc[value]) {
             curs->asc[value] = create_trie_node(word[index]);
+            curs = curs->asc[value];
+            if (word[index + 1])
+                curs->sub = ft_strdup(&word[index + 1]);
+            else {
+                curs->data = word[index];
+                curs->counter++;
+            }
+            return head;
         }
         curs = curs->asc[value];
+        if (curs->sub)
+        {
+            if (curs->sub[1])
+              insert_word_trie(curs, curs->sub);
+            set_free_null(&curs->sub);
+        }
 		curs->data = word[index];
         curs->counter++;
 		index++;
@@ -147,41 +175,28 @@ static void create_names_list(t_trie * root, char **av, int index, t_auto *head)
     }
 }
 */
-t_auto  *fill_variant_list(char *orig, char *path, t_auto *arg)
+t_trie *fill_variant_list(char *orig, char *path, t_trie *head)
 {
     DIR     *dir;
     struct dirent *container;
-    t_auto  *source;
-    t_auto  *head;
-    t_trie  *root;
     int     len;
 
     len = 0;
-    source = find_last(arg);
     dir = opendir(path);
     if (!dir)
-        return arg;
+        return head;
     if (!orig)
         return NULL;
     len = ft_strlen(orig);
     while ((container = readdir(dir)))
     {
-        if (ft_strnequ(container->d_name, orig, len))
-        { 
-            if (!source)
-            {
-                source = create_new_list(container->d_name);
-                arg = source;
-            }
-            else
-            {
-                source->next = create_new_list(container->d_name);
-                source = source->next;
-            }
+        if (ft_strnequ(container->d_name, orig, len)) {
+            g_words++;
+            head = insert_word_trie(head, container->d_name);
         }
     }
     free(dir);
-    return arg;
+    return head;
 }
 
 t_trie    *init_auto_trie(char *original, t_env **env)
@@ -197,36 +212,20 @@ t_trie    *init_auto_trie(char *original, t_env **env)
     i = 0;
     pwd = NULL;
     arg = NULL;
+    head = NULL;
     naming = ft_strnew(256);
     way = find_env_variable(env, "PATH");
     ways = ft_strsplit(way->value, ':');
     if (!(pwd = getcwd(pwd, 4096)))
         return NULL;
-    arg = fill_variant_list(original, pwd, arg);
+    head = fill_variant_list(original, pwd, head);
     while (ways[i])
     {
-        arg = fill_variant_list(original, ways[i], arg);
+        head = fill_variant_list(original, ways[i], head);
         i++;
-    }
-    t_auto *saved = arg;
-    head = create_trie_node(0);
-    while (arg)
-    {
-        head = insert_word_trie(head, arg->name);
-        arg = arg->next;
-        g_words++;
     }
     free(naming);
     free(pwd);
-    t_auto *curs;
-    arg = saved;
-    while (arg)
-    {
-        curs = arg;
-        arg = arg->next;
-        free(curs->name);
-        free(curs);
-    }
     ft_strsplit_free(&ways);
     return head;
 }
@@ -313,7 +312,7 @@ g_words = 0;
     set_free_null(&orig);
     if (head)
         free_trie_node(head);
-            printf("%lu - total number\n", g_count);
+    printf("%lu - total number\n", g_count);
     printf("%zu - single\n", g_single);
     printf("%lu -size\n", g_size);
     printf("%lu - words\n", g_words);
