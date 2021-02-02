@@ -73,7 +73,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	//buf = new_string(t->data);
 	while (t->data[i])
 	{
-		if (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$')
+		while (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0)
 			buf[j++] = t->data[i++];
 		if (t->data[i] == 39 && q[1] == 0)
 		{
@@ -85,7 +85,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 				j++;
 				i++;
 			}
-			if(t->data[i] == 39 && q[0] == 1)
+			if(t->data[i] == 39)
 			{
 				q[0] = 0;
 				i++;
@@ -103,6 +103,11 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 				j++;
 				i++;
 			}
+			if (t->data[i] == 34)
+			{
+                q[1] = 0;
+                i++;
+            }
 		}
 		if (t->data[i] == '$' && t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0)
 			get_env_val(buf, &j, t->data, &i, env);
