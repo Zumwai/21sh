@@ -27,19 +27,6 @@ static void			echo_env(char *s, t_env **env, int fd)
 	ft_putstr_fd(cur->value, fd);
 }
 
-static void			print_echo(char *s, int fd)
-{
-	int			i;
-
-	i = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] != '"' && s[i] != 39)
-			ft_putchar_fd(s[i], fd);
-		i++;
-	}
-}
-
 int			sh_echo(char **com, t_env **env, int fd)
 {
 	int			i;
@@ -59,8 +46,9 @@ int			sh_echo(char **com, t_env **env, int fd)
 	{
 		/*if (com[i][0] == '$')
 			echo_env(com[i], env, fd);
-		else*/
-			print_echo(com[i], fd);
+		else
+			print_echo(com[i], fd);*/
+		ft_putstr_fd(com[i], fd);
 		if (sp--)
 			ft_putchar_fd(' ', fd);
 		i++;
@@ -98,21 +86,3 @@ int				do_builtin()
 {
 	return 1;
 }
-/*
-int				do_builtin(t_cmd *cmd, t_env **env)
-{
-	if (ft_strcmp(cmd->arr[0], EXIT) == 0)
-		return (0);
-	if (ft_strcmp(cmd->arr[0], "clear") == 0)
-		sh_clear();
-	if (ft_strcmp(cmd->arr[0], "echo") == 0)
-		sh_echo(cmd, 1, *env);
-	if (ft_strcmp(cmd->arr[0], SETENV) == 0)
-		sh_setenv(cmd->arr, env);
-	if (ft_strcmp(cmd->arr[0], UNSETENV) == 0)
-		sh_unset(cmd->arr, env);
-	if (ft_strcmp(cmd->arr[0], CD) == 0)
-		sh_cd(cmd->arr, *env);
-	return (1);
-}
-*/
