@@ -32,7 +32,7 @@ static t_term *init_prompt(struct termios *old_tty)
 	tty.c_lflag &= ~(ECHO | ICANON);
 //	tty.c_lflag &= ~(ECHO | IEXTEN | ISIG);
 	tty.c_cc[VMIN] = 1;
-	tty.c_cc[VTIME] = 0;
+	tty.c_cc[VTIME] = 1;
 	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 	pos = create_new_io_struct();
 	return (pos);
@@ -53,11 +53,15 @@ void	print_value_into_file(long long key, int x, int y)
 }
 
 
-static __attribute__((noinline))long long	incapsulate_read(void)
+static long long	incapsulate_read(void)
 {
 	long long key;
+	ssize_t	ret;
+	ret = 0;
 	key = 0;
-	read(STDIN_FILENO, &key, sizeof(key));
+	ret = read(STDIN_FILENO, &key, sizeof(key));
+	if (ret == -1)
+		handle_exit_errors("read ERRNO");
 	return (key);
 }
 

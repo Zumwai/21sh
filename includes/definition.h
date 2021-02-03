@@ -115,7 +115,7 @@ typedef struct s_trie
     int				counter;
 	char			data;
 	char			*sub;
-	struct s_trie *asc[94];
+	struct s_trie **asc;
 }		t_trie;
 
 typedef struct	s_inherit
