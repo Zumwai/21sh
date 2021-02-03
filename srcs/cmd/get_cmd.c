@@ -73,7 +73,8 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	//buf = new_string(t->data);
 	while (t->data[i])
 	{
-		while (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0)
+	//	while (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0)
+		if (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0)
 			buf[j++] = t->data[i++];
 		if (t->data[i] == 39 && q[1] == 0)
 		{

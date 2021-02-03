@@ -101,8 +101,10 @@ static t_trie    *insert_word_trie(t_trie *head, char *word)
         if (!curs->asc[value]) {
             curs->asc[value] = create_trie_node(word[index]);
             curs = curs->asc[value];
-            if (word[index + 1])
+            if (word[index + 1]) {
                 curs->sub = ft_strdup(&word[index + 1]);
+                curs->leaf = 1;
+            }
             else {
                 curs->data = word[index];
                 curs->counter++;
@@ -302,6 +304,7 @@ void    print_remainders(t_trie *head)
 
 }
 
+/*
 char    *parse_vertex(t_trie *head, char buf[256])
 {
     t_trie *curs = head;
@@ -328,6 +331,45 @@ char    *parse_vertex(t_trie *head, char buf[256])
     }
     return ft_strdup(buf);
 }
+*/
+
+static void create_names_list(t_trie *root, char **av, int index, t_auto *head) {
+
+	int i = 0;
+    t_auto  *curs;
+
+    if (!root)
+        return;
+    t_trie* temp = root;
+	if (temp->data != -1) {
+        if (temp->sub)
+        {
+            ft_strcat(av[0], temp->sub);
+            int len = ft_strlen(temp->sub);
+            index += len;
+            /*
+            t_auto *curs = find_last(head);
+            curs->next = create_new_list(*av);
+            return */
+        } else {
+	    	av[0][index] = temp->data;
+	    	av[0][index + 1] = '\0';
+            index++;
+        }
+	}
+    if (temp->leaf == true)
+    {
+        t_auto *curs = find_last(head);
+        curs->next = create_new_list(*av);
+    }
+   	while (i < 94) {
+		if (temp->asc && temp->asc[i]) {
+            create_names_list(temp->asc[i], av, index, head);
+        }
+		i++;
+    }
+}
+
 
 char    *search_trie(t_trie *head, char *orig)
 {
@@ -335,12 +377,13 @@ char    *search_trie(t_trie *head, char *orig)
     int     flag = 0;
     int     i = 0;
     int     value;
-    char    buf[256];
+     char    *buf;
     char    dbuf[1];
     char    *ret;
+    t_auto  *root;
 
     ret = NULL;
-  //  buf = ft_strnew(256);
+   buf = ft_strnew(256);
     curs = head;
     while(orig[i])
     {
@@ -351,7 +394,20 @@ char    *search_trie(t_trie *head, char *orig)
         i++;
     }
     ft_strcpy(buf, orig);
-    ret = parse_vertex(curs, buf);
+    int index = ft_strlen(buf);
+    root = NULL;
+    root = (t_auto *)malloc(sizeof(t_auto));
+    root->next = NULL;
+    create_names_list(curs, &buf, index + 1, root);
+    int j = 0;
+    while (root)
+    {
+        printf("%s\n", root->name);
+        root = root->next;
+        j++;
+    }
+    printf("%d - number\n", j);
+   // ret = parse_vertex(curs, buf);
     return ret;
 }
 
@@ -365,11 +421,11 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     g_words = 0;
 	new = NULL;
     g_size = 0;
-     g_count = 0;
+    g_count = 0;
 	if (!(orig = get_incomplete(pos)))
         return 1;
 	head = find_best_match(orig, env);
-    if (head)
+     if (head)
     	new = search_trie(head, orig);
     set_free_null(&orig);
     if (head)
