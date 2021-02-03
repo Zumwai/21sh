@@ -54,6 +54,7 @@ static t_yank	*init_buffer(void)
 	new->saved = NULL;
 	new->hist_ptr = NULL;
 	new->counter = 0;
+	new->sub = NULL;
 	return (new);
 }
 
