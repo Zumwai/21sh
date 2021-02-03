@@ -4,7 +4,7 @@ static size_t	g_size;
 static size_t	g_count;
 static size_t   g_single;
 static size_t   g_words;
-
+static size_t   g_print;
 
 static t_trie **init_array(void)
 {
@@ -19,7 +19,6 @@ static t_trie **init_array(void)
         i++;
     }
      g_size += (sizeof(t_trie *) * 94);
-  //\  printf("%lu - tire\n", sizeof(t_trie *));
      return node;
 }
 
@@ -33,7 +32,12 @@ static t_trie *create_trie_node(char c) {
     new->counter = 0;
     new->leaf = 0;
     new->data = c;
-    new->asc = NULL;
+  //  new->asc = NULL;
+    while (i < 94)
+    {
+        new->asc[i]= NULL;
+        i++;
+    }
     new->sub = NULL;
     g_size += sizeof(t_trie);
     g_count++;
@@ -48,7 +52,7 @@ void free_trie_node(t_trie* node) {
         return ;
     while (i < 94)
     {
-          if (node->asc && node->asc[i] != NULL){
+          if (node->asc[i] != NULL){
             if (node->counter == 1)
                 g_single++;
             free_trie_node(node->asc[i]);
@@ -56,14 +60,10 @@ void free_trie_node(t_trie* node) {
         i++;
     }
 
-    if (node->asc)
-        free(node->asc);
+ //   if (node->asc)
+   //     free(node->asc);
     if (node->sub)
-    {
-     //   printf("%s\n", node->sub);
         free(node->sub);
-    }
-    node->asc = NULL;
     if (node)
         free(node);
     node = NULL;
@@ -81,12 +81,10 @@ static t_trie    *insert_word_trie(t_trie *head, char *word)
 {
     int     index;
     int     value;
-  //  char    *temp;
     t_trie  *curs;
 
     if (!head)
         head = create_trie_node(0);
- //   temp = ft_strnew(256);
     curs = head;
     index = 0;
     value = 0;
@@ -95,28 +93,31 @@ static t_trie    *insert_word_trie(t_trie *head, char *word)
         value = convert_asc_value(word[index]);
         if (value < 0)
             handle_exit_errors("Trie value is negative!\n");
-        if (!curs->asc) {
+    /*    if (!curs->asc) {
             curs->asc = init_array();
-        }
+        }    */
         if (!curs->asc[value]) {
             curs->asc[value] = create_trie_node(word[index]);
             curs = curs->asc[value];
             if (word[index + 1]) {
-                curs->sub = ft_strdup(&word[index + 1]);
+                curs->sub = ft_strdup(&word[index]);
                 curs->leaf = 1;
             }
             else {
                 curs->data = word[index];
                 curs->counter++;
             }
+            curs->leaf = 1;
             return head;
-        }
-        curs = curs->asc[value];
-        if (curs->sub)
-        {
-            if (curs->sub[1])
-              insert_word_trie(curs, curs->sub);
-            set_free_null(&curs->sub);
+        } else {
+            curs = curs->asc[value];
+            if (curs->sub)
+            {
+                if (curs->sub[1])
+                    insert_word_trie(curs, &curs->sub[1]);
+                  set_free_null(&curs->sub);
+                  curs->leaf = 0;
+            }
         }
 		curs->data = word[index];
         curs->counter++;
@@ -151,33 +152,6 @@ static t_auto  *find_last(t_auto *head)
             curs = curs->next;
     return curs;
 }
-
-/*
-static void create_names_list(t_trie * root, char **av, int index, t_auto *head) {
-
-	int i = 0;
-    t_auto  *curs;
-
-    if (!root)
-        return;
-    t_trie* temp = root;
-	if (temp->data != -1) {
-		av[0][index] = temp->data;
-		av[0][index + 1] = '\0';
-        index++;
-	}
-    if (temp->leaf == true)
-    {
-        t_auto *curs = find_last(head);
-        curs->next = create_new_list(*av);
-    }
-   	while (i < 94) {
-		if (temp->asc[i])
-     	    create_names_list(temp->asc[i], av, index, head);
-		i++;
-    }
-}
-*/
 
 static t_trie *fill_variant_list(char *orig, char *path, t_trie *head)
 {
@@ -232,42 +206,6 @@ static t_trie    *init_auto_trie(char *original, t_env **env)
     ft_strsplit_free(&ways);
     return head;
 }
-/*
-int  search_word(t_trie *root, char *word)
-{
-    int     i = 0;
-    int     value = 0;
-    t_trie  *curs = root;
-
-    while (word[i])
-    {
-        value = convert_asc_value(word[i]);
-        if (!curs->asc[value])
-            return 0;
-        curs = curs->asc[value];
-    }
-    if (curs != NULL && curs->leaf == true)
-        return 1;
-    return 0;
-}
-
-char *search_trie(t_trie *root, char *word)
-{
-    t_trie *curs;
-    char    *av;
-    int     value;
-    int     i;
-
-    curs = root;
-    i = 0;
-    value = 0;
-    if (!search_word(root, word))
-        return NULL;
-    av = ft_strnew(256);
-    ft_strcpy(av, word);
-    return av;
-}
-*/
 
 t_trie    *find_best_match(char *orig, t_env **env)
 {
@@ -298,80 +236,42 @@ char	*get_incomplete(t_term *pos)
 	return incomplete;
 }
 
-
-void    print_remainders(t_trie *head)
+void    print_words(t_trie *node, char **line, int index, t_auto *list)
 {
-
-}
-
-/*
-char    *parse_vertex(t_trie *head, char buf[256])
-{
-    t_trie *curs = head;
-    char       dbuf[1];
-    int     flag = 0;
-
-    while (curs)
+    if (!node)
+        return ;
+    line[0][index] = 0;
+    if (node->data != -1)
     {
-        if (curs->counter != 1) {
-            print_remainders(curs);
-            if (!flag)
-                return NULL;
-            return ft_strdup(buf);
-        }
-        if (!curs->sub) {
-            dbuf[0] = curs->data;
-            ft_strcat(buf, dbuf);
-            flag++;
-        } else
-        {
-            ft_strcat(buf, curs->sub);
-            flag++;
-        }
-    }
-    return ft_strdup(buf);
-}
-*/
-
-static void create_names_list(t_trie *root, char **av, int index, t_auto *head) {
-
-	int i = 0;
-    t_auto  *curs;
-
-    if (!root)
-        return;
-    t_trie* temp = root;
-	if (temp->data != -1) {
-        if (temp->sub)
-        {
-            ft_strcat(av[0], temp->sub);
-            int len = ft_strlen(temp->sub);
-            index += len;
-            /*
-            t_auto *curs = find_last(head);
-            curs->next = create_new_list(*av);
-            return */
+        if (node->sub) {
+            ft_strcat(*line, node->sub);
+            index += ft_strlen(node->sub);
         } else {
-	    	av[0][index] = temp->data;
-	    	av[0][index + 1] = '\0';
+            line[0][index] = node->data;
+            line[0][index + 1] = '\0';
             index++;
         }
-	}
-    if (temp->leaf == true)
-    {
-        t_auto *curs = find_last(head);
-        curs->next = create_new_list(*av);
     }
-   	while (i < 94) {
-		if (temp->asc && temp->asc[i]) {
-            create_names_list(temp->asc[i], av, index, head);
+    if (node->leaf == true) {
+        t_auto *curs;
+
+        curs = find_last(list);
+        curs->next = create_new_list(*line);
+        g_print++;
+    }
+    int i = 0;
+ //   if (node->asc) {
+        while (i < 94)
+        {
+            if (node->asc[i]) {
+                print_words(node->asc[i], line, index, list);
+            }
+            i++;
         }
-		i++;
-    }
+  //  }
 }
 
-
-char    *search_trie(t_trie *head, char *orig)
+t_auto  *search_trie(t_trie *head, char *orig)
 {
     t_trie  *curs;
     int     flag = 0;
@@ -383,56 +283,60 @@ char    *search_trie(t_trie *head, char *orig)
     t_auto  *root;
 
     ret = NULL;
-   buf = ft_strnew(256);
+    buf = ft_strnew(256);
     curs = head;
     while(orig[i])
     {
         value = convert_asc_value(orig[i]);
-        if (!curs->asc || !curs->asc[value])
+        if (!curs->asc[value])
             return NULL;
         curs = curs->asc[value];
         i++;
     }
     ft_strcpy(buf, orig);
     int index = ft_strlen(buf);
-    root = NULL;
-    root = (t_auto *)malloc(sizeof(t_auto));
-    root->next = NULL;
-    create_names_list(curs, &buf, index + 1, root);
-    int j = 0;
-    while (root)
-    {
-        printf("%s\n", root->name);
-        root = root->next;
-        j++;
-    }
-    printf("%d - number\n", j);
-   // ret = parse_vertex(curs, buf);
-    return ret;
+    t_auto *list;
+    list = create_new_list(buf);
+    print_words(curs, &buf, index - 1, list);
+    if (!list->next)
+        free(list);return NULL;
+    return list;
 }
 
 int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 {
 	t_trie *head;
 	char	*orig;
-	char	*new;
+	t_auto	*new;
 
     g_single = 0;
     g_words = 0;
 	new = NULL;
     g_size = 0;
     g_count = 0;
+    g_print = 0;
 	if (!(orig = get_incomplete(pos)))
         return 1;
 	head = find_best_match(orig, env);
-     if (head)
+    if (head)
     	new = search_trie(head, orig);
     set_free_null(&orig);
+   // set_free_null(&new);
     if (head)
         free_trie_node(head);
+    while (new)
+    {
+        t_auto *tmp = new;
+        new = new->next;
+        free(tmp->name);
+        free(tmp);
+    }
+    /*
     printf("%lu -size\n", g_size);
     printf("%lu - total number\n", g_count);
     printf("%zu - single\n", g_single);
     printf("%lu - words\n", g_words);
+    printf("%lu - printed\n", g_print);
+    */
 	return 1;
 }

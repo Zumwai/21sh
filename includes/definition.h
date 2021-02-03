@@ -115,7 +115,7 @@ typedef struct s_trie
     int				counter;
 	char			data;
 	char			*sub;
-	struct s_trie **asc;
+	struct s_trie *asc[94];
 }		t_trie;
 
 typedef struct	s_inherit
@@ -161,6 +161,7 @@ typedef struct s_yank
 	char			*yanked;
 	int				size;
 	int				counter;
+	char			*sub;
 	t_history		*hist_ptr;
 	t_term			*input;
 	t_term			*current;
