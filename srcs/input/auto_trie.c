@@ -272,6 +272,33 @@ void    print_words(t_trie *node, char **line, int index, t_auto *list)
     }
 }
 
+int    get_to_the_diversion(t_trie *node, char **buf, int index)
+{
+    int i;
+
+    i = 0;
+    if (!node)
+        return -1;
+    if (node->counter > 1)
+        return -1;
+    buf[0][index] = 0;
+    if (node->sub)
+    {
+        index += ft_strlen(node->sub);
+        ft_strcat(*buf, node->sub);
+        return (0);
+    }
+    buf[0][index] = node->data;
+    buf[0][index + 1] = 0;
+    index++;
+    while (i < 94)
+    {
+        if (node->asc[i])
+            return (get_to_the_diversion(node, buf, index));
+        i++;
+    }
+}
+
 t_auto  *search_trie(t_trie *head, char *orig)
 {
     t_trie  *curs;
@@ -289,16 +316,19 @@ t_auto  *search_trie(t_trie *head, char *orig)
     while(orig[i])
     {
         value = convert_asc_value(orig[i]);
-        if (!curs->asc)
-              return NULL;
-        curs = curs->asc[value];
+        if (curs->asc)
+            curs = curs->asc[value];
         i++;
     }
     ft_strcpy(buf, orig);
     int index = ft_strlen(buf);
     t_auto *list;
+    int     res = 0;
     list = create_new_list(buf);
-    print_words(curs, &buf, index - 1, list);
+    if ((res = get_to_the_diversion(curs, &buf, index - 1)) < 0)
+        print_words(curs, &buf, index - 1, list);
+    else
+        printf("%s\n", buf);
     free(buf);
   //  if (!list->next)
    //     free(list);return NULL;
@@ -331,13 +361,14 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     if (!new)
         return 1;
     t_auto *tmp;
+    int  all    = g_print;
     while (new)
     {
         tmp = new;
         new = new->next;
-        if (g_print == 0)
-            printf("\n");
-        printf("%s\n", tmp->name);
+        if (all % 5 == 0)
+           printf("\n");
+        printf("%s ", tmp->name);
         free(tmp->name);
         free(tmp);
     }
