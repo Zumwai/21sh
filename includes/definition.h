@@ -21,6 +21,7 @@
 # define HISTORY_DOWN	4348699 //arrow down
 # define COPY_W	15				//ctrl + o
 # define TAB 	9				//tab or ctrl + i, unfortunately
+# define BACK_TAB	5921563		//backtab
 
 # define BK "&"
 # define AND "&&"
@@ -46,6 +47,8 @@
 # define NODIR	(-7)	//not a dir
 
 # define PATH_MAX 4096
+
+
 
 typedef struct	s_env
 {
@@ -106,14 +109,22 @@ typedef struct			s_token
 	struct s_token		*next;
 	struct s_token		*prev;
 }						t_token;
-
 typedef struct s_trie
 {
-	bool leaf;
-    int  counter;
-	char	data;
-	struct s_trie *asc[94];
+	bool			leaf;
+    int				counter;
+	char			data;
+	char			*sub;
+	struct s_trie **asc;
 }		t_trie;
+
+typedef struct	s_inherit
+{
+	bool		leaf;
+	int			counter;
+	char		*data;
+	int			wrong;
+}				t_inherit;
 
 typedef struct s_auto
 {
@@ -150,11 +161,13 @@ typedef struct s_yank
 	char			*yanked;
 	int				size;
 	int				counter;
+	char			*sub;
 	t_history		*hist_ptr;
 	t_term			*input;
 	t_term			*current;
 	t_term			*saved;
 	t_history		*history;
+	t_auto			*completion;
 }					t_yank;
 
 enum				e_state

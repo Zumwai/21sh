@@ -185,11 +185,11 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env
 		cut_word(curs, buf);
 	else if (key == CLEAR)
 			ft_clear(curs);
-	else if (key == TAB)
-			autocomplete(curs, env, buf);
 	else if (key == HISTORY_UP)
 			return (ft_history_up());
 	else if (key == HISTORY_DOWN)
 			return (ft_history_down());
+	else if (key == TAB)
+		autocomplete(curs, env, buf);
 	return (0);
 }
