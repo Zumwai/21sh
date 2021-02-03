@@ -1,16 +1,6 @@
 #include "sh.h"
 #include <stdio.h>
 
-static char			*new_string(char *s)
-{
-	char		*n;
-	size_t			i;
-
-	i = ft_strlen(s) + 1;
-	n = ft_strnew(i);
-	return (n);
-}
-
 static char				*get_value(char *name, t_env **env)
 {
 	t_env			*cur;
@@ -70,6 +60,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	j = 0;
 	q[0] = 0;
 	q[1] = 0;
+	//printf("%s\n", t->data);
 	//buf = new_string(t->data);
 	while (t->data[i])
 	{
@@ -112,8 +103,11 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 		}
 		if (t->data[i] == '$' && t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0)
 			get_env_val(buf, &j, t->data, &i, env);
+		if(t->data[i] == '$' && j == 0)
+            get_env_val(buf, &j, t->data, &i, env);
 	}
 	buf[j] = '\0';
+	//printf("%s\n", buf);
 	c->arr = ft_strsplit(buf, ' ');
 	//free(buf);
 	return (c);
