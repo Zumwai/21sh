@@ -176,7 +176,8 @@ static void create_names_list(t_trie * root, char **av, int index, t_auto *head)
     }
 }
 */
-t_trie *fill_variant_list(char *orig, char *path, t_trie *head)
+
+static t_trie *fill_variant_list(char *orig, char *path, t_trie *head)
 {
     DIR     *dir;
     struct dirent *container;
@@ -202,7 +203,7 @@ t_trie *fill_variant_list(char *orig, char *path, t_trie *head)
     return head;
 }
 
-t_trie    *init_auto_trie(char *original, t_env **env)
+static t_trie    *init_auto_trie(char *original, t_env **env)
 {
     t_auto  *arg;
     t_trie  *head;
@@ -265,6 +266,7 @@ char *search_trie(t_trie *root, char *word)
     return av;
 }
 */
+
 t_trie    *find_best_match(char *orig, t_env **env)
 {
     t_trie *head;
@@ -345,6 +347,7 @@ char    *search_trie(t_trie *head, char *orig)
         value = convert_asc_value(orig[i]);
         if (!curs->asc || !curs->asc[value])
             return NULL;
+        curs = curs->asc[value];
         i++;
     }
     ft_strcpy(buf, orig);
