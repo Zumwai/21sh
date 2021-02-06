@@ -313,8 +313,8 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
     {
         if (node->asc[i])
             ret = get_to_the_diversion(node->asc[i], buf, index);
-        if (ret == -1)
-            return -1;
+        if (ret == -1 || ret == -2)
+            return ret;
         i++;
     }
     return 0;
@@ -413,19 +413,19 @@ void    print_varians(t_auto *list)
     curs = list;
     cols = dimensions.ws_col / max;
     int     i = 0;
-    ft_printf("\n");
+    ft_putchar('\n');
     while (curs)
-    {
-        ft_printf("%s ", curs->name);
+    {   
+        ft_putstr(curs->name);
         while (curs->size++ < max)
-            ft_printf(" ");
+            ft_putchar(' ');
         i++;
         if (i == cols) {
-            ft_printf("\n"); i = 0;
+            ft_putchar('\n'); i = 0;
         }
         curs = curs->next;
     }
-    ft_printf("\n");
+    ft_putchar('\n');
 }
 int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 {
@@ -451,6 +451,7 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     curs = list->next;  
     if (curs)
        print_varians(curs);
+    free(list);
     if (!new)
         handle_empty_error("TEMP", "autocomplete failed");
     set_free_null(&orig);
