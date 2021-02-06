@@ -100,7 +100,7 @@ static t_trie    *insert_word_trie(t_trie *head, char *word)
 //        }
         if (!curs->asc[value]) {
             curs->asc[value] = create_trie_node(word[index]);
-             curs->counter++;
+            curs->counter++;
             curs = curs->asc[value];
             if (word[index + 1]) {
                 curs->sub = ft_strdup(&word[index]);
@@ -118,12 +118,12 @@ static t_trie    *insert_word_trie(t_trie *head, char *word)
                 if (curs->sub[1])
                     insert_word_trie(curs, &curs->sub[1]);
                   set_free_null(&curs->sub);
-                  curs->counter--;
+                  //curs->counter--;
                   curs->leaf = 0;
             }
         }
 		curs->data = word[index];
-        curs->counter++;
+        //curs->counter++;
 		index++;
     }
     curs->leaf = 1;
