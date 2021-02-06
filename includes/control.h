@@ -29,7 +29,7 @@ char		*get_buf_line(char **line, int *size, int increase);
 void		cut_word(t_term *pos, t_yank *buffer);
 void		cut_after(t_term *pos, t_yank *buffer);
 void		cut_before(t_term *pos, t_yank *buffer);
-void		yank_buffer(t_term *pos, t_yank *buffer);
+void		yank_buffer(t_term *pos, char *line);
 t_term		*create_new_io_struct(void);
 t_history	*save_history(t_yank *buffer);
 void 		free_input_line(t_term **input);
@@ -46,5 +46,6 @@ void ft_putstr_size(char *line, size_t size);
 char	*concat_lines(t_term *input);
 t_trie    *find_best_match(char *orig, t_env **env);
 int	autocomplete(t_term *pos, t_env **env, t_yank *buf);
+void free_trie_node(t_trie* node);
 
 #endif

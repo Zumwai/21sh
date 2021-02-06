@@ -180,7 +180,7 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env
 	else if (key == COPY_W)
 		copy_word(curs, buf);
 	else if (key == YANK)
-		yank_buffer(curs, buf);
+		yank_buffer(curs, buf->yanked);
 	else if (key == W_CUT)
 		cut_word(curs, buf);
 	else if (key == CLEAR)
