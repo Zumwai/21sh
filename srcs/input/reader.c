@@ -45,7 +45,7 @@ void	print_value_into_file(long long key, int x, int y)
 	if (key == '\n') {
 			fprintf(fptr, "%s\n", "--------------------------------");
 	} else {
-	fprintf(fptr, "%lld: key, %d:x, %d:y", key, x, y);
+		fprintf(fptr, "%lld: key, %d:x, %d:y", key, x, y);
 	if (ft_ischar(key))
 		fprintf(fptr, ";%c - char key", (char)key);
 	fprintf(fptr, "%c", '\n');

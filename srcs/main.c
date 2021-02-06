@@ -30,6 +30,7 @@ int		main(int ac, char **av, char **env)
 		}
 		set_free_null(&line);
 	}
+	free_trie_node(buffer->trie);
 	set_free_all(ev, buffer);
 	return (0);
 }

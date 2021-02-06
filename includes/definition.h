@@ -115,7 +115,7 @@ typedef struct s_trie
     int				counter;
 	char			data;
 	char			*sub;
-	struct s_trie **asc;
+	struct s_trie *asc[94];
 }		t_trie;
 
 typedef struct	s_inherit
@@ -129,6 +129,7 @@ typedef struct	s_inherit
 typedef struct s_auto
 {
     char *name;
+	int	 size;
     struct s_auto *next;
 }           t_auto;
 
@@ -168,6 +169,7 @@ typedef struct s_yank
 	t_term			*saved;
 	t_history		*history;
 	t_auto			*completion;
+	t_trie			*trie;
 }					t_yank;
 
 enum				e_state

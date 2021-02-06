@@ -74,22 +74,22 @@ void	cut_before(t_term *pos, t_yank *buffer)
 		pos->x = pos->index + pos->prompt;
 }
 
-void	yank_buffer(t_term *pos, t_yank *buffer) //overflow multiple pastes + lines
+void	yank_buffer(t_term *pos, char *line)//overflow multiple pastes + lines
 {
 	int	size;
 	int		curr;
 	int 	abs = ft_abs(pos->delta_x);
 
-	if (!buffer->yanked)
+	if (!line)
 		return ;
-	if (buffer->yanked[0] == 0)
+	if (line[0] == 0)
 		return ;
-	size = ft_strlen(buffer->yanked); //calc at creation time, not here
+	size = ft_strlen(line); //calc at creation time, not here
 	if (size + pos->index >= pos->buf_size)
 		pos->new = get_buf_line(&pos->new, &pos->buf_size, size);
 	curr = pos->index - abs;
 	ft_memmove(&pos->new[curr + size], &pos->new[curr], abs);
-	ft_memmove(&pos->new[curr], buffer->yanked, size);
+	ft_memmove(&pos->new[curr], line, size);
 	pos->index += size;
 	if (pos->delta_x > 0)
 		pos->delta_x = 0;
