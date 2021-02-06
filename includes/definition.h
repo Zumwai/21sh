@@ -129,6 +129,7 @@ typedef struct	s_inherit
 typedef struct s_auto
 {
     char *name;
+	int	 size;
     struct s_auto *next;
 }           t_auto;
 

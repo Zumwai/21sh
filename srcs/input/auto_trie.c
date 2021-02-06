@@ -137,8 +137,10 @@ static t_auto  *create_new_list(char *line)
     if (!(new = (t_auto *)malloc(sizeof(t_auto))))
         handle_exit_errors("Malloc returned NULL");
     new->next = NULL;
-    if (line)
+    if (line) {
         new->name = ft_strdup(line);
+        new->size = ft_strlen(line);
+    }
     else
         new->name = NULL;
     return (new);
@@ -239,6 +241,7 @@ char	*get_incomplete(t_term *pos)
 	return incomplete;
 }
 
+
 void    print_words(t_trie *node, char **line, int index, t_auto *list)
 {
     if (!node)
@@ -273,6 +276,7 @@ void    print_words(t_trie *node, char **line, int index, t_auto *list)
  //   }
 }
 
+
 int    get_to_the_diversion(t_trie *node, char **buf, int index)
 {
     int i;
@@ -286,14 +290,25 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
     {
         index += ft_strlen(node->sub);
         ft_strcat(*buf, node->sub);
-        node->sub[index] = '\0';
+        buf[0][index] = '\0';
+        //node->sub[index] = '\0';
         return 0;
     }
     buf[0][index] = node->data;
     buf[0][index + 1] = 0;
     index++;
-    if (node->counter > 1)
+    if (node->leaf)
         return -1;
+    if (node->counter > 1 || node->leaf == true)
+    {  
+        /*
+        t_auto *list;
+        list = create_new_list(NULL);
+        index = ft_strlen(*buf);
+        print_words(node, buf, index - 1, list);
+        */
+        return -2;
+    }
     while (i < 94)
     {
         if (node->asc[i])
@@ -304,45 +319,7 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
     }
     return 0;
 }
-/*
-t_trie      *check_existence(t_trie *head, char *orig, char *buf[257], int *i)
-{
-    int value = 0;
-    t_trie *curs = head;
-   // char    buf[257];
 
-    //bzero(&buf, 257);
-    while(orig[(*i)])
-    {
-       value = convert_asc_value(orig[(*i)]);
-        if (!curs->sub && !curs->asc[value])
-            return NULL;
-        if (curs->sub) {
-            break ;
-        }
-        else if (curs->asc[value]) {
-            buf[0][(*i)] = curs->asc[value]->data;
-            curs = curs->asc[value];
-        }
-        else
-            return NULL;
-        (*i)++;
-    }
-    if (curs->sub)
-    {
-        ft_strcat(*buf, &curs->sub[1]);
-        if (ft_strequ(*buf, orig))
-            return NULL;
-    }
-    return curs;
-}
-*/
-/*
-int     check_equality(char *a, char *b, int len)
-{
-    if (ft_strncmp())
-}
-*/
 t_trie  *check_existence(t_trie *head, char *orig, char **remainder)
 {
     int value = 0;
@@ -375,7 +352,7 @@ t_trie  *check_existence(t_trie *head, char *orig, char **remainder)
     return curs;
 }
 
-char  *search_trie(t_trie *head, char *orig)
+char  *search_trie(t_trie *head, char *orig, t_auto *list)
 {
     t_trie  *curs;
     int     j = 0;
@@ -388,16 +365,21 @@ char  *search_trie(t_trie *head, char *orig)
     ret = NULL;
     comp = ft_strnew(257);
     curs = check_existence(head, orig, &comp);
-    if (!curs)
+    if (!curs){
         return NULL;
+    }
+
     int     res = 0;
     if (!curs->sub) {
         buf = ft_strnew(257);
         ft_strcpy(buf, orig);
         index = ft_strlen(buf);
         res = get_to_the_diversion(curs, &buf, index - 1);
-        if (ft_strcmp(buf, orig))
+        if (ft_strcmp(buf, orig)) {
             ret = ft_strdup(&buf[index]);
+        }
+        if (res == -2)
+            print_words(curs, &buf, ft_strlen(buf) - 1, list);
         free(buf);
         free(comp);
         return ret;
@@ -405,11 +387,46 @@ char  *search_trie(t_trie *head, char *orig)
     else {
         buf = ft_strnew(257);
         ft_strcpy(buf, comp);
+        free(comp);
         return buf;          
     }
   //      print_words(curs, &buf, index - 1, list);
 }
+//REWRITE
 
+void    print_varians(t_auto *list)
+{
+    t_auto *curs = list;
+    int     size = 0;
+    int     max = 0;
+	struct winsize dimensions;
+    int     cols = 0;
+
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
+    while (curs)
+    {
+        size++;
+        if (curs->size > max)
+            max = curs->size;
+        curs = curs->next;
+    }
+    curs = list;
+    cols = dimensions.ws_col / max;
+    int     i = 0;
+    ft_printf("\n");
+    while (curs)
+    {
+        ft_printf("%s ", curs->name);
+        while (curs->size++ < max)
+            ft_printf(" ");
+        i++;
+        if (i == cols) {
+            ft_printf("\n"); i = 0;
+        }
+        curs = curs->next;
+    }
+    ft_printf("\n");
+}
 int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 {
 	t_trie *head;
@@ -426,8 +443,14 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         return 1;
     if (!buf->trie)
         buf->trie = find_best_match(orig, env);
+    t_auto *list;
+    list = create_new_list(NULL);
     if (buf->trie)
-    	new = search_trie(buf->trie, orig);
+    	new = search_trie(buf->trie, orig, list);
+    t_auto *curs;
+    curs = list->next;  
+    if (curs)
+       print_varians(curs);
     if (!new)
         handle_empty_error("TEMP", "autocomplete failed");
     set_free_null(&orig);
