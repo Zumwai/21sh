@@ -304,51 +304,110 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
     }
     return 0;
 }
-
-t_trie      *check_existence(t_trie *head, char *orig)
+/*
+t_trie      *check_existence(t_trie *head, char *orig, char *buf[257], int *i)
 {
-    int i = 0;
     int value = 0;
     t_trie *curs = head;
+   // char    buf[257];
 
-    while(orig[i])
+    //bzero(&buf, 257);
+    while(orig[(*i)])
     {
-        value = convert_asc_value(orig[i]);
+       value = convert_asc_value(orig[(*i)]);
         if (!curs->sub && !curs->asc[value])
             return NULL;
-        if (curs->sub)
-                return NULL;
-        else if (curs->asc[value])
+        if (curs->sub) {
+            break ;
+        }
+        else if (curs->asc[value]) {
+            buf[0][(*i)] = curs->asc[value]->data;
             curs = curs->asc[value];
+        }
         else
             return NULL;
+        (*i)++;
+    }
+    if (curs->sub)
+    {
+        ft_strcat(*buf, &curs->sub[1]);
+        if (ft_strequ(*buf, orig))
+            return NULL;
+    }
+    return curs;
+}
+*/
+/*
+int     check_equality(char *a, char *b, int len)
+{
+    if (ft_strncmp())
+}
+*/
+t_trie  *check_existence(t_trie *head, char *orig, char **remainder)
+{
+    int value = 0;
+    int ret = 0;
+    int     size = 0;
+    int i = 0;
+    t_trie *curs;
+
+    curs = head;
+    while (orig[i])
+    {
+        
+       value = convert_asc_value(orig[i]);
+        if (!curs->sub && !curs->asc[value])
+            return NULL;
+        if (curs->sub) {
+            size = ft_strlen(orig);
+            ret = ft_strncmp(curs->sub, &orig[i - 1], size - i + 1);
+            if (!ret) {
+                ft_strcpy(*remainder, &curs->sub[size - i + 1]);
+                return curs;
+            }
+            return NULL;
+        }
+        curs = curs->asc[value];
         i++;
     }
+    if (curs->sub)
+        ft_strcpy(*remainder, &curs->sub[1]);
     return curs;
 }
 
 char  *search_trie(t_trie *head, char *orig)
 {
     t_trie  *curs;
+    int     j = 0;
     int     i = 0;
      char    *buf;
+    char     *comp;
     char    *ret;
+    int     index = 0;
 
     ret = NULL;
-    curs = check_existence(head, orig);
+    comp = ft_strnew(257);
+    curs = check_existence(head, orig, &comp);
     if (!curs)
         return NULL;
-    buf = ft_strnew(257);
-    ft_strcpy(buf, orig);
-    int index = ft_strlen(buf);
-    t_auto *list;
     int     res = 0;
-    res = get_to_the_diversion(curs, &buf, index - 1);
+    if (!curs->sub) {
+        buf = ft_strnew(257);
+        ft_strcpy(buf, orig);
+        index = ft_strlen(buf);
+        res = get_to_the_diversion(curs, &buf, index - 1);
+        if (ft_strcmp(buf, orig))
+            ret = ft_strdup(&buf[index]);
+        free(buf);
+        free(comp);
+        return ret;
+    }
+    else {
+        buf = ft_strnew(257);
+        ft_strcpy(buf, comp);
+        return buf;          
+    }
   //      print_words(curs, &buf, index - 1, list);
-    if (ft_strcmp(buf, orig))
-        ret = ft_strdup(&buf[index]);
-    free(buf);
-    return ret;
 }
 
 int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
