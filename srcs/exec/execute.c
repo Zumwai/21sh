@@ -1,18 +1,5 @@
 #include "sh.h"
 
-/*int				sh_echo(char **com, t_env **env, int fd)
-{
-	int			i;
-	i = 1;
-	while(com[i])
-	{
-		ft_putstr(com[i]);
-		ft_putchar(' ');
-		i++;
-	}
-	ft_putchar('\n');
-}*/
-
 static	int					command(char *s)
 {
 	if (/*ft_strcmp(s, ECHO) == 0) ||
@@ -66,6 +53,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	pid_t		pid;
 	char		**environ;
 
+	ft_putendl("do proc");
 	environ = convert_env_array(env);
 	if ((pid = fork()) == 0)
 	{
@@ -74,7 +62,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 			dup2(read, 0);
 			close(read);
 		}
-		if (fd != 1 && cmd->type == 2)
+		if (fd != 1 && (cmd->type == 2 || cmd->type == 6 || cmd->type == 7))
 		{
 			dup2(fd, 1);
 			close(fd);
@@ -89,22 +77,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	set_free_null(&cmd->target);
 	ft_free_tab(&environ);
 }
-/* UNUSED
-static void			do_target(t_cmd *cmd, t_env **env)
-{
-	while (cmd)
-	{
-		if ((!command(cmd->arr[0]) && cmd->arr[0][0] != '/') ||
-			(ft_strcmp("env", cmd->arr[0]) == 0 || ft_strcmp("echo", cmd->arr[0]) == 0))
-		{
-			cmd->target = get_path(cmd->arr[0], env);
-			if (cmd->target == NULL)
-				return;
-		}
-		cmd = cmd->next;
-	}
-}
-*/
+
 static void *get_builtin(char *com)
 {
 
@@ -132,44 +105,24 @@ static void *get_builtin(char *com)
 int             get_fd_write(t_cmd *cmd)
 {
     int         fd;
-    fd = 0;
-    if (cmd->prev->type == 7)
-        fd = open(cmd->arr[0], O_CREAT | O_RDWR | O_APPEND,
-                  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-    if (cmd->prev->type == 6)
-        fd = open(cmd->arr[0], O_CREAT | O_RDWR | O_TRUNC,
-                  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-    return (fd);
-
-}
-
-t_cmd           *redirect(t_cmd *cmd, t_env *env)
-{
-
-    pid_t		pid;
-    char		**environ;
-    int wfd;
     t_cmd       *cur;
 
-    environ = convert_env_array(env);
-    wfd = 0;
-    cur = cmd->next;
-    if (cmd->type == 6 || cmd->type == 7)
+    fd = 0;
+    cur = cmd;
+    while (cur->type == 6 || cur->type == 7 && cur->next)
     {
-        while (cur && (cur->prev->type == 6 || cur->prev->type == 7))
-        {
-            wfd = get_fd_write(cur);
-            cur = cur->next;
-        }
-        if ((pid = fork()) == 0)
-        {
-            dup2(wfd, 1);
-            execve(cmd->arr[0], cmd->arr, environ);
-        }
-        else
-            wait(&pid);
+        if (cur->type == 7)
+            fd = open(cur->next->arr[0], O_CREAT | O_RDWR | O_APPEND,
+                      S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+        if (cur->type == 6)
+            fd = open(cur->next->arr[0], O_CREAT | O_RDWR | O_TRUNC,
+                      S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+        printf("%d\n", fd);
+        if (cur->next->type == 6 || cur->next->type == 7)
+            close(fd);
+        cur = cur->next;
     }
-    return (cmd);
+    return (fd);
 }
 
 int			execute(t_cmd *cmd, t_env **env)
@@ -179,39 +132,41 @@ int			execute(t_cmd *cmd, t_env **env)
 	pid_t		pid;
 	t_cmd 		*head;
 	int		(*builtin)();
+	int     wfd;
 
-	int
+	int res;
+	wfd = 1;
 	res = 1;
 	head = cmd;
 	read = 0;
 	builtin = NULL;
 	while (cmd)
 	{
-			pipe(fd);
-			if (cmd->type == 6 || cmd->type == 7)
-			    cmd = redirect(cmd, env);
-			if (/*cmd->type != 2 && ((*/builtin = get_builtin(cmd->arr[0]))
-			{
-				res = builtin(cmd->arr, env, fd);
-			}
-			else
-			    {
+	    pipe(fd);
+	    if (cmd->type == 6 || cmd->type == 7)
+	        wfd = get_fd_write(cmd);
+	    if (/*cmd->type != 2 && ((*/builtin = get_builtin(cmd->arr[0]))
+	    {
+	        if (wfd != 1)
+	            fd[1] = wfd;
+            res = builtin(cmd->arr, env, fd);
+        }
+	    else
+	        {
 				cmd->target = get_path(cmd->arr[0], env);
-				if (cmd->target != NULL)
+				if (cmd->target != NULL && cmd->type != 6 && cmd->type != 7)
 					do_proc(read, fd[1], cmd->target, cmd, env);
+                if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
+                {
+                    do_proc(read, wfd, cmd->target, cmd, env);
+                    while (cmd->next && (cmd->type == 6 || cmd->type == 7))
+                        cmd = cmd->next;
+                }
 			}
 			close(fd[1]);
 			if (cmd->type == 2)
 			    read = fd[0];
-			if (cmd->type == 6 || cmd->type == 7)
-            {
-			    cmd = cmd->next;
-			    while (cmd && (cmd->prev->type == 6 || cmd->prev->type == 7))
-                    cmd = cmd->next;
-            }
-			else
-			    cmd = cmd->next;
+			cmd = cmd->next;
 	}
-	//free_cmd(head);
 	return (res);
 }

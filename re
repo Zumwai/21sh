@@ -1,0 +1,23 @@
+111
+21sh
+21sh.dSYM
+a b
+cmake-build-debug
+CMakeLists.txt
+echores
+fo
+hi
+includes
+libft
+Makefile
+privet
+re
+README.md
+res
+ro
+rres
+srcs
+str.c
+test
+re
+[6n
