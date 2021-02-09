@@ -140,16 +140,20 @@ int			execute(t_cmd *cmd, t_env **env)
 	head = cmd;
 	read = 0;
 	builtin = NULL;
+	int ffd;
+	ffd = 1;
 	while (cmd)
 	{
 	    pipe(fd);
+	    printf("%d === %d\n", fd[0], fd[1]);
 	    if (cmd->type == 6 || cmd->type == 7)
 	        wfd = get_fd_write(cmd);
+	    printf("wfd === %d\n", wfd);
 	    if (/*cmd->type != 2 && ((*/builtin = get_builtin(cmd->arr[0]))
 	    {
 	        if (wfd != 1)
-	            fd[1] = wfd;
-            res = builtin(cmd->arr, env, fd);
+	            ffd = wfd;
+	        res = builtin(cmd->arr, env, ffd);
         }
 	    else
 	        {
@@ -159,10 +163,13 @@ int			execute(t_cmd *cmd, t_env **env)
                 if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
                 {
                     do_proc(read, wfd, cmd->target, cmd, env);
-                    while (cmd->next && (cmd->type == 6 || cmd->type == 7))
-                        cmd = cmd->next;
                 }
 			}
+	    if (cmd->type == 6 || cmd->type == 7)
+	    {
+            while (cmd->next && (cmd->type == 6 || cmd->type == 7))
+                cmd = cmd->next;
+        }
 			close(fd[1]);
 			if (cmd->type == 2)
 			    read = fd[0];
