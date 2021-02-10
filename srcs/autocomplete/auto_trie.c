@@ -267,6 +267,17 @@ int     check_for_dir(char *orig, char *new)
     return 0;
 }
 
+int is_relative_path(char *orig)
+{
+    int     i = 0;
+    while (orig[i])
+    {
+        if (orig[i] == '/')
+            return 1;
+        i++;
+    }
+    return 0;
+}
 int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 {
 	char	*orig; 
@@ -284,6 +295,8 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         buf->trie = construct_trie(&orig, env, LOCAL);
     else if (orig[len - 1] == '/')
         buf->trie = construct_trie(&orig, env, DIRECTORY);
+    else if (is_relative_path(orig))
+        buf->trie = construct_trie(&orig, env, 4);
     else 
         buf->trie = construct_trie(&orig, env, GLOBAL);
    // else if (orig[0] == '.')

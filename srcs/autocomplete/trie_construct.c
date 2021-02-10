@@ -140,11 +140,45 @@ t_trie      *construct_env_trie(char *orig, t_env **env)
     return head;
 }
 
+char        *split_path(char *orig, char **path)
+{
+    int     len;
+    int     tmp;
+    char    *sub;
+
+    *path = ft_strnew(4096);
+    len = ft_strlen(orig) - 1;
+    tmp = len;
+    while (len >= 0)
+    {
+        if (orig[len] == '/')
+            break ;
+        len--;
+    }
+    len++;
+    if (orig[0] == '/')
+        *path = ft_strsub(orig, 0, len - 1);
+    else {
+        char        *pwd = NULL;
+        if (!(pwd = getcwd(pwd, 4096)))
+            return NULL;
+        ft_strcat(*path, pwd);
+        ft_strcat(*path, "/");
+        ft_strncat(*path, orig, len - 1);
+        ft_strcat(*path, "/");
+    }
+    sub = ft_strdup(&orig[len]);
+    return sub;
+}
+
 t_trie    *construct_trie(char **orig, t_env **env, int source)
 {
     t_trie *head;
-
+    char    *path;
+    char    *sub;
+    int     len;
     head = NULL;
+    path = NULL;
     if (source == ENV_ONLY) {
         head = construct_env_trie(*orig, env);
     }
@@ -156,7 +190,16 @@ t_trie    *construct_trie(char **orig, t_env **env, int source)
         head = construct_local_entry(*orig);
     }
     else if (source == DIRECTORY) {
-        //head = constuct_directory(orig, env);
+        len = ft_strlen(*orig);
+        if (orig[0][len - 1] == '/')
+            head = fill_variant_list("", *orig, head);
+        *orig[0] = 0;
+    }
+    else {
+        sub = split_path(*orig, &path);
+        head = fill_variant_list(sub, path, head);
+        free(*orig);
+        *orig = sub;
     }
     if (!head)
         return NULL;
