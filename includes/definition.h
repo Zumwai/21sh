@@ -48,6 +48,10 @@
 
 # define PATH_MAX 4096
 
+# define ENV_ONLY 0
+# define GLOBAL  1
+# define LOCAL   2
+# define DIRECTORY 3
 
 
 typedef struct	s_env

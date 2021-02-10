@@ -31,7 +31,9 @@ SRCS =	main.c \
 		input/input_utils.c \
 		input/cut_paste.c \
 		input/history.c \
-		input/auto_trie.c
+		autocomplete/trie_construct.c \
+		autocomplete/auto_trie.c \
+		autocomplete/auto_utils.c
 DIR_SRCS = srcs/
 SOURCE = $(addprefix $(DIR_SRCS), $(SRCS))
 OBJECT = $(patsubst %.c,%.o,$(SOURCE))
