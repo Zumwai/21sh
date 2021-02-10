@@ -68,7 +68,7 @@ static t_trie *fill_variant_list(char *orig, char *path, t_trie *head)
     {
         if(container->d_reclen == 0)
             break ; //test
-        if (orig[0] == 0 || ft_strnequ(container->d_name, orig, len)) {
+        if ((orig[0] == 0 || ft_strnequ(container->d_name, orig, len)) && ft_strcmp(container->d_name, ".") && ft_strcmp(container->d_name, "..")) {
             head = insert_word_trie(head, container->d_name);
         }
     }
@@ -157,7 +157,7 @@ char        *split_path(char *orig, char **path)
     }
     len++;
     if (orig[0] == '/')
-        *path = ft_strsub(orig, 0, len - 1);
+        *path = ft_strsub(orig, 0, len);
     else {
         char        *pwd = NULL;
         if (!(pwd = getcwd(pwd, 4096)))
@@ -167,7 +167,9 @@ char        *split_path(char *orig, char **path)
         ft_strncat(*path, orig, len - 1);
         ft_strcat(*path, "/");
     }
-    sub = ft_strdup(&orig[len]);
+    sub = ft_strnew(257);
+    ft_strcpy(sub, &orig[len]);
+    //sub = ft_strdup(&orig[len]);
     return sub;
 }
 
@@ -197,9 +199,15 @@ t_trie    *construct_trie(char **orig, t_env **env, int source)
     }
     else {
         sub = split_path(*orig, &path);
+        //if (ft_strequ(path, "~/");
+        //    path = 
         head = fill_variant_list(sub, path, head);
-        free(*orig);
+        if (*orig)
+            free(*orig);
+        //if (!ft_strequ(*orig, sub))
         *orig = sub;
+        if (path)
+            free(path);
     }
     if (!head)
         return NULL;

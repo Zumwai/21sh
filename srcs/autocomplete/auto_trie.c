@@ -51,7 +51,8 @@ void    print_words(t_trie *node, char **line, int index, t_auto *list)
 {
     if (!node)
         return ;
-    line[0][index] = 0;
+    if (line[0][index])
+        line[0][index] = 0;
     if (node->data != -1)
     {
         if (node->sub) {
@@ -88,6 +89,8 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
     i = 0;
     if (!node)
         return -1;
+    //if (!buf[0][0])
+    //    return 0;
     buf[0][index] = 0;
     if (node->sub)
     {
@@ -149,7 +152,7 @@ t_trie  *check_existence(t_trie *head, char *orig, char **remainder)
         curs = curs->asc[value];
         i++;
     }
-    if (curs->sub)
+    if (curs->sub) //sega with "cd ~"
         ft_strcpy(*remainder, &curs->sub[1]);
     return curs;
 }
@@ -187,9 +190,9 @@ char  *search_trie(t_trie *head, char *orig, t_auto *list)
         buf = ft_strnew(257);
         ft_strcpy(buf, comp);
         free(comp);
-        return buf;          
+        return buf;
     }
-    return NULL;
+    return NULL;    
 }
 
 void    print_varians(t_auto *list)
@@ -208,8 +211,10 @@ void    print_varians(t_auto *list)
             max = curs->size;
         curs = curs->next;
     }
+    max += 1;
     curs = list;
-    cols = dimensions.ws_col / max;
+    if (max)
+        cols = dimensions.ws_col / max;
     int     i = 0;
     t_auto *tmp;
     ft_putchar('\n');
@@ -282,12 +287,14 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 {
 	char	*orig; 
 	char	*new;
+    char    *dup;
     t_auto *list;
     int     len = 0;
 
     new = NULL;
 	if (!(orig = get_incomplete(pos)))
         return 1;
+   dup =  ft_strdup(orig);
     len = ft_strlen(orig);
     if (orig[0] == '$')
         buf->trie = construct_trie(&orig, env, ENV_ONLY);
@@ -305,16 +312,20 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     	new = search_trie(buf->trie, orig, list);
         if (list->next)
             print_varians(list->next);
-        free(list);
+            
+        if (new && !new[0]) {
+            if (check_for_dir(dup, new))
+                  yank_buffer(pos, "/");
+        } 
         if (new)
-            yank_buffer(pos, new); 
-        if(check_for_dir(orig, new))
-            yank_buffer(pos, "/");
+            yank_buffer(pos, new);
+        //if(check_for_dir(orig, new))
+         //   yank_buffer(pos, "/");
         set_free_null(&new);
+        free(list);
         free_trie_node(buf->trie);
         buf->trie = NULL;
     }
-
-    set_free_null(&orig);
+    //set_free_null(&orig);
     return 0;
 }
