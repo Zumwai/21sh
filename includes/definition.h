@@ -52,7 +52,7 @@
 # define GLOBAL  1
 # define LOCAL   2
 # define DIRECTORY 3
-
+# define HOMEDIR 6
 
 typedef struct	s_env
 {
@@ -119,7 +119,7 @@ typedef struct s_trie
     int				counter;
 	char			data;
 	char			*sub;
-	struct s_trie *asc[94];
+	struct s_trie *asc[95];
 }		t_trie;
 
 typedef struct	s_inherit

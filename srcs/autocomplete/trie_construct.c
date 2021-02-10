@@ -94,6 +94,7 @@ static t_trie    *init_auto_trie(char *original, t_env **env)
     t_auto  *arg;
     t_trie  *head;
     t_env    *way;
+    int     len;
     char    **ways;
     char    *pwd;
     int     i;
@@ -113,9 +114,13 @@ static t_trie    *init_auto_trie(char *original, t_env **env)
         i++;
     }
     i = 0;
+    len = ft_strlen(original);
+    char    *bilt;
     while (i <= 6)
     {
-        head = insert_word_trie(head, builtin_list(i));
+        bilt = builtin_list(i);
+        if (ft_strnequ(bilt, original, len))
+            head = insert_word_trie(head, builtin_list(i));
         i++;
     }
     free(pwd);
@@ -146,7 +151,7 @@ char        *split_path(char *orig, char **path)
     int     tmp;
     char    *sub;
 
-    *path = ft_strnew(4096);
+    
     len = ft_strlen(orig) - 1;
     tmp = len;
     while (len >= 0)
@@ -159,6 +164,7 @@ char        *split_path(char *orig, char **path)
     if (orig[0] == '/')
         *path = ft_strsub(orig, 0, len);
     else {
+        *path = ft_strnew(4096);
         char        *pwd = NULL;
         if (!(pwd = getcwd(pwd, 4096)))
             return NULL;
@@ -173,14 +179,18 @@ char        *split_path(char *orig, char **path)
     return sub;
 }
 
+
 t_trie    *construct_trie(char **orig, t_env **env, int source)
 {
     t_trie *head;
+    t_env   *curs;
+    char    *ptr;
     char    *path;
     char    *sub;
     int     len;
     head = NULL;
     path = NULL;
+
     if (source == ENV_ONLY) {
         head = construct_env_trie(*orig, env);
     }
@@ -199,12 +209,9 @@ t_trie    *construct_trie(char **orig, t_env **env, int source)
     }
     else {
         sub = split_path(*orig, &path);
-        //if (ft_strequ(path, "~/");
-        //    path = 
         head = fill_variant_list(sub, path, head);
         if (*orig)
             free(*orig);
-        //if (!ft_strequ(*orig, sub))
         *orig = sub;
         if (path)
             free(path);

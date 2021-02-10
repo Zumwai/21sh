@@ -152,7 +152,7 @@ t_trie  *check_existence(t_trie *head, char *orig, char **remainder)
         curs = curs->asc[value];
         i++;
     }
-    if (curs->sub) //sega with "cd ~"
+    if (curs->sub)
         ft_strcpy(*remainder, &curs->sub[1]);
     return curs;
 }
@@ -287,15 +287,30 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 {
 	char	*orig; 
 	char	*new;
+    char    *path;
     char    *dup;
     t_auto *list;
+    t_env   *curs;
+    char    *ptr;
     int     len = 0;
 
     new = NULL;
 	if (!(orig = get_incomplete(pos)))
         return 1;
-   dup =  ft_strdup(orig);
+    dup =  ft_strdup(orig);
     len = ft_strlen(orig);
+    if (orig[0] == '~') {
+        curs = find_env_variable(env, "HOME");
+        if (curs && curs->value)
+        {
+            path = ft_strnew(4096);
+            ft_strcpy(path, curs->value);
+            ptr = ft_strchr(orig, '~');
+            ft_strcat(path, ptr + 1);
+            free(orig);
+            orig = path;
+        }
+    }
     if (orig[0] == '$')
         buf->trie = construct_trie(&orig, env, ENV_ONLY);
     else if (orig[0] == '.' && orig[1] == '/')
@@ -306,13 +321,11 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         buf->trie = construct_trie(&orig, env, 4);
     else 
         buf->trie = construct_trie(&orig, env, GLOBAL);
-   // else if (orig[0] == '.')
     if (buf->trie) {
         list = create_new_list(NULL);
     	new = search_trie(buf->trie, orig, list);
         if (list->next)
             print_varians(list->next);
-            
         if (new && !new[0]) {
             if (check_for_dir(dup, new))
                   yank_buffer(pos, "/");
@@ -326,6 +339,9 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         free_trie_node(buf->trie);
         buf->trie = NULL;
     }
-    //set_free_null(&orig);
+    //free_trie_node(buf->trie);
+    set_free_null(&dup);
+    set_free_null(&orig);
     return 0;
 }
+

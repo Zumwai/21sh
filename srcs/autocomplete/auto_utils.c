@@ -17,19 +17,28 @@ extern char *builtin_list(int i)
     return arr[i];
 }
 
-extern t_trie **init_array(void)
-{
-    int i = 0;
-    t_trie  **node;
-    if(!(node = (t_trie **)malloc(sizeof(t_trie *) * 94)))
-        handle_exit_errors("Malloc returned NULL");
-    bzero(node, sizeof(t_trie **) * 94);
-    while (i < 94)
+extern void free_trie_node(t_trie* node) {
+    int     i;
+
+    i = 0;
+    if (!node)
+        return ;
+    while (i < 95)
     {
-        node[i] = NULL;
+        //if (node->asc && node->asc[i] != NULL){
+        if (node->asc[i] != NULL){
+            //if (node->counter == 1)
+            free_trie_node(node->asc[i]);
+          }
         i++;
     }
-     return node;
+ //   if (node->asc)
+   //     free(node->asc);
+    if (node->sub)
+        free(node->sub);
+    if (node)
+        free(node);
+    node = NULL;
 }
 
 extern t_trie *create_trie_node(char c) {
@@ -43,39 +52,27 @@ extern t_trie *create_trie_node(char c) {
     new->leaf = 0;
     new->data = c;
 //    new->asc = NULL;
-    
-    while (i < 94)
+    while (i < 95)
     {
         new->asc[i]= NULL;
         i++;
     }
-    
     new->sub = NULL;
     return new;
 }
-
-extern void free_trie_node(t_trie* node) {
-    int     i;
-
-    i = 0;
-    if (!node)
-        return ;
+extern t_trie **init_array(void)
+{
+    int i = 0;
+    t_trie  **node;
+    if(!(node = (t_trie **)malloc(sizeof(t_trie *) * 94)))
+        handle_exit_errors("Malloc returned NULL");
+    bzero(node, sizeof(t_trie **) * 94);
     while (i < 94)
     {
-        //if (node->asc && node->asc[i] != NULL){
-        if (node->asc[i] != NULL){
-            if (node->counter == 1)
-            free_trie_node(node->asc[i]);
-          }
+        node[i] = NULL;
         i++;
     }
- //   if (node->asc)
-   //     free(node->asc);
-    if (node->sub)
-        free(node->sub);
-    if (node)
-        free(node);
-    node = NULL;
+     return node;
 }
 
 extern int  convert_asc_value(char c)
