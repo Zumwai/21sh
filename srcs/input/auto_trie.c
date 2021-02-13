@@ -297,9 +297,8 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
     buf[0][index] = node->data;
     buf[0][index + 1] = 0;
     index++;
-    if (node->leaf)
-        return -1;
-    if (node->counter > 1 || node->leaf == true)
+
+    if (node->counter > 1)
     {  
         /*
         t_auto *list;
@@ -309,6 +308,9 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
         */
         return -2;
     }
+	if (node->leaf)
+        return -1;
+
     while (i < 94)
     {
         if (node->asc[i])
@@ -414,16 +416,20 @@ void    print_varians(t_auto *list)
     cols = dimensions.ws_col / max;
     int     i = 0;
     ft_putchar('\n');
+	t_auto	*temp;
     while (curs)
     {   
+		temp = curs->next;
         ft_putstr(curs->name);
+		free(curs->name);
         while (curs->size++ < max)
             ft_putchar(' ');
         i++;
         if (i == cols) {
             ft_putchar('\n'); i = 0;
         }
-        curs = curs->next;
+		free(curs);
+        curs = temp;
     }
     ft_putchar('\n');
 }
@@ -452,8 +458,8 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     if (curs)
        print_varians(curs);
     free(list);
-    if (!new)
-        handle_empty_error("TEMP", "autocomplete failed");
+    //if (!new)
+     //   handle_empty_error("TEMP", "autocomplete failed");
     set_free_null(&orig);
     if (new)
         yank_buffer(pos, new);
@@ -461,18 +467,19 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     /*
     if (head)
         free_trie_node(head);
-    */
-    if (!new)
-        return 1;
-    return 0;
-    /*
+    
     printf("\n");
     printf("%lu -size\n", g_size);
     printf("%lu - total number\n", g_count);
     printf("%zu - single\n", g_single);
     printf("%lu - words\n", g_words);
     printf("%lu - printed\n", g_print);
-    */
+	*/
+    if (!new)
+        return 1;
+    return 0;
+
+    
    
 	return 1;
 }
