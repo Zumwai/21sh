@@ -117,7 +117,6 @@ int             get_fd_write(t_cmd *cmd)
         if (cur->type == 6)
             fd = open(cur->next->arr[0], O_CREAT | O_RDWR | O_TRUNC,
                       S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-        printf("%d\n", fd);
         if (cur->next->type == 6 || cur->next->type == 7)
             close(fd);
         cur = cur->next;
@@ -144,36 +143,34 @@ int			execute(t_cmd *cmd, t_env **env)
 	ffd = 1;
 	while (cmd)
 	{
-	    pipe(fd);
-	    printf("%d === %d\n", fd[0], fd[1]);
-	    if (cmd->type == 6 || cmd->type == 7)
-	        wfd = get_fd_write(cmd);
-	    printf("wfd === %d\n", wfd);
-	    if (/*cmd->type != 2 && ((*/builtin = get_builtin(cmd->arr[0]))
+	pipe(fd);
+	if (cmd->type == 6 || cmd->type == 7)
+	    wfd = get_fd_write(cmd);
+	if (/*cmd->type != 2 && ((*/builtin = get_builtin(cmd->arr[0]))
+	{
+	    if (wfd != 1)
+	        ffd = wfd;
+	    res = builtin(cmd->arr, env, ffd);
+    }
+	else
 	    {
-	        if (wfd != 1)
-	            ffd = wfd;
-	        res = builtin(cmd->arr, env, ffd);
-        }
-	    else
-	        {
-				cmd->target = get_path(cmd->arr[0], env);
-				if (cmd->target != NULL && cmd->type != 6 && cmd->type != 7)
-					do_proc(read, fd[1], cmd->target, cmd, env);
-                if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
-                {
-                    do_proc(read, wfd, cmd->target, cmd, env);
-                }
-			}
-	    if (cmd->type == 6 || cmd->type == 7)
-	    {
-            while (cmd->next && (cmd->type == 6 || cmd->type == 7))
-                cmd = cmd->next;
-        }
-			close(fd[1]);
-			if (cmd->type == 2)
-			    read = fd[0];
-			cmd = cmd->next;
+			cmd->target = get_path(cmd->arr[0], env);
+			if (cmd->target != NULL && cmd->type != 6 && cmd->type != 7)
+				do_proc(read, fd[1], cmd->target, cmd, env);
+            if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
+            {
+                do_proc(read, wfd, cmd->target, cmd, env);
+            }
+		}
+	if (cmd->type == 6 || cmd->type == 7)
+	{
+        while (cmd->next && (cmd->type == 6 || cmd->type == 7))
+            cmd = cmd->next;
+    }
+		close(fd[1]);
+		if (cmd->type == 2)
+		    read = fd[0];
+		cmd = cmd->next;
 	}
 	return (res);
 }

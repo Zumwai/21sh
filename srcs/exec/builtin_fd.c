@@ -17,7 +17,6 @@ int			sh_echo(char **com, t_env **env, int fd)
 
 	i = 1;
 	n = 0;
-	printf("which fd on echo? fd === %d\n", fd);
 	sp = ft_strsplit_len(com) - 1;
 	if (com[i] && ft_strequ(com[1], "-n"))
 	{
