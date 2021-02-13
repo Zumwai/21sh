@@ -36,9 +36,10 @@ static void set_cursor(t_term *pos)
 	{
 		pos->delta_y++;
 		pos->x = 0;
-		pos->y--;
+		//pos->y--;
 		if (pos->y + pos->delta_y>= dimensions.ws_row){
 			t_term *curs = pos->prev;
+			pos->y--;
 			while (curs)
 			{
 				curs->y--;
@@ -50,24 +51,28 @@ static void set_cursor(t_term *pos)
 	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y - 1), 1, putchar_like);
 }
 
-void	handle_last_line(t_term *pos, int rows) 
+static void	handle_last_line(t_term *pos, int rows) 
 {
 	if (rows <= pos->y + pos->delta_y)
 	{
-		//tputs(tgetstr("sf", NULL), 1, putchar_like);
+		tputs(tgetstr("sf", NULL), 1, putchar_like);
 		pos->y--;
+		
 		t_term *curs = pos;
 		curs = curs->prev;
+	
 		while (curs)
 		{
-			pos->delta_y++;
-			curs->y--;
+			curs->delta_y++;
+			//curs->y--;
 			curs = curs->prev;
 		}
+		
 		pos->delta_y++;
 	}
-	else
+	else {
 		pos->delta_y += 1;
+	}
 	pos->x = 0;
 }
 
@@ -103,27 +108,23 @@ static void set_empty_line(int y)
 int display_input(t_term *pos, int delta)
 {
 	int	remainder = pos->index;
-//	int		y = 0;
 	t_term	temp;
 
 	temp = *pos;
 	if (!pos->new)
 		return (0);
+	//if (pos->prev)
+//		delta++;
 	if (delta)
 		pos->y += delta;
 	set_empty_line(pos->y);
-	if (!delta)
+	if (!pos->prev)
 		ft_putstr_fd("shelp$>", 1);
 	while (remainder)
 		remainder = draw_line(pos, remainder);
 	set_cursor(pos);
-	t_term *curs;
-	curs = pos->next;
-	while (curs)
-	{
-		display_input(curs, delta + pos->delta_y + 1); // why + 1?
-		curs = curs->next;
-	}
+	if (pos->next)
+		display_input(pos->next, delta + pos->delta_y);
 	pos->delta_y = 0;
 	if (delta)
 		pos->y-= delta;
