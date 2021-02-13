@@ -22,15 +22,15 @@ SRCS =	main.c \
 		utils/init.c \
 		utils/handle_err.c \
 		utils/misc.c \
-		input/controls.c \
 		input/display.c \
 		input/reader.c \
-		input/arrow_movement.c \
-		input/edition.c \
-		input/jump_words.c \
-		input/input_utils.c \
-		input/cut_paste.c \
 		input/history.c \
+		input/input_utils.c \
+		controls/controls.c \
+		controls/arrow_movement.c \
+		controls/edition.c \
+		controls/jump_words.c \
+		controls/cut_paste.c \
 		autocomplete/trie_construct.c \
 		autocomplete/auto_trie.c \
 		autocomplete/auto_utils.c

@@ -78,6 +78,7 @@ static int draw_line(t_term *pos, int remainder)
 
 static void set_empty_line(int y)
 {
+	printf("%d - y in set empty", y);
 	struct winsize dimensions;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	tputs (tgoto (tgetstr("cm", NULL), 0, y - 1), 1, putchar_like);

@@ -45,6 +45,8 @@ t_term	*create_new_io_struct(void)
 	t_term			*pos;
 	if (!(pos = (t_term *)malloc(sizeof(t_term))))
 		handle_exit_errors("Malloc returned NULL");
+	pos->y = 0;
+	pos->x = 0;
 	get_coordinates(&pos->y, &pos->x);
 	pos->index = 0;
 //	pos->y = 0;
