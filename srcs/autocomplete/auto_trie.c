@@ -296,6 +296,8 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     char    *ptr;
     int     len = 0;
 
+    //if (pos->state || pos->heredoc)
+     //   return 1;
     new = NULL;
 	if (!(orig = get_incomplete(pos)))
         return 1;
