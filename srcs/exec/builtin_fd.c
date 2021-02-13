@@ -1,21 +1,4 @@
 #include "sh.h"
-/* UNUSED  */
-static char				*get_name(char *s)
-{
-	int				l;
-	char			*name;
-	int				i;
-	int				c;
-
-	i = 1;
-	c = 0;
-	l = ft_strlen(s);
-	name = (char *)malloc(sizeof(char) * l);
-	while (s[i])
-		name[c++] = s[i++];
-	name[c] = '\0';
-	return (name);
-}
 
 static void			echo_env(char *s, t_env **env, int fd)
 {
@@ -23,7 +6,6 @@ static void			echo_env(char *s, t_env **env, int fd)
 	t_env		*cur;
 
 	cur = find_env_variable(env, &s[1]);
-//	name = get_name(s);
 	ft_putstr_fd(cur->value, fd);
 }
 
@@ -36,7 +18,6 @@ int			sh_echo(char **com, t_env **env, int fd)
 	i = 1;
 	n = 0;
 	sp = ft_strsplit_len(com) - 1;
-	fd = 1;
 	if (com[i] && ft_strequ(com[1], "-n"))
 	{
 		n = 1;
@@ -44,10 +25,6 @@ int			sh_echo(char **com, t_env **env, int fd)
 	}
 	while (com[i])
 	{
-		/*if (com[i][0] == '$')
-			echo_env(com[i], env, fd);
-		else
-			print_echo(com[i], fd);*/
 		ft_putstr_fd(com[i], fd);
 		if (sp--)
 			ft_putchar_fd(' ', fd);
