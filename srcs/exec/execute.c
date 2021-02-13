@@ -1,16 +1,5 @@
 #include "sh.h"
 
-static	int					command(char *s)
-{
-	if (/*ft_strcmp(s, ECHO) == 0) ||
-		(ft_strcmp(s, ENV) == 0) || */(ft_strcmp(s, SETENV) == 0) ||
-		(ft_strcmp(s, UNSETENV) == 0) || (ft_strcmp(s, CD) == 0) ||
-		(ft_strcmp(s, EXIT) == 0) || (ft_strcmp(s, "clear") == 0))
-		return (1);
-	else
-		return (0);
-}
-
 static void terminate_child(char *command)
 {
 	ft_putstr_fd("Execve failed to execute ", STDERR_FILENO);
@@ -53,7 +42,6 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	pid_t		pid;
 	char		**environ;
 
-	ft_putendl("do proc");
 	environ = convert_env_array(env);
 	if ((pid = fork()) == 0)
 	{
@@ -91,8 +79,8 @@ static void *get_builtin(char *com)
 		return(&sh_exit);
 	if (ft_strequ(com, "clear"))
 		return(&sh_clear);
-	if (ft_strequ(com, "setenv"))
-		return(&sh_setenv);
+	//if (ft_strequ(com, "setenv"))
+		//return(&sh_setenv);
 //	if (ft_strequ(com, "unsetenv"))
 //		return(&sh_unset);
 	if (ft_strequ(com, "ppid"))
@@ -143,16 +131,18 @@ int			execute(t_cmd *cmd, t_env **env)
 	ffd = 1;
 	while (cmd)
 	{
-	pipe(fd);
-	if (cmd->type == 6 || cmd->type == 7)
-	    wfd = get_fd_write(cmd);
-	if (/*cmd->type != 2 && ((*/builtin = get_builtin(cmd->arr[0]))
-	{
-	    if (wfd != 1)
-	        ffd = wfd;
-	    res = builtin(cmd->arr, env, ffd);
-    }
-	else
+	    pipe(fd);
+	    if (cmd->type == 6 || cmd->type == 7)
+	        wfd = get_fd_write(cmd);
+	    if (builtin = get_builtin(cmd->arr[0]))
+	    {
+	       if (wfd != 1)
+	            ffd = wfd;
+	       if (cmd->type == 2)
+	           ffd = fd[1];
+	     res = builtin(cmd->arr, env, ffd);
+        }
+	    else
 	    {
 			cmd->target = get_path(cmd->arr[0], env);
 			if (cmd->target != NULL && cmd->type != 6 && cmd->type != 7)
