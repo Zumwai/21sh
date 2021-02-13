@@ -194,6 +194,10 @@ t_trie    *construct_trie(char **orig, t_env **env, int source)
     if (source == ENV_ONLY) {
         head = construct_env_trie(*orig, env);
     }
+    else if (source == EMPTY) {
+        orig[0][0] = 0;
+        head = fill_variant_list("", ".", head);
+    }
     else if (source == GLOBAL) {
         head = init_auto_trie(*orig, env);
     }

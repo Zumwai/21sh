@@ -35,6 +35,7 @@ char	*get_incomplete(t_term *pos)
 	int 	abs = ft_abs(pos->delta_x);
 	char	*incomplete;
 
+    incomplete = NULL;
 	if (pos->index == 0 || pos->index - abs <= 0)
 		return NULL;
 	curr = pos->index - abs;
@@ -167,6 +168,7 @@ char  *search_trie(t_trie *head, char *orig, t_auto *list)
     char    *ret = NULL;
     int     index = 0;
     int     res = 0;
+
 
     comp = ft_strnew(257);
     curs = check_existence(head, orig, &comp);
@@ -311,7 +313,9 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
             orig = path;
         }
     }
-    if (orig[0] == '$')
+    if (orig[len - 1] == ' ')
+        buf->trie = construct_trie(&orig, env, EMPTY);
+    else if (orig[0] == '$')
         buf->trie = construct_trie(&orig, env, ENV_ONLY);
     else if (orig[0] == '.' && orig[1] == '/')
         buf->trie = construct_trie(&orig, env, LOCAL);

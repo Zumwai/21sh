@@ -53,6 +53,7 @@
 # define LOCAL   2
 # define DIRECTORY 3
 # define HOMEDIR 6
+# define EMPTY	7
 
 typedef struct	s_env
 {
