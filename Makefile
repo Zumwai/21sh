@@ -50,7 +50,7 @@ all: $(NAME)
 
 $(NAME): $(OBJECT) $(LIB) 
 	$(COM) $(FLAGS) $(OBJECT) -o $(NAME) -L ./libft -lft -ltermcap
-%.o: %.c
+%.o: %.c $(LIB)
 	$(COM) $(FLAGS) -c $< -o $@ -I$(DIR_LIB) -I$(INCLUDES) 
 $(LIB):
 	$(MAKE) -sC $(DIR_LIB) all
