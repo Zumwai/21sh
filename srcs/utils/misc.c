@@ -27,7 +27,19 @@ void	ft_concat(char *str, char **path, char *name)
 	if (name)
 		(*path) = strcat((*path), name);
 }
+void	ft_strclr(char *s)
+{
+	size_t		i;
 
+	if (!s)
+		return ;
+	i = 0;
+	while (s[i] != '\0')
+	{
+		s[i] = '\0';
+		i++;
+	}
+}
 char	*get_full_path(char *path, char *name)
 {
 	char	*str;

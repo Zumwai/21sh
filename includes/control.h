@@ -47,5 +47,10 @@ char	*concat_lines(t_term *input);
 t_trie    *find_best_match(char *orig, t_env **env);
 int	autocomplete(t_term *pos, t_env **env, t_yank *buf);
 void free_trie_node(t_trie* node);
-
+t_trie    *construct_trie(char **orig, t_env **env, int source);
+void free_trie_node(t_trie* node);
+int  convert_asc_value(char c);
+extern t_trie *create_trie_node(char c);
+extern t_trie **init_array(void);
+extern char *builtin_list(int i);
 #endif
