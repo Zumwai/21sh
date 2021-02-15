@@ -1,8 +1,8 @@
 #include "sh.h"
-
+/*
 static	int					command(char *s)
 {
-	if (/*ft_strcmp(s, ECHO) == 0) ||
+	if (ft_strcmp(s, ECHO) == 0) ||
 		(ft_strcmp(s, ENV) == 0) || (ft_strcmp(s, SETENV) == 0) ||
 		(ft_strcmp(s, UNSETENV) == 0) || (ft_strcmp(s, CD) == 0) ||
 		(ft_strcmp(s, EXIT) == 0) || (ft_strcmp(s, "clear") == 0))

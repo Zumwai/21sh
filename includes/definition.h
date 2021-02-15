@@ -149,6 +149,7 @@ typedef struct 		s_term
 	int				buf_size;
 	int				state;
 	int				heredoc;
+	bool			glue;
 	char			*substr;
 	char			*new;
 	struct s_term	*next;

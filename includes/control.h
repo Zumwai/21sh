@@ -53,4 +53,5 @@ int  convert_asc_value(char c);
 extern t_trie *create_trie_node(char c);
 extern t_trie **init_array(void);
 extern char *builtin_list(int i);
+int		determine_state(char *line, int prev, t_term *pos);
 #endif

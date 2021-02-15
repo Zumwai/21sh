@@ -65,11 +65,29 @@ static long long	incapsulate_read(void)
 	return (key);
 }
 
+void	recalc_y(t_term *pos, int y)
+{
+	t_term	*curs;
+	int		tmp;
+
+
+	curs = pos;
+	tmp = curs->y;
+	curs->y = y;
+	curs = curs->next;
+	while (curs)
+	{
+		curs->y = y + curs->y - tmp;
+		curs = curs->next;
+	}
+}
+
 static t_term *get_input(t_yank *buffer, t_env **env)
 {
 	ssize_t		red;
 	struct termios	old_tty;
 	long long	key;
+	int tmp;
 	t_term	*pos;
 //	t_term	*head;
 
@@ -91,8 +109,11 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 				break ;
 			if (red == -2)
 				return NULL;
-			if (red == -3 || red == -4)
+			if (red == -3 || red == -4) {
+				int tmp = buffer->current->y;
 				envoke_history(buffer, red);
+				recalc_y(buffer->current, tmp);
+			}
 			red = 0;
 			key = 0;
 			display_input(buffer->current, 0);
@@ -114,5 +135,6 @@ char	*handle_input_stream(t_yank *buffer, t_env **env)
 		if (buffer->saved)
 			free_input_line(&buffer->saved);
 	}
+	//printf("%s\n", line);
 	return (line);
 }

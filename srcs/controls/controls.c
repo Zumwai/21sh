@@ -7,42 +7,6 @@ static void	ft_clear(t_term *pos)
 		pos->y = 0;
 }
 
-static int		determine_state(char *line, int prev, t_term *pos)
-{
-	size_t	index = 0;
-	int		state;
-
-	state = prev;
-	while (line[index])
-	{
-		if (line[index] == '\'')
-		{
-			if (state == DEFAULT)
-				state = QUOTES;
-			else if (state == QUOTES)
-				state = DEFAULT;
-		}
-		if (line[index] == '\"')
-		{
-			if (state == DEFAULT)
-				state = DOUBLE_QUOTES;
-			else if (state == DOUBLE_QUOTES)
-				state = DEFAULT;
-		}
-		if (line[index] == '<' && line[index + 1] == '<')
-		{
-			if (state == DEFAULT)
-			{
-				pos->heredoc = index + 1;
-				state = HEREDOC;
-				return (state);
-			}
-		}
-		index++;
-	}
-	return (state);
-}
-
 static char	*get_heredoc_ptr(int heredoc, char *new, int index)
 {
 	char	*substr = NULL;
@@ -77,7 +41,7 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 			pos->next->state = POST_DOC;
 			pos->substr = get_heredoc_ptr(pos->heredoc, pos->new, pos->index);
 			if (pos->substr == NULL)
-				return (handle_return_error(-2, "syntax error near unexpected token `newline"));
+				return (handle_return_error(-1, "syntax error near unexpected token `newline"));
 		}
 	}
 	else if (pos->state == POST_DOC)

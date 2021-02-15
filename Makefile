@@ -26,6 +26,7 @@ SRCS =	main.c \
 		input/reader.c \
 		input/history.c \
 		input/input_utils.c \
+		controls/state.c \
 		controls/controls.c \
 		controls/arrow_movement.c \
 		controls/edition.c \
@@ -43,7 +44,6 @@ INCLUDES = ./includes/
 FLAGS = -g 
 REMOVE = -rm -rf
 
-
 .PHONY: all clean re
 
 all: $(NAME)
@@ -55,7 +55,9 @@ $(NAME): $(OBJECT) $(LIB)
 $(LIB):
 	$(MAKE) -sC $(DIR_LIB) all
 clean:
-	$(REMOVE) $(OBJECT)
+	$(REMOVE) $(OBJECT) && \
+	$(MAKE) -sC $(DIR_LIB) clean
 fclean : clean
-	$(REMOVE) $(NAME)
+	$(REMOVE) $(NAME) && \
+	$(MAKE) -sC $(DIR_LIB) fclean
 re: fclean all
