@@ -19,7 +19,6 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env)
 	char			tmp[246];
 	int				u;
 	char			*t_tmp;
-//	char			*f;
 
 	u = 0;
 	*i = *i + 1;
@@ -31,7 +30,6 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env)
 		u++;
 	}
 	tmp[u] = '\0';
-//	f = ft_strdup(tmp);
 	t_tmp = get_value(tmp, env);
 	if (t_tmp)
 	{
@@ -43,8 +41,6 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env)
 			u++;
 		}
 	}
-//	if (f)
-	//	set_free_null(&f);
 	if (t_tmp)
 		set_free_null(&t_tmp);
 }
@@ -60,11 +56,8 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	j = 0;
 	q[0] = 0;
 	q[1] = 0;
-	//printf("%s\n", t->data);
-	//buf = new_string(t->data);
 	while (t->data[i])
 	{
-	//	while (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0)
 		if (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0)
 			buf[j++] = t->data[i++];
 		if (t->data[i] == 39 && q[1] == 0)
@@ -107,9 +100,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
             get_env_val(buf, &j, t->data, &i, env);
 	}
 	buf[j] = '\0';
-	//printf("%s\n", buf);
 	c->arr = ft_strsplit(buf, ' ');
-	//free(buf);
 	return (c);
 }
 
