@@ -116,7 +116,7 @@ int display_input(t_term *pos, int delta)
 	if (!pos)
 		return 0;
 	remainder = pos->index;
-	if (pos->prev && pos->y <= pos->prev->y)
+	if (pos->prev)
 		pos->y += delta;
 	set_empty_line(pos, pos->y, !!pos->prev);
 	while (remainder)
