@@ -84,11 +84,14 @@ static void	correct_y(t_term *pos)
 }
 static void	handle_last_line(t_term *pos, int rows, int cols, int rem, int print) 
 {
-	if (pos->y + pos->delta_y == rows) {
+	if (pos->y + pos->delta_y >= rows) {
+		if (pos->y > rows)
+			pos->y = rows;
 		correct_y(pos);
 		tputs(tgetstr("sf", NULL), 1, putchar_like);
 		//pos->delta_y++;
 	}
+
 	tputs(tgoto (tgetstr("cm", NULL), 0, pos->y + pos->delta_y), 1, putchar_like);
 	pos->delta_y++;
 	//tputs(tgetstr("sf", NULL), 1, putchar_like);
@@ -134,7 +137,10 @@ int display_input(t_term *pos, int delta)
 	if (!pos)
 		return 0;
 	remainder = pos->index;
+	if (pos->prev && pos->y <= pos->prev->y)
 	pos->y += delta;
+	//if (pos->y >= 6)
+	//	pos->y--;
 	set_empty_line(pos->y, !!pos->prev);
 	while (remainder)
 		remainder = draw_line(pos, remainder);

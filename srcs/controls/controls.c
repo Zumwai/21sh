@@ -3,8 +3,8 @@
 static void	ft_clear(t_term *pos)
 {
 		ft_printf("%s", "\033[2J");
-		tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
-		pos->y = 0;
+		tputs (tgoto (tgetstr("cm", NULL), 0, 1), 1, putchar_like);
+		pos->y = 1;
 }
 
 static char	*get_heredoc_ptr(int heredoc, char *new, int index)
