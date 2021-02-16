@@ -1,64 +1,4 @@
 #include "sh.h"
-/*
-static int draw_finale_line(t_term *pos, int remainder, int curr)
-{
-		ft_putstr(&pos->new[pos->index - remainder]);
-		pos->x = remainder + curr;
-		return (0);
-}
-
-static void	calc_x_pos(t_term *pos, int cols)
-{
-	int		tmp;
-
-	if (ft_abs(pos->delta_x) > pos->x)
-	{
-		pos->delta_y--;
-		tmp -= pos->x;
-		while (tmp >= cols)
-		{
-			pos->delta_y--;
-			tmp -= cols;
-		}
-		pos->x = cols - tmp;
-	}
-	else
-		pos->x += pos->delta_x;
-}
-
-static void calc_y_pos(t_term *pos, int rows)
-{
-	if (pos->next && pos->next->new == NULL)
-	{
-		pos->delta_y++;
-		pos->x = 0;
-		pos->y--;
-		if (pos->y + pos->delta_y>= rows){
-			t_term *curs = pos->prev;
-			//pos->y--;
-			while (curs)
-			{
-				curs->y--;
-				//tputs(tgetstr("sf", NULL), 1, putchar_like);
-				curs->delta_y ++;
-				curs = curs->prev;
-			}
-			tputs(tgetstr("sf", NULL), 1, putchar_like);
-		}
-	}
-}
-
-
-static void set_cursor(t_term *pos)
-{
-	struct winsize dimensions;
-
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-	calc_x_pos(pos, dimensions.ws_col);
-	calc_y_pos(pos, dimensions.ws_row);
-	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y - 1), 1, putchar_like);
-}
-*/
 
 static int	calc_pos(t_term *pos, int cols)
 {
@@ -72,7 +12,7 @@ static int	calc_pos(t_term *pos, int cols)
 	{
 		while (tmp >= pos->x)
 		{
-			diff_y--;
+			diff_y++;
 			tmp -= cols;
 			diff_x += cols;
 		}
@@ -91,11 +31,16 @@ static void set_cursor(t_term *pos)
 {
 	struct winsize dimensions;
 	int		diff_y;
-	diff_y = 0;
+	int		counter = 0;
+	diff_y = 0; 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	diff_y = calc_pos(pos, dimensions.ws_col);
-
-	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y + diff_y - 1), 1, putchar_like);
+	if (ft_abs(pos->y) - ft_abs(diff_y) + counter < 0)
+	{
+		tputs(tgetstr("sf", NULL), 1, putchar_like);
+		counter++;
+	}
+	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y - diff_y - 1), 1, putchar_like);
 	calc_y_pos(pos, dimensions.ws_row);
 }
 
@@ -111,17 +56,16 @@ static void	correct_y(t_term *pos)
 }
 static void	handle_last_line(t_term *pos, int rows, int cols, int rem, int print) 
 {
+	/* Scroll down and correct starting y in previous lines */
 	if (pos->y + pos->delta_y >= rows) {
 		if (pos->y > rows)
 			pos->y = rows;
 		correct_y(pos);
 		tputs(tgetstr("sf", NULL), 1, putchar_like);
-		//pos->delta_y++;
 	}
 	tputs(tgoto (tgetstr("cm", NULL), 0, pos->y + pos->delta_y), 1, putchar_like);
 	pos->delta_y++;
 	pos->x = 0;
-	//tputs(tgetstr("sf", NULL), 1, putchar_like);
 }
 
 static int draw_line(t_term *pos, int remainder)
@@ -131,27 +75,37 @@ static int draw_line(t_term *pos, int remainder)
 	struct winsize dimensions;
 
 	ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
-
+	/* Calculate max possible character in this line */
 	if (remainder == pos->index && !pos->prev)
 		curr = pos->prompt;
 	print = dimensions.ws_col - curr;
+	/* Correct if line smaller than available space */
 	if (print > remainder)
 		print = remainder;
-	ft_putstr_size(&pos->new[pos->index - remainder], print);
-	pos->x = print + curr;
+
+	/* Dont print anything beyond y < 0, just skip */
+	if (pos->y + pos->delta_y > 0) {
+		ft_putstr_size(&pos->new[pos->index - remainder], print);
+		pos->x = print + curr;
+	}
+	/* Calculate diff and y for current printed part */
 	if ((pos->next && remainder == print) || (print + curr == dimensions.ws_col))
 		handle_last_line(pos, dimensions.ws_row, dimensions.ws_col, remainder, print + curr);
-
 	return (remainder - print);
 }
 
-static void set_empty_line(int y, int prev)
+static void set_empty_line(t_term *pos, int y, int prev)
 {
-	tputs (tgoto (tgetstr("cm", NULL), 0, y - 1), 1, putchar_like);
-	tputs(tgetstr("cb", NULL), 1, putchar_like);
-	tputs(tgetstr("cd", NULL), 1, putchar_like);
-	if (!prev)
-		ft_putstr_fd("shelp$>", 1);
+	/*skip clearing if y < 0 */
+	if (pos->y + pos->delta_y > 0) {
+		tputs (tgoto (tgetstr("cm", NULL), 0, y - 1), 1, putchar_like);
+		tputs(tgetstr("cb", NULL), 1, putchar_like);
+		tputs(tgetstr("cd", NULL), 1, putchar_like);
+		if (!prev)
+			ft_putstr_fd("shelp$>", 1);
+	} else {
+		tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
+	}
 }
 
 int display_input(t_term *pos, int delta)
@@ -164,7 +118,7 @@ int display_input(t_term *pos, int delta)
 	remainder = pos->index;
 	if (pos->prev && pos->y <= pos->prev->y)
 		pos->y += delta;
-	set_empty_line(pos->y, !!pos->prev);
+	set_empty_line(pos, pos->y, !!pos->prev);
 	while (remainder)
 		remainder = draw_line(pos, remainder);
 	set_cursor(pos);
