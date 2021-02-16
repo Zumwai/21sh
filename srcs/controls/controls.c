@@ -105,7 +105,7 @@ static int	ft_history_down(void)
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env **env)
 {
 	t_term	*curs;
-	if (key == 27)
+	if (key == 27 || (key == 4 && (!pos->new || !pos->new[0])))
 		return (key_exit(old, pos, buf));
 	curs = get_last_pos(pos);
 	if (!curs->new)

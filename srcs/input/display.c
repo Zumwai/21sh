@@ -22,9 +22,28 @@ static int	calc_pos(t_term *pos, int cols)
 	return diff_y;
 }
 
-static void calc_y_pos(t_term *pos, int rows)
+static void calc_y_pos(t_term *pos, int diff)
 {
-
+	if (pos->y <= 0)
+	{
+		diff = pos->y + pos->delta_y - diff;
+		if (diff <= 0)
+		{
+			int tmp = diff;
+			while (tmp <= 0) {
+				tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
+				tputs(tgetstr("sr", NULL), 1, putchar_like);
+				tmp++;
+			}
+			tmp = diff;
+			t_term *curs;
+			curs = pos;
+			while (curs){
+				curs->y += tmp;
+				curs = curs->prev;
+			}
+		}
+	}
 }
 
 static void set_cursor(t_term *pos)
@@ -32,16 +51,20 @@ static void set_cursor(t_term *pos)
 	struct winsize dimensions;
 	int		diff_y;
 	int		counter = 0;
-	diff_y = 0; 
+	diff_y = 0;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	diff_y = calc_pos(pos, dimensions.ws_col);
+	calc_y_pos(pos, diff_y);
+	/*
 	if (ft_abs(pos->y) - ft_abs(diff_y) + counter < 0)
 	{
 		tputs(tgetstr("sf", NULL), 1, putchar_like);
 		counter++;
 	}
+	*/
+	//tputs(tgetstr("cd", NULL), 1, putchar_like);
 	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y - diff_y - 1), 1, putchar_like);
-	calc_y_pos(pos, dimensions.ws_row);
+
 }
 
 static void	correct_y(t_term *pos)

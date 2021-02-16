@@ -183,8 +183,10 @@ char  *search_trie(t_trie *head, char *orig, t_auto *list)
             ret = ft_strdup(&buf[index]);
         }
         if (res < 0) {
-            ft_strclr(buf);
-            ft_strcpy(buf, orig);
+            if (res == -1) {
+                ft_strclr(buf);
+                ft_strcpy(buf, orig);
+            }
             print_words(curs, &buf, ft_strlen(buf) - 1, list);
         }
         free(buf);
@@ -239,7 +241,6 @@ void    print_varians(t_auto *list)
     }
     ft_putchar('\n');
 }
-
 
 int     check_for_dir(char *orig, char *new)
 {

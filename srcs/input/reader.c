@@ -29,7 +29,9 @@ static t_term *init_prompt(struct termios *old_tty)
 	t_term			*pos;
 	tcgetattr(STDIN_FILENO, old_tty);
 	tcgetattr(STDIN_FILENO, &tty);
-	tty.c_lflag &= ~(ECHO | ICANON);
+	//tty.c_lflag &= ~(ECHO | ICANON);
+	tty.c_lflag &= ~(ECHO | ICANON | ISIG);
+	//tty.c_oflag &= ~(TABDLY);
 //	tty.c_lflag &= ~(ECHO | IEXTEN | ISIG);
 	tty.c_cc[VMIN] = 1;
 	tty.c_cc[VTIME] = 1;
