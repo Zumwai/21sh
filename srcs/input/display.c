@@ -91,7 +91,6 @@ static void	handle_last_line(t_term *pos, int rows, int cols, int rem, int print
 		tputs(tgetstr("sf", NULL), 1, putchar_like);
 		//pos->delta_y++;
 	}
-
 	tputs(tgoto (tgetstr("cm", NULL), 0, pos->y + pos->delta_y), 1, putchar_like);
 	pos->delta_y++;
 	//tputs(tgetstr("sf", NULL), 1, putchar_like);
@@ -105,15 +104,12 @@ static int draw_line(t_term *pos, int remainder)
 
 	ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
 
-	if (remainder == pos->index)
+	if (remainder == pos->index && !pos->prev)
 		curr = pos->prompt;
 	print = dimensions.ws_col - curr;
 	if (print > remainder)
 		print = remainder;
-
-
 	ft_putstr_size(&pos->new[pos->index - remainder], print);
-
 	if ((pos->next && remainder == print) || (print + curr == dimensions.ws_col))
 		handle_last_line(pos, dimensions.ws_row, dimensions.ws_col, remainder, print + curr);
 
@@ -138,16 +134,14 @@ int display_input(t_term *pos, int delta)
 		return 0;
 	remainder = pos->index;
 	if (pos->prev && pos->y <= pos->prev->y)
-	pos->y += delta;
-	//if (pos->y >= 6)
-	//	pos->y--;
+		pos->y += delta;
 	set_empty_line(pos->y, !!pos->prev);
 	while (remainder)
 		remainder = draw_line(pos, remainder);
-	//set_cursor(pos);
 	if (curs) {
 		display_input(curs->next, pos->delta_y + delta);
 	}
+	//set_cursor(pos);
 	pos->y -= delta;
 	pos->delta_y = 0;
 	return (0);

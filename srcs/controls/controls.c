@@ -64,7 +64,6 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 			pos->next->prev = pos;
 			return (1);
 		}
-		
 	}
 	return (1);
 }
