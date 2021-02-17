@@ -156,7 +156,7 @@ typedef struct 		s_term
 	int				buf_size;
 	int				state;
 	int				heredoc;
-	bool			glue;
+	int				glue;
 	char			*substr;
 	char			*new;
 	struct s_print	*store;
@@ -193,6 +193,14 @@ enum				e_state
 	DOUBLE_QUOTES,
 	HEREDOC,
 	POST_DOC
+};
+
+enum				e_glue
+{
+	NONE,
+	BEG,
+	MID,
+	FIN
 };
 
 #endif

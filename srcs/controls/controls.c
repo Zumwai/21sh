@@ -18,23 +18,39 @@ static char	*get_heredoc_ptr(int heredoc, char *new, int index)
 	return (substr); 
 }
 
+static t_term *create_next_io(int y, int state)
+{
+	t_term *input;
+
+	input = create_new_io_struct();
+	input->y = y;
+	input->new = NULL;
+	input->x = 0;
+	input->delta_x = 0;
+	input->prompt = 0;
+	input->state = state;
+	return input;
+}
+
 static int		consult_state(__attribute((unused))long long key, __attribute((unused))t_term *pos)
 {
-	pos->state = determine_state(pos->new, pos->state, pos);
+	char *glued = NULL;
+	glued = determine_glue(pos->new, pos, ft_strlen(pos->new));
+	if (!glued && !pos->glue)
+		pos->state = determine_state(pos->new, pos->state, pos);
+	/* glue! */
 	if (pos->state == DEFAULT)
 	{
 		ft_putchar_fd('\n', STDIN_FILENO);
-		return (-1);
+		if (!pos->glue)
+			return (-1);
+		pos->next = create_next_io(pos->y, pos->state);
+		pos->next->prev = pos;
+		return 0;
 	}
 	else if (pos->state == QUOTES || pos->state == DOUBLE_QUOTES || pos->state == HEREDOC)
 	{
-		pos->next = create_new_io_struct();
-		pos->next->y = pos->y;
-		pos->next->new = NULL;
-		pos->next->x = 0;
-		pos->next->delta_x = 0;
-		pos->next->prompt = 0;
-		pos->next->state = pos->state;
+		pos->next = create_next_io(pos->y, pos->state);
 		pos->next->prev = pos;
 		if (pos->state == HEREDOC)
 		{
@@ -44,7 +60,7 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 				return (handle_return_error(-1, "syntax error near unexpected token `newline"));
 		}
 	}
-	else if (pos->state == POST_DOC)
+	else if (pos->state == POST_DOC || !pos->glue)
 	{
 		t_term	*curs;
 		curs = pos;
@@ -54,13 +70,7 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 			return (-1);
 		else
 		{
-			pos->next = create_new_io_struct();
-			pos->next->y = pos->y;
-			pos->next->new = NULL;
-			pos->next->x = 0;
-			pos->next->delta_x = 0;
-			pos->next->prompt = 0;
-			pos->next->state = pos->state;
+			pos->next = create_next_io(pos->y, pos->state);
 			pos->next->prev = pos;
 			return (1);
 		}

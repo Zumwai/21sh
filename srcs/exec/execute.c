@@ -53,7 +53,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	pid_t		pid;
 	char		**environ;
 
-	ft_putendl("do proc");
+	//ft_putendl("do proc");
 	environ = convert_env_array(env);
 	if ((pid = fork()) == 0)
 	{
