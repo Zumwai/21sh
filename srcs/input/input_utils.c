@@ -56,6 +56,7 @@ t_term	*create_new_io_struct(void)
 	pos->delta_y = 0;
 	pos->buf_size = 0;
 	pos->heredoc = 0;
+	pos->glue = false;
 	pos->new = NULL;
 	pos->next = NULL;
 	pos->substr = NULL;
@@ -81,6 +82,31 @@ int		putchar_like(int n)
 	return (size);
 }
 
+char	*concat_symbol(char *frst, char *scnd, char c)
+{
+	char	*new;
+
+	new = ft_strnew(ft_strlen(frst) + ft_strlen(scnd) + 2);
+	ft_strcpy(new, frst);
+	ft_strcat(new, &c);
+	ft_strcat(new, scnd);
+	return new;
+}
+/*
+char	*glue_lines(t_term *input)
+{
+	t_term *curs;
+	char	*line;
+
+	curs = input;
+	line = NULL;
+	while (curs)
+	{
+		tmp = line;
+
+	}
+}
+*/
 char	*concat_lines(t_term *input)
 {
 	t_term	*curs;
