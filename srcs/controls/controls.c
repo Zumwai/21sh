@@ -42,7 +42,7 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 	if (pos->state == DEFAULT)
 	{
 		ft_putchar_fd('\n', STDIN_FILENO);
-		if (!pos->glue)
+		if (!pos->glue || pos->glue == FIN)
 			return (-1);
 		pos->next = create_next_io(pos->y, pos->state);
 		pos->next->prev = pos;

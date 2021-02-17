@@ -15,7 +15,10 @@ char	*search_heredoc(t_term *pos, int padd)
 		len = ft_strlen(curs->new);
 		if (len > 1)
 		{
-			tmp = ft_strnew(ft_strlen(str) + len + 1);
+			int len2 = 0;
+			if (str)
+				len2 = ft_strlen(str);
+			tmp = ft_strnew(len2 + len + 1);
 			ft_strcpy(tmp, curs->new);
 			if (str)
 				ft_strcat(tmp, str);
