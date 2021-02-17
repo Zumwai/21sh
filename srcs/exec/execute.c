@@ -1,4 +1,5 @@
 #include "sh.h"
+#include <stdio.h>
 
 static void terminate_child(char *command)
 {
@@ -42,6 +43,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	pid_t		pid;
 	char		**environ;
 
+	printf("fd === %d\n", read);
 	environ = convert_env_array(env);
 	if ((pid = fork()) == 0)
 	{
@@ -97,7 +99,7 @@ int             get_fd_write(t_cmd *cmd)
 
     fd = 0;
     cur = cmd;
-    while (cur->type == 6 || cur->type == 7 && cur->next)
+    while ((cur->type == 6 || cur->type == 7 || cur->type == 8) && cur->next)
     {
         if (cur->type == 7)
             fd = open(cur->next->arr[0], O_CREAT | O_RDWR | O_APPEND,
@@ -105,6 +107,8 @@ int             get_fd_write(t_cmd *cmd)
         if (cur->type == 6)
             fd = open(cur->next->arr[0], O_CREAT | O_RDWR | O_TRUNC,
                       S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+        if (cur->type == 8)
+            fd = open(cur->next->arr[0], O_RDONLY);
         if (cur->next->type == 6 || cur->next->type == 7)
             close(fd);
         cur = cur->next;
@@ -132,11 +136,11 @@ int			execute(t_cmd *cmd, t_env **env)
 	while (cmd)
 	{
 	    pipe(fd);
-	    if (cmd->type == 6 || cmd->type == 7)
+	    if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8)
 	        wfd = get_fd_write(cmd);
 	    if (builtin = get_builtin(cmd->arr[0]))
 	    {
-	       if (wfd != 1)
+	       if ((cmd->type == 6 || cmd->type == 7) && wfd != 1)
 	            ffd = wfd;
 	       if (cmd->type == 2)
 	           ffd = fd[1];
@@ -145,21 +149,23 @@ int			execute(t_cmd *cmd, t_env **env)
 	    else
 	    {
 			cmd->target = get_path(cmd->arr[0], env);
-			if (cmd->target != NULL && cmd->type != 6 && cmd->type != 7)
+			if (cmd->target != NULL && cmd->type != 6 && cmd->type != 7 && cmd->type != 8)
 				do_proc(read, fd[1], cmd->target, cmd, env);
             if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
-            {
                 do_proc(read, wfd, cmd->target, cmd, env);
-            }
+            if (cmd->target != NULL && cmd->type == 8)
+                do_proc(wfd, fd[1], cmd->target, cmd, env);
 		}
-	if (cmd->type == 6 || cmd->type == 7)
+	if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8)
 	{
-        while (cmd->next && (cmd->type == 6 || cmd->type == 7))
+        while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8))
             cmd = cmd->next;
     }
 		close(fd[1]);
+	    //close(fd[0]);
 		if (cmd->type == 2)
 		    read = fd[0];
+		close(wfd);
 		cmd = cmd->next;
 	}
 	return (res);
