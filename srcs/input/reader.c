@@ -72,7 +72,6 @@ void	recalc_y(t_term *pos, int y)
 	t_term	*curs;
 	int		tmp;
 
-
 	curs = pos;
 	tmp = curs->y;
 	curs->y = y;
@@ -107,11 +106,11 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 		//	print_value_into_file(key, buffer->current->x, buffer->current->y);
 			red = (read_key(key, buffer->current, old_tty, buffer, env));
 		//	printf("%lld\n", key);
-			if (red == -1) 
+			if (red == -1 || red == -5) 
 				break ;
 			if (red == -2)
 				return NULL;
-			if (red == -3 || red == -4) {
+			if (red == HIST_UP || red == HIST_D) {
 				int tmp = buffer->current->y;
 				envoke_history(buffer, red);
 				recalc_y(buffer->current, tmp);
@@ -132,6 +131,7 @@ char	*handle_input_stream(t_yank *buffer, t_env **env)
 	buffer->current = get_input(buffer, env);
 	if (buffer->current) {
 		line = concat_lines(buffer->current);
+		//printf("%s - line in handle input\n", line);
 		buffer->history = save_history(buffer);
 		free_input_line(&buffer->current);
 		if (buffer->saved)

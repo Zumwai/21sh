@@ -22,7 +22,8 @@
 # define COPY_W	15				//ctrl + o
 # define TAB 	9				//tab or ctrl + i, unfortunately
 # define BACK_TAB	5921563		//backtab
-
+# define HIST_UP -3
+# define HIST_D -4
 # define BK "&"
 # define AND "&&"
 # define OR "||"
@@ -138,6 +139,12 @@ typedef struct s_auto
     struct s_auto *next;
 }           t_auto;
 
+typedef struct s_print 
+{
+	int		size;
+	char	**arr;
+}				t_print;
+
 typedef struct 		s_term
 {
 	int				x;
@@ -152,6 +159,7 @@ typedef struct 		s_term
 	bool			glue;
 	char			*substr;
 	char			*new;
+	struct s_print	*store;
 	struct s_term	*next;
 	struct s_term	*prev;
 }					t_term;

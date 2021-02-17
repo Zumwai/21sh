@@ -31,7 +31,7 @@ static void calc_y_pos(t_term *pos, int diff)
 		{
 			int tmp = diff;
 			while (tmp <= 0) {
-				tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
+				tputs (tgoto (tgetstr("cm", NULL), 1, 0), 1, putchar_like);
 				tputs(tgetstr("sr", NULL), 1, putchar_like);
 				tmp++;
 			}
@@ -90,6 +90,32 @@ static void	handle_last_line(t_term *pos, int rows, int cols, int rem, int print
 	pos->delta_y++;
 	pos->x = 0;
 }
+/*
+char	**append_arr(t_term *pos, char *line)
+{
+	char	**new;
+
+	new = NULL;
+	if (!(new = (char **)malloc(sizeof(char *) * pos->store->size + 1)))
+		handle_exit_errors("Malloc returned NULL");
+	ft_memcpy(new, pos->store, sizeof(pos->store));
+	pos->store->size++;
+	free(pos->store->arr);
+	pos->store->arr = new;
+	pos->store->arr[pos->store->arr] = ft_strndup()
+}
+
+void ft_putstr_size(t_term *pos, char *line, size_t size)
+{
+	write(1, line, size);
+	pos->store = append_arr(pos, );
+}
+*/
+
+void ft_putstr_size(char *line, size_t size)
+{
+	write(1, line, size);
+}
 
 static int draw_line(t_term *pos, int remainder)
 {
@@ -105,7 +131,6 @@ static int draw_line(t_term *pos, int remainder)
 	/* Correct if line smaller than available space */
 	if (print > remainder)
 		print = remainder;
-
 	/* Dont print anything beyond y < 0, just skip */
 	if (pos->y + pos->delta_y > 0) {
 		ft_putstr_size(&pos->new[pos->index - remainder], print);
@@ -144,6 +169,8 @@ int display_input(t_term *pos, int delta)
 	set_empty_line(pos, pos->y, !!pos->prev);
 	while (remainder)
 		remainder = draw_line(pos, remainder);
+	if (!pos->next)
+		tputs(tgetstr("cd", NULL), 1, putchar_like);
 	set_cursor(pos);
 	if (curs) {
 		display_input(curs->next, pos->delta_y + delta);

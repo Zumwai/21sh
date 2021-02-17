@@ -1,9 +1,6 @@
 #include "sh.h"
 
-void ft_putstr_size(char *line, size_t size)
-{
-	write(1, line, size);
-}
+
 
 int key_exit(struct termios old_tty, t_term *pos, __attribute((unused))t_yank *buffer)
 {
@@ -56,6 +53,7 @@ t_term	*create_new_io_struct(void)
 	pos->delta_y = 0;
 	pos->buf_size = 0;
 	pos->heredoc = 0;
+	pos->store = NULL;
 	pos->glue = false;
 	pos->new = NULL;
 	pos->next = NULL;
@@ -118,11 +116,16 @@ char	*concat_lines(t_term *input)
 	while(curs)
 	{
 		tmp = line;
-		if (!line && curs->new)
-			line = ft_strdup(curs->new);
-		else
-			line = ft_strjoin(line, curs->new);
-		free(tmp);
+		if (curs->new) {
+			
+			//printf("%s\n", curs->new);
+			if (!line && curs->new)
+				line = ft_strdup(curs->new);
+			else
+				line = ft_strjoin(line, curs->new);
+			free(tmp);
+			printf("%s\n", line);
+		}
 		curs = curs->next;
 	}
 	if (line && ft_strlen(line) > 4095)

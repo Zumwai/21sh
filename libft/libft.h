@@ -93,6 +93,7 @@ char				**ft_splitword(char *l);
 int				ft_printf(const char *ft, ...);
 size_t			ft_strsplit_len(char **strsplit);
 void	ft_strsplit_free(char ***strsplit);
+char    *ft_strndup(const char *src, const int size);
 
 
 #endif

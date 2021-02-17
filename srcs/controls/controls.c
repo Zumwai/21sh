@@ -93,12 +93,12 @@ static t_term *get_last_pos(t_term *pos)
 
 static int	ft_history_up(void)
 {
-	return (-3);
+	return (HIST_UP);
 }
 
 static int	ft_history_down(void)
 {
-	return (-4);
+	return (HIST_D);
 }
 
 
@@ -108,11 +108,13 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env
 	if (key == 27 || (key == 4 && (!pos->new || !pos->new[0])))
 		return (key_exit(old, pos, buf));
 	curs = get_last_pos(pos);
+	if (key == 4 && (!curs->new || !curs->new[0]))
+		return -5;
 	if (!curs->new)
 		curs->new = get_buf_line(&curs->new, &curs->buf_size, 20);
 	if (curs->index + 2 >= curs->buf_size)
 		curs->new = get_buf_line(&curs->new, &curs->buf_size, 20);
-	else if (key == ENTER)
+	if (key == ENTER)
 		return (consult_state(key, curs));
 	else if (key == BACKSPACE)
 		backspace_char(curs);
