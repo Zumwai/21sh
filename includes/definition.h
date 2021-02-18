@@ -159,6 +159,7 @@ typedef struct 		s_term
 	int				glue;
 	char			*substr;
 	char			*new;
+
 	struct s_print	*store;
 	struct s_term	*next;
 	struct s_term	*prev;

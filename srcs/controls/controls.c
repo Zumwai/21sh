@@ -78,9 +78,6 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 	return (1);
 }
 
-/*
-Needs an update for sublines
-*/
 static void	move_home(t_term *pos)
 {
 	pos->delta_x = -pos->index;

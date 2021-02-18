@@ -5,7 +5,7 @@ char	*get_buf_line(char **line, int *size, int increase)
 {
 	char	*new;
 
-	struct winsize dimensions;
+	struct winsize dimensions = {0};
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	new = ft_strnew(*size + dimensions.ws_col + increase);
@@ -25,8 +25,8 @@ char	*get_buf_line(char **line, int *size, int increase)
 
 static t_term *init_prompt(struct termios *old_tty)
 {
-	struct termios	tty;
-	t_term			*pos;
+	struct termios	tty = {0};
+	t_term			*pos = NULL;
 	tcgetattr(STDIN_FILENO, old_tty);
 	tcgetattr(STDIN_FILENO, &tty);
 	//tty.c_lflag &= ~(ECHO | ICANON);
@@ -42,7 +42,7 @@ static t_term *init_prompt(struct termios *old_tty)
 
 void	print_value_into_file(long long key, int x, int y)
 {
-	FILE *fptr;
+	FILE *fptr = {0};
 	fptr = fopen("input_log", "aw");
 	if (key == '\n') {
 			fprintf(fptr, "%s\n", "--------------------------------");

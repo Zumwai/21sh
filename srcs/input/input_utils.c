@@ -53,7 +53,10 @@ t_term	*create_new_io_struct(void)
 	pos->delta_y = 0;
 	pos->buf_size = 0;
 	pos->heredoc = 0;
-	pos->store = NULL;
+	if (!(pos->store = (t_print *)malloc(sizeof(t_print))))
+		handle_exit_errors("Malloc returned NULL");
+	pos->store->arr = NULL;
+	pos->store->size = 0;
 	pos->glue = false;
 	pos->new = NULL;
 	pos->next = NULL;

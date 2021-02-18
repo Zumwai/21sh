@@ -24,18 +24,36 @@ static int	calc_pos(t_term *pos, int cols)
 
 static void calc_y_pos(t_term *pos, int diff)
 {
-	if (pos->y <= 0)
+	int		printed = 0;
+	if (diff && pos->y <= 0)
 	{
 		diff = pos->y + pos->delta_y - diff;
+
 		if (diff <= 0)
 		{
 			int tmp = diff;
+			printed = pos->y + pos->delta_y - 1;
 			while (tmp <= 0) {
-				tputs (tgoto (tgetstr("cm", NULL), 1, 0), 1, putchar_like);
+				tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
 				tputs(tgetstr("sr", NULL), 1, putchar_like);
+				if (tmp == 0 && !pos->prev)
+					ft_putstr("shelp&>");
+				ft_putstr(pos->store->arr[tmp]);
 				tmp++;
 			}
 			tmp = diff;
+			int i = 0;
+			/*
+			while (i < tmp)
+			{
+				if (!pos->prev && (pos->store->size - i - 1 == 0))
+					ft_putstr("shelp&>");
+				ft_putstr(pos->store->arr[i]);
+				i++;
+			}
+			*/
+			/* Change to zero for unduplicated lines */
+			tmp += 1;
 			t_term *curs;
 			curs = pos;
 			while (curs){
@@ -48,10 +66,11 @@ static void calc_y_pos(t_term *pos, int diff)
 
 static void set_cursor(t_term *pos)
 {
-	struct winsize dimensions;
+	struct winsize dimensions = {0};
 	int		diff_y;
 	int		counter = 0;
 	diff_y = 0;
+
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	diff_y = calc_pos(pos, dimensions.ws_col);
 	calc_y_pos(pos, diff_y);
@@ -86,36 +105,45 @@ static void	handle_last_line(t_term *pos, int rows, int cols, int rem, int print
 		correct_y(pos);
 		tputs(tgetstr("sf", NULL), 1, putchar_like);
 	}
-	tputs(tgoto (tgetstr("cm", NULL), 0, pos->y + pos->delta_y), 1, putchar_like);
+	/* move cursor */
+	if (pos->y + pos->delta_y > 0) {
+		tputs(tgoto (tgetstr("cm", NULL), 0, pos->y + pos->delta_y), 1, putchar_like);
+		pos->x = 0;
+	}
+	else {
+		tputs(tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
+		pos->x = 0;
+	}
 	pos->delta_y++;
-	pos->x = 0;
 }
-/*
-char	**append_arr(t_term *pos, char *line)
+
+char	**append_arr(t_term *pos, char *line, int len)
 {
 	char	**new;
 
 	new = NULL;
+	pos->store->size++;
 	if (!(new = (char **)malloc(sizeof(char *) * pos->store->size + 1)))
 		handle_exit_errors("Malloc returned NULL");
-	ft_memcpy(new, pos->store, sizeof(pos->store));
-	pos->store->size++;
-	free(pos->store->arr);
+	if (pos->store->arr)
+		ft_memcpy(new, pos->store->arr, sizeof(pos->store));
+	else
+		bzero(new, sizeof(char *) * pos->store->size + 1);
+	if (pos->store->arr)
+		ft_free_tab(&pos->store->arr);
 	pos->store->arr = new;
-	pos->store->arr[pos->store->arr] = ft_strndup()
+	pos->store->arr[pos->store->size] = ft_strndup(line, len);
 }
-
-void ft_putstr_size(t_term *pos, char *line, size_t size)
-{
-	write(1, line, size);
-	pos->store = append_arr(pos, );
-}
-*/
 
 void ft_putstr_size(char *line, size_t size)
 {
 	write(1, line, size);
+	//pos->store = append_arr(pos);
 }
+
+/*
+Decides what is to be printed. If can't print, stores line in scrollback buffer.
+Returns number of char left to print */
 
 static int draw_line(t_term *pos, int remainder)
 {
@@ -134,8 +162,15 @@ static int draw_line(t_term *pos, int remainder)
 	/* Dont print anything beyond y < 0, just skip */
 	if (pos->y + pos->delta_y > 0) {
 		ft_putstr_size(&pos->new[pos->index - remainder], print);
+		append_arr(pos, &pos->new[pos->index - remainder], print);
 		pos->x = print + curr;
 	}
+	else {
+		 /* store some kind of scrollback buffer  */
+		append_arr(pos, &pos->new[pos->index - remainder], print);
+	}
+	
+
 	/* Calculate diff and y for current printed part */
 	if ((pos->next && remainder == print) || (print + curr == dimensions.ws_col))
 		handle_last_line(pos, dimensions.ws_row, dimensions.ws_col, remainder, print + curr);
@@ -156,6 +191,7 @@ static void set_empty_line(t_term *pos, int y, int prev)
 	}
 }
 
+/* delta currently is useless, always equals to zero */
 int display_input(t_term *pos, int delta)
 {
 	t_term	*curs = pos;
@@ -172,10 +208,19 @@ int display_input(t_term *pos, int delta)
 	if (!pos->next)
 		tputs(tgetstr("cd", NULL), 1, putchar_like);
 	set_cursor(pos);
-	if (curs) {
+	if (curs->next) {
+		if (pos->store->arr)
+			ft_free_tab(&pos->store->arr);
+		pos->store->size = 0;
 		display_input(curs->next, pos->delta_y + delta);
 	}
+
+	/* destruct scrollback buffer */
+	if (pos->store->arr)
+		ft_free_tab(&pos->store->arr);
+	pos->store->size = 0;
 	pos->y -= delta;
 	pos->delta_y = 0;
+
 	return (0);
 }
