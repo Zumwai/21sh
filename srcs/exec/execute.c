@@ -1,6 +1,19 @@
 #include "sh.h"
 #include <stdio.h>
 
+/*
+static	int					command(char *s)
+{
+	if (ft_strcmp(s, ECHO) == 0) ||
+		(ft_strcmp(s, ENV) == 0) || (ft_strcmp(s, SETENV) == 0) ||
+		(ft_strcmp(s, UNSETENV) == 0) || (ft_strcmp(s, CD) == 0) ||
+		(ft_strcmp(s, EXIT) == 0) || (ft_strcmp(s, "clear") == 0))
+		return (1);
+	else
+		return (0);
+}
+*/
+
 static void terminate_child(char *command)
 {
 	ft_putstr_fd("Execve failed to execute ", STDERR_FILENO);
@@ -43,7 +56,6 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	pid_t		pid;
 	char		**environ;
 
-	printf("fd === %d\n", read);
 	environ = convert_env_array(env);
 	if ((pid = fork()) == 0)
 	{

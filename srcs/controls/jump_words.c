@@ -11,8 +11,10 @@ void go_next_word(t_term *pos)
 		curs++;
 	curs = pos->index - curs;
 	pos->delta_x = -curs;
-	if (pos->delta_x > 0)
+	if (pos->delta_x > 0) {
 		pos->delta_x = 0;
+		//tputs(tgetstr("cd", NULL), 1, putchar_like);
+	}
 }
 
 void go_prev_word(t_term *pos)
@@ -32,4 +34,6 @@ void go_prev_word(t_term *pos)
 	}
 	else
 		pos->delta_x = -pos->index;
+	//if (!pos->delta_x)
+		//tputs(tgetstr("cd", NULL), 1, putchar_like);
 }

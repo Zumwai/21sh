@@ -4,17 +4,8 @@ int					check_rights(char *path, int cd)
 {
 	struct stat		per;
 	unsigned int	tmp;
-
-	if (!path)
-		return (-42);
 	if ((lstat(path, &per)) == -1)
 		return (LSTA);
-	if (access(path, F_OK) == -1)
-		return (EXIS);
-	if (access(path, X_OK) == -1)
-		return (IXUS);
-	if (!(S_IXUSR & per.st_mode))
-		return (IXUS);
 	tmp = (per.st_mode & S_IFMT);
 	if (!cd)
 		if ((!S_ISREG(tmp)) && !(S_ISLNK(tmp)))
@@ -22,6 +13,14 @@ int					check_rights(char *path, int cd)
 	if (cd)
 		if (!S_ISDIR(tmp))
 			return (NODIR);
+	if (!path)
+		return (-42);
+	if (access(path, F_OK) == -1)
+		return (EXIS);
+	if (access(path, X_OK) == -1)
+		return (IXUS);
+	if (!(S_IXUSR & per.st_mode))
+		return (IXUS);
 	return (0);
 }
 /*
