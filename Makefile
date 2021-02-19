@@ -22,16 +22,19 @@ SRCS =	main.c \
 		utils/init.c \
 		utils/handle_err.c \
 		utils/misc.c \
-		input/controls.c \
 		input/display.c \
 		input/reader.c \
-		input/arrow_movement.c \
-		input/edition.c \
-		input/jump_words.c \
-		input/input_utils.c \
-		input/cut_paste.c \
 		input/history.c \
-		input/auto_trie.c
+		input/input_utils.c \
+		controls/state.c \
+		controls/controls.c \
+		controls/arrow_movement.c \
+		controls/edition.c \
+		controls/jump_words.c \
+		controls/cut_paste.c \
+		autocomplete/trie_construct.c \
+		autocomplete/auto_trie.c \
+		autocomplete/auto_utils.c
 DIR_SRCS = srcs/
 SOURCE = $(addprefix $(DIR_SRCS), $(SRCS))
 OBJECT = $(patsubst %.c,%.o,$(SOURCE))
@@ -41,19 +44,20 @@ INCLUDES = ./includes/
 FLAGS = -g 
 REMOVE = -rm -rf
 
-
 .PHONY: all clean re
 
 all: $(NAME)
 
 $(NAME): $(OBJECT) $(LIB) 
 	$(COM) $(FLAGS) $(OBJECT) -o $(NAME) -L ./libft -lft -ltermcap
-%.o: %.c
+%.o: %.c $(LIB)
 	$(COM) $(FLAGS) -c $< -o $@ -I$(DIR_LIB) -I$(INCLUDES) 
 $(LIB):
 	$(MAKE) -sC $(DIR_LIB) all
 clean:
-	$(REMOVE) $(OBJECT)
+	$(REMOVE) $(OBJECT) && \
+	$(MAKE) -sC $(DIR_LIB) clean
 fclean : clean
-	$(REMOVE) $(NAME)
+	$(REMOVE) $(NAME) && \
+	$(MAKE) -sC $(DIR_LIB) fclean
 re: fclean all

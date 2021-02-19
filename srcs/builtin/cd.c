@@ -297,3 +297,4 @@ int			sh_cd(char **com, t_env **ev)
 		handle_empty_error(com[1], ": Variable not set\n");
 	return (1);
 }
+

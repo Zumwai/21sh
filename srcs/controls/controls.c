@@ -3,44 +3,8 @@
 static void	ft_clear(t_term *pos)
 {
 		ft_printf("%s", "\033[2J");
-		tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
-		pos->y = 0;
-}
-
-static int		determine_state(char *line, int prev, t_term *pos)
-{
-	size_t	index = 0;
-	int		state;
-
-	state = prev;
-	while (line[index])
-	{
-		if (line[index] == '\'')
-		{
-			if (state == DEFAULT)
-				state = QUOTES;
-			else if (state == QUOTES)
-				state = DEFAULT;
-		}
-		if (line[index] == '\"')
-		{
-			if (state == DEFAULT)
-				state = DOUBLE_QUOTES;
-			else if (state == DOUBLE_QUOTES)
-				state = DEFAULT;
-		}
-		if (line[index] == '<' && line[index + 1] == '<')
-		{
-			if (state == DEFAULT)
-			{
-				pos->heredoc = index + 1;
-				state = HEREDOC;
-				return (state);
-			}
-		}
-		index++;
-	}
-	return (state);
+		tputs (tgoto (tgetstr("cm", NULL), 0, 1), 1, putchar_like);
+		pos->y = 1;
 }
 
 static char	*get_heredoc_ptr(int heredoc, char *new, int index)
@@ -77,7 +41,7 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 			pos->next->state = POST_DOC;
 			pos->substr = get_heredoc_ptr(pos->heredoc, pos->new, pos->index);
 			if (pos->substr == NULL)
-				return (handle_return_error(-2, "syntax error near unexpected token `newline"));
+				return (handle_return_error(-1, "syntax error near unexpected token `newline"));
 		}
 	}
 	else if (pos->state == POST_DOC)
@@ -100,7 +64,6 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 			pos->next->prev = pos;
 			return (1);
 		}
-		
 	}
 	return (1);
 }
@@ -142,7 +105,7 @@ static int	ft_history_down(void)
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env **env)
 {
 	t_term	*curs;
-	if (key == 27)
+	if (key == 27 || (key == 4 && (!pos->new || !pos->new[0])))
 		return (key_exit(old, pos, buf));
 	curs = get_last_pos(pos);
 	if (!curs->new)
