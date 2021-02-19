@@ -43,6 +43,7 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.в
 			u++;
 		}
 	}
+	//printf("%d == index", *j); /// eksperiment
 	if (t_tmp)
 		set_free_null(&t_tmp);
 }
@@ -128,14 +129,14 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 			}
 			if (t->data[i] == 34)
 			{
-                q[1] = 0;
-                i++;
-            }
+				q[1] = 0;
+				i++;
+			}
 		}
 		if (t->data[i] == '$' && t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0)
 			get_env_val(buf, &j, t->data, &i, env);
 		if(t->data[i] == '$' && j == 0)
-            get_env_val(buf, &j, t->data, &i, env);
+			get_env_val(buf, &j, t->data, &i, env);
 	}
 	buf[j] = '\0';
 	c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
