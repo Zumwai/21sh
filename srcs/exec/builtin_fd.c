@@ -12,12 +12,10 @@ static void			echo_env(char *s, t_env **env, int fd)
 int			sh_echo(char **com, t_env **env, int fd)
 {
 	int			i;
-	//int			sp;
 	int			n;
 
 	i = 1;
 	n = 0;
-	//sp = ft_strsplit_len(com) - 1;
 	if (com[i] && ft_strequ(com[1], "-n"))
 	{
 		n = 1;
@@ -26,8 +24,6 @@ int			sh_echo(char **com, t_env **env, int fd)
 	while (com[i])
 	{
 		ft_putstr_fd(com[i], fd);
-		/*if (sp--)
-			ft_putchar_fd(' ', fd);*/
 		i++;
 	}
 	if (!n)

@@ -58,8 +58,8 @@ static int					get_cmd_type(char *s)
 		return (out_w);
 	if (ft_strcmp(s, GGREAT) == 0)
 		return (out_add);
-	//if(ft_strcmp(s, LESS) == 0)
-	//return ();
+	if(ft_strcmp(s, LESS) == 0)
+	    return (in);
 	//if(ft_strcmp(s, LLESS) == 0)
 	//return ();
 
