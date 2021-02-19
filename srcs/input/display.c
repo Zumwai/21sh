@@ -32,17 +32,19 @@ static void calc_y_pos(t_term *pos, int diff)
 		if (diff <= 0)
 		{
 			int tmp = diff;
+			//tmp++;
 			printed = pos->y + pos->delta_y - 1;
-			while (tmp <= 0) {
+			int i = 0;
+
+			while (tmp >= 0) {
 				tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
 				tputs(tgetstr("sr", NULL), 1, putchar_like);
 				if (tmp == 0 && !pos->prev)
 					ft_putstr("shelp&>");
-				ft_putstr(pos->store->arr[tmp]);
-				tmp++;
+				ft_putstr(pos->store->arr[tmp + 1]);
+				tmp--;
 			}
 			tmp = diff;
-			int i = 0;
 			/*
 			while (i < tmp)
 			{
@@ -125,10 +127,9 @@ char	**append_arr(t_term *pos, char *line, int len)
 	pos->store->size++;
 	if (!(new = (char **)malloc(sizeof(char *) * pos->store->size + 1)))
 		handle_exit_errors("Malloc returned NULL");
+	bzero(new, sizeof(char *) * pos->store->size + 1);
 	if (pos->store->arr)
-		ft_memcpy(new, pos->store->arr, sizeof(pos->store));
-	else
-		bzero(new, sizeof(char *) * pos->store->size + 1);
+		ft_memcpy(new, pos->store->arr, sizeof(char *) * pos->store->size);
 	if (pos->store->arr)
 		ft_free_tab(&pos->store->arr);
 	pos->store->arr = new;
@@ -168,9 +169,9 @@ static int draw_line(t_term *pos, int remainder)
 	else {
 		 /* store some kind of scrollback buffer  */
 		append_arr(pos, &pos->new[pos->index - remainder], print);
+		//pos->x = print + curr;
 	}
 	
-
 	/* Calculate diff and y for current printed part */
 	if ((pos->next && remainder == print) || (print + curr == dimensions.ws_col))
 		handle_last_line(pos, dimensions.ws_row, dimensions.ws_col, remainder, print + curr);
