@@ -127,12 +127,16 @@ char	**append_arr(t_term *pos, char *line, int len)
 	if (!(new = (char **)malloc(sizeof(char *) * pos->store->size + 1)))
 		handle_exit_errors("Malloc returned NULL");
 	bzero(new, sizeof(char *) * pos->store->size + 1);
+	int i = 0;
+	while (i < pos->store->size + 1)
+		new[i++] = NULL;
 	if (pos->store->arr)
-		ft_memcpy(new, pos->store->arr, sizeof(char *) * pos->store->size);
+		memcpy(new, pos->store->arr, sizeof(char *) * pos->store->size - 1);
 	if (pos->store->arr)
 		ft_free_tab(&pos->store->arr);
 	pos->store->arr = new;
-	pos->store->arr[pos->store->size] = ft_strndup(line, len);
+	ft_print_tab(pos->store->arr);
+	pos->store->arr[pos->store->size - 1] = ft_strndup(line, len);
 }
 
 void ft_putstr_size(char *line, size_t size)
@@ -161,7 +165,7 @@ static int draw_line(t_term *pos, int remainder)
 		print = remainder;
 	/* Dont print anything beyond y < 0, just skip */
 	if (pos->y + pos->delta_y > 0) {
-		ft_putstr_size(&pos->new[pos->index - remainder], print);
+		//ft_putstr_size(&pos->new[pos->index - remainder], print);
 		append_arr(pos, &pos->new[pos->index - remainder], print);
 		pos->x = print + curr;
 	}
