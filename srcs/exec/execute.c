@@ -177,7 +177,8 @@ int			execute(t_cmd *cmd, t_env **env)
 	    //close(fd[0]);
 		if (cmd->type == 2)
 		    read = fd[0];
-		close(wfd);
+		if (wfd != 1)
+			close(wfd);
 		cmd = cmd->next;
 	}
 	return (res);
