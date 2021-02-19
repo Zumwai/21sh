@@ -33,16 +33,15 @@ static void calc_y_pos(t_term *pos, int diff)
 		{
 			int tmp = diff;
 			//tmp++;
-			printed = pos->y + pos->delta_y - 1;
+			printed = pos->y + pos->delta_y;
 			int i = 0;
-
-			while (tmp >= 0) {
+			while (i <= tmp) {
 				tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
 				tputs(tgetstr("sr", NULL), 1, putchar_like);
-				if (tmp == 0 && !pos->prev)
+				if (pos->store->size - printed - 1 == 0 && !pos->prev)
 					ft_putstr("shelp&>");
-				ft_putstr(pos->store->arr[tmp + 1]);
-				tmp--;
+				ft_putstr(pos->store->arr[pos->store->size - printed - 1]);
+				i++;
 			}
 			tmp = diff;
 			/*

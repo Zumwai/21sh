@@ -7,11 +7,12 @@ int					check_rights(char *path, int cd)
 	if ((lstat(path, &per)) == -1)
 		return (LSTA);
 	tmp = (per.st_mode & S_IFMT);
-	if (!cd)
+	if (!cd) {
 		if (S_ISDIR(tmp))
 			return (NODIR);
 		if ((!S_ISREG(tmp)) && !(S_ISLNK(tmp)))
 			return (NOEX);
+	}
 	if (cd)
 		if (!S_ISDIR(tmp))
 			return (NODIR);
