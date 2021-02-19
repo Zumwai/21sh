@@ -28,6 +28,8 @@ int		handle_return_error(int num, char *name)
 		ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
 	else if (num == -6)
 		ft_putstr_fd(": Not an executable\n", STDERR_FILENO);
+	else if (num == -7)
+		ft_putstr_fd(": is a directory\n", STDERR_FILENO);
 	else if (num == -2 || num == -3)
 		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
 	return (num);
@@ -53,4 +55,3 @@ void	handle_exit_errors(char *description)
 //	reset_tty();
 	exit(EXIT_FAILURE);
 }
-
