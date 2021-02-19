@@ -75,6 +75,7 @@ typedef enum {
 	bk = 5,
 	out_w = 6,
 	out_add = 7,
+	in = 8,
 }			t_type_cmd;
 
 typedef struct			s_cmd

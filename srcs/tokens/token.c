@@ -15,6 +15,8 @@ static int 				right_row(t_token *t)
 	t_token 		*first;
 
 	first = t;
+	if (first->type == 1)
+	    return (0);
 	while (first->next)
 	{
 		if (first->type == first->next->type)
@@ -56,8 +58,8 @@ static int					get_cmd_type(char *s)
 		return (out_w);
 	if (ft_strcmp(s, GGREAT) == 0)
 		return (out_add);
-	//if(ft_strcmp(s, LESS) == 0)
-	//return ();
+	if(ft_strcmp(s, LESS) == 0)
+	    return (in);
 	//if(ft_strcmp(s, LLESS) == 0)
 	//return ();
 
@@ -92,7 +94,8 @@ extern int 				is_tokens_true(t_token *t)
 	if (right_row(tmp))
 		return (1);
 	else
-		return (0);
+	    ft_putendl_fd("error of parsing", 2);
+	return (0);
 	/* error */
 	return 0;
 }
