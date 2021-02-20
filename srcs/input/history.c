@@ -42,6 +42,11 @@ static t_term *copy_input_struct(t_term *current)
 			curs->new = ft_strdup_size(current->new, current->buf_size);
 		if (current->substr)
 			curs->substr = ft_strdup_size(current->new, current->buf_size);
+		if (current->store) {
+			curs->store = (t_print *)malloc(sizeof(t_print));
+			curs->store->arr = NULL;
+			curs->store->size = 0;
+		}
 		current = current->next;
 		if (current)
 		{
