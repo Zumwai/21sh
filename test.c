@@ -82,6 +82,7 @@ int		parse_incoming_subline(char *str, int prev)
 				return -1; }
 			else if (c != '\\' && !check_for_zero(str, i)) {
 				state ^= ARG_HDOC;
+				//state ^= HEREDOC;
 			}
 		}
 		else if ((state & REQ_HDOC)) {
@@ -185,7 +186,7 @@ int	main(void)
 
 	//char	ex[] = "\"";
 	//char	ex[] = "echo  < \\"; failure
-	char	ex[] = "echo  \"\\";
+	char	ex[] = "echo  <<abc ';' echo <<\\";
 	char	*str;
 	str = strdup((char *)ex);
 	state = parse_incoming_subline(str, 0);
