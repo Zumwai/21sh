@@ -56,4 +56,6 @@ extern t_trie **init_array(void);
 extern char *builtin_list(int i);
 int		determine_state(char *line, int prev, t_term *pos);
 char	*determine_glue(char *line, t_term *pos, int index);
+t_actual	*create_main_line(void);
+int		consult_state(t_term *curs)
 #endif

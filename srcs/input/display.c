@@ -22,6 +22,7 @@ static int	calc_pos(t_term *pos, int cols)
 	return diff_y;
 }
 
+
 static void calc_y_pos(t_term *pos, int diff)
 {
 	int		printed = 0;
@@ -32,7 +33,6 @@ static void calc_y_pos(t_term *pos, int diff)
 		if (diff <= 0)
 		{
 			int tmp = diff;
-			//tmp++;
 			printed = pos->y + pos->delta_y;
 			int i = 0;
 			while (i <= tmp) {
@@ -44,15 +44,6 @@ static void calc_y_pos(t_term *pos, int diff)
 				i++;
 			}
 			tmp = diff;
-			/*
-			while (i < tmp)
-			{
-				if (!pos->prev && (pos->store->size - i - 1 == 0))
-					ft_putstr("shelp&>");
-				ft_putstr(pos->store->arr[i]);
-				i++;
-			}
-			*/
 			/* Change to zero for unduplicated lines */
 			tmp += 1;
 			t_term *curs;
@@ -124,11 +115,9 @@ char	**append_arr(t_term *pos, char *line, int len)
 
 	new = NULL;
 	pos->store->size++;
-	
 	if (!(new = (char **)malloc(sizeof(char *) * pos->store->size + 1)))
 		handle_exit_errors("Malloc returned NULL");
 	bzero(new, sizeof(char *) * pos->store->size + 1);
-	//new[pos->store->size] = NULL;
 	int i = 0;
 	if (pos->store->arr) {
 		while (i < pos->store->size){
@@ -136,19 +125,11 @@ char	**append_arr(t_term *pos, char *line, int len)
 			i++;
 		}
 	}
-	//if (pos->store->arr)
-	//	memcpy(new, pos->store->arr, sizeof(char *) * pos->store->size);
-	//if (pos->store->arr)
-		//free(pos->store->arr);
-		//ft_free_tab(&pos->store->arr);
 	if (pos->store->arr)
 		free(pos->store->arr);
 	pos->store->arr = NULL;
 	pos->store->arr = new;
 	pos->store->arr[pos->store->size - 1] = ft_strndup(line, len + 1);
-	//pos->store->arr[pos->store->size - 1] = ft_strdup(line);
-		//ft_print_tab(pos->store->arr);
-	
 }
 
 void ft_putstr_size(char *line, size_t size)
@@ -169,7 +150,7 @@ static int draw_line(t_term *pos, int remainder)
 	ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
 	/* Calculate max possible character in this line */
 	if (remainder == pos->index && !pos->prev)
-		curr = pos->prompt;
+		curr = 7;
 	print = dimensions.ws_col - curr;
 	/* Correct if line smaller than available space */
 	if (print > remainder)

@@ -42,26 +42,17 @@ t_term	*create_new_io_struct(void)
 	t_term			*pos;
 	if (!(pos = (t_term *)malloc(sizeof(t_term))))
 		handle_exit_errors("Malloc returned NULL");
-	pos->y = 0;
-	pos->x = 0;
+	bzero(&pos, sizeof(t_term));
 	get_coordinates(&pos->y, &pos->x);
-	pos->index = 0;
-	pos->prompt = ft_strlen("shelp$>");
-	pos->x += pos->prompt;
-	pos->state = 0;
-	pos->delta_x = 0;
-	pos->delta_y = 0;
-	pos->buf_size = 0;
-	pos->heredoc = 0;
-	if (!(pos->store = (t_print *)malloc(sizeof(t_print))))
+	if (!(pos->store = (t_scroll *)malloc(sizeof(t_scroll))))
 		handle_exit_errors("Malloc returned NULL");
-	pos->store->arr = NULL;
-	pos->store->size = 0;
-	pos->glue = false;
-	pos->new = NULL;
-	pos->next = NULL;
-	pos->substr = NULL;
-	pos->prev = NULL;
+	bzero(&pos->store, sizeof(t_scroll));
+	if (!pos->main)
+	{
+		if (!(pos->main = (t_actual *)malloc(sizeof(t_actual))))
+			handle_exit_errors("Malloc returned NULL");
+		bzero(&pos->main, sizeof(t_actual));
+	}
 	return (pos);
 }
 
@@ -73,6 +64,17 @@ char	*ft_strdup_size(char *old, size_t size)
 		handle_exit_errors("Malloc returned NULL");
 	ft_strcpy(new,old);
 	return (new);
+}
+
+t_actual	*create_main_line(void)
+{
+	t_actual	*new;
+
+	if (!(new = (t_actual *)malloc(sizeof(t_actual))))
+		handle_exit_errors("Malloc returned NULL");
+	new->heredoc = NULL;
+	new->line = NULL;
+	new->state = 0;
 }
 
 int		putchar_like(int n)
@@ -93,18 +95,3 @@ char	*concat_symbol(char *frst, char *scnd, char c)
 	ft_strcat(new, scnd);
 	return new;
 }
-/*
-char	*glue_lines(t_term *input)
-{
-	t_term *curs;
-	char	*line;
-
-	curs = input;
-	line = NULL;
-	while (curs)
-	{
-		tmp = line;
-
-	}
-}
-*/

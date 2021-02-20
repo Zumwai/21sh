@@ -1,5 +1,5 @@
 #include "sh.h"
-
+/*
 char	*search_heredoc(t_term *pos, int padd)
 {
 	char	*str;
@@ -90,4 +90,45 @@ int		determine_state(char *line, int prev, t_term *pos)
 	}
 
 	return (state);
+}
+*/
+int		parse_incoming_subline(char *str)
+{
+	int	i = 0;
+	int	doc = 0;
+	int	state = 0;
+
+	while (str[i]) {
+		if (str[i] == '\'')
+			state ^= (QUOTE);
+		if (str[i] == '\"')
+			state ^= (D_QUOTE);
+		if (!state && str[i] == '<')
+			doc++;
+		if (!state && doc == 2) {
+			doc = 0;
+			state |= HEREDOC;
+		i++;
+	}
+	i--;
+	if (str[i] == '\\')
+		state |= (GLUE);
+	if (!(state & QUOTE) && !(state & (D_QUOTE))) {
+		if (state & GLUE)
+			if (i > 0 && str[i - 1] == '<')
+				state |= (REQ_HDOC);
+	}
+	return state;
+}
+int		consult_state(t_term *curs)
+{
+	int		ret = 0;
+	int		small = 0;
+	if (curs->prev)
+		if (curs->main)
+			curs->main = create_main_line();
+	small = parse_incoming_subline(curs->new);
+	//ret = curs->main->state ^ small;
+	curs->main->state = ret;
+	return ret;
 }

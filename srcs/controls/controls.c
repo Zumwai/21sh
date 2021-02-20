@@ -6,7 +6,7 @@ static void	ft_clear(t_term *pos)
 		tputs (tgoto (tgetstr("cm", NULL), 0, 1), 1, putchar_like);
 		pos->y = 1;
 }
-
+/*
 static char	*get_heredoc_ptr(int heredoc, char *new, int index)
 {
 	char	*substr = NULL;
@@ -17,6 +17,7 @@ static char	*get_heredoc_ptr(int heredoc, char *new, int index)
 		substr = ft_strsub(new, heredoc + 1, index - heredoc);
 	return (substr); 
 }
+
 
 static t_term *create_next_io(int y, int state)
 {
@@ -38,7 +39,6 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 	glued = determine_glue(pos->new, pos, ft_strlen(pos->new));
 	if (!glued && !pos->glue)
 		pos->state = determine_state(pos->new, pos->state, pos);
-	/* glue! */
 	if (pos->state == DEFAULT)
 	{
 		ft_putchar_fd('\n', STDIN_FILENO);
@@ -77,7 +77,7 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 	}
 	return (1);
 }
-
+*/
 static void	move_home(t_term *pos)
 {
 	pos->delta_x = -pos->index;
@@ -122,7 +122,7 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env
 	if (curs->index + 2 >= curs->buf_size)
 		curs->new = get_buf_line(&curs->new, &curs->buf_size, 20);
 	if (key == ENTER)
-		return (consult_state(key, curs));
+		return (consult_state(curs));
 	else if (key == BACKSPACE)
 		backspace_char(curs);
 	else if (key == DELETE)
