@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-
+#include "./libft/libft.h"
 # define	DEFAULT		0
 # define	QUOTE		1<<0
 # define	D_QUOTE		1<<1
@@ -8,6 +8,7 @@
 # define	REQ_HDOC	1<<3
 # define	HEREDOC		1<<4
 # define	ARG_HDOC	1<<5
+# define	READ_HDOC	1<<6
 
 char	find_last_char(char *str, int i)
 {
@@ -39,7 +40,7 @@ int	check_for_zero(char *str, int i)
 		return 0;
 	while (str[i])
 	{
-		if (str[i] = '\\') {
+		if (str[i] == '\\') {
 			if (str[ i + 1] == 0)
 				return 1;
 			else
@@ -71,7 +72,7 @@ int		parse_incoming_subline(char *str, int prev)
 	//if ((state & REQ_HDOC))
 		//doc++;
 	if (!str[0]) /* placeholer for empy line...for now */
-		return -1;
+		return state;
 	while (str[i]) {
 		char b = str[i];
 		if ((state & ARG_HDOC))
@@ -82,7 +83,7 @@ int		parse_incoming_subline(char *str, int prev)
 				return -1; }
 			else if (c != '\\' && !check_for_zero(str, i)) {
 				state ^= ARG_HDOC;
-				//state ^= HEREDOC;
+				state ^= HEREDOC;
 			}
 		}
 		else if ((state & REQ_HDOC)) {
@@ -94,13 +95,13 @@ int		parse_incoming_subline(char *str, int prev)
 				else if (c == '\\' && check_for_zero(str, i + 1)) {
 					state ^= ARG_HDOC;
 					state ^= REQ_HDOC;
-				}else {
+				} else {
 					state ^= ARG_HDOC;
 					state ^= REQ_HDOC;
+					//state ^= HEREDOC;
 				}
 				if (str[1] == 0)
 					return -1;
-
 			} else if (i > 0 && str[i] == '<' && str[i - 1] == '<' && !(state & QUOTE) && !(state & D_QUOTE)) {
 				state ^= ARG_HDOC;
 				state ^= REQ_HDOC;
@@ -132,8 +133,8 @@ int		parse_incoming_subline(char *str, int prev)
 		else if (!state && doc == 2) {
 			doc = 0;
 			state ^= REQ_HDOC;
-			state |= ARG_HDOC;
-			printf("Changed REQ TO ARG");
+			//state |= ARG_HDOC;
+			//printf("Changed REQ TO ARG");
 			/*shoud return to something and start from scratch */
 		}
 		i++;
@@ -159,6 +160,50 @@ int		parse_incoming_subline(char *str, int prev)
 	return state;
 }
 
+int		find_real_char(char *line, int i)
+{
+	while (i > 0)
+	{
+		if (line[i] >= 32 && line [i] <= 127 && line[i] != '\\')
+			return i + 1;
+		i--;
+	}
+	return 0;
+}
+char    *append_main_line(char *line, char *sub, int state)
+{
+    char    *new;
+    int     size;
+    int     sub_size;
+
+    sub_size = ft_strlen(sub);
+    size = sub_size + 1;
+    if (line)
+   		size += ft_strlen(line);
+	//if ((state & HEREDOC))
+	//	size++;
+    new = ft_strnew(size);
+    if (line)
+        ft_strcpy(new, line);
+    ft_strcat(new, sub);
+	if ((state & QUOTE) || (state & D_QUOTE))
+	{
+		
+	}
+    if ((state & GLUE)) {
+		int	i = 0;
+		i = find_real_char(new, size);
+		new[size] = 0;
+		new[size - 1] = 0;
+		new[size - 2] = 0;
+		/*
+		while (i <= size)
+			new[i++] = 0;
+			*/
+	}
+    return new;
+}
+
 void	printer(int state)
 {
 	printf("\n%d - state\n", state);
@@ -179,36 +224,94 @@ void	printer(int state)
 
 int	main(void)
 {
-	int	i  = 0;
-	int	doc = 0;
 	int	state = 0;
-	int	heredoc = 0;
+	char		*line = NULL;
+	char	ex[25] = "echo  <<abc ; echo <<\\";
+	char	ex2[10] = "\\";
+	char	ex3[25] = "  ;'vasya'   \\";
+	char	ex4[11] = "asdasd";
 
-	//char	ex[] = "\"";
-	//char	ex[] = "echo  < \\"; failure
-	char	ex[] = "echo  <<abc ';' echo <<\\";
 	char	*str;
-	str = strdup((char *)ex);
+
+	printf("~~~~~~~~~~~START~~~~~~~~~~~~~~\n");
+	str = ft_strdup(ex);
 	state = parse_incoming_subline(str, 0);
+	line = append_main_line(line, str, state);
 	printer(state);
+	printf("\n%s||FIRST!\n", line);
 
-	char	ex2[] = "\\";
 	char	*str2;
-	str2 = strdup((char *)ex2);
+	str2 = ft_strdup(ex2);
 	state = parse_incoming_subline(str2, state);
+	line = append_main_line(line, str2, state);
 	printer(state);
+	printf("\n%s||SECOND!\n", line);
 
-
-	char	ex3[] = "\\";
 	char	*str3;
-	str3 = strdup((char *)ex3);
+	str3 = ft_strdup(ex3);
 	state = parse_incoming_subline(str3, state);
+	line = append_main_line(line, str3, state);
 	printer(state);
+	printf("\n%s||THIRD!\n", line);
 
-	char	ex4[] = "\\";
 	char	*str4;
-	str4 = strdup((char *)ex4);
+	str4 = ft_strdup(ex4);
 	state = parse_incoming_subline(str4, state);
+	line = append_main_line(line, str4, state);
 	printer(state);
+	printf("\n%s||FORTH!\n", line);
 	return 0;
 }
+
+
+/*
+char	*call_1(char *line, int *state)
+{
+	char	*str;
+	char	ex[25] = "echo  <<abc ; echo <<\\";
+	str = ft_strdup(ex);
+	*state = parse_incoming_subline(str, 0);
+	line = append_main_line(line, str, *state);
+	printer(*state);
+	printf("\n%s|| first line!\n", line);
+	return line;
+}
+
+char	*call_2(char *line, int *state)
+{
+	char	ex2[10] = "\\";
+	char	*str2;
+	str2 = ft_strdup(ex2);
+	*state = parse_incoming_subline(str2, *state);
+	line = append_main_line(line, str2, *state);
+	printer(*state);
+	printf("\n%s|| second line!\n", line);
+	return line;
+}
+
+char	*call_3(char *line, int *state)
+{
+
+	char	ex3[25] = "  ;'vasya'   \\";
+	char	*str3;
+	str3 = ft_strdup(ex3);
+	*state = parse_incoming_subline(str3, *state);
+	line = append_main_line(line, str3, *state);
+	printer(*state);
+	printf("\n%s|| third line!\n", line);
+	return line;
+}
+
+
+char	*call_4(char *line, int *state)
+{
+	char	ex4[11] = "asdasd";
+	char	*str4;
+	str4 = ft_strdup(ex4);
+	*state = parse_incoming_subline(str4, *state);
+	line = append_main_line(line, str4, *state);
+	printer(*state);
+	printf("\n%s|| forth line!\n", line);
+	return line;
+}
+*/

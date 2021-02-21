@@ -6,6 +6,7 @@ static void	ft_clear(t_term *pos)
 		tputs (tgoto (tgetstr("cm", NULL), 0, 1), 1, putchar_like);
 		pos->y = 1;
 }
+
 /*
 static char	*get_heredoc_ptr(int heredoc, char *new, int index)
 {
@@ -78,6 +79,7 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 	return (1);
 }
 */
+
 static void	move_home(t_term *pos)
 {
 	pos->delta_x = -pos->index;

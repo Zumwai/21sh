@@ -236,7 +236,6 @@ int		parse_incoming_subline(char *str, int prev)
 	return state;
 }
 
-
 int		consult_state(t_term *curs)
 {
 	int		ret = 0;
@@ -244,7 +243,9 @@ int		consult_state(t_term *curs)
 	if (curs->prev)
 		if (!curs->main)
 			curs->main = create_main_line();
-	small = parse_incoming_subline(curs->new, curs->main->state);
+	ret = parse_incoming_subline(curs->new, curs->main->state);
+	curs->main->line = append_main_line(curs->main->line, curs->new, curs->main->state);
+	curs->main->state = ret;
 	//ret = curs->main->state ^ small;
 	return ret;
 }
