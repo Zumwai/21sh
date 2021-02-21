@@ -10,6 +10,12 @@
 # define	ARG_HDOC	1<<5
 # define	READ_HDOC	1<<6
 
+
+typedef struct s_hdoc {
+	int				cord;
+	struct s_hdoc	*next;
+}			t_hdoc;
+
 char	find_last_char(char *str, int i)
 {
 	if (i < 0)
@@ -60,6 +66,23 @@ int		verify_char_heredoc(char c)
 		return 1;
 	return 0;
 }
+
+int		verify_end_arg(char c, int n, int state)
+{
+	int		i = 0;
+	if (c == '\\' && !n)
+		return 0;
+	if (c == '\'' || c == '\"') /* TMP solution for heredoc */
+		return 1;
+	if (verify_char_heredoc(c)) {
+		if ((state & GLUE))
+			return 0;
+		return 1;
+	}
+	if (c == ' ')
+		return 0; /* highly in doubts about whether 1 or 0 required */
+	return 0;
+}
 int		parse_incoming_subline(char *str, int prev)
 {
 	int	i = 0;
@@ -68,13 +91,14 @@ int		parse_incoming_subline(char *str, int prev)
 	char	c = 0;
 	int		flag ;
 	state &= ~(GLUE);
-	//state &= ~HEREDOC;
-	//if ((state & REQ_HDOC))
-		//doc++;
-	if (!str[0]) /* placeholer for empy line...for now */
+	if (!str[0]) { /* placeholer for empy line...for now */
+		if ((state & READ_HDOC))
+			state ^= READ_HDOC;
 		return state;
+	}
 	while (str[i]) {
 		char b = str[i];
+
 		if ((state & ARG_HDOC))
 		{
 			c = find_next_char(str, i);
@@ -83,8 +107,17 @@ int		parse_incoming_subline(char *str, int prev)
 				return -1; }
 			else if (c != '\\' && !check_for_zero(str, i)) {
 				state ^= ARG_HDOC;
-				state ^= HEREDOC;
+				state ^= READ_HDOC; /*return coordinate of the begining */
+				if (!(state & HEREDOC))
+					state ^= HEREDOC;
 			}
+		}
+		if ((state & READ_HDOC))
+		{
+			if (verify_end_arg(str[i], str[i + 1], state))
+				state ^= READ_HDOC;
+			if (i == 0 && str[i] != '\\' && !str[i + 1])
+				state ^= READ_HDOC;
 		}
 		else if ((state & REQ_HDOC)) {
 			/*verifies that heredoc incoming or glue present*/
@@ -119,23 +152,16 @@ int		parse_incoming_subline(char *str, int prev)
 		else if (!state && str[i] == '<') {
 			doc++;
 			state |= REQ_HDOC;
-			/*
-				c = find_next_char(str, i + 1);
-				if (verify_char_heredoc(c)) { printf("failed verification %c\n", c);
-					return -1; }
-				else if (c != '\\' && !check_for_zero(str, i)) {
-					state ^= ARG_HDOC;
-				}
-				if (str[1] == 0)
-					return -1;
-					*/
+		} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) &&!(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && str[i] == '<') {
+			doc++;
+			state |= REQ_HDOC;
 		}
 		else if (!state && doc == 2) {
 			doc = 0;
 			state ^= REQ_HDOC;
-			//state |= ARG_HDOC;
-			//printf("Changed REQ TO ARG");
-			/*shoud return to something and start from scratch */
+		} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) &&!(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && doc == 2) {
+			doc++;
+			state |= REQ_HDOC;
 		}
 		i++;
 	} 
@@ -143,33 +169,10 @@ int		parse_incoming_subline(char *str, int prev)
 	/* commit to glue if not stated as single quote */
 	if (!(state & QUOTE) && str[i] == '\\')
 		state ^= (GLUE);
-		/*
-	 try to guess half cooked heredoc 
-	if (!(state & QUOTE) && !(state & (D_QUOTE))) {
-		c = find_last_char(str, i - 1);
-	
-		if (i > 0 && str[i] == '<') {
-			if (state & GLUE) {
-				if (!(state & HEREDOC))
-				state |= (REQ_HDOC);
-			} else
-				return -1;
-		}
-	}
-	*/
 	return state;
 }
 
-int		find_real_char(char *line, int i)
-{
-	while (i > 0)
-	{
-		if (line[i] >= 32 && line [i] <= 127 && line[i] != '\\')
-			return i + 1;
-		i--;
-	}
-	return 0;
-}
+
 char    *append_main_line(char *line, char *sub, int state)
 {
     char    *new;
@@ -180,26 +183,24 @@ char    *append_main_line(char *line, char *sub, int state)
     size = sub_size + 1;
     if (line)
    		size += ft_strlen(line);
-	//if ((state & HEREDOC))
-	//	size++;
+	if ((state & HEREDOC))
+		size++;
     new = ft_strnew(size);
     if (line)
         ft_strcpy(new, line);
     ft_strcat(new, sub);
-	if ((state & QUOTE) || (state & D_QUOTE))
-	{
-		
-	}
-    if ((state & GLUE)) {
-		int	i = 0;
-		i = find_real_char(new, size);
-		new[size] = 0;
-		new[size - 1] = 0;
-		new[size - 2] = 0;
-		/*
-		while (i <= size)
-			new[i++] = 0;
-			*/
+	if (state == 16)
+		new[size - 2] == 10;
+    else if ((state & GLUE)) {
+		//if ((state & HEREDOC))
+		//int	i = 0;
+		new[size--] = 0;
+		new[size--] = 0;
+		new[size--] = 0;
+		if ((state & HEREDOC)) {
+			new[size] = 0;
+			new[size] == '\n';
+		}
 	}
     return new;
 }
@@ -219,6 +220,8 @@ void	printer(int state)
 		printf("heredoc found!\n");
 	if (state & ARG_HDOC)
 		printf("arg for heredoc required!\n");
+	if (state & READ_HDOC)
+		printf("currently reading heredoc delimeter!\n");
 	printf("----------------------");
 }
 
@@ -226,10 +229,10 @@ int	main(void)
 {
 	int	state = 0;
 	char		*line = NULL;
-	char	ex[25] = "echo  <<abc ; echo <<\\";
-	char	ex2[10] = "\\";
-	char	ex3[25] = "  ;'vasya'   \\";
-	char	ex4[11] = "asdasd";
+	char	ex[25] = "echo <<bdc\\";
+	char	ex2[10] = " abcdef\\";
+	char	ex3[25] = "s";
+	char	ex4[11] = "abc";
 
 	char	*str;
 
@@ -262,56 +265,3 @@ int	main(void)
 	printf("\n%s||FORTH!\n", line);
 	return 0;
 }
-
-
-/*
-char	*call_1(char *line, int *state)
-{
-	char	*str;
-	char	ex[25] = "echo  <<abc ; echo <<\\";
-	str = ft_strdup(ex);
-	*state = parse_incoming_subline(str, 0);
-	line = append_main_line(line, str, *state);
-	printer(*state);
-	printf("\n%s|| first line!\n", line);
-	return line;
-}
-
-char	*call_2(char *line, int *state)
-{
-	char	ex2[10] = "\\";
-	char	*str2;
-	str2 = ft_strdup(ex2);
-	*state = parse_incoming_subline(str2, *state);
-	line = append_main_line(line, str2, *state);
-	printer(*state);
-	printf("\n%s|| second line!\n", line);
-	return line;
-}
-
-char	*call_3(char *line, int *state)
-{
-
-	char	ex3[25] = "  ;'vasya'   \\";
-	char	*str3;
-	str3 = ft_strdup(ex3);
-	*state = parse_incoming_subline(str3, *state);
-	line = append_main_line(line, str3, *state);
-	printer(*state);
-	printf("\n%s|| third line!\n", line);
-	return line;
-}
-
-
-char	*call_4(char *line, int *state)
-{
-	char	ex4[11] = "asdasd";
-	char	*str4;
-	str4 = ft_strdup(ex4);
-	*state = parse_incoming_subline(str4, *state);
-	line = append_main_line(line, str4, *state);
-	printer(*state);
-	printf("\n%s|| forth line!\n", line);
-	return line;
-}
-*/
