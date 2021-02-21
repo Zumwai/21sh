@@ -13,6 +13,7 @@
 
 typedef struct s_hdoc {
 	int				cord;
+	char			*eot;
 	struct s_hdoc	*next;
 }			t_hdoc;
 
@@ -72,6 +73,8 @@ int		verify_end_arg(char c, int n, int state)
 	int		i = 0;
 	if (c == '\\' && !n)
 		return 0;
+	if (c != '\\' && !n)
+		return 1;
 	if (c == '\'' || c == '\"') /* TMP solution for heredoc */
 		return 1;
 	if (verify_char_heredoc(c)) {
@@ -83,7 +86,37 @@ int		verify_end_arg(char c, int n, int state)
 		return 0; /* highly in doubts about whether 1 or 0 required */
 	return 0;
 }
-int		parse_incoming_subline(char *str, int prev)
+
+t_hdoc	*create_new_hdoc(void)
+{
+	t_hdoc	*new;
+
+	if (!(new = (t_hdoc *)malloc(sizeof(t_hdoc))))
+		exit(1);
+	new->cord = -1;
+	new->eot = NULL;
+	new->next = NULL;
+}
+
+void	save_coord_hdoc(t_hdoc **lst, int i)
+{
+	t_hdoc	*curs;
+
+	if (*lst) {
+		curs = *lst;
+		while (curs->next)
+			curs = curs->next;
+		curs->next = create_new_hdoc();
+		curs = curs->next;
+	}
+	else {
+		curs = create_new_hdoc();
+		*lst = curs;
+	}
+	curs->cord = i;
+}
+
+int		parse_incoming_subline(char *str, int prev, t_hdoc **del)
 {
 	int	i = 0;
 	int	doc = 0;
@@ -98,7 +131,6 @@ int		parse_incoming_subline(char *str, int prev)
 	}
 	while (str[i]) {
 		char b = str[i];
-
 		if ((state & ARG_HDOC))
 		{
 			c = find_next_char(str, i);
@@ -114,10 +146,15 @@ int		parse_incoming_subline(char *str, int prev)
 		}
 		if ((state & READ_HDOC))
 		{
-			if (verify_end_arg(str[i], str[i + 1], state))
+			/*if (verify_end_arg(str[i], str[i + 1], state)) || 
 				state ^= READ_HDOC;
-			if (i == 0 && str[i] != '\\' && !str[i + 1])
-				state ^= READ_HDOC;
+			if ((i == 0 && str[i] != '\\' && !str[i + 1]))
+				state ^= READ_HDOC; */
+			if ((verify_end_arg(str[i], str[i + 1], state) ||
+				(i == 0 && str[i] != '\\' && !str[i + 1]))) {
+					state ^= READ_HDOC;
+					save_coord_hdoc(del, i);
+				}
 		}
 		else if ((state & REQ_HDOC)) {
 			/*verifies that heredoc incoming or glue present*/
@@ -131,7 +168,6 @@ int		parse_incoming_subline(char *str, int prev)
 				} else {
 					state ^= ARG_HDOC;
 					state ^= REQ_HDOC;
-					//state ^= HEREDOC;
 				}
 				if (str[1] == 0)
 					return -1;
@@ -166,7 +202,6 @@ int		parse_incoming_subline(char *str, int prev)
 		i++;
 	} 
 	i--;
-	/* commit to glue if not stated as single quote */
 	if (!(state & QUOTE) && str[i] == '\\')
 		state ^= (GLUE);
 	return state;
@@ -189,11 +224,7 @@ char    *append_main_line(char *line, char *sub, int state)
     if (line)
         ft_strcpy(new, line);
     ft_strcat(new, sub);
-	if (state == 16)
-		new[size - 2] == 10;
-    else if ((state & GLUE)) {
-		//if ((state & HEREDOC))
-		//int	i = 0;
+    if ((state & GLUE)) {
 		new[size--] = 0;
 		new[size--] = 0;
 		new[size--] = 0;
@@ -202,6 +233,8 @@ char    *append_main_line(char *line, char *sub, int state)
 			new[size] == '\n';
 		}
 	}
+	else if ((state & HEREDOC))
+		new[size - 2] = 10;
     return new;
 }
 
@@ -225,43 +258,93 @@ void	printer(int state)
 	printf("----------------------");
 }
 
+char	*grub_eot(char *line, int i)
+{
+	char	*eot= NULL;
+	int		size = 0;
+
+	while (i > 0)
+	{
+		if (line[i] == '<')
+			break ;
+		i--;
+		size++;
+	}
+
+	eot = ft_strndup(&line[i + 1], size);
+	return eot;
+}
+
+void	update_hdoc_list(t_hdoc **lst, char *line)
+{
+	t_hdoc	*curs;
+	int		size;
+
+	size = ft_strlen(line);
+	if (!*lst)
+		return ;
+	curs = *lst;
+	while (curs)
+	{
+		if (!curs->eot) {
+			curs->cord += size;
+			curs->eot = grub_eot(line, curs->cord);
+		}
+		curs = curs->next;
+	}
+}
+
 int	main(void)
 {
 	int	state = 0;
 	char		*line = NULL;
-	char	ex[25] = "echo <<bdc\\";
-	char	ex2[10] = " abcdef\\";
-	char	ex3[25] = "s";
+	char	ex[25] = "echo <<abc; echo <<124";
+	char	ex2[10] = "123";
+	char	ex3[25] = "456";
 	char	ex4[11] = "abc";
-
+	t_hdoc			*hdoc = NULL;
 	char	*str;
 
 	printf("~~~~~~~~~~~START~~~~~~~~~~~~~~\n");
 	str = ft_strdup(ex);
-	state = parse_incoming_subline(str, 0);
+	state = parse_incoming_subline(str, 0, &hdoc);
 	line = append_main_line(line, str, state);
+	update_hdoc_list(&hdoc, line);
 	printer(state);
 	printf("\n%s||FIRST!\n", line);
 
 	char	*str2;
 	str2 = ft_strdup(ex2);
-	state = parse_incoming_subline(str2, state);
+	state = parse_incoming_subline(str2, state, &hdoc);
 	line = append_main_line(line, str2, state);
+	update_hdoc_list(&hdoc, line);
 	printer(state);
 	printf("\n%s||SECOND!\n", line);
 
 	char	*str3;
 	str3 = ft_strdup(ex3);
-	state = parse_incoming_subline(str3, state);
+	state = parse_incoming_subline(str3, state, &hdoc);
 	line = append_main_line(line, str3, state);
+	update_hdoc_list(&hdoc, line);
 	printer(state);
 	printf("\n%s||THIRD!\n", line);
-
 	char	*str4;
 	str4 = ft_strdup(ex4);
-	state = parse_incoming_subline(str4, state);
+	state = parse_incoming_subline(str4, state, &hdoc);
 	line = append_main_line(line, str4, state);
+	update_hdoc_list(&hdoc, line);
 	printer(state);
 	printf("\n%s||FORTH!\n", line);
+	if (hdoc)
+	{
+		t_hdoc *curs = hdoc;
+		while (curs)
+		{
+			printf("%d \n", curs->cord);
+			printf("%s\n", curs->eot);
+			curs = curs->next;
+		}
+	}
 	return 0;
 }
+
