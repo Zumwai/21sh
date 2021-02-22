@@ -41,6 +41,8 @@ void change_line_up(t_term *pos)
 
 	int tmp = pos->delta_x - dimensions.ws_col;
 
+				//tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
+				//tputs(tgetstr("sr", NULL), 1, putchar_like);
 	tmp = ft_abs(tmp);
 	if (tmp > pos->index)
 	{

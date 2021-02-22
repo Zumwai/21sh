@@ -7,9 +7,12 @@ int					check_rights(char *path, int cd)
 	if ((lstat(path, &per)) == -1)
 		return (LSTA);
 	tmp = (per.st_mode & S_IFMT);
-	if (!cd)
+	if (!cd) {
+		if (S_ISDIR(tmp))
+			return (NODIR);
 		if ((!S_ISREG(tmp)) && !(S_ISLNK(tmp)))
 			return (NOEX);
+	}
 	if (cd)
 		if (!S_ISDIR(tmp))
 			return (NODIR);
@@ -155,8 +158,9 @@ static char			*is_local(char *com, t_env **ev, int *res)
 		path = get_full_path(path, com);
 	if (!(*res = check_rights(path, 0)))
 		return path;
-	if (*res <= IXUS)
+	if (*res <= IXUS) {
 		handle_return_error(*res, com);
+	}
 	set_free_null(&path);
 	return NULL;
 }

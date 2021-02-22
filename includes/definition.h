@@ -22,7 +22,8 @@
 # define COPY_W	15				//ctrl + o
 # define TAB 	9				//tab or ctrl + i, unfortunately
 # define BACK_TAB	5921563		//backtab
-
+# define HIST_UP -3
+# define HIST_D -4
 # define BK "&"
 # define AND "&&"
 # define OR "||"
@@ -139,6 +140,26 @@ typedef struct s_auto
     struct s_auto *next;
 }           t_auto;
 
+typedef struct s_scroll
+{
+	int		size;
+	char	**arr;
+}				t_scroll;
+
+typedef struct s_hdoc {
+	int				cord;
+	bool			used;
+	char			*eot;
+	struct s_hdoc	*next;
+}			t_hdoc;
+
+typedef struct		s_actual
+{
+	char			*line;
+	int				state;
+	struct s_hdoc	*hdoc;
+}					t_actual;
+
 typedef struct 		s_term
 {
 	int				x;
@@ -146,13 +167,10 @@ typedef struct 		s_term
 	int				delta_x;
 	int				delta_y;
 	int				index;
-	int				prompt; //dont need yet
 	int				buf_size;
-	int				state;
-	int				heredoc;
-	bool			glue;
-	char			*substr;
 	char			*new;
+	struct s_actual *main;
+	struct s_scroll	*store;
 	struct s_term	*next;
 	struct s_term	*prev;
 }					t_term;
@@ -177,8 +195,20 @@ typedef struct s_yank
 	t_history		*history;
 	t_auto			*completion;
 	t_trie			*trie;
+	char			*actual;
 }					t_yank;
 
+
+# define	DEFAULT		0
+# define	QUOTE		1<<0
+# define	D_QUOTE		1<<1
+# define	GLUE		1<<2
+# define	REQ_HDOC	1<<3
+# define	HEREDOC		1<<4
+# define	ARG_HDOC	1<<5
+# define	READ_HDOC	1<<6
+# define	FAILED		1<<7
+/*
 enum				e_state
 {
 	DEFAULT,
@@ -186,6 +216,14 @@ enum				e_state
 	DOUBLE_QUOTES,
 	HEREDOC,
 	POST_DOC
+};
+*/
+enum				e_glue
+{
+	NONE,
+	BEG,
+	MID,
+	FIN
 };
 
 #endif

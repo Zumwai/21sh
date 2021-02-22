@@ -1,6 +1,7 @@
 #ifndef CONTROL_H
 # define CONTROL_H
 
+
 # include <stdbool.h>
 
 # include "definition.h"
@@ -54,4 +55,11 @@ extern t_trie *create_trie_node(char c);
 extern t_trie **init_array(void);
 extern char *builtin_list(int i);
 int		determine_state(char *line, int prev, t_term *pos);
+char	*determine_glue(char *line, t_term *pos, int index);
+t_actual	*create_main_line(void);
+int		consult_state(t_term *curs);
+void	save_coord_hdoc(t_hdoc **lst, int i, int size);
+int	update_hdoc_list(t_hdoc **lst, char *line);
+int		verify_char_heredoc(char c);
+t_hdoc *clone_hdoc(t_hdoc *old);
 #endif
