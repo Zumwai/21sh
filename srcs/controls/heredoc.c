@@ -52,22 +52,25 @@ static char	*grub_eot(char *line, int i)
 	return eot;
 }
 
-extern void	update_hdoc_list(t_hdoc **lst, char *line)
+extern int	update_hdoc_list(t_hdoc **lst, char *line)
 {
 	t_hdoc	*curs;
 	int		size;
+	int		ret = 0;
 
 	size = ft_strlen(line);
 	if (!*lst)
-		return ;
+		return 0; /*not sure*/
 	curs = *lst;
 	while (curs)
 	{
 		if (!curs->eot) {
 			curs->eot = grub_eot(line, curs->cord);
+			ret = 1;
 		}
 		curs = curs->next;
 	}
+	return ret;
 }
 
 extern t_hdoc *clone_hdoc(t_hdoc *old)

@@ -154,13 +154,11 @@ static char    *append_main_line(char *line, char *sub, int state)
     int     sub_size;
 
 	if ((state & HEREDOC))
-		var++;
+		size++;
     sub_size = ft_strlen(sub);
     size = sub_size + 1;
     if (line)
    		size += ft_strlen(line);
-	if ((state & HEREDOC))
-		size++;
     new = ft_strnew(size);
     if (line)
         ft_strcpy(new, line);
@@ -169,14 +167,16 @@ static char    *append_main_line(char *line, char *sub, int state)
 		new[size--] = 0;
 		new[size--] = 0;
 		new[size--] = 0;
+		//new[size--] = 0;
+		/*
 		if ((state & HEREDOC)) {
 			new[size] = 0;
 			new[size] = '\n';
 		}
+		*/
 	}
 	else if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE))
-		new[size - 1 - var] = 10;
-	
+		new[size - 1] = 10;
     return new;
 }
 
@@ -224,8 +224,10 @@ int		determine_next_io_step(t_term *curs, int ret)
 	if (0 == ret)
 		return 0; /* check for ending */
 	if ((curs->main->state & HEREDOC)) {
-		update_hdoc_list(&curs->main->hdoc, curs->main->line);
-		res = check_hdoc_eot(&curs->main->hdoc, curs->new);
+		res = update_hdoc_list(&curs->main->hdoc, curs->main->line);
+		if (!res) {
+			res = check_hdoc_eot(&curs->main->hdoc, curs->new);
+		}
 		if (res) {
 			curs->next = create_next_io(&curs->main, curs->y);
 			curs->next->prev = curs;
@@ -252,6 +254,8 @@ int		consult_state(t_term *curs)
 	if (ret >= 0)
 		ret = determine_next_io_step(curs, ret);
 	//pos->next = create_next_io(pos->y, pos->state);
+	if (ret == -1)
+		handle_return_error(-1, "syntax error near unexpected token `newline'\n");
 	if (ret == 0)
 		ft_putchar_fd('\n', 1);
 	return ret;

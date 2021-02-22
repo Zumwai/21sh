@@ -124,6 +124,8 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 			key = 0;
 			display_input(buffer->current, 0);
 	}
+	if (red == 0)
+		buffer->current->main->state = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
 	return (buffer->current);
 }
