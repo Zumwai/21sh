@@ -67,6 +67,20 @@ static char 				*get_data(char *line, int *n, t_flag *flag)
 	return (ret);
 }
 
+int						is_empty(char *s)
+{
+	int					i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] != ' ' && s[i] != '\t')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 extern t_token 			*parsing_t(char *line)
 {
 	t_token *token;
@@ -78,7 +92,9 @@ extern t_token 			*parsing_t(char *line)
 	///ft_putendl(line);
 	car = 0;
 	if (!(l = ft_strlen(line)))
-		return NULL;
+		return (0);
+	if (is_empty(line))
+		return (0);
 	token = init_token();
 	cur = token;
 	flag = init_flag();
