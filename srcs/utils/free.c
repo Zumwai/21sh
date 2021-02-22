@@ -149,12 +149,18 @@ void	free_main_line(t_actual **main)
 		free_eot_list(&(*main)->hdoc);
 	if ((*main)->line)
 		set_free_null(&(*main)->line);
+	(*main)->line = NULL;
 	free(*main);
 	*main = NULL;
+	main = NULL;
 }
 
 void free_input_line(t_term **input)
 {
+	if (!(*input)->next) {
+		free_main_line(&(*input)->main);
+		(*input)->main = NULL;
+	}
 	if (!(*input))
 		return ;
 	if ((*input)->next)
@@ -164,9 +170,6 @@ void free_input_line(t_term **input)
 	if ((*input)->store) {
 		free((*input)->store);
 		(*input)->store = NULL;
-	}
-	if ((*input)->main) {
-		free_main_line(&(*input)->main);
 	}
 	if (*input)
 		free(*input);
