@@ -146,6 +146,8 @@ int			execute(t_cmd *cmd, t_env **env)
 	int ffd;
 	ffd = 1;
 	//int m = 0;
+	if (!cmd->arr)
+		return 1;
 	while (cmd)
 	{
 		//m = 0;
