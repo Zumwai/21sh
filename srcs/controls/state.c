@@ -79,7 +79,9 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 		{
 			c = find_next_char(str, i);
 			if (verify_char_heredoc(c)) { printf("failed verification 1%c\n", c);
-				return -1; }
+				state |= FAILED;
+				return -1;
+			}
 			else if (c != '\\' && !check_for_zero(str, i)) {
 				state ^= ARG_HDOC;
 				state ^= READ_HDOC;
@@ -99,7 +101,9 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 			if (str[i] == '<') {
 				c = find_next_char(str, i + 1);
 				if (verify_char_heredoc(c)) { printf("failed verification 2%c\n", c);
-					return -1; }
+					state |= FAILED;
+					return -1;
+				}
 				else if (c == '\\' && check_for_zero(str, i + 1)) {
 					state ^= ARG_HDOC;
 					state ^= REQ_HDOC;
@@ -113,8 +117,9 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				state ^= ARG_HDOC;
 				state ^= REQ_HDOC;
 			} else if (i == 0 && str[0] != '\\' && str[1]) {
-				printf("failed glue 1\n");
+				state |= FAILED;
 				return -1;
+				printf("failed glue 1\n");
 			}
 			else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0)
 				return -1;
@@ -153,6 +158,7 @@ static char    *append_main_line(char *line, char *sub, int state)
     int     size;
     int     sub_size;
 
+	//if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE))
 	if ((state & HEREDOC))
 		size++;
     sub_size = ft_strlen(sub);
@@ -167,13 +173,6 @@ static char    *append_main_line(char *line, char *sub, int state)
 		new[size--] = 0;
 		new[size--] = 0;
 		new[size--] = 0;
-		//new[size--] = 0;
-		/*
-		if ((state & HEREDOC)) {
-			new[size] = 0;
-			new[size] = '\n';
-		}
-		*/
 	}
 	else if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE))
 		new[size - 1] = 10;
@@ -248,14 +247,13 @@ int		consult_state(t_term *curs)
 		if (!curs->main)
 			curs->main = create_main_line();
 	ret = parse_incoming_subline(curs->new, curs->main->state, &curs->main->hdoc, ft_strlen(curs->main->line));
-	if (ret >= 0)
-		curs->main->state = ret;
+	curs->main->state = ret;
 	curs->main->line = append_main_line(curs->main->line, curs->new, ret);
-	if (ret >= 0)
+	if (!(curs->main->state & FAILED)) 
 		ret = determine_next_io_step(curs, ret);
-	//pos->next = create_next_io(pos->y, pos->state);
-	if (ret == -1)
+	else {
 		handle_return_error(-1, "syntax error near unexpected token `newline'\n");
+	}
 	if (ret == 0)
 		ft_putchar_fd('\n', 1);
 	return ret;

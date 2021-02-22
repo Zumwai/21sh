@@ -207,6 +207,8 @@ typedef struct s_yank
 # define	HEREDOC		1<<4
 # define	ARG_HDOC	1<<5
 # define	READ_HDOC	1<<6
+# define	FAILED		1<<7
+
 /*
 enum				e_state
 {
