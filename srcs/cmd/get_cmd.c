@@ -54,34 +54,33 @@ char                    **fill_res(char *s, int i, char **res)
 
     l = ft_strlen(s) - i;
     res[0] = ft_strsub(s, 0, i);
-    res[1] = ft_strsub(s, i + 1, l);
+    if (l != 0)
+	{
+    	res[1] = ft_strsub(s, i + 1, l);
+	}
+    else
+    	res[1] = '\0';
     res[2] = '\0';
     return (res);
 }
 
 char                    **save_the_spaces(char *s)
 {
-    char    **res;
-    int i;
+	char    **res;
+	int i;
 
-    i = 0;
-    res = ft_strsplit(s, ' ');
-    if (ft_strcmp("echo", res[0]) != 0)
-        return (res);
-    if (ft_strcmp("echo", res[0]) == 0)
-    {
-        ft_strsplit_free(&res);
-        while (s[i] && s[i] != ' ')
-        {
-            i++;
-            if (s[i] == ' ')
-            {
-                res = (char **)malloc(sizeof(char *) * 3);
-                res = fill_res(s, i, res);
-                break ;
-            }
-        }
-    }
+	 i = 0;
+	while (s[i] && (s[i] != ' ' || s[i] != '\0'))
+	{
+	    i++;
+	    if (s[i] == ' ' || s[i] == '\0')
+	    {
+	        res = (char **)malloc(sizeof(char *) * 3);
+	        res = fill_res(s, i, res);
+	        break ;
+	    }
+	}
+
     return (res);
 }
 
@@ -158,6 +157,7 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 		return NULL;
 	while (cur_t)
 	{
+		///ft_putendl(cur_t->data);
 		cur = get_data_cmd(cur_t, cur, env);
 		if (cur_t->next && cur_t->next->next)
 		{
