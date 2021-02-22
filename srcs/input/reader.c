@@ -5,7 +5,7 @@ char	*get_buf_line(char **line, int *size, int increase)
 {
 	char	*new;
 
-	struct winsize dimensions;
+	struct winsize dimensions = {0};
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
 	new = ft_strnew(*size + dimensions.ws_col + increase);
@@ -25,8 +25,8 @@ char	*get_buf_line(char **line, int *size, int increase)
 
 static t_term *init_prompt(struct termios *old_tty)
 {
-	struct termios	tty;
-	t_term			*pos;
+	struct termios	tty = {0};
+	t_term			*pos = NULL;
 	tcgetattr(STDIN_FILENO, old_tty);
 	tcgetattr(STDIN_FILENO, &tty);
 	//tty.c_lflag &= ~(ECHO | ICANON);
@@ -39,21 +39,6 @@ static t_term *init_prompt(struct termios *old_tty)
 	pos = create_new_io_struct();
 	return (pos);
 }
-
-void	print_value_into_file(long long key, int x, int y)
-{
-	FILE *fptr;
-	fptr = fopen("input_log", "aw");
-	if (key == '\n') {
-			fprintf(fptr, "%s\n", "--------------------------------");
-	} else {
-		fprintf(fptr, "%lld: key, %d:x, %d:y", key, x, y);
-	if (ft_ischar(key))
-		fprintf(fptr, ";%c - char key", (char)key);
-	fprintf(fptr, "%c", '\n');
-	}
-}
-
 
 static long long	incapsulate_read(void)
 {
@@ -71,7 +56,6 @@ void	recalc_y(t_term *pos, int y)
 {
 	t_term	*curs;
 	int		tmp;
-
 
 	curs = pos;
 	tmp = curs->y;
@@ -96,6 +80,7 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 	ft_bzero(&old_tty, sizeof(struct termios));
 	pos = init_prompt(&old_tty);
 	ft_putstr_size("shelp$>", 7);
+	pos->x += 7;
 //	head = pos;
 	key = 0;
 	red = 0;
@@ -104,14 +89,15 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 	while (1)
 	{
 			key = incapsulate_read();
-		//	print_value_into_file(key, buffer->current->x, buffer->current->y);
 			red = (read_key(key, buffer->current, old_tty, buffer, env));
 		//	printf("%lld\n", key);
-			if (red == -1) 
+			if (red == DEFAULT || red == -5 || red == -1)
 				break ;
-			if (red == -2)
+			if (red == -2) {
+						//free_input_line(&buffer->current);
 				return NULL;
-			if (red == -3 || red == -4) {
+			}
+			if (red == HIST_UP || red == HIST_D) {
 				int tmp = buffer->current->y;
 				envoke_history(buffer, red);
 				recalc_y(buffer->current, tmp);
@@ -120,6 +106,8 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 			key = 0;
 			display_input(buffer->current, 0);
 	}
+	if (red == 0)
+		buffer->current->main->state = 0;
 	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
 	return (buffer->current);
 }
@@ -131,12 +119,15 @@ char	*handle_input_stream(t_yank *buffer, t_env **env)
 	line =  NULL;
 	buffer->current = get_input(buffer, env);
 	if (buffer->current) {
-		line = concat_lines(buffer->current);
+		//line = concat_lines(buffer->current);
+		if (!(buffer->current->main->state & FAILED)) {
+			line = ft_strdup(buffer->current->main->line);
+		}
+		buffer->current->main->state &= ~(FAILED);
 		buffer->history = save_history(buffer);
 		free_input_line(&buffer->current);
 		if (buffer->saved)
 			free_input_line(&buffer->saved);
 	}
-	//printf("%s\n", line);
 	return (line);
 }

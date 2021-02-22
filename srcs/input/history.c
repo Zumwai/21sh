@@ -22,17 +22,39 @@ static t_history	*push_history(t_history **history, __attribute__((unused))t_his
 	return (new);
 }
 
+t_actual	*clone_main_line(t_actual *main)
+{
+	t_actual	*new;
+
+	new = NULL;
+
+	if (!(new = (t_actual *)malloc(sizeof(t_actual))))
+		handle_exit_errors("Malloc returned NULL");
+	ft_memset(new, 0, sizeof(t_actual));
+	if(main->line)
+		new->line = ft_strdup(main->line);
+	new->state = main->state;
+	if (main->hdoc)
+		new->hdoc = clone_hdoc(main->hdoc);
+	return new;
+}
+
 static t_term *copy_input_struct(t_term *current)
 {
 	t_term *head;
 	t_term	*curs;
 	t_term	*tmp;
+	t_actual *clone = NULL;
 
 	if (!(curs = (t_term *)malloc(sizeof(t_term))))
 		handle_exit_errors("malloc returned NULL");
 	head = curs;
 	tmp = head;
 	curs->prev = NULL;
+	clone = NULL;
+	if (current->main)
+		clone = clone_main_line(current->main);
+	curs->main = clone;
 	while (current)
 	{
 		ft_memcpy(curs, current, sizeof(t_term));
@@ -40,8 +62,13 @@ static t_term *copy_input_struct(t_term *current)
 			curs->prev = tmp;
 		if (current->new)
 			curs->new = ft_strdup_size(current->new, current->buf_size);
-		if (current->substr)
-			curs->substr = ft_strdup_size(current->new, current->buf_size);
+		if (current->store) {
+			curs->store = (t_scroll *)malloc(sizeof(t_scroll));
+			curs->store->arr = NULL;
+			curs->store->size = 0;
+		}
+		if (clone)
+			curs->main = clone;
 		current = current->next;
 		if (current)
 		{
@@ -49,6 +76,7 @@ static t_term *copy_input_struct(t_term *current)
 			tmp = curs;
 			curs = curs->next;
 		}
+
 	}
 	return (head);
 }

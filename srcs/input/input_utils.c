@@ -1,9 +1,6 @@
 #include "sh.h"
 
-void ft_putstr_size(char *line, size_t size)
-{
-	write(1, line, size);
-}
+
 
 int key_exit(struct termios old_tty, t_term *pos, __attribute((unused))t_yank *buffer)
 {
@@ -45,22 +42,18 @@ t_term	*create_new_io_struct(void)
 	t_term			*pos;
 	if (!(pos = (t_term *)malloc(sizeof(t_term))))
 		handle_exit_errors("Malloc returned NULL");
-	pos->y = 0;
-	pos->x = 0;
+	bzero(pos, sizeof(t_term));
+	pos->main = NULL;
 	get_coordinates(&pos->y, &pos->x);
-	pos->index = 0;
-	pos->prompt = ft_strlen("shelp$>");
-	pos->x += pos->prompt;
-	pos->state = 0;
-	pos->delta_x = 0;
-	pos->delta_y = 0;
-	pos->buf_size = 0;
-	pos->heredoc = 0;
-	pos->glue = false;
-	pos->new = NULL;
-	pos->next = NULL;
-	pos->substr = NULL;
-	pos->prev = NULL;
+	if (!(pos->store = (t_scroll *)malloc(sizeof(t_scroll))))
+		handle_exit_errors("Malloc returned NULL");
+	bzero(pos->store, sizeof(t_scroll));
+	if (!pos->main)
+	{
+		if (!(pos->main = (t_actual *)malloc(sizeof(t_actual))))
+			handle_exit_errors("Malloc returned NULL");
+		bzero(pos->main, sizeof(t_actual));
+	}
 	return (pos);
 }
 
@@ -72,6 +65,18 @@ char	*ft_strdup_size(char *old, size_t size)
 		handle_exit_errors("Malloc returned NULL");
 	ft_strcpy(new,old);
 	return (new);
+}
+
+t_actual	*create_main_line(void)
+{
+	t_actual	*new;
+
+	if (!(new = (t_actual *)malloc(sizeof(t_actual))))
+		handle_exit_errors("Malloc returned NULL");
+	new->hdoc = NULL;
+	new->line = NULL;
+	new->state = 0;
+	return new;
 }
 
 int		putchar_like(int n)
@@ -91,45 +96,4 @@ char	*concat_symbol(char *frst, char *scnd, char c)
 	ft_strcat(new, &c);
 	ft_strcat(new, scnd);
 	return new;
-}
-/*
-char	*glue_lines(t_term *input)
-{
-	t_term *curs;
-	char	*line;
-
-	curs = input;
-	line = NULL;
-	while (curs)
-	{
-		tmp = line;
-
-	}
-}
-*/
-char	*concat_lines(t_term *input)
-{
-	t_term	*curs;
-	char	*line;
-	char	*tmp;
-
-	curs = input;
-	line = NULL;
-	while(curs)
-	{
-		tmp = line;
-		if (!line && curs->new)
-			line = ft_strdup(curs->new);
-		else
-			line = ft_strjoin(line, curs->new);
-		free(tmp);
-		curs = curs->next;
-	}
-	if (line && ft_strlen(line) > 4095)
-	{
-		handle_empty_error("usage: length", "input line too long, must be under 4096\n");
-		set_free_null(&line);
-		return (NULL);
-	}
-	return (line);
 }

@@ -98,6 +98,10 @@ void	ft_free_tab(char ***tab)
 
 	curs = *tab;
 	i = 0;
+	if (!curs)
+		return ;
+	if (!curs[i])
+		return ;
 	while (curs[i])
 	{
 		if (curs[i])
@@ -116,18 +120,57 @@ void set_free_null(char **line)
 		free(*line);
 	*line = NULL;
 }
+void		free_eot_list(t_hdoc **t)
+{
+	t_hdoc	*curs;
+	t_hdoc	*tmp;
 
+	curs = (*t);
+	while (curs)
+	{
+		tmp = curs->next;
+		if (curs->eot)
+			set_free_null(&curs->eot);
+		free(curs);
+		curs = NULL;
+		curs = tmp;
+	}
+	curs = NULL;
+	*t = NULL;
+}
+void	free_main_line(t_actual **main)
+{
+	t_actual *curs;
+
+	curs = *main;
+	if(!(*main))
+		return ;
+	if ((*main)->hdoc)
+		free_eot_list(&(*main)->hdoc);
+	if ((*main)->line)
+		set_free_null(&(*main)->line);
+	(*main)->line = NULL;
+	free(*main);
+	*main = NULL;
+	main = NULL;
+}
 
 void free_input_line(t_term **input)
 {
+	if (!(*input)->next) {
+		free_main_line(&(*input)->main);
+		(*input)->main = NULL;
+	}
 	if (!(*input))
 		return ;
-	if ((*input)->next)
-		free_input_line(&(*input)->next);
 	if ((*input)->new)
 		set_free_null(&(*input)->new);
-	if ((*input)->state == HEREDOC)
-		set_free_null(&(*input)->substr);
+	if ((*input)->store) {
+		free((*input)->store);
+		(*input)->store = NULL;
+	}
+	if ((*input)->next)
+		free_input_line(&(*input)->next);
 	if (*input)
 		free(*input);
 	*input = NULL;

@@ -71,7 +71,7 @@ void	cut_before(t_term *pos, t_yank *buffer)
 	ft_memset(&pos->new[pos->index - curr], 0, curr);
 	pos->index -= (pos->index + pos->delta_x);
 	if (!abs)
-		pos->x = pos->index + pos->prompt;
+		pos->x = pos->index + 7;
 }
 
 void	yank_buffer(t_term *pos, char *line)//overflow multiple pastes + lines

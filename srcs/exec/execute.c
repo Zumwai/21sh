@@ -146,6 +146,8 @@ int			execute(t_cmd *cmd, t_env **env)
 	int ffd;
 	ffd = 1;
 	//int m = 0;
+	if (!cmd->arr)
+		return 1;
 	while (cmd)
 	{
 		//m = 0;
@@ -181,7 +183,7 @@ int			execute(t_cmd *cmd, t_env **env)
 	    //close(fd[0]);
 		if (cmd->type == 2)
 		    read = fd[0];
-		if (wfd != 1)
+		if (wfd != 1 && wfd != 2 && wfd != 0)
 			close(wfd);
 		cmd = cmd->next;
 	}
