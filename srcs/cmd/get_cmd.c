@@ -14,7 +14,7 @@ static char				*get_value(char *name, t_env **env)
 	return res;
 }
 
-static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env)
+static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.вынуть переменную среды
 {
 	char			tmp[246];
 	int				u;
@@ -30,6 +30,8 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env)
 		u++;
 	}
 	tmp[u] = '\0';
+	if (t[*i] == '"')
+	    *i = *i + 1;
 	t_tmp = get_value(tmp, env);
 	if (t_tmp)
 	{
@@ -43,6 +45,42 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env)
 	}
 	if (t_tmp)
 		set_free_null(&t_tmp);
+}
+
+char                    **fill_res(char *s, int i, char **res)
+{
+    int l;
+
+    l = ft_strlen(s) - i;
+    res[0] = ft_strsub(s, 0, i);
+    res[1] = ft_strsub(s, i + 1, l);
+    return (res);
+}
+
+char                    **save_the_spaces(char *s)
+{
+    char    **res;
+    int i;
+
+    i = 0;
+    res = ft_strsplit(s, ' ');
+    if (ft_strcmp("echo", res[0]) != 0)
+        return (res);
+    if (ft_strcmp("echo", res[0]) == 0)
+    {
+        ft_strsplit_free(&res);
+        while (s[i] && s[i] != ' ')
+        {
+            i++;
+            if (s[i] == ' ')
+            {
+                res = (char **)malloc(sizeof(char *) * 3);
+                res = fill_res(s, i, res);
+                break ;
+            }
+        }
+    }
+    return (res);
 }
 
 static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
@@ -100,7 +138,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
             get_env_val(buf, &j, t->data, &i, env);
 	}
 	buf[j] = '\0';
-	c->arr = ft_strsplit(buf, ' ');
+	c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
 	return (c);
 }
 
