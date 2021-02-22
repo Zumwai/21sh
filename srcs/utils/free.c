@@ -163,14 +163,14 @@ void free_input_line(t_term **input)
 	}
 	if (!(*input))
 		return ;
-	if ((*input)->next)
-		free_input_line(&(*input)->next);
 	if ((*input)->new)
 		set_free_null(&(*input)->new);
 	if ((*input)->store) {
 		free((*input)->store);
 		(*input)->store = NULL;
 	}
+	if ((*input)->next)
+		free_input_line(&(*input)->next);
 	if (*input)
 		free(*input);
 	*input = NULL;
