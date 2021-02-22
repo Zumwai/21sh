@@ -56,7 +56,6 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	pid_t		pid;
 	char		**environ;
 
-	printf("fd === %d\n", read);
 	environ = convert_env_array(env);
 	if ((pid = fork()) == 0)
 	{
@@ -146,8 +145,12 @@ int			execute(t_cmd *cmd, t_env **env)
 	builtin = NULL;
 	int ffd;
 	ffd = 1;
+	//int m = 0;
 	while (cmd)
 	{
+		//m = 0;
+		//while (cmd->arr[m])
+			//ft_putendl(cmd->arr[m++]);
 	    pipe(fd);
 	    if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8)
 	        wfd = get_fd_write(cmd);
