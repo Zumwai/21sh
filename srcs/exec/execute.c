@@ -145,8 +145,12 @@ int			execute(t_cmd *cmd, t_env **env)
 	builtin = NULL;
 	int ffd;
 	ffd = 1;
+	//int m = 0;
 	while (cmd)
 	{
+		//m = 0;
+		//while (cmd->arr[m])
+			//ft_putendl(cmd->arr[m++]);
 	    pipe(fd);
 	    if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8)
 	        wfd = get_fd_write(cmd);
@@ -177,7 +181,8 @@ int			execute(t_cmd *cmd, t_env **env)
 	    //close(fd[0]);
 		if (cmd->type == 2)
 		    read = fd[0];
-		close(wfd);
+		if (wfd != 1)
+			close(wfd);
 		cmd = cmd->next;
 	}
 	return (res);

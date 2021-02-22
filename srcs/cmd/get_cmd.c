@@ -43,7 +43,7 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.в
 			u++;
 		}
 	}
-	//printf("%d == index", *j); /// eksperiment
+	*i = *i - 1;
 	if (t_tmp)
 		set_free_null(&t_tmp);
 }
@@ -54,33 +54,33 @@ char                    **fill_res(char *s, int i, char **res)
 
     l = ft_strlen(s) - i;
     res[0] = ft_strsub(s, 0, i);
-    res[1] = ft_strsub(s, i + 1, l);
+    if (l != 0)
+	{
+    	res[1] = ft_strsub(s, i + 1, l);
+	}
+    else
+    	res[1] = '\0';
+    res[2] = '\0';
     return (res);
 }
 
 char                    **save_the_spaces(char *s)
 {
-    char    **res;
-    int i;
+	char    **res;
+	int i;
 
-    i = 0;
-    res = ft_strsplit(s, ' ');
-    if (ft_strcmp("echo", res[0]) != 0)
-        return (res);
-    if (ft_strcmp("echo", res[0]) == 0)
-    {
-        ft_strsplit_free(&res);
-        while (s[i] && s[i] != ' ')
-        {
-            i++;
-            if (s[i] == ' ')
-            {
-                res = (char **)malloc(sizeof(char *) * 3);
-                res = fill_res(s, i, res);
-                break ;
-            }
-        }
-    }
+	 i = 0;
+	while (s[i] && (s[i] != ' ' || s[i] != '\0'))
+	{
+	    i++;
+	    if (s[i] == ' ' || s[i] == '\0')
+	    {
+	        res = (char **)malloc(sizeof(char *) * 3);
+	        res = fill_res(s, i, res);
+	        break ;
+	    }
+	}
+
     return (res);
 }
 
@@ -97,7 +97,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	q[1] = 0;
 	while (t->data[i])
 	{
-		if (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0)
+		if (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0 && t->data[i])
 			buf[j++] = t->data[i++];
 		if (t->data[i] == 39 && q[1] == 0)
 		{
@@ -121,17 +121,17 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 			i++;
 			while (t->data[i] && t->data[i] != 34)
 			{
+				if (t->data[i] != '$')
+				{
+					buf[j] = t->data[i];
+					i++;
+					j++;
+				}
 				if (t->data[i] == '$' && (t->data[i - 1] && t->data[i - 1] != 92))
 					get_env_val(buf, &j, t->data, &i, env);
-				buf[j] = t->data[i];
-				j++;
-				i++;
 			}
-			if (t->data[i] == 34)
-			{
-				q[1] = 0;
-				i++;
-			}
+			q[1] = 0;
+			i++;
 		}
 		if (t->data[i] == '$' && t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0)
 			get_env_val(buf, &j, t->data, &i, env);
@@ -157,6 +157,7 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 		return NULL;
 	while (cur_t)
 	{
+		///ft_putendl(cur_t->data);
 		cur = get_data_cmd(cur_t, cur, env);
 		if (cur_t->next && cur_t->next->next)
 		{
