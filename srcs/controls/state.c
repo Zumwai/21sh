@@ -80,13 +80,11 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 			c = find_next_char(str, i);
 			if (verify_char_heredoc(c)) { printf("failed verification 1%c\n", c);
 				state |= FAILED;
-				return -1;
 			}
 			else if (c != '\\' && !check_for_zero(str, i)) {
 				state ^= ARG_HDOC;
 				state ^= READ_HDOC;
-				if (!(state & HEREDOC))
-					state ^= HEREDOC;
+				state |= HEREDOC;
 			}
 		}
 		if ((state & READ_HDOC))
@@ -118,8 +116,8 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				state ^= REQ_HDOC;
 			} else if (i == 0 && str[0] != '\\' && str[1]) {
 				state |= FAILED;
-				return -1;
 				printf("failed glue 1\n");
+				return -1;
 			}
 			else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0)
 				return -1;
@@ -143,10 +141,14 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 			state |= REQ_HDOC;
 		}
 		i++;
-	} 
+	}
 	i--;
 	if (!(state & QUOTE) && str[i] == '\\')
 		state ^= (GLUE);
+	if ((state & REQ_HDOC && !(state & GLUE))) {
+		state |= FAILED;
+		return -1;
+	}
 	return state;
 }
 
@@ -249,7 +251,11 @@ int		consult_state(t_term *curs)
 	ret = parse_incoming_subline(curs->new, curs->main->state, &curs->main->hdoc, ft_strlen(curs->main->line));
 	curs->main->state = ret;
 	curs->main->line = append_main_line(curs->main->line, curs->new, ret);
+<<<<<<< HEAD
 	if (!(curs->main->state & FAILED)) 
+=======
+	if (!(curs->main->state & FAILED))
+>>>>>>> refac
 		ret = determine_next_io_step(curs, ret);
 	else {
 		handle_return_error(-1, "syntax error near unexpected token `newline'\n");

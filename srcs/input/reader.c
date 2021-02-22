@@ -40,21 +40,6 @@ static t_term *init_prompt(struct termios *old_tty)
 	return (pos);
 }
 
-void	print_value_into_file(long long key, int x, int y)
-{
-	FILE *fptr = {0};
-	fptr = fopen("input_log", "aw");
-	if (key == '\n') {
-			fprintf(fptr, "%s\n", "--------------------------------");
-	} else {
-		fprintf(fptr, "%lld: key, %d:x, %d:y", key, x, y);
-	if (ft_ischar(key))
-		fprintf(fptr, ";%c - char key", (char)key);
-	fprintf(fptr, "%c", '\n');
-	}
-}
-
-
 static long long	incapsulate_read(void)
 {
 	long long key;
@@ -104,17 +89,13 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 	while (1)
 	{
 			key = incapsulate_read();
-		//	print_value_into_file(key, buffer->current->x, buffer->current->y);
 			red = (read_key(key, buffer->current, old_tty, buffer, env));
 		//	printf("%lld\n", key);
 			if (red == DEFAULT || red == -5 || red == -1)
 				break ;
-				/*
-			if (red == -1 || red == -5) 
-				break ;
-				*/
-			if (red == -2)
+			if (red == -2) {
 				return NULL;
+			}
 			if (red == HIST_UP || red == HIST_D) {
 				int tmp = buffer->current->y;
 				envoke_history(buffer, red);
@@ -137,15 +118,15 @@ char	*handle_input_stream(t_yank *buffer, t_env **env)
 	line =  NULL;
 	buffer->current = get_input(buffer, env);
 	if (buffer->current) {
-		line = concat_lines(buffer->current);
-		//printf("%s - line in handle input\n", line);
+		//line = concat_lines(buffer->current);
+		if (!(buffer->current->main->state & FAILED)) {
+			line = ft_strdup(buffer->current->main->line);
+		}
+		buffer->current->main->state &= ~(FAILED);
 		buffer->history = save_history(buffer);
-		//free_input_line(&buffer->current);
+		free_input_line(&buffer->current);
 		if (buffer->saved)
 			free_input_line(&buffer->saved);
-			/*new version */
-		line = buffer->current->main->line;
 	}
-	//printf("%s\n", line);
 	return (line);
 }
