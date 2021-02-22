@@ -145,12 +145,20 @@ typedef struct s_scroll
 	char	**arr;
 }				t_scroll;
 
+typedef struct s_hdoc {
+	int				cord;
+	bool			used;
+	char			*eot;
+	struct s_hdoc	*next;
+}			t_hdoc;
+
 typedef struct		s_actual
 {
 	char			*line;
 	int				state;
-	char			**heredoc;
+	struct t_hdoc	*hdoc;
 }					t_actual;
+
 typedef struct 		s_term
 {
 	int				x;
@@ -189,6 +197,7 @@ typedef struct s_yank
 	char			*actual;
 }					t_yank;
 
+
 # define	DEFAULT		0
 # define	QUOTE		1<<0
 # define	D_QUOTE		1<<1
@@ -196,6 +205,7 @@ typedef struct s_yank
 # define	REQ_HDOC	1<<3
 # define	HEREDOC		1<<4
 # define	ARG_HDOC	1<<5
+# define	READ_HDOC	1<<6
 /*
 enum				e_state
 {

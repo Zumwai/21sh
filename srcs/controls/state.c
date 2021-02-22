@@ -1,140 +1,7 @@
 #include "sh.h"
-/*
-char	*search_heredoc(t_term *pos, int padd)
-{
-	char	*str;
-	char	*tmp;
-	if (!pos->prev)
-		return NULL;
-	int		len;
-	t_term *curs;
-	curs = pos;
-	str = NULL;
-	while (curs && curs->glue)
-	{
-		len = ft_strlen(curs->new);
-		if (len > 1)
-		{
-			int len2 = 0;
-			if (str)
-				len2 = ft_strlen(str);
-			tmp = ft_strnew(len2 + len + 1);
-			ft_strcpy(tmp, curs->new);
-			if (str)
-				ft_strcat(tmp, str);
-			str = tmp;
-		}
-		curs = curs->prev;
-	}
-	return str;
-}
 
-char	*determine_glue(char *line, t_term *pos, int index)
-{
-	if (line[index - 1] == '\\') {
-		if (pos->prev && pos->prev->glue)
-			pos->glue = MID;
-		else
-			pos->glue = BEG;
-	} else {
-		if (!pos->prev)
-			pos->glue = NONE;
-		else if (pos->prev && pos->prev->glue) {
-			pos->glue = FIN;
-			if (pos->prev->glue == FIN)
-				pos->prev->glue = MID;
-		}
-	}
-	if (pos->glue == FIN)
-	{
-		if (pos->new[0] == '<')
-			return (search_heredoc(pos, 1));
-		else
-			return (search_heredoc(pos, 0));
-	}
-	return NULL;
-}
 
-int		determine_state(char *line, int prev, t_term *pos)
-{
-	size_t	index = 0;
-	int		state;
-
-	state = prev;
-	while (line[index])
-	{
-		if (line[index] == '\'')
-		{
-			if (state == DEFAULT)
-				state = QUOTES;
-			else if (state == QUOTES)
-				state = DEFAULT;
-		}
-		if (line[index] == '\"')
-		{
-			if (state == DEFAULT)
-				state = DOUBLE_QUOTES;
-			else if (state == DOUBLE_QUOTES)
-				state = DEFAULT;
-		}
-		if (line[index] == '<' && line[index + 1] == '<')
-		{
-			if (state == DEFAULT)
-			{
-				pos->heredoc = index + 1;
-				state = HEREDOC;
-				break ;
-			}
-		}
-		index++;
-	}
-
-	return (state);
-}
-
-int		parse_incoming_subline(char *str)
-{
-	int	i = 0;
-	int	doc = 0;
-	int	state = 0;
-
-	while (str[i]) {
-		if (str[i] == '\'')
-			state ^= (QUOTE);
-		if (str[i] == '\"')
-			state ^= (D_QUOTE);
-		if (!state && str[i] == '<')
-			doc++;
-		if (!state && doc == 2) {
-			doc = 0;
-			state |= HEREDOC;
-		i++;
-	}
-	i--;
-	if (str[i] == '\\')
-		state |= (GLUE);
-	if (!(state & QUOTE) && !(state & (D_QUOTE))) {
-		if (state & GLUE)
-			if (i > 0 && str[i - 1] == '<')
-				state |= (REQ_HDOC);
-	}
-	return state;
-}
-*/
-
-char	find_last_char(char *str, int i)
-{
-	if (i < 0)
-		return 0;
-	while (i > 0)
-	{
-		if (str[i] > 32 && str[i] < 127)
-			return str[i];
-		i--;
-	}
-}
-
-char	find_next_char(char *str, int i)
+static char	find_next_char(char *str, int i)
 {
 	if (i < 0)
 		return 0;
@@ -146,13 +13,13 @@ char	find_next_char(char *str, int i)
 	}
 }
 
-int	check_for_zero(char *str, int i)
+static int	check_for_zero(char *str, int i)
 {
 	if (i < 0)
 		return 0;
 	while (str[i])
 	{
-		if (str[i] = '\\') {
+		if (str[i] == '\\') {
 			if (str[ i + 1] == 0)
 				return 1;
 			else
@@ -166,13 +33,33 @@ int	check_for_zero(char *str, int i)
 	return 0;
 }
 
-int		verify_char_heredoc(char c)
+static int		verify_char_heredoc(char c)
 {
 	if (c == '|' || c == '&' || c == ';' || c == '\n' || c == 0 || c == '<' || c == '>')
 		return 1;
 	return 0;
 }
-int		parse_incoming_subline(char *str, int prev)
+
+static int		verify_end_arg(char c, int n, int state)
+{
+	int		i = 0;
+	if (c == '\\' && !n)
+		return 0;
+	if (c != '\\' && !n)
+		return 1;
+	if (c == '\'' || c == '\"') /* TMP solution for heredoc */
+		return 1;
+	if (verify_char_heredoc(c)) {
+		if ((state & GLUE))
+			return 0;
+		return 1;
+	}
+	if (c == ' ')
+		return 0; /* highly in doubts about whether 1 or 0 required */
+	return 0;
+}
+
+static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 {
 	int	i = 0;
 	int	doc = 0;
@@ -180,24 +67,38 @@ int		parse_incoming_subline(char *str, int prev)
 	char	c = 0;
 	int		flag ;
 	state &= ~(GLUE);
-	if (!str[0]) /* placeholer for empy line...for now */
-		return -1;
+	if (!str[0]) { /* placeholer for empy line...for now */
+		if ((state & READ_HDOC))
+			state ^= READ_HDOC;
+		return state;
+	}
 	while (str[i]) {
 		char b = str[i];
 		if ((state & ARG_HDOC))
 		{
 			c = find_next_char(str, i);
-			if (verify_char_heredoc(c))
-				return -1;
+			if (verify_char_heredoc(c)) { printf("failed verification 1%c\n", c);
+				return -1; }
 			else if (c != '\\' && !check_for_zero(str, i)) {
 				state ^= ARG_HDOC;
+				state ^= READ_HDOC;
+				if (!(state & HEREDOC))
+					state ^= HEREDOC;
 			}
+		}
+		if ((state & READ_HDOC))
+		{
+			if ((verify_end_arg(str[i], str[i + 1], state) ||
+				(i == 0 && str[i] != '\\' && !str[i + 1]))) {
+					state ^= READ_HDOC;
+					save_coord_hdoc(del, i, size);
+				}
 		}
 		else if ((state & REQ_HDOC)) {
 			if (str[i] == '<') {
 				c = find_next_char(str, i + 1);
-				if (verify_char_heredoc(c))
-					return -1;
+				if (verify_char_heredoc(c)) { printf("failed verification 2%c\n", c);
+					return -1; }
 				else if (c == '\\' && check_for_zero(str, i + 1)) {
 					state ^= ARG_HDOC;
 					state ^= REQ_HDOC;
@@ -210,8 +111,10 @@ int		parse_incoming_subline(char *str, int prev)
 			} else if (i > 0 && str[i] == '<' && str[i - 1] == '<' && !(state & QUOTE) && !(state & D_QUOTE)) {
 				state ^= ARG_HDOC;
 				state ^= REQ_HDOC;
-			} else if (i == 0 && str[0] != '\\' && str[1])
+			} else if (i == 0 && str[0] != '\\' && str[1]) {
+				printf("failed glue 1\n");
 				return -1;
+			}
 			else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0)
 				return -1;
 		}
@@ -222,11 +125,16 @@ int		parse_incoming_subline(char *str, int prev)
 		else if (!state && str[i] == '<') {
 			doc++;
 			state |= REQ_HDOC;
+		} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) &&!(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && str[i] == '<') {
+			doc++;
+			state |= REQ_HDOC;
 		}
 		else if (!state && doc == 2) {
 			doc = 0;
 			state ^= REQ_HDOC;
-			state |= ARG_HDOC;
+		} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) &&!(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && doc == 2) {
+			doc++;
+			state |= REQ_HDOC;
 		}
 		i++;
 	} 
@@ -236,6 +144,71 @@ int		parse_incoming_subline(char *str, int prev)
 	return state;
 }
 
+
+static char    *append_main_line(char *line, char *sub, int state)
+{
+    char    *new;
+    int     size;
+    int     sub_size;
+
+    sub_size = ft_strlen(sub);
+    size = sub_size + 1;
+    if (line)
+   		size += ft_strlen(line);
+	if ((state & HEREDOC))
+		size++;
+    new = ft_strnew(size);
+    if (line)
+        ft_strcpy(new, line);
+    ft_strcat(new, sub);
+    if ((state & GLUE)) {
+		new[size--] = 0;
+		new[size--] = 0;
+		new[size--] = 0;
+		if ((state & HEREDOC)) {
+			new[size] = 0;
+			new[size] == '\n';
+		}
+	}
+	else if ((state & HEREDOC))
+		new[size - 2] = 10;
+    return new;
+}
+
+static t_term *create_next_io(t_actual **line, int y)
+{
+	t_term *input;
+
+	input = create_new_io_struct();
+	input->y = y;
+	if (*line)
+		input->main = *line;
+	return input;
+}
+
+int		check_hdoc_eot(t_hdoc **head, char *sub)
+{
+
+}
+
+int		determine_next_io_step(t_term *curs, int ret)
+{
+	int		res = 0;
+	if (0 > ret)
+		return -1; /* handle errors */
+	if (0 == ret)
+		return 0; /* check for ending */
+	if ((curs->main->state & HEREDOC)) {
+		update_hdoc_list(&curs->main->hdoc, curs->main->line);
+		res = check_hdoc_eot(&curs->main->hdoc, curs->new);
+		/*cmp for heredoc, change state */
+		curs->next = create_next_io(curs->main, curs->y);
+	}
+	else
+		curs->next = create_next_io(curs->main, curs->y);
+	return 1;
+}
+
 int		consult_state(t_term *curs)
 {
 	int		ret = 0;
@@ -243,9 +216,13 @@ int		consult_state(t_term *curs)
 	if (curs->prev)
 		if (!curs->main)
 			curs->main = create_main_line();
-	ret = parse_incoming_subline(curs->new, curs->main->state);
-	curs->main->line = append_main_line(curs->main->line, curs->new, curs->main->state);
-	curs->main->state = ret;
-	//ret = curs->main->state ^ small;
-	return ret;
+
+	ret = parse_incoming_subline(curs->new, curs->main->state, &curs->main->hdoc, ft_strlen(curs->main->line));
+
+	if (ret >= 0)
+		curs->main->state = ret;
+	curs->main->line = append_main_line(curs->main->line, curs->new, ret);
+
+	//pos->next = create_next_io(pos->y, pos->state);
+	return 
 }

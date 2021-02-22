@@ -17,18 +17,6 @@ typedef struct s_hdoc {
 	struct s_hdoc	*next;
 }			t_hdoc;
 
-char	find_last_char(char *str, int i)
-{
-	if (i < 0)
-		return 0;
-	while (i > 0)
-	{
-		if (str[i] > 32 && str[i] < 127)
-			return str[i];
-		i--;
-	}
-}
-
 char	find_next_char(char *str, int i)
 {
 	if (i < 0)
@@ -98,7 +86,7 @@ t_hdoc	*create_new_hdoc(void)
 	new->next = NULL;
 }
 
-void	save_coord_hdoc(t_hdoc **lst, int i)
+void	save_coord_hdoc(t_hdoc **lst, int i, int size)
 {
 	t_hdoc	*curs;
 
@@ -113,10 +101,10 @@ void	save_coord_hdoc(t_hdoc **lst, int i)
 		curs = create_new_hdoc();
 		*lst = curs;
 	}
-	curs->cord = i;
+	curs->cord = size + i;
 }
 
-int		parse_incoming_subline(char *str, int prev, t_hdoc **del)
+int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 {
 	int	i = 0;
 	int	doc = 0;
@@ -153,7 +141,7 @@ int		parse_incoming_subline(char *str, int prev, t_hdoc **del)
 			if ((verify_end_arg(str[i], str[i + 1], state) ||
 				(i == 0 && str[i] != '\\' && !str[i + 1]))) {
 					state ^= READ_HDOC;
-					save_coord_hdoc(del, i);
+					save_coord_hdoc(del, i, size);
 				}
 		}
 		else if ((state & REQ_HDOC)) {
@@ -270,8 +258,9 @@ char	*grub_eot(char *line, int i)
 		i--;
 		size++;
 	}
-
 	eot = ft_strndup(&line[i + 1], size);
+	if (verify_char_heredoc(eot[size - 1]))
+		eot[size - 1] = 0;
 	return eot;
 }
 
@@ -287,7 +276,6 @@ void	update_hdoc_list(t_hdoc **lst, char *line)
 	while (curs)
 	{
 		if (!curs->eot) {
-			curs->cord += size;
 			curs->eot = grub_eot(line, curs->cord);
 		}
 		curs = curs->next;
@@ -298,7 +286,7 @@ int	main(void)
 {
 	int	state = 0;
 	char		*line = NULL;
-	char	ex[25] = "echo <<abc; echo <<124";
+	char	ex[25] = "<<a";
 	char	ex2[10] = "123";
 	char	ex3[25] = "456";
 	char	ex4[11] = "abc";
@@ -307,7 +295,7 @@ int	main(void)
 
 	printf("~~~~~~~~~~~START~~~~~~~~~~~~~~\n");
 	str = ft_strdup(ex);
-	state = parse_incoming_subline(str, 0, &hdoc);
+	state = parse_incoming_subline(str, 0, &hdoc, 0);
 	line = append_main_line(line, str, state);
 	update_hdoc_list(&hdoc, line);
 	printer(state);
@@ -315,7 +303,7 @@ int	main(void)
 
 	char	*str2;
 	str2 = ft_strdup(ex2);
-	state = parse_incoming_subline(str2, state, &hdoc);
+	state = parse_incoming_subline(str2, state, &hdoc, ft_strlen(line));
 	line = append_main_line(line, str2, state);
 	update_hdoc_list(&hdoc, line);
 	printer(state);
@@ -323,14 +311,14 @@ int	main(void)
 
 	char	*str3;
 	str3 = ft_strdup(ex3);
-	state = parse_incoming_subline(str3, state, &hdoc);
+	state = parse_incoming_subline(str3, state, &hdoc, ft_strlen(line));
 	line = append_main_line(line, str3, state);
 	update_hdoc_list(&hdoc, line);
 	printer(state);
 	printf("\n%s||THIRD!\n", line);
 	char	*str4;
 	str4 = ft_strdup(ex4);
-	state = parse_incoming_subline(str4, state, &hdoc);
+	state = parse_incoming_subline(str4, state, &hdoc, ft_strlen(line));
 	line = append_main_line(line, str4, state);
 	update_hdoc_list(&hdoc, line);
 	printer(state);

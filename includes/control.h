@@ -57,5 +57,8 @@ extern char *builtin_list(int i);
 int		determine_state(char *line, int prev, t_term *pos);
 char	*determine_glue(char *line, t_term *pos, int index);
 t_actual	*create_main_line(void);
-int		consult_state(t_term *curs)
+int		consult_state(t_term *curs);
+void	save_coord_hdoc(t_hdoc **lst, int i, int size);
+void	update_hdoc_list(t_hdoc **lst, char *line);
+
 #endif
