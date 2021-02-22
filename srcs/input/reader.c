@@ -94,6 +94,7 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 			if (red == DEFAULT || red == -5 || red == -1)
 				break ;
 			if (red == -2) {
+						//free_input_line(&buffer->current);
 				return NULL;
 			}
 			if (red == HIST_UP || red == HIST_D) {

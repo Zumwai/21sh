@@ -47,6 +47,7 @@ static t_yank	*init_buffer(void)
 
 	if(!(new = (t_yank *)malloc(sizeof(t_yank))))
 		return (NULL);
+	ft_memset(new, 0, sizeof(t_yank)); /*
 	new->size = 0;
 	new->yanked = 0;
 	new->history = NULL;
@@ -55,7 +56,7 @@ static t_yank	*init_buffer(void)
 	new->hist_ptr = NULL;
 	new->trie = NULL;
 	new->counter = 0;
-	new->sub = NULL;
+	new->sub = NULL; */
 	return (new);
 }
 

@@ -80,11 +80,13 @@ extern t_hdoc *clone_hdoc(t_hdoc *old)
 
     new = create_new_hdoc();
     head = new;
+	new->next = NULL;
     while (old)
     {
         new->cord = old->cord;
         new->used = old->used;
         new->eot = ft_strdup(old->eot);
+		new->next = NULL;
         old = old->next;
         if (old) {
             new->next = create_new_hdoc();

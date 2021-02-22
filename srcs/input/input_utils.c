@@ -43,6 +43,7 @@ t_term	*create_new_io_struct(void)
 	if (!(pos = (t_term *)malloc(sizeof(t_term))))
 		handle_exit_errors("Malloc returned NULL");
 	bzero(pos, sizeof(t_term));
+	pos->main = NULL;
 	get_coordinates(&pos->y, &pos->x);
 	if (!(pos->store = (t_scroll *)malloc(sizeof(t_scroll))))
 		handle_exit_errors("Malloc returned NULL");

@@ -156,6 +156,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 static char    *append_main_line(char *line, char *sub, int state)
 {
     char    *new;
+	char	*tmp = line;
 	int		var = 0;
     int     size;
     int     sub_size;
@@ -178,6 +179,8 @@ static char    *append_main_line(char *line, char *sub, int state)
 	}
 	else if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE))
 		new[size - 1] = 10;
+	if (tmp)
+		free(tmp);
     return new;
 }
 
@@ -251,11 +254,7 @@ int		consult_state(t_term *curs)
 	ret = parse_incoming_subline(curs->new, curs->main->state, &curs->main->hdoc, ft_strlen(curs->main->line));
 	curs->main->state = ret;
 	curs->main->line = append_main_line(curs->main->line, curs->new, ret);
-<<<<<<< HEAD
-	if (!(curs->main->state & FAILED)) 
-=======
 	if (!(curs->main->state & FAILED))
->>>>>>> refac
 		ret = determine_next_io_step(curs, ret);
 	else {
 		handle_return_error(-1, "syntax error near unexpected token `newline'\n");

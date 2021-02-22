@@ -147,7 +147,8 @@ void	free_main_line(t_actual **main)
 		return ;
 	if ((*main)->hdoc)
 		free_eot_list(&(*main)->hdoc);
-	set_free_null(&(*main)->line);
+	if ((*main)->line)
+		set_free_null(&(*main)->line);
 	free(*main);
 	*main = NULL;
 }
@@ -167,8 +168,6 @@ void free_input_line(t_term **input)
 	if ((*input)->main) {
 		free_main_line(&(*input)->main);
 	}
-	//if ((*input)->state == HEREDOC)
-	//	set_free_null(&(*input)->substr);
 	if (*input)
 		free(*input);
 	*input = NULL;

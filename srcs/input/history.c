@@ -30,6 +30,7 @@ t_actual	*clone_main_line(t_actual *main)
 
 	if (!(new = (t_actual *)malloc(sizeof(t_actual))))
 		handle_exit_errors("Malloc returned NULL");
+	ft_memset(new, 0, sizeof(t_actual));
 	if(main->line)
 		new->line = ft_strdup(main->line);
 	new->state = main->state;
@@ -50,8 +51,10 @@ static t_term *copy_input_struct(t_term *current)
 	head = curs;
 	tmp = head;
 	curs->prev = NULL;
+	clone = NULL;
 	if (current->main)
 		clone = clone_main_line(current->main);
+	curs->main = clone;
 	while (current)
 	{
 		ft_memcpy(curs, current, sizeof(t_term));
@@ -64,7 +67,8 @@ static t_term *copy_input_struct(t_term *current)
 			curs->store->arr = NULL;
 			curs->store->size = 0;
 		}
-		curs->main = clone;
+		if (clone)
+			curs->main = clone;
 		current = current->next;
 		if (current)
 		{
