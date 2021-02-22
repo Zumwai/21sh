@@ -79,12 +79,12 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 		{
 			c = find_next_char(str, i);
 			if (verify_char_heredoc(c)) { printf("failed verification 1%c\n", c);
+				state |= FAILED;
 				return -1; }
 			else if (c != '\\' && !check_for_zero(str, i)) {
 				state ^= ARG_HDOC;
 				state ^= READ_HDOC;
-				if (!(state & HEREDOC))
-					state ^= HEREDOC;
+				state |= HEREDOC;
 			}
 		}
 		if ((state & READ_HDOC))
@@ -99,6 +99,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 			if (str[i] == '<') {
 				c = find_next_char(str, i + 1);
 				if (verify_char_heredoc(c)) { printf("failed verification 2%c\n", c);
+					state |= FAILED;
 					return -1; }
 				else if (c == '\\' && check_for_zero(str, i + 1)) {
 					state ^= ARG_HDOC;
@@ -113,6 +114,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				state ^= ARG_HDOC;
 				state ^= REQ_HDOC;
 			} else if (i == 0 && str[0] != '\\' && str[1]) {
+				state |= FAILED;
 				printf("failed glue 1\n");
 				return -1;
 			}
@@ -142,6 +144,10 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 	i--;
 	if (!(state & QUOTE) && str[i] == '\\')
 		state ^= (GLUE);
+	if ((state & REQ_HDOC && !(state & GLUE))) {
+		state |= FAILED;
+		return -1;
+	}
 	return state;
 }
 
@@ -248,10 +254,9 @@ int		consult_state(t_term *curs)
 		if (!curs->main)
 			curs->main = create_main_line();
 	ret = parse_incoming_subline(curs->new, curs->main->state, &curs->main->hdoc, ft_strlen(curs->main->line));
-	if (ret >= 0)
-		curs->main->state = ret;
+	curs->main->state = ret;
 	curs->main->line = append_main_line(curs->main->line, curs->new, ret);
-	if (ret >= 0)
+	if (!(curs->main->state & FAILED))
 		ret = determine_next_io_step(curs, ret);
 	//pos->next = create_next_io(pos->y, pos->state);
 	if (ret == -1)

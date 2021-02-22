@@ -120,7 +120,37 @@ void set_free_null(char **line)
 		free(*line);
 	*line = NULL;
 }
+void		free_eot_list(t_hdoc **t)
+{
+	t_hdoc	*curs;
+	t_hdoc	*tmp;
 
+	curs = (*t);
+	while (curs)
+	{
+		tmp = curs->next;
+		if (curs->eot)
+			set_free_null(&curs->eot);
+		free(curs);
+		curs = NULL;
+		curs = tmp;
+	}
+	curs = NULL;
+	*t = NULL;
+}
+void	free_main_line(t_actual **main)
+{
+	t_actual *curs;
+
+	curs = *main;
+	if(!(*main))
+		return ;
+	if ((*main)->hdoc)
+		free_eot_list(&(*main)->hdoc);
+	set_free_null(&(*main)->line);
+	free(*main);
+	*main = NULL;
+}
 
 void free_input_line(t_term **input)
 {
@@ -133,6 +163,9 @@ void free_input_line(t_term **input)
 	if ((*input)->store) {
 		free((*input)->store);
 		(*input)->store = NULL;
+	}
+	if ((*input)->main) {
+		free_main_line(&(*input)->main);
 	}
 	//if ((*input)->state == HEREDOC)
 	//	set_free_null(&(*input)->substr);
