@@ -11,6 +11,7 @@ static char	find_next_char(char *str, int i)
 			return str[i];
 		i++;
 	}
+	return 0;
 }
 
 static int	check_for_zero(char *str, int i)
@@ -33,7 +34,7 @@ static int	check_for_zero(char *str, int i)
 	return 0;
 }
 
-static int		verify_char_heredoc(char c)
+int		verify_char_heredoc(char c)
 {
 	if (c == '|' || c == '&' || c == ';' || c == '\n' || c == 0 || c == '<' || c == '>')
 		return 1;
@@ -55,7 +56,7 @@ static int		verify_end_arg(char c, int n, int state)
 		return 1;
 	}
 	if (c == ' ')
-		return 0; /* highly in doubts about whether 1 or 0 required */
+		return 1; /* highly in doubts about whether 1 or 0 required */
 	return 0;
 }
 
@@ -148,9 +149,12 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 static char    *append_main_line(char *line, char *sub, int state)
 {
     char    *new;
+	int		var = 0;
     int     size;
     int     sub_size;
 
+	if ((state & HEREDOC))
+		var++;
     sub_size = ft_strlen(sub);
     size = sub_size + 1;
     if (line)
@@ -167,11 +171,12 @@ static char    *append_main_line(char *line, char *sub, int state)
 		new[size--] = 0;
 		if ((state & HEREDOC)) {
 			new[size] = 0;
-			new[size] == '\n';
+			new[size] = '\n';
 		}
 	}
-	else if ((state & HEREDOC))
-		new[size - 2] = 10;
+	else if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE))
+		new[size - 1 - var] = 10;
+	
     return new;
 }
 
@@ -188,12 +193,32 @@ static t_term *create_next_io(t_actual **line, int y)
 
 int		check_hdoc_eot(t_hdoc **head, char *sub)
 {
+	t_hdoc	*curs;
 
+	curs = *head;
+	if (!curs)
+		return 1; /*probably will never happen*/
+	while (curs)
+	{
+		if (curs->used == false)
+		{
+			if (ft_strequ(sub, curs->eot))
+			{
+				curs->used = true;
+				if (!curs->next)
+					return 0;
+				return 1;
+			}
+			break ;
+		}
+		curs = curs->next;
+	}
+	return 1;
 }
 
 int		determine_next_io_step(t_term *curs, int ret)
 {
-	int		res = 0;
+	int		res = 1;
 	if (0 > ret)
 		return -1; /* handle errors */
 	if (0 == ret)
@@ -201,12 +226,16 @@ int		determine_next_io_step(t_term *curs, int ret)
 	if ((curs->main->state & HEREDOC)) {
 		update_hdoc_list(&curs->main->hdoc, curs->main->line);
 		res = check_hdoc_eot(&curs->main->hdoc, curs->new);
-		/*cmp for heredoc, change state */
-		curs->next = create_next_io(curs->main, curs->y);
+		if (res) {
+			curs->next = create_next_io(&curs->main, curs->y);
+			curs->next->prev = curs;
+		}
 	}
-	else
-		curs->next = create_next_io(curs->main, curs->y);
-	return 1;
+	else {
+		curs->next = create_next_io(&curs->main, curs->y);
+		curs->next->prev = curs;
+	}
+	return res;
 }
 
 int		consult_state(t_term *curs)
@@ -216,13 +245,14 @@ int		consult_state(t_term *curs)
 	if (curs->prev)
 		if (!curs->main)
 			curs->main = create_main_line();
-
 	ret = parse_incoming_subline(curs->new, curs->main->state, &curs->main->hdoc, ft_strlen(curs->main->line));
-
 	if (ret >= 0)
 		curs->main->state = ret;
 	curs->main->line = append_main_line(curs->main->line, curs->new, ret);
-
+	if (ret >= 0)
+		ret = determine_next_io_step(curs, ret);
 	//pos->next = create_next_io(pos->y, pos->state);
-	return 
+	if (ret == 0)
+		ft_putchar_fd('\n', 1);
+	return ret;
 }

@@ -109,7 +109,7 @@ static void	handle_last_line(t_term *pos, int rows, int cols, int rem, int print
 	pos->delta_y++;
 }
 
-char	**append_arr(t_term *pos, char *line, int len)
+void	append_arr(t_term *pos, char *line, int len)
 {
 	char	**new;
 

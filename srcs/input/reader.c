@@ -95,6 +95,7 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 	ft_bzero(&old_tty, sizeof(struct termios));
 	pos = init_prompt(&old_tty);
 	ft_putstr_size("shelp$>", 7);
+	pos->x += 7;
 //	head = pos;
 	key = 0;
 	red = 0;
@@ -106,8 +107,12 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 		//	print_value_into_file(key, buffer->current->x, buffer->current->y);
 			red = (read_key(key, buffer->current, old_tty, buffer, env));
 		//	printf("%lld\n", key);
+			if (red == DEFAULT || red == -5 || red == -1)
+				break ;
+				/*
 			if (red == -1 || red == -5) 
 				break ;
+				*/
 			if (red == -2)
 				return NULL;
 			if (red == HIST_UP || red == HIST_D) {
@@ -133,9 +138,11 @@ char	*handle_input_stream(t_yank *buffer, t_env **env)
 		line = concat_lines(buffer->current);
 		//printf("%s - line in handle input\n", line);
 		buffer->history = save_history(buffer);
-		free_input_line(&buffer->current);
+		//free_input_line(&buffer->current);
 		if (buffer->saved)
 			free_input_line(&buffer->saved);
+			/*new version */
+		line = buffer->current->main->line;
 	}
 	//printf("%s\n", line);
 	return (line);

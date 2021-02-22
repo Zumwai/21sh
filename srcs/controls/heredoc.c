@@ -5,11 +5,12 @@ static t_hdoc	*create_new_hdoc(void)
 	t_hdoc	*new;
 
 	if (!(new = (t_hdoc *)malloc(sizeof(t_hdoc))))
-		exit(1);
+		handle_exit_errors("Malloc returned NULL");
 	new->cord = -1;
 	new->eot = NULL;
     new->used = false;
 	new->next = NULL;
+    return new;
 }
 
 extern void	save_coord_hdoc(t_hdoc **lst, int i, int size)
@@ -35,9 +36,12 @@ static char	*grub_eot(char *line, int i)
 	char	*eot= NULL;
 	int		size = 0;
 
+	while(line[i] == ' ') {
+		i--;
+	}
 	while (i > 0)
 	{
-		if (line[i] == '<')
+		if (line[i] == '<' || line[i] == ' ')
 			break ;
 		i--;
 		size++;
@@ -64,4 +68,25 @@ extern void	update_hdoc_list(t_hdoc **lst, char *line)
 		}
 		curs = curs->next;
 	}
+}
+
+extern t_hdoc *clone_hdoc(t_hdoc *old)
+{
+    t_hdoc *new;
+    t_hdoc *head;
+
+    new = create_new_hdoc();
+    head = new;
+    while (old)
+    {
+        new->cord = old->cord;
+        new->used = old->used;
+        new->eot = ft_strdup(old->eot);
+        old = old->next;
+        if (old) {
+            new->next = create_new_hdoc();
+            new = new->next;
+        }
+    }
+    return head;
 }

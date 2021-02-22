@@ -134,8 +134,8 @@ void free_input_line(t_term **input)
 		free((*input)->store);
 		(*input)->store = NULL;
 	}
-	if ((*input)->state == HEREDOC)
-		set_free_null(&(*input)->substr);
+	//if ((*input)->state == HEREDOC)
+	//	set_free_null(&(*input)->substr);
 	if (*input)
 		free(*input);
 	*input = NULL;

@@ -110,7 +110,6 @@ static int	ft_history_down(void)
 	return (HIST_D);
 }
 
-
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env **env)
 {
 	t_term	*curs;
@@ -165,5 +164,5 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env
 			return (ft_history_down());
 	else if (key == TAB)
 		autocomplete(curs, env, buf);
-	return (0);
+	return (1);
 }

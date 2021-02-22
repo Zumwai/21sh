@@ -60,5 +60,6 @@ t_actual	*create_main_line(void);
 int		consult_state(t_term *curs);
 void	save_coord_hdoc(t_hdoc **lst, int i, int size);
 void	update_hdoc_list(t_hdoc **lst, char *line);
-
+int		verify_char_heredoc(char c);
+t_hdoc *clone_hdoc(t_hdoc *old);
 #endif

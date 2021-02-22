@@ -42,16 +42,16 @@ t_term	*create_new_io_struct(void)
 	t_term			*pos;
 	if (!(pos = (t_term *)malloc(sizeof(t_term))))
 		handle_exit_errors("Malloc returned NULL");
-	bzero(&pos, sizeof(t_term));
+	bzero(pos, sizeof(t_term));
 	get_coordinates(&pos->y, &pos->x);
 	if (!(pos->store = (t_scroll *)malloc(sizeof(t_scroll))))
 		handle_exit_errors("Malloc returned NULL");
-	bzero(&pos->store, sizeof(t_scroll));
+	bzero(pos->store, sizeof(t_scroll));
 	if (!pos->main)
 	{
 		if (!(pos->main = (t_actual *)malloc(sizeof(t_actual))))
 			handle_exit_errors("Malloc returned NULL");
-		bzero(&pos->main, sizeof(t_actual));
+		bzero(pos->main, sizeof(t_actual));
 	}
 	return (pos);
 }
@@ -72,9 +72,10 @@ t_actual	*create_main_line(void)
 
 	if (!(new = (t_actual *)malloc(sizeof(t_actual))))
 		handle_exit_errors("Malloc returned NULL");
-	new->heredoc = NULL;
+	new->hdoc = NULL;
 	new->line = NULL;
 	new->state = 0;
+	return new;
 }
 
 int		putchar_like(int n)
