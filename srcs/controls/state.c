@@ -81,7 +81,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 			if (verify_char_heredoc(c)) { printf("failed verification 1%c\n", c);
 				state |= FAILED;
 			}
-			else if (c != '\\' && !check_for_zero(str, i)) {
+			else if (str[i] != ' ' && c != '\\' && !check_for_zero(str, i)) {
 				state ^= ARG_HDOC;
 				state ^= READ_HDOC;
 				state |= HEREDOC;
