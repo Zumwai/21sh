@@ -89,8 +89,10 @@ extern t_hdoc *clone_hdoc(t_hdoc *old)
 		new->next = NULL;
         old = old->next;
         if (old) {
-            new->next = create_new_hdoc();
-            new = new->next;
+			if (old->next) {
+            	new->next = create_new_hdoc();
+            	new = new->next;
+			}
         }
     }
     return head;
