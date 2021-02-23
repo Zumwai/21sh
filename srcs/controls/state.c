@@ -107,12 +107,12 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				else if (c == '\\' && check_for_zero(str, i + 1)) {
 					state ^= ARG_HDOC;
 					state ^= REQ_HDOC;
-				} else {
-					state ^= ARG_HDOC;
+				} else {/*useless ?*/
+					state ^= ARG_HDOC; 
 					state ^= REQ_HDOC;
 				}
 				if (str[1] == 0)
-					return -1;
+					return -1; /* useless? */
 			} else if (i > 0 && str[i] == '<' && str[i - 1] == '<' && !(state & QUOTE) && !(state & D_QUOTE)) {
 				state ^= ARG_HDOC;
 				state ^= REQ_HDOC;
@@ -122,7 +122,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				return -1;
 			}
 			else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0)
-				return -1;
+				return -1; /*useles ?*/
 		}
 		else if (str[i] == '\'' && !(state & D_QUOTE))
 			state ^= (QUOTE);
@@ -138,8 +138,8 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 		else if (!state && doc == 2) {
 			doc = 0;
 			state ^= REQ_HDOC;
-		} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) &&!(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && doc == 2) {
-			doc++;
+		} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) && !(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && doc == 2) {
+			doc++; /* probably an error? even if its going to happen, it will cause an error */
 			state |= REQ_HDOC;
 		}
 		i++;
@@ -254,6 +254,7 @@ int		consult_state(t_term *curs)
 		if (!curs->main)
 			curs->main = create_main_line();
 	ret = parse_incoming_subline(curs->new, curs->main->state, &curs->main->hdoc, ft_strlen(curs->main->line));
+	curs->main->state_before = curs->main->state;
 	curs->main->state = ret;
 	curs->main->line = append_main_line(curs->main->line, curs->new, ret);
 	if (!(curs->main->state & FAILED))

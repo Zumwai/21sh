@@ -157,6 +157,7 @@ typedef struct		s_actual
 {
 	char			*line;
 	int				state;
+	int				state_before;
 	struct s_hdoc	*hdoc;
 }					t_actual;
 

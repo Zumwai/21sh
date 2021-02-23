@@ -31,14 +31,27 @@ t_actual	*clone_main_line(t_actual *main)
 	if (!(new = (t_actual *)malloc(sizeof(t_actual))))
 		handle_exit_errors("Malloc returned NULL");
 	ft_memset(new, 0, sizeof(t_actual));
+	new->line = NULL;
 	if(main->line)
 		new->line = ft_strdup(main->line);
-	new->state = main->state;
+	new->state = main->state_before;
+	new->state_before = main->state_before;
 	if (main->hdoc)
 		new->hdoc = clone_hdoc(main->hdoc);
 	return new;
 }
 
+void	cut_last_suffix(int len, t_actual *main)
+{
+	int	m_len;
+	m_len = ft_strlen(main->line);
+
+	while (len > 0)
+	{
+		main->line[m_len - len] = 0;
+		len--;
+	}
+}
 static t_term *copy_input_struct(t_term *current)
 {
 	t_term *head;
@@ -78,6 +91,7 @@ static t_term *copy_input_struct(t_term *current)
 		}
 
 	}
+	cut_last_suffix(ft_strlen(curs->new), curs->main);
 	return (head);
 }
 
