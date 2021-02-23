@@ -157,12 +157,12 @@ void	free_main_line(t_actual **main)
 
 void free_input_line(t_term **input)
 {
+	if (!(*input))
+		return ;
 	if (!(*input)->next) {
 		free_main_line(&(*input)->main);
 		(*input)->main = NULL;
 	}
-	if (!(*input))
-		return ;
 	if ((*input)->new)
 		set_free_null(&(*input)->new);
 	if ((*input)->store) {
@@ -171,8 +171,7 @@ void free_input_line(t_term **input)
 	}
 	if ((*input)->next)
 		free_input_line(&(*input)->next);
-	if (*input)
-		free(*input);
+	free(*input);
 	*input = NULL;
 }
 

@@ -68,9 +68,11 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 	char	c = 0;
 	int		flag ;
 	state &= ~(GLUE);
-	if (!str[0]) { /* placeholer for empy line...for now */
-		if ((state & READ_HDOC))
+	if (!str[0]) {
+		if ((state & READ_HDOC)) {
 			state ^= READ_HDOC;
+			save_coord_hdoc(del, i, size);
+		}
 		return state;
 	}
 	while (str[i]) {
