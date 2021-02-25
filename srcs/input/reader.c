@@ -36,7 +36,7 @@ static t_term *init_prompt(struct termios *old_tty)
 	tty.c_cc[VMIN] = 1;
 	tty.c_cc[VTIME] = 1;
 	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
-	pos = create_new_io_struct();
+	pos = create_new_io_struct(NULL);
 	return (pos);
 }
 
@@ -94,8 +94,9 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 			if (red == DEFAULT || red == -5 || red == -1)
 				break ;
 			if (red == -2) {
+				free_input_line(&buffer->current);
 						//free_input_line(&buffer->current);
-				return NULL;
+				break ;
 			}
 			if (red == HIST_UP || red == HIST_D) {
 				int tmp = buffer->current->y;

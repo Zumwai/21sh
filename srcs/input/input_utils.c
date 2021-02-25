@@ -7,7 +7,7 @@ int key_exit(struct termios old_tty, t_term *pos, __attribute((unused))t_yank *b
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
 //	if (pos->new)
 //		set_free_null(pos->new);
-	free_input_line(&pos);
+	//free_input_line(&pos);
 //	free(pos->new);
 //	pos->new = NULL;
 //	set_free_all(NULL, buffer);
@@ -37,7 +37,7 @@ static void get_coordinates(int *start_y, int *start_x)
 	*start_x = 0;
 }
 
-t_term	*create_new_io_struct(void)
+t_term	*create_new_io_struct(t_actual **head)
 {
 	t_term			*pos;
 	if (!(pos = (t_term *)malloc(sizeof(t_term))))
@@ -48,11 +48,14 @@ t_term	*create_new_io_struct(void)
 	if (!(pos->store = (t_scroll *)malloc(sizeof(t_scroll))))
 		handle_exit_errors("Malloc returned NULL");
 	bzero(pos->store, sizeof(t_scroll));
-	if (!pos->main)
+	if (!head)
 	{
 		if (!(pos->main = (t_actual *)malloc(sizeof(t_actual))))
 			handle_exit_errors("Malloc returned NULL");
 		bzero(pos->main, sizeof(t_actual));
+	}
+	else {
+		pos->main = *head;
 	}
 	return (pos);
 }

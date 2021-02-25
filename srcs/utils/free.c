@@ -159,8 +159,10 @@ void free_input_line(t_term **input)
 {
 	if (!(*input))
 		return ;
-	if (!(*input)->next) {
+	if (!(*input)->prev) {
 		free_main_line(&(*input)->main);
+		(*input)->main = NULL;
+	} else {
 		(*input)->main = NULL;
 	}
 	if ((*input)->new)
@@ -171,7 +173,8 @@ void free_input_line(t_term **input)
 	}
 	if ((*input)->next)
 		free_input_line(&(*input)->next);
-	free(*input);
+	if (*input)
+		free(*input);
 	*input = NULL;
 }
 

@@ -197,7 +197,7 @@ static t_term *create_next_io(t_actual **line, int y)
 {
 	t_term *input;
 
-	input = create_new_io_struct();
+	input = create_new_io_struct(line);
 	input->y = y;
 	if (*line)
 		input->main = *line;
