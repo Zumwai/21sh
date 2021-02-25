@@ -137,6 +137,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 			get_env_val(buf, &j, t->data, &i, env);
 		if(t->data[i] == '$' && j == 0)
 			get_env_val(buf, &j, t->data, &i, env);
+			
 	}
 	buf[j] = '\0';
 	c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
