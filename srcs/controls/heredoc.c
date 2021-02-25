@@ -88,12 +88,46 @@ extern t_hdoc *clone_hdoc(t_hdoc *old)
         new->eot = ft_strdup(old->eot);
 		new->next = NULL;
         old = old->next;
+		if (old) {
+			new->next = create_new_hdoc();
+			new = new->next;
+		}
+		/*
         if (old) {
 			if (old->next) {
             	new->next = create_new_hdoc();
             	new = new->next;
 			}
         }
+		*/
     }
+	new->used = false;
     return head;
 }
+
+/*
+extern t_hdoc *clone_hdoc(t_hdoc *old)
+{
+	t_hdoc *new = NULL;
+	t_hdoc *head = NULL;
+
+	while (old)
+	{
+		if (old->next){
+			if (!new)
+			{
+				new = create_new_hdoc();
+				head = new;
+			} else {
+				new->next = create_new_hdoc();
+				new = new->next;
+			}
+			new->cord = old->cord;
+			new->used = old->used;
+			new->eot = ft_strdup(old->eot);
+		}
+		old = old->next;
+	}
+	return head;
+}
+*/

@@ -102,7 +102,8 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				c = find_next_char(str, i + 1);
 				if (verify_char_heredoc(c)) { printf("failed verification 2%c\n", c);
 					state |= FAILED;
-					return -1;
+					break ;
+					//return -1;
 				}
 				else if (c == '\\' && check_for_zero(str, i + 1)) {
 					state ^= ARG_HDOC;
@@ -111,18 +112,24 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 					state ^= ARG_HDOC; 
 					state ^= REQ_HDOC;
 				}
-				if (str[1] == 0)
-					return -1; /* useless? */
+				if (str[1] == 0) {
+					printf("failed sudden end of the line\n");
+					state |= FAILED;
+					break; /* useless? */
+				}
 			} else if (i > 0 && str[i] == '<' && str[i - 1] == '<' && !(state & QUOTE) && !(state & D_QUOTE)) {
 				state ^= ARG_HDOC;
 				state ^= REQ_HDOC;
 			} else if (i == 0 && str[0] != '\\' && str[1]) {
 				state |= FAILED;
 				printf("failed glue 1\n");
-				return -1;
+				break ;
 			}
-			else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0)
-				return -1; /*useles ?*/
+			else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0) {
+				printf("failed glue 2\n");
+				state |= FAILED;
+				break ; /*useles ?*/
+			}
 		}
 		else if (str[i] == '\'' && !(state & D_QUOTE))
 			state ^= (QUOTE);
@@ -146,10 +153,10 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 	}
 	i--;
 	if (!(state & QUOTE) && str[i] == '\\')
-		state ^= (GLUE);
+		state |= (GLUE);
 	if ((state & REQ_HDOC && !(state & GLUE))) {
+		printf("failed glue 3\n");
 		state |= FAILED;
-		return -1;
 	}
 	return state;
 }
@@ -225,9 +232,9 @@ int		check_hdoc_eot(t_hdoc **head, char *sub)
 int		determine_next_io_step(t_term *curs, int ret)
 {
 	int		res = 1;
-	if (0 > ret)
+	if (curs->main->state & (FAILED))
 		return -1; /* handle errors */
-	if (0 == ret)
+	if (!curs->main->state)
 		return 0; /* check for ending */
 	if ((curs->main->state & HEREDOC)) {
 		res = update_hdoc_list(&curs->main->hdoc, curs->main->line);
@@ -250,17 +257,17 @@ int		consult_state(t_term *curs)
 {
 	int		ret = 0;
 	int		small = 0;
-	if (curs->prev)
+	if (curs->prev) /* just to be safe */
 		if (!curs->main)
 			curs->main = create_main_line();
 	ret = parse_incoming_subline(curs->new, curs->main->state, &curs->main->hdoc, ft_strlen(curs->main->line));
 	curs->main->state_before = curs->main->state;
 	curs->main->state = ret;
-	curs->main->line = append_main_line(curs->main->line, curs->new, ret);
+	curs->main->line = append_main_line(curs->main->line, curs->new, curs->main->state);
 	if (!(curs->main->state & FAILED))
 		ret = determine_next_io_step(curs, ret);
 	else {
-		handle_return_error(-1, "syntax error near unexpected token `newline'\n");
+		return (handle_return_error(-1, "syntax error near unexpected token `newline'\n"));
 	}
 	if (ret == 0)
 		ft_putchar_fd('\n', 1);

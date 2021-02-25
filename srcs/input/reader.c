@@ -112,18 +112,18 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 	return (buffer->current);
 }
 
-char	*handle_input_stream(t_yank *buffer, t_env **env)
+char	*handle_input_stream(t_yank *buffer, t_env **env, int *fail)
 {
 	char	*line;
 
 	line =  NULL;
 	buffer->current = get_input(buffer, env);
 	if (buffer->current) {
-		//line = concat_lines(buffer->current);
-		if (!(buffer->current->main->state & FAILED)) {
-			line = ft_strdup(buffer->current->main->line);
+		if ((buffer->current->main->state & FAILED)) {
+			(*fail) |= (FAILED);
 		}
-		buffer->current->main->state &= ~(FAILED);
+		line = ft_strdup(buffer->current->main->line);
+		//buffer->current->main->state &= ~(FAILED);
 		buffer->history = save_history(buffer);
 		free_input_line(&buffer->current);
 		if (buffer->saved)
