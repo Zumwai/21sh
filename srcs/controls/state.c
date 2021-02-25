@@ -48,8 +48,8 @@ static int		verify_end_arg(char c, int n, int state)
 		return 0;
 	if (c != '\\' && !n)
 		return 1;
-	if (c == '\'' || c == '\"') /* TMP solution for heredoc */
-		return 1;
+	if (c == '\'' || c == '\"') /* TMP solution for heredoc, probably not enough */
+		return 0;
 	if (verify_char_heredoc(c)) {
 		if ((state & GLUE))
 			return 0;
@@ -89,7 +89,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				state |= HEREDOC;
 			}
 		}
-		if ((state & READ_HDOC))
+		else if ((state & READ_HDOC))
 		{
 			if ((verify_end_arg(str[i], str[i + 1], state) ||
 				(i == 0 && str[i] != '\\' && !str[i + 1]))) {
@@ -98,7 +98,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				}
 		}
 		else if ((state & REQ_HDOC)) {
-			if (str[i] == '<') {
+			if (str[i] == '<') { /* dont need to check it here, useless and harmful */
 				c = find_next_char(str, i + 1);
 				if (verify_char_heredoc(c)) { printf("failed verification 2%c\n", c);
 					state |= FAILED;
@@ -130,6 +130,8 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				state |= FAILED;
 				break ; /*useles ?*/
 			}
+			else
+				state ^= REQ_HDOC;
 		}
 		else if (str[i] == '\'' && !(state & D_QUOTE))
 			state ^= (QUOTE);
@@ -146,8 +148,8 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 			doc = 0;
 			state ^= REQ_HDOC;
 		} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) && !(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && doc == 2) {
-			doc++; /* probably an error? even if its going to happen, it will cause an error */
-			state |= REQ_HDOC;
+			doc = 0; /* probably an error? even if its going to happen, it will cause an error */
+			//state |= REQ_HDOC;
 		}
 		i++;
 	}

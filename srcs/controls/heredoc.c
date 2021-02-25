@@ -31,11 +31,33 @@ extern void	save_coord_hdoc(t_hdoc **lst, int i, int size)
 	curs->cord = size + i;
 }
 
+static	char *trim_inword(char *line, int size, int count)
+{
+	char	*ret = NULL;
+	int		i = 0;
+	int		j = 0;
+	if (count)
+	{
+		ret = ft_strnew(size - count);
+		while (line[i])
+		{
+			if (line[i] != '\'' || line[i] != '\"') {
+				ret[j] = line[i];
+				j++;
+			}
+			i++;
+		}
+		free(line);
+		return ret;
+	}
+	return line;
+}
 static char	*grub_eot(char *line, int i)
 {
 	char	*eot= NULL;
+	int		count = 0;
 	int		size = 0;
-
+	char	*eot2 = NULL;
 	while(line[i] == ' ') {
 		i--;
 	}
@@ -43,12 +65,16 @@ static char	*grub_eot(char *line, int i)
 	{
 		if (line[i] == '<' || line[i] == ' ')
 			break ;
+		if (line[i] == '\'' || line[i] == '\"')
+			count++;
 		i--;
 		size++;
 	}
 	eot = ft_strndup(&line[i + 1], size);
 	if (verify_char_heredoc(eot[size - 1]))
 		eot[size - 1] = 0;
+	if (count)
+		eot = trim_inword(eot, size, count);
 	return eot;
 }
 
