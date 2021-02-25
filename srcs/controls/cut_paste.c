@@ -72,6 +72,8 @@ void	cut_before(t_term *pos, t_yank *buffer)
 	pos->index -= (pos->index + pos->delta_x);
 	if (!abs && !pos->prev)
 		pos->x = pos->index + 7;
+	else
+		pos->x = 0;
 }
 
 void	yank_buffer(t_term *pos, char *line)//overflow multiple pastes + lines
