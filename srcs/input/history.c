@@ -49,8 +49,8 @@ void	cut_last_suffix(char *new, t_actual *main)
 	m_len = ft_strlen(main->line);
 	s_len = ft_strlen(new);
 
-	if (m_len > s_len) /* simple check for multiline */
-		s_len++;
+	//if (m_len > s_len) /* simple check for multiline */
+		//s_len++;
 	if (m_len == 0) /* case for handling envoking line from history */
 		return ;
 	while (s_len > 0)
@@ -141,10 +141,10 @@ t_history	*save_history(t_yank *buffer)
 	t_history	*temp;
 
 	temp = buffer->history;
-	if (!buffer->current || !buffer->current->new || buffer->current->new[0] == 0)
+	if (!buffer->current || !buffer->current->main || buffer->current->main->line[0] == 0)
 		return (temp);
 	if (buffer->history)
-		if (!ft_strcmp(buffer->current->new, buffer->history->line->new))
+		if (!ft_strcmp(buffer->current->main->line, buffer->history->line->main->line))
 			return (temp);
 	temp = push_history(&(temp), &buffer->hist_ptr);
 	temp->line = copy_input_struct(buffer->current, DEFAULT);
