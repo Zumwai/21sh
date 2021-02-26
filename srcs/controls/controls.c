@@ -7,6 +7,7 @@ static void	ft_clear(t_term *pos)
 		pos->y = 1;
 }
 
+/*
 static char	*get_heredoc_ptr(int heredoc, char *new, int index)
 {
 	char	*substr = NULL;
@@ -18,23 +19,39 @@ static char	*get_heredoc_ptr(int heredoc, char *new, int index)
 	return (substr); 
 }
 
+
+static t_term *create_next_io(int y, int state)
+{
+	t_term *input;
+
+	input = create_new_io_struct();
+	input->y = y;
+	input->new = NULL;
+	input->x = 0;
+	input->delta_x = 0;
+	input->prompt = 0;
+	input->state = state;
+	return input;
+}
+
 static int		consult_state(__attribute((unused))long long key, __attribute((unused))t_term *pos)
 {
-	pos->state = determine_state(pos->new, pos->state, pos);
+	char *glued = NULL;
+	glued = determine_glue(pos->new, pos, ft_strlen(pos->new));
+	if (!glued && !pos->glue)
+		pos->state = determine_state(pos->new, pos->state, pos);
 	if (pos->state == DEFAULT)
 	{
 		ft_putchar_fd('\n', STDIN_FILENO);
-		return (-1);
+		if (!pos->glue || pos->glue == FIN)
+			return (-1);
+		pos->next = create_next_io(pos->y, pos->state);
+		pos->next->prev = pos;
+		return 0;
 	}
 	else if (pos->state == QUOTES || pos->state == DOUBLE_QUOTES || pos->state == HEREDOC)
 	{
-		pos->next = create_new_io_struct();
-		pos->next->y = pos->y;
-		pos->next->new = NULL;
-		pos->next->x = 0;
-		pos->next->delta_x = 0;
-		pos->next->prompt = 0;
-		pos->next->state = pos->state;
+		pos->next = create_next_io(pos->y, pos->state);
 		pos->next->prev = pos;
 		if (pos->state == HEREDOC)
 		{
@@ -44,7 +61,7 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 				return (handle_return_error(-1, "syntax error near unexpected token `newline"));
 		}
 	}
-	else if (pos->state == POST_DOC)
+	else if (pos->state == POST_DOC || !pos->glue)
 	{
 		t_term	*curs;
 		curs = pos;
@@ -54,23 +71,15 @@ static int		consult_state(__attribute((unused))long long key, __attribute((unuse
 			return (-1);
 		else
 		{
-			pos->next = create_new_io_struct();
-			pos->next->y = pos->y;
-			pos->next->new = NULL;
-			pos->next->x = 0;
-			pos->next->delta_x = 0;
-			pos->next->prompt = 0;
-			pos->next->state = pos->state;
+			pos->next = create_next_io(pos->y, pos->state);
 			pos->next->prev = pos;
 			return (1);
 		}
 	}
 	return (1);
 }
-
-/*
-Needs an update for sublines
 */
+
 static void	move_home(t_term *pos)
 {
 	pos->delta_x = -pos->index;
@@ -93,14 +102,13 @@ static t_term *get_last_pos(t_term *pos)
 
 static int	ft_history_up(void)
 {
-	return (-3);
+	return (HIST_UP);
 }
 
 static int	ft_history_down(void)
 {
-	return (-4);
+	return (HIST_D);
 }
-
 
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env **env)
 {
@@ -108,12 +116,14 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env
 	if (key == 27 || (key == 4 && (!pos->new || !pos->new[0])))
 		return (key_exit(old, pos, buf));
 	curs = get_last_pos(pos);
+	if (key == 4 && (!curs->new || !curs->new[0]))
+		return -5;
 	if (!curs->new)
 		curs->new = get_buf_line(&curs->new, &curs->buf_size, 20);
 	if (curs->index + 2 >= curs->buf_size)
 		curs->new = get_buf_line(&curs->new, &curs->buf_size, 20);
-	else if (key == ENTER)
-		return (consult_state(key, curs));
+	if (key == ENTER)
+		return (consult_state(curs));
 	else if (key == BACKSPACE)
 		backspace_char(curs);
 	else if (key == DELETE)
@@ -154,5 +164,5 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env
 			return (ft_history_down());
 	else if (key == TAB)
 		autocomplete(curs, env, buf);
-	return (0);
+	return (1);
 }

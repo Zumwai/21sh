@@ -21,7 +21,7 @@ int	display_id_kid_parent(void)
 	return 1;
 }
 
-int		sh_pwd(void)
+/*int		sh_pwd(void)
 {
 	char	*curr;
 
@@ -32,4 +32,4 @@ int		sh_pwd(void)
 	ft_putchar('\n');
 	free(curr);
 	return (1);
-}
+}*/

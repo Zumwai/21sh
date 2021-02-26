@@ -26,7 +26,9 @@ SRCS =	main.c \
 		input/reader.c \
 		input/history.c \
 		input/input_utils.c \
+		input/concater.c \
 		controls/state.c \
+		controls/heredoc.c \
 		controls/controls.c \
 		controls/arrow_movement.c \
 		controls/edition.c \

@@ -20,6 +20,7 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.в
 	int				u;
 	char			*t_tmp;
 
+	ft_putendl("get val");
 	u = 0;
 	*i = *i + 1;
 	while (t[*i] != ' ' && t[*i] != '/' && t[*i] != 92
@@ -54,34 +55,33 @@ char                    **fill_res(char *s, int i, char **res)
 
     l = ft_strlen(s) - i;
     res[0] = ft_strsub(s, 0, i);
-    res[1] = ft_strsub(s, i + 1, l);
+    if (l != 0)
+	{
+    	res[1] = ft_strsub(s, i + 1, l);
+	}
+    else
+    	res[1] = '\0';
     res[2] = '\0';
     return (res);
 }
 
 char                    **save_the_spaces(char *s)
 {
-    char    **res;
-    int i;
+	char    **res;
+	int i;
 
-    i = 0;
-    res = ft_strsplit(s, ' ');
-    if (ft_strcmp("echo", res[0]) != 0)
-        return (res);
-    if (ft_strcmp("echo", res[0]) == 0)
-    {
-        ft_strsplit_free(&res);
-        while (s[i] && s[i] != ' ')
-        {
-            i++;
-            if (s[i] == ' ')
-            {
-                res = (char **)malloc(sizeof(char *) * 3);
-                res = fill_res(s, i, res);
-                break ;
-            }
-        }
-    }
+	 i = 0;
+	while (s[i] && (s[i] != ' ' || s[i] != '\0'))
+	{
+	    i++;
+	    if (s[i] == ' ' || s[i] == '\0')
+	    {
+	        res = (char **)malloc(sizeof(char *) * 3);
+	        res = fill_res(s, i, res);
+	        break ;
+	    }
+	}
+
     return (res);
 }
 
@@ -128,16 +128,18 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 					i++;
 					j++;
 				}
-				if (t->data[i] == '$' && (t->data[i - 1] && t->data[i - 1] != 92))
+				if (t->data[i] == '$' && (t->data[i - 1] && t->data[i - 1] != 92) && (t->data[i + 1]
+				&& t->data[i + 1] != ' '))
 					get_env_val(buf, &j, t->data, &i, env);
 			}
 			q[1] = 0;
 			i++;
 		}
-		if (t->data[i] == '$' && t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0)
+		if ((t->data[i] == '$' && t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0 && (t->data[i + 1] && t->data[i + 1] != ' ')) ||
+		(t->data[i] == '$' && j == 0 && (t->data[i + 1] && t->data[i + 1] != ' ')))
 			get_env_val(buf, &j, t->data, &i, env);
-		if(t->data[i] == '$' && j == 0)
-			get_env_val(buf, &j, t->data, &i, env);
+		if (t->data[i] == '$' && (t->data[i + 1] == ' ' || t->data[i + 1] =='\0'))
+			buf[j++] = t->data[i++];
 	}
 	buf[j] = '\0';
 	c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
@@ -158,6 +160,7 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 		return NULL;
 	while (cur_t)
 	{
+		///ft_putendl(cur_t->data);
 		cur = get_data_cmd(cur_t, cur, env);
 		if (cur_t->next && cur_t->next->next)
 		{
