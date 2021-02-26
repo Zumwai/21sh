@@ -35,13 +35,15 @@ static void calc_y_pos(t_term *pos, int diff)
 			int tmp = diff;
 			printed = pos->y + pos->delta_y;
 			int i = 0;
+			if (pos->store->size) {
 			while (i <= tmp) {
 				tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
 				tputs(tgetstr("sr", NULL), 1, putchar_like);
-				if (pos->store->size - printed - 1 == 0 && !pos->prev)
+				if (pos->store->size - i - 1 == 0 && !pos->prev)
 					ft_putstr("shelp&>");
-				ft_putstr(pos->store->arr[pos->store->size - printed]);
+				ft_putstr(pos->store->arr[pos->store->size - i - 1]);
 				i++;
+			}
 			}
 			tmp = diff;
 			/* Change to zero for unduplicated lines */
@@ -75,7 +77,6 @@ static void  set_cursor(t_term *pos)
 	*/
 	//tputs(tgetstr("cd", NULL), 1, putchar_like);
 	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y - diff_y - 1), 1, putchar_like);
-
 }
 
 static void	correct_y(t_term *pos)
