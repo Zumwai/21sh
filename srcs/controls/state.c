@@ -48,8 +48,8 @@ static int		verify_end_arg(char c, int n, int state)
 		return 0;
 	if (c != '\\' && !n)
 		return 1;
-	if (c == '\'' || c == '\"') /* TMP solution for heredoc */
-		return 1;
+	if (c == '\'' || c == '\"') /* TMP solution for heredoc, probably not enough */
+		return 0;
 	if (verify_char_heredoc(c)) {
 		if ((state & GLUE))
 			return 0;
@@ -89,7 +89,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				state |= HEREDOC;
 			}
 		}
-		if ((state & READ_HDOC))
+		else if ((state & READ_HDOC))
 		{
 			if ((verify_end_arg(str[i], str[i + 1], state) ||
 				(i == 0 && str[i] != '\\' && !str[i + 1]))) {
@@ -98,31 +98,40 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				}
 		}
 		else if ((state & REQ_HDOC)) {
-			if (str[i] == '<') {
+			if (str[i] == '<') { /* dont need to check it here, useless and harmful */
 				c = find_next_char(str, i + 1);
 				if (verify_char_heredoc(c)) { printf("failed verification 2%c\n", c);
 					state |= FAILED;
-					return -1;
+					break ;
+					//return -1;
 				}
 				else if (c == '\\' && check_for_zero(str, i + 1)) {
 					state ^= ARG_HDOC;
 					state ^= REQ_HDOC;
-				} else {
-					state ^= ARG_HDOC;
+				} else {/*useless ?*/
+					state ^= ARG_HDOC; 
 					state ^= REQ_HDOC;
 				}
-				if (str[1] == 0)
-					return -1;
+				if (str[1] == 0) {
+					printf("failed sudden end of the line\n");
+					state |= FAILED;
+					break; /* useless? */
+				}
 			} else if (i > 0 && str[i] == '<' && str[i - 1] == '<' && !(state & QUOTE) && !(state & D_QUOTE)) {
 				state ^= ARG_HDOC;
 				state ^= REQ_HDOC;
 			} else if (i == 0 && str[0] != '\\' && str[1]) {
 				state |= FAILED;
 				printf("failed glue 1\n");
-				return -1;
+				break ;
 			}
-			else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0)
-				return -1;
+			else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0) {
+				printf("failed glue 2\n");
+				state |= FAILED;
+				break ; /*useles ?*/
+			}
+			else
+				state ^= REQ_HDOC;
 		}
 		else if (str[i] == '\'' && !(state & D_QUOTE))
 			state ^= (QUOTE);
@@ -138,41 +147,42 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 		else if (!state && doc == 2) {
 			doc = 0;
 			state ^= REQ_HDOC;
-		} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) &&!(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && doc == 2) {
-			doc++;
-			state |= REQ_HDOC;
+		} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) && !(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && doc == 2) {
+			doc = 0; /* probably an error? even if its going to happen, it will cause an error */
+			//state |= REQ_HDOC;
 		}
 		i++;
 	}
 	i--;
 	if (!(state & QUOTE) && str[i] == '\\')
-		state ^= (GLUE);
+		state |= (GLUE);
 	if ((state & REQ_HDOC && !(state & GLUE))) {
+		printf("failed glue 3\n");
 		state |= FAILED;
-		return -1;
 	}
 	return state;
 }
 
 
-static char    *append_main_line(char *line, char *sub, int state)
+static void append_main_line(t_actual *main, char *sub, int state)
 {
     char    *new;
-	char	*tmp = line;
 	int		var = 0;
     int     size;
     int     sub_size;
 
-	//if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE))
-	if ((state & HEREDOC))
+	size = 0;
+	if (!(state & GLUE) && ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE)))
 		size++;
+	//vif ((state & HEREDOC))
+	
     sub_size = ft_strlen(sub);
-    size = sub_size + 1;
-    if (line)
-   		size += ft_strlen(line);
-    new = ft_strnew(size);
-    if (line)
-        ft_strcpy(new, line);
+    size += sub_size;
+	size += main->size;
+    if (!(new = ft_strnew(size)))
+		handle_exit_errors("Malloc returned NULL");
+    if (main->line)
+        ft_strcpy(new, main->line);
     ft_strcat(new, sub);
     if ((state & GLUE)) {
 		new[size--] = 0;
@@ -180,20 +190,22 @@ static char    *append_main_line(char *line, char *sub, int state)
 		new[size--] = 0;
 	}
 	else if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE))
-		new[size - 1] = 10;
-	if (tmp)
-		free(tmp);
-    return new;
+		new[size - 2] = '\n';
+	if (main->line)
+		free(main->line);
+	main->size = size;
+	main->line = new;
 }
 
 static t_term *create_next_io(t_actual **line, int y)
 {
 	t_term *input;
 
-	input = create_new_io_struct();
+	input = create_new_io_struct(line);
 	input->y = y;
 	if (*line)
 		input->main = *line;
+	//input->new = get_buf_line(&input->new, &input->buf_size, 20);
 	return input;
 }
 
@@ -225,9 +237,9 @@ int		check_hdoc_eot(t_hdoc **head, char *sub)
 int		determine_next_io_step(t_term *curs, int ret)
 {
 	int		res = 1;
-	if (0 > ret)
+	if (curs->main->state & (FAILED))
 		return -1; /* handle errors */
-	if (0 == ret)
+	if (!curs->main->state)
 		return 0; /* check for ending */
 	if ((curs->main->state & HEREDOC)) {
 		res = update_hdoc_list(&curs->main->hdoc, curs->main->line);
@@ -250,16 +262,17 @@ int		consult_state(t_term *curs)
 {
 	int		ret = 0;
 	int		small = 0;
-	if (curs->prev)
+	if (curs->prev) /* just to be safe */
 		if (!curs->main)
 			curs->main = create_main_line();
 	ret = parse_incoming_subline(curs->new, curs->main->state, &curs->main->hdoc, ft_strlen(curs->main->line));
+	curs->main->state_before = curs->main->state;
 	curs->main->state = ret;
-	curs->main->line = append_main_line(curs->main->line, curs->new, ret);
+	append_main_line(curs->main, curs->new, curs->main->state);
 	if (!(curs->main->state & FAILED))
 		ret = determine_next_io_step(curs, ret);
 	else {
-		handle_return_error(-1, "syntax error near unexpected token `newline'\n");
+		return (handle_return_error(-1, "syntax error near unexpected token `newline'\n"));
 	}
 	if (ret == 0)
 		ft_putchar_fd('\n', 1);

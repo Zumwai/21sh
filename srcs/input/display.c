@@ -56,7 +56,7 @@ static void calc_y_pos(t_term *pos, int diff)
 	}
 }
 
-static void set_cursor(t_term *pos)
+static void  set_cursor(t_term *pos)
 {
 	struct winsize dimensions = {0};
 	int		diff_y;
@@ -166,6 +166,8 @@ static int draw_line(t_term *pos, int remainder)
 	/* Calculate diff and y for current printed part */
 	if ((pos->next && remainder == print) || (print + curr == dimensions.ws_col))
 		handle_last_line(pos, dimensions.ws_row, dimensions.ws_col, remainder, print + curr);
+	if ((remainder - print) == 0)
+		return -1;
 	return (remainder - print);
 }
 
@@ -195,15 +197,12 @@ int display_input(t_term *pos, int delta)
 	if (pos->prev)
 		pos->y += delta;
 	set_empty_line(pos, pos->y, !!pos->prev);
-	while (remainder)
+	while (remainder >= 0)
 		remainder = draw_line(pos, remainder);
 	if (!pos->next)
 		tputs(tgetstr("cd", NULL), 1, putchar_like);
 	set_cursor(pos);
 	if (curs->next) {
-		//if (pos->store->arr)
-		//	ft_free_tab(&pos->store->arr);
-		//pos->store->size = 0;
 		display_input(curs->next, pos->delta_y + delta);
 	}
 	/* destruct scrollback buffer */

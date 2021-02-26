@@ -31,15 +31,53 @@ t_actual	*clone_main_line(t_actual *main)
 	if (!(new = (t_actual *)malloc(sizeof(t_actual))))
 		handle_exit_errors("Malloc returned NULL");
 	ft_memset(new, 0, sizeof(t_actual));
+	new->line = NULL;
+	main->state &= ~(FAILED);
 	if(main->line)
 		new->line = ft_strdup(main->line);
-	new->state = main->state;
+	new->state = main->state_before;
+	new->state_before = main->state_before;
 	if (main->hdoc)
 		new->hdoc = clone_hdoc(main->hdoc);
 	return new;
 }
 
-static t_term *copy_input_struct(t_term *current)
+void	cut_last_suffix(char *new, t_actual *main)
+{
+	int	m_len;
+	int	s_len;
+	m_len = ft_strlen(main->line);
+	s_len = ft_strlen(new);
+
+	if (m_len > s_len) /* simple check for multiline */
+		s_len++;
+	if (m_len == 0) /* case for handling envoking line from history */
+		return ;
+	while (s_len > 0)
+	{
+		main->line[m_len - s_len] = 0;
+		//if (main->line[m_len - s_len] != '\n')
+			s_len--;
+	}
+}
+
+void	copy_data_term(t_term **curs, t_term *old)
+{
+	t_term *new;
+
+	new = (*curs);
+	new->y = old->y;
+	new->x = old->x;
+	new->delta_x = old->delta_x;
+	new->delta_y = old->delta_y;
+	new->index = old->index;
+	new->buf_size = old->buf_size;
+	new->next = NULL;
+	new->main = NULL;
+	new->store = NULL;
+}
+
+static t_term *copy_input_struct(t_term *current, int read)
 {
 	t_term *head;
 	t_term	*curs;
@@ -57,7 +95,7 @@ static t_term *copy_input_struct(t_term *current)
 	curs->main = clone;
 	while (current)
 	{
-		ft_memcpy(curs, current, sizeof(t_term));
+		copy_data_term(&curs, current);
 		if (tmp != head)
 			curs->prev = tmp;
 		if (current->new)
@@ -72,12 +110,16 @@ static t_term *copy_input_struct(t_term *current)
 		current = current->next;
 		if (current)
 		{
-			curs->next = (t_term *)malloc(sizeof(t_term));
 			tmp = curs;
+			curs->next = (t_term *)malloc(sizeof(t_term));
 			curs = curs->next;
+			curs->prev = tmp;
 		}
-
 	}
+	//curs->next = NULL;
+	/* call on history call only */
+	if (read)
+		cut_last_suffix(curs->new, curs->main);
 	return (head);
 }
 
@@ -105,7 +147,7 @@ t_history	*save_history(t_yank *buffer)
 		if (!ft_strcmp(buffer->current->new, buffer->history->line->new))
 			return (temp);
 	temp = push_history(&(temp), &buffer->hist_ptr);
-	temp->line = copy_input_struct(buffer->current);
+	temp->line = copy_input_struct(buffer->current, DEFAULT);
 	buffer->counter++;
 	if (buffer->counter > 50)
 	{
@@ -178,7 +220,7 @@ void	envoke_history(t_yank *buffer, int key)
 			free_input_line(&buffer->current);
 			buffer->current = NULL;
 		}
-		buffer->current = copy_input_struct(buffer->hist_ptr->line);
+		buffer->current = copy_input_struct(buffer->hist_ptr->line, 1);
 	}
 	if (temp == NULL)
 	{
