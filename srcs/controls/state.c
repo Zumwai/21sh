@@ -171,14 +171,14 @@ static void append_main_line(t_actual *main, char *sub, int state)
     int     size;
     int     sub_size;
 
-	//if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE))
-	if ((state & HEREDOC))
+	size = 0;
+	if (!(state & GLUE) && ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE)))
 		size++;
+	//vif ((state & HEREDOC))
+	
     sub_size = ft_strlen(sub);
-    size = sub_size + 1;
+    size += sub_size;
 	size += main->size;
-    if (main->line)
-   		size += ft_strlen(main->line);
     if (!(new = ft_strnew(size)))
 		handle_exit_errors("Malloc returned NULL");
     if (main->line)
@@ -190,7 +190,7 @@ static void append_main_line(t_actual *main, char *sub, int state)
 		new[size--] = 0;
 	}
 	else if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE))
-		new[size - 1] = 10;
+		new[size - 2] = '\n';
 	if (main->line)
 		free(main->line);
 	main->size = size;
