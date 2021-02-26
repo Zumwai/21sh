@@ -144,8 +144,10 @@ t_history	*save_history(t_yank *buffer)
 	if (!buffer->current || !buffer->current->main || buffer->current->main->line[0] == 0)
 		return (temp);
 	if (buffer->history)
-		if (!ft_strcmp(buffer->current->main->line, buffer->history->line->main->line))
+		if (!ft_strcmp(buffer->current->main->line, buffer->history->line->main->line)) {
+			buffer->hist_ptr = NULL;
 			return (temp);
+		}
 	temp = push_history(&(temp), &buffer->hist_ptr);
 	temp->line = copy_input_struct(buffer->current, DEFAULT);
 	buffer->counter++;

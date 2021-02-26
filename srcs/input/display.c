@@ -117,7 +117,7 @@ void	append_arr(t_term *pos, char *line, int len)
 	pos->store->size++;
 	if (!(new = (char **)malloc(sizeof(char *) * pos->store->size + 1)))
 		handle_exit_errors("Malloc returned NULL");
-	bzero(new, sizeof(char *) * pos->store->size + 1);
+	ft_memset(new, 0, sizeof(char *) * pos->store->size + 1);
 	int i = 0;
 	if (pos->store->arr) {
 		while (i < pos->store->size){

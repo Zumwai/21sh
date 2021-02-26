@@ -106,12 +106,13 @@ extern t_token 			*init_token(void)
 
 	if(!(new = (t_token *)malloc(sizeof(t_token))))
 		return (NULL);
+	ft_memset(new, 0, sizeof(t_token)); /*
 	new->data = NULL;
 	new->priority = 0;
 	new->next = NULL;
 	new->prev = NULL;
 	new->c_type = 0;
 	new->type = 0;
-	new->status = 0;
+	new->status = 0;*/
 	return (new);
 }
