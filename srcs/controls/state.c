@@ -205,7 +205,7 @@ static t_term *create_next_io(t_actual **line, int y)
 	input->y = y;
 	if (*line)
 		input->main = *line;
-	input->new = get_buf_line(&input->new, &input->buf_size, 20);
+	//input->new = get_buf_line(&input->new, &input->buf_size, 20);
 	return input;
 }
 

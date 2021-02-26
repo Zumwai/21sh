@@ -197,7 +197,7 @@ int display_input(t_term *pos, int delta)
 	if (pos->prev)
 		pos->y += delta;
 	set_empty_line(pos, pos->y, !!pos->prev);
-	while (remainder > 0)
+	while (remainder >= 0)
 		remainder = draw_line(pos, remainder);
 	if (!pos->next)
 		tputs(tgetstr("cd", NULL), 1, putchar_like);
