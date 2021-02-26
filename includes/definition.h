@@ -149,6 +149,7 @@ typedef struct s_scroll
 typedef struct s_hdoc {
 	int				cord;
 	bool			used;
+	int				quotes;
 	char			*eot;
 	struct s_hdoc	*next;
 }			t_hdoc;
@@ -158,6 +159,7 @@ typedef struct		s_actual
 	char			*line;
 	int				state;
 	int				state_before;
+	size_t			size;
 	struct s_hdoc	*hdoc;
 }					t_actual;
 

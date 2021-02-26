@@ -8,6 +8,7 @@ static t_hdoc	*create_new_hdoc(void)
 		handle_exit_errors("Malloc returned NULL");
 	new->cord = -1;
 	new->eot = NULL;
+	new->quotes = 0;
     new->used = false;
 	new->next = NULL;
     return new;
@@ -41,7 +42,7 @@ static	char *trim_inword(char *line, int size, int count)
 		ret = ft_strnew(size - count);
 		while (line[i])
 		{
-			if (line[i] != '\'' || line[i] != '\"') {
+			if (line[i] != '\'' && line[i] != '\"') {
 				ret[j] = line[i];
 				j++;
 			}
@@ -52,7 +53,7 @@ static	char *trim_inword(char *line, int size, int count)
 	}
 	return line;
 }
-static char	*grub_eot(char *line, int i)
+static char	*grub_eot(char *line, int i, int *quotes)
 {
 	char	*eot= NULL;
 	int		count = 0;
@@ -65,8 +66,15 @@ static char	*grub_eot(char *line, int i)
 	{
 		if (line[i] == '<' || line[i] == ' ')
 			break ;
-		if (line[i] == '\'' || line[i] == '\"')
+		if (line[i] == '\'' || line[i] == '\"') {
+			if (!(*quotes)) {
+				if (line[i] == '\'')
+					(*quotes) |= (QUOTE);
+				else
+					(*quotes) |= (D_QUOTE);
+			}
 			count++;
+		}
 		i--;
 		size++;
 	}
@@ -91,7 +99,7 @@ extern int	update_hdoc_list(t_hdoc **lst, char *line)
 	while (curs)
 	{
 		if (!curs->eot) {
-			curs->eot = grub_eot(line, curs->cord);
+			curs->eot = grub_eot(line, curs->cord, &curs->quotes);
 			ret = 1;
 		}
 		curs = curs->next;
@@ -111,6 +119,7 @@ extern t_hdoc *clone_hdoc(t_hdoc *old)
     {
         new->cord = old->cord;
         new->used = old->used;
+		new->quotes = old->quotes;
         new->eot = ft_strdup(old->eot);
 		new->next = NULL;
         old = old->next;
@@ -118,14 +127,6 @@ extern t_hdoc *clone_hdoc(t_hdoc *old)
 			new->next = create_new_hdoc();
 			new = new->next;
 		}
-		/*
-        if (old) {
-			if (old->next) {
-            	new->next = create_new_hdoc();
-            	new = new->next;
-			}
-        }
-		*/
     }
 	new->used = false;
     return head;

@@ -164,10 +164,9 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 }
 
 
-static char    *append_main_line(char *line, char *sub, int state)
+static void append_main_line(t_actual *main, char *sub, int state)
 {
     char    *new;
-	char	*tmp = line;
 	int		var = 0;
     int     size;
     int     sub_size;
@@ -177,11 +176,13 @@ static char    *append_main_line(char *line, char *sub, int state)
 		size++;
     sub_size = ft_strlen(sub);
     size = sub_size + 1;
-    if (line)
-   		size += ft_strlen(line);
-    new = ft_strnew(size);
-    if (line)
-        ft_strcpy(new, line);
+	size += main->size;
+    if (main->line)
+   		size += ft_strlen(main->line);
+    if (!(new = ft_strnew(size)))
+		handle_exit_errors("Malloc returned NULL");
+    if (main->line)
+        ft_strcpy(new, main->line);
     ft_strcat(new, sub);
     if ((state & GLUE)) {
 		new[size--] = 0;
@@ -190,9 +191,10 @@ static char    *append_main_line(char *line, char *sub, int state)
 	}
 	else if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE))
 		new[size - 1] = 10;
-	if (tmp)
-		free(tmp);
-    return new;
+	if (main->line)
+		free(main->line);
+	main->size = size;
+	main->line = new;
 }
 
 static t_term *create_next_io(t_actual **line, int y)
@@ -203,6 +205,7 @@ static t_term *create_next_io(t_actual **line, int y)
 	input->y = y;
 	if (*line)
 		input->main = *line;
+	input->new = get_buf_line(&input->new, &input->buf_size, 20);
 	return input;
 }
 
@@ -265,7 +268,7 @@ int		consult_state(t_term *curs)
 	ret = parse_incoming_subline(curs->new, curs->main->state, &curs->main->hdoc, ft_strlen(curs->main->line));
 	curs->main->state_before = curs->main->state;
 	curs->main->state = ret;
-	curs->main->line = append_main_line(curs->main->line, curs->new, curs->main->state);
+	append_main_line(curs->main, curs->new, curs->main->state);
 	if (!(curs->main->state & FAILED))
 		ret = determine_next_io_step(curs, ret);
 	else {

@@ -124,6 +124,7 @@ char	*handle_input_stream(t_yank *buffer, t_env **env, int *fail)
 			(*fail) |= (FAILED);
 		}
 		line = ft_strdup(buffer->current->main->line);
+		buffer->current->main->size = ft_strlen(line);
 		//buffer->current->main->state &= ~(FAILED);
 		buffer->history = save_history(buffer);
 		free_input_line(&buffer->current);

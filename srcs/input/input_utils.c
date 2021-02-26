@@ -50,8 +50,7 @@ t_term	*create_new_io_struct(t_actual **head)
 	bzero(pos->store, sizeof(t_scroll));
 	if (!head)
 	{
-		if (!(pos->main = (t_actual *)malloc(sizeof(t_actual))))
-			handle_exit_errors("Malloc returned NULL");
+		pos->main = create_main_line();
 		bzero(pos->main, sizeof(t_actual));
 	}
 	else {
