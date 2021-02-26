@@ -89,7 +89,7 @@ extern t_token 			*parsing_t(char *line)
 	int l;
 	t_token *cur;
 
-	///ft_putendl(line);
+	//ft_putendl(line);
 	car = 0;
 	if (!(l = ft_strlen(line)))
 		return (0);

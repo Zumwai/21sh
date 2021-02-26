@@ -163,38 +163,49 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 	return state;
 }
 
-
+/* calls to strlen too many times...*/
 static void append_main_line(t_actual *main, char *sub, int state)
 {
-    char    *new;
+    char    *new = NULL;
 	int		var = 0;
-    int     size;
+    int     size = 0;
     int     sub_size;
 
 	size = 0;
+	sub_size = 0;
+
+	//vif ((state & HEREDOC))
+	if (sub)
+   		sub_size = ft_strlen(sub) + 1;
+    size += sub_size;
+	if (main->line)
+		size += ft_strlen(main->line);
+	if (size == 1)
+		size++;
 	if (!(state & GLUE) && ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE)))
 		size++;
-	//vif ((state & HEREDOC))
-	
-    sub_size = ft_strlen(sub);
-    size += sub_size;
-	size += main->size;
-    if (!(new = ft_strnew(size)))
+    if (!(new = ft_strnew(size + 1)))
 		handle_exit_errors("Malloc returned NULL");
     if (main->line)
-        ft_strcpy(new, main->line);
+        ft_strcat(new, main->line);
     ft_strcat(new, sub);
     if ((state & GLUE)) {
 		new[size--] = 0;
 		new[size--] = 0;
 		new[size--] = 0;
 	}
-	else if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE))
-		new[size - 2] = '\n';
-	if (main->line)
+	else if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE)) {
+		size--;
+		new[size - 1] = '\n';
+		new[size] = 0;
+	}
+	if (main->line) {
 		free(main->line);
-	main->size = size;
+		main->line = NULL;
+	}
+	main->size = ft_strlen(new);
 	main->line = new;
+	main->line[size] = 0;
 }
 
 static t_term *create_next_io(t_actual **line, int y)

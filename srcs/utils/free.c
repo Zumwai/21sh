@@ -120,6 +120,7 @@ void set_free_null(char **line)
 		free(*line);
 	*line = NULL;
 }
+
 void		free_eot_list(t_hdoc **t)
 {
 	t_hdoc	*curs;
