@@ -6,21 +6,22 @@ int		main(int ac, char **av, char **env)
 	char		*line;
 	t_cmd		*cmd;
 	int			loop;
+	int			fail;
 
 	t_env	*ev;
 	t_yank	*buffer;
-
 	buffer = NULL;
 	ev = init_shell(ac, av, env, &buffer);
 	loop = 1;
 	while (loop > 0)
 	{
+		fail = 0;
 		token = NULL;
 		line = NULL;
-		line = handle_input_stream(buffer, &ev);
+		line = handle_input_stream(buffer, &ev, &fail);
 		if (!line)
 			break ;
-		else if (line[0])
+		else if (line[0] && !(fail & (FAILED)))
 		{
 			token = parsing_t(line);
 			if (token)

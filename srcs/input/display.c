@@ -35,13 +35,15 @@ static void calc_y_pos(t_term *pos, int diff)
 			int tmp = diff;
 			printed = pos->y + pos->delta_y;
 			int i = 0;
+			if (pos->store->size) {
 			while (i <= tmp) {
 				tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
 				tputs(tgetstr("sr", NULL), 1, putchar_like);
-				if (pos->store->size - printed - 1 == 0 && !pos->prev)
+				if (pos->store->size - i - 1 == 0 && !pos->prev)
 					ft_putstr("shelp&>");
-				ft_putstr(pos->store->arr[pos->store->size - printed]);
+				ft_putstr(pos->store->arr[pos->store->size - i - 1]);
 				i++;
+			}
 			}
 			tmp = diff;
 			/* Change to zero for unduplicated lines */
@@ -56,7 +58,7 @@ static void calc_y_pos(t_term *pos, int diff)
 	}
 }
 
-static void set_cursor(t_term *pos)
+static void  set_cursor(t_term *pos)
 {
 	struct winsize dimensions = {0};
 	int		diff_y;
@@ -75,7 +77,6 @@ static void set_cursor(t_term *pos)
 	*/
 	//tputs(tgetstr("cd", NULL), 1, putchar_like);
 	tputs (tgoto (tgetstr("cm", NULL), pos->x, pos->y + pos->delta_y - diff_y - 1), 1, putchar_like);
-
 }
 
 static void	correct_y(t_term *pos)
@@ -117,7 +118,7 @@ void	append_arr(t_term *pos, char *line, int len)
 	pos->store->size++;
 	if (!(new = (char **)malloc(sizeof(char *) * pos->store->size + 1)))
 		handle_exit_errors("Malloc returned NULL");
-	bzero(new, sizeof(char *) * pos->store->size + 1);
+	ft_memset(new, 0, sizeof(char *) * pos->store->size + 1);
 	int i = 0;
 	if (pos->store->arr) {
 		while (i < pos->store->size){
@@ -166,6 +167,8 @@ static int draw_line(t_term *pos, int remainder)
 	/* Calculate diff and y for current printed part */
 	if ((pos->next && remainder == print) || (print + curr == dimensions.ws_col))
 		handle_last_line(pos, dimensions.ws_row, dimensions.ws_col, remainder, print + curr);
+	if ((remainder - print) == 0)
+		return -1;
 	return (remainder - print);
 }
 
@@ -195,15 +198,12 @@ int display_input(t_term *pos, int delta)
 	if (pos->prev)
 		pos->y += delta;
 	set_empty_line(pos, pos->y, !!pos->prev);
-	while (remainder)
+	while (remainder >= 0)
 		remainder = draw_line(pos, remainder);
 	if (!pos->next)
 		tputs(tgetstr("cd", NULL), 1, putchar_like);
 	set_cursor(pos);
 	if (curs->next) {
-		//if (pos->store->arr)
-		//	ft_free_tab(&pos->store->arr);
-		//pos->store->size = 0;
 		display_input(curs->next, pos->delta_y + delta);
 	}
 	/* destruct scrollback buffer */

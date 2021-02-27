@@ -30,6 +30,8 @@ static void		init_tty(void)
 	int		res;
 	char	*tty_name;
 
+	if (read(STDIN_FILENO, NULL, 0) == -1) /* useless */
+		handle_exit_errors("Shelp must have access to STDIN");
 	if (!(tty_name = getenv("TERM")))
 		handle_exit_errors("terminal type is not defined\n");
 	if (!isatty(STDIN_FILENO))
@@ -143,6 +145,10 @@ int				set_env(char **com, t_env **ev)
 	if (!(ft_isletter(com[1][0])))
 	{
 		handle_empty_error(com[1], ": Variable name should start with a letter\n");
+		return (1);
+	}
+	if (ft_strlen(com[1]) > 255) {
+		handle_empty_error(com[1], ": Variable name is too long");
 		return (1);
 	}
 	return (find_exitsing_env(ev, com));

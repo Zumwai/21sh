@@ -36,7 +36,7 @@ static t_term *init_prompt(struct termios *old_tty)
 	tty.c_cc[VMIN] = 1;
 	tty.c_cc[VTIME] = 1;
 	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
-	pos = create_new_io_struct();
+	pos = create_new_io_struct(NULL);
 	return (pos);
 }
 
@@ -94,8 +94,9 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 			if (red == DEFAULT || red == -5 || red == -1)
 				break ;
 			if (red == -2) {
+				free_input_line(&buffer->current);
 						//free_input_line(&buffer->current);
-				return NULL;
+				break ;
 			}
 			if (red == HIST_UP || red == HIST_D) {
 				int tmp = buffer->current->y;
@@ -112,18 +113,19 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 	return (buffer->current);
 }
 
-char	*handle_input_stream(t_yank *buffer, t_env **env)
+char	*handle_input_stream(t_yank *buffer, t_env **env, int *fail)
 {
 	char	*line;
 
 	line =  NULL;
 	buffer->current = get_input(buffer, env);
 	if (buffer->current) {
-		//line = concat_lines(buffer->current);
-		if (!(buffer->current->main->state & FAILED)) {
-			line = ft_strdup(buffer->current->main->line);
+		if ((buffer->current->main->state & FAILED)) {
+			(*fail) |= (FAILED);
 		}
-		buffer->current->main->state &= ~(FAILED);
+		line = ft_strdup(buffer->current->main->line);
+		buffer->current->main->size = ft_strlen(line);
+		//buffer->current->main->state &= ~(FAILED);
 		buffer->history = save_history(buffer);
 		free_input_line(&buffer->current);
 		if (buffer->saved)
