@@ -28,7 +28,7 @@ static char 				*get_data(char *line, int *n, t_flag *flag)
 			   line[*n] != '<'  && line[*n] != '\0')
 		{
 			update_flag(flag, line[*n]);
-			if (line[*n] == 92 && line[*n + 1])
+			/*if (line[*n] == 92 && line[*n + 1])
 			{
 				res[j] = get_manage(line[*n + 1]);
 				if (res[j] != '\\')
@@ -37,7 +37,10 @@ static char 				*get_data(char *line, int *n, t_flag *flag)
 			else
 				res[j] = line[*n];
 			*n += 1;
-			j += 1;
+			j += 1;*/
+            res[j] = line[*n];
+            *n += 1;
+            j += 1;
 		}
 		if (line[*n] == '|' || line[*n] == ';' || line[*n] == '&' || line[*n] == '>' ||
 		line[*n] == '<' || line[*n] == '\0')
@@ -110,6 +113,7 @@ extern t_token 			*parsing_t(char *line)
 		flag = reset_flag(flag);
 	}
 	free(flag);
+	//ft_putendl("gettokens");
 	if (is_tokens_true(cur))
 		return (cur);
 	return (0);
