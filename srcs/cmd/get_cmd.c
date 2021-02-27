@@ -20,7 +20,6 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.в
 	int				u;
 	char			*t_tmp;
 
-	//ft_putendl("get val");
 	u = 0;
 	*i = *i + 1;
 	while (t[*i] != ' ' && t[*i] != '/' && t[*i] != 92
@@ -174,7 +173,6 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
             buf[j++] = t->data[i++];
 	}
 	buf[j] = '\0';
-	ft_putendl(buf);
 	c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
 	return (c);
 }
