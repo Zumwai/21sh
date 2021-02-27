@@ -20,7 +20,7 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.в
 	int				u;
 	char			*t_tmp;
 
-	ft_putendl("get val");
+	//ft_putendl("get val");
 	u = 0;
 	*i = *i + 1;
 	while (t[*i] != ' ' && t[*i] != '/' && t[*i] != 92
@@ -56,9 +56,7 @@ char                    **fill_res(char *s, int i, char **res)
     l = ft_strlen(s) - i;
     res[0] = ft_strsub(s, 0, i);
     if (l != 0)
-	{
     	res[1] = ft_strsub(s, i + 1, l);
-	}
     else
     	res[1] = '\0';
     res[2] = '\0';
@@ -95,9 +93,19 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	i = 0;
 	j = 0;
 	q[0] = 0;
-	q[1] = 0;
 	while (t->data[i])
 	{
+        if (t->data[i] == 92)
+        {
+            if (t->data[i + 1] == 92)
+            {
+                buf[j] = t->data[i];
+                i = i + 2;
+                j++;
+            }
+            else
+                i++;
+        }
 		if (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0 && t->data[i])
 			buf[j++] = t->data[i++];
 		if (t->data[i] == 39 && q[1] == 0)
@@ -122,26 +130,51 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 			i++;
 			while (t->data[i] && t->data[i] != 34)
 			{
-				if (t->data[i] != '$')
-				{
-					buf[j] = t->data[i];
-					i++;
-					j++;
-				}
-				if (t->data[i] == '$' && (t->data[i - 1] && t->data[i - 1] != 92) && (t->data[i + 1]
-				&& t->data[i + 1] != ' '))
-					get_env_val(buf, &j, t->data, &i, env);
-			}
+				if (t->data[i] == 92)
+                {
+				    if (t->data[i + 1] == 92)
+				    {
+                        buf[j] = t->data[i];
+                        i = i + 2;
+                        j++;
+                    }
+				    else
+				        i++;
+                }
+                if (t->data[i] == '$' && t->data[i + 1] != '$')
+                {
+                    if ((t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
+                        || (t->data[i] == '$' && j == 0 && t->data[i + 1] && t->data[i + 1] != ' '))
+                    {
+                        get_env_val(buf, &j, t->data, &i, env);
+                        i++;
+                    }
+                   else
+                        buf[j++] = t->data[i++];
+                }
+                else
+                ///if (t->data[i] == '$' && (t->data[i + 1] == ' ' || t->data[i + 1] =='\0' || t->data[i + 1] == '$')) /// единичный доллар
+                    buf[j++] = t->data[i++];
+            }
 			q[1] = 0;
 			i++;
 		}
-		if ((t->data[i] == '$' && t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0 && (t->data[i + 1] && t->data[i + 1] != ' ')) ||
-		(t->data[i] == '$' && j == 0 && (t->data[i + 1] && t->data[i + 1] != ' ')))
-			get_env_val(buf, &j, t->data, &i, env);
-		if (t->data[i] == '$' && (t->data[i + 1] == ' ' || t->data[i + 1] =='\0'))
-			buf[j++] = t->data[i++];
+		if (t->data[i] == '$' && t->data[i + 1] && t->data[i + 1] != '$')
+        {
+		    if ((t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
+		        || (t->data[i] == '$' && j == 0 && t->data[i + 1] && t->data[i + 1] != ' '))
+            {
+                get_env_val(buf, &j, t->data, &i, env);
+                i++;
+            }
+           else
+                buf[j++] = t->data[i++];
+        }
+		else
+            buf[j++] = t->data[i++];
 	}
 	buf[j] = '\0';
+	ft_putendl(buf);
 	c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
 	return (c);
 }
@@ -160,7 +193,6 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 		return NULL;
 	while (cur_t)
 	{
-		///ft_putendl(cur_t->data);
 		cur = get_data_cmd(cur_t, cur, env);
 		if (cur_t->next && cur_t->next->next)
 		{
