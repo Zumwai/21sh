@@ -152,7 +152,6 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
                         buf[j++] = t->data[i++];
                 }
                 else
-                ///if (t->data[i] == '$' && (t->data[i + 1] == ' ' || t->data[i + 1] =='\0' || t->data[i + 1] == '$')) /// единичный доллар
                     buf[j++] = t->data[i++];
             }
 			q[1] = 0;

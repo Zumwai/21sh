@@ -162,6 +162,8 @@ int			execute(t_cmd *cmd, t_env **env)
 	            ffd = wfd;
 	       if (cmd->type == 2)
 	           ffd = fd[1];
+	       if (cmd->type != 2 && cmd->type != 7 && cmd->type != 6)
+	           ffd = 1;
 	     res = builtin(cmd->arr, env, ffd);
         }
 	    else

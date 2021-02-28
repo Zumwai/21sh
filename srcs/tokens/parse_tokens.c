@@ -92,7 +92,6 @@ extern t_token 			*parsing_t(char *line)
 	int l;
 	t_token *cur;
 
-	//ft_putendl(line);
 	car = 0;
 	if (!(l = ft_strlen(line)))
 		return (0);
@@ -113,7 +112,6 @@ extern t_token 			*parsing_t(char *line)
 		flag = reset_flag(flag);
 	}
 	free(flag);
-	//ft_putendl("gettokens");
 	if (is_tokens_true(cur))
 		return (cur);
 	return (0);
