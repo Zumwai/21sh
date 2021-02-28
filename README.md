@@ -40,7 +40,7 @@ rm riri; cat riri 2>&- <br/>
 * функция *get_data_cmd(t_token *t, t_cmd *c, t_env **env) не во всех путях исполнения
 содержит i++, в итоге иногда впадает в бесконечный цикл. К примеру, если ввести просто знак $ как команду или '\'. Без кавычек<br/> Где-то она за один проход по нескольку раз инкрементирует, поэтому влезать не стал.
 * Обработка спецсимволов на вводе для корректной модификации состояния строки.  Экранирование кавычек, документов и тд
-"* In the POSIX locale, at a minimum, the <space>, <form-feed>, <newline>, <carriage-return>, <tab>, and <vertical-tab> shall be included." Добавить бланки
+* "In the POSIX locale, at a minimum, the \<space>, \<form-feed>, \<newline>, \<carriage-return>, \<tab>, and \<vertical-tab> shall be included." Добавить бланки
 
 **Переменные #TODO**
 * Создание внутренних переменных шелла
