@@ -1,4 +1,5 @@
 #include "sh.h"
+#include <stdio.h>
 
 static void			echo_env(char *s, t_env **env, int fd)
 {
