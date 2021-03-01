@@ -66,19 +66,20 @@ char                    **save_the_spaces(char *s)
 {
 	char    **res;
 	int i;
+	char    *cm;
 
 	 i = 0;
-	while (s[i] && (s[i] != ' ' || s[i] != '\0'))
-	{
+	while (s[i] && s[i] != ' ' && s[i] != '\0')
 	    i++;
-	    if (s[i] == ' ' || s[i] == '\0')
-	    {
-	        res = (char **)malloc(sizeof(char *) * 3);
-	        res = fill_res(s, i, res);
-	        break ;
-	    }
-	}
-
+	cm = ft_strsub(s, 0, i);
+	if (ft_strcmp(cm, "echo") != 0)
+	    res = ft_strsplit(s, ' ');
+	else
+    {
+	    res = (char **)malloc(sizeof(char *) * 3);
+	    fill_res(s, i, res);
+    }
+	free(cm);
     return (res);
 }
 
