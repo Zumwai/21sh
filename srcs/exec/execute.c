@@ -156,7 +156,7 @@ int			execute(t_cmd *cmd, t_env **env)
 	    pipe(fd);
 	    if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8)
 	        wfd = get_fd_write(cmd);
-	    if (builtin = get_builtin(cmd->arr[0]))
+	    if ((builtin = get_builtin(cmd->arr[0])) != NULL)
 	    {
 	       if ((cmd->type == 6 || cmd->type == 7) && wfd != 1)
 	            ffd = wfd;

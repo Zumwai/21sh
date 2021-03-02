@@ -1,34 +1,6 @@
 #include "sh.h"
 
-static t_auto  *create_new_list(char *line)
-{
-    t_auto *new;
-
-    if (!(new = (t_auto *)malloc(sizeof(t_auto))))
-        handle_exit_errors("Malloc returned NULL");
-    new->next = NULL;
-    if (line) {
-        new->name = ft_strdup(line);
-        new->size = ft_strlen(line);
-    }
-    else
-        new->name = NULL;
-    return (new);
-}
-
-static t_auto  *find_last(t_auto *head)
-{
-    t_auto *curs;
-
-    curs = head;
-    if (!curs)
-        return NULL;
-    while (curs->next)
-            curs = curs->next;
-    return curs;
-}
-
-char	*get_incomplete(t_term *pos)
+char	*get_incomplete(t_term *pos, int cd)
 {
 	int		curr;
 	int		end;
@@ -45,41 +17,16 @@ char	*get_incomplete(t_term *pos)
 	while(curr > 0 && ft_ischar(pos->new[curr - 1]))
 		curr--;
 	incomplete = ft_strsub(pos->new, curr, end - curr);
-	return incomplete;
-}
-
-void    print_words(t_trie *node, char **line, int index, t_auto *list)
-{
-    if (!node)
-        return ;
-    if (line[0][index])
-        line[0][index] = 0;
-    if (node->data != -1)
+    if (curr > 0)
     {
-        if (node->sub) {
-            ft_strcat(*line, node->sub);
-            index += ft_strlen(node->sub);
-        } else {
-            line[0][index] = node->data;
-            line[0][index + 1] = '\0';
-            index++;
-        }
+        while (curr >0 && pos->new[curr -1] == ' ')
+            curr--;
+        end = curr;
+        while(curr > 0 && ft_ischar(pos->new[curr - 1]))
+		curr--;
+        char *test = ft_strsub(pos->new, curr, end - curr);
     }
-    if (node->leaf == true) {
-        t_auto *curs;
-        curs = find_last(list);
-        curs->next = create_new_list(*line);
-    }
-    int i = 0;
-//    if (node->asc) {
-        while (i < 94)
-        {
-            if (node->asc[i]) {
-                print_words(node->asc[i], line, index, list);
-            }
-            i++;
-        }
- //   }
+	return incomplete;
 }
 
 int    get_to_the_diversion(t_trie *node, char **buf, int index)
@@ -108,12 +55,6 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
         return -1;
     if (node->counter > 1 || node->leaf == true)
     {  
-        /*
-        t_auto *list;
-        list = create_new_list(NULL);
-        index = ft_strlen(*buf);
-        print_words(node, buf, index - 1, list);
-        */
         return -2;
     }
     while (i < 94)
@@ -202,46 +143,6 @@ char  *search_trie(t_trie *head, char *orig, t_auto *list)
     return NULL;    
 }
 
-void    print_varians(t_auto *list)
-{
-    t_auto *curs = list;
-    int     size = 0;
-    int     max = 0;
-	struct winsize dimensions;
-    int     cols = 0;
-
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-    while (curs)
-    {
-        size++;
-        if (curs->size > max)
-            max = curs->size;
-        curs = curs->next;
-    }
-    max += 1;
-    curs = list;
-    if (max)
-        cols = dimensions.ws_col / max;
-    int     i = 0;
-    t_auto *tmp;
-    ft_putchar('\n');
-    while (curs)
-    {
-        tmp = curs;
-        curs = curs->next;
-        ft_putstr(tmp->name);
-        while (tmp->size++ < max)
-            ft_putchar(' ');
-        i++;
-        if (i == cols) {
-            ft_putchar('\n'); i = 0;
-        }
-        free(tmp->name);
-        free(tmp);
-    }
-    ft_putchar('\n');
-}
-
 int     check_for_dir(char *orig, char *new)
 {
     char    path[PATH_MAX] = {0};
@@ -279,17 +180,6 @@ int     check_for_dir(char *orig, char *new)
     return 0;
 }
 
-int is_relative_path(char *orig)
-{
-    int     i = 0;
-    while (orig[i])
-    {
-        if (orig[i] == '/')
-            return 1;
-        i++;
-    }
-    return 0;
-}
 
 int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 {
@@ -301,33 +191,37 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     t_env   *curs;
     char    *ptr;
     int     len = 0;
+    int     cd = 0;
 
     //if (pos->state || pos->heredoc)
      //   return 1;
     new = NULL;
-	if (!(orig = get_incomplete(pos)))
+	if (!(orig = get_incomplete(pos, cd)))
         return 1;
     dup =  ft_strdup(orig);
     len = ft_strlen(orig);
-
     if ('~' == orig[0] ) {
-        if (orig[1]) {
-            curs = find_env_variable(env, "HOME");
-            if (curs && curs->value)
-            {
-                path = ft_strnew(PATH_MAX);
-                ft_strcpy(path, curs->value);
+        curs = find_env_variable(env, "HOME");
+        if (curs && curs->value)
+        {
+            path = ft_strnew(PATH_MAX);
+            ft_strcpy(path, curs->value);
+            if (orig[1]) {
                 ptr = ft_strchr(orig, '~');
                 ft_strcat(path, ptr + 1);
-                free(orig);
-                orig = path;
             }
+            free(orig);
+            orig = path;
+            len = ft_strlen(orig);
+            free(dup);
+            dup = ft_strdup(orig);
         }
     }
     if (len > 0 && orig[len - 1] == ' ') {
         if (!ft_strcmp("cd ", orig))
             buf->trie = construct_trie(&orig, env, LOC_DIRECTORY);
-        buf->trie = construct_trie(&orig, env, EMPTY);
+        else
+            buf->trie = construct_trie(&orig, env, EMPTY);
     }
     else if (orig[0] == '$')
         buf->trie = construct_trie(&orig, env, ENV_ONLY);
@@ -343,7 +237,7 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         list = create_new_list(NULL);
     	new = search_trie(buf->trie, orig, list);
         if (list->next)
-            print_varians(list->next);
+            print_varians(pos, list->next);
         if (new && !new[0]) {
             if (check_for_dir(dup, new))
                   yank_buffer(pos, "/");
@@ -357,7 +251,11 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         free_trie_node(buf->trie);
         buf->trie = NULL;
     }
-    //free_trie_node(buf->trie);
+    else {
+        if (check_for_dir(orig, ""))
+        yank_buffer(pos, "/");
+    }
+    free_trie_node(buf->trie);
     set_free_null(&dup);
     set_free_null(&orig);
     return 0;

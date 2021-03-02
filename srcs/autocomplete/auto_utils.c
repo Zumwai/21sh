@@ -82,3 +82,32 @@ extern int  convert_asc_value(char c)
     else
         return -1;    
 }
+
+
+int is_relative_path(char *orig)
+{
+    int     i = 0;
+    while (orig[i])
+    {
+        if (orig[i] == '/')
+            return 1;
+        i++;
+    }
+    return 0;
+}
+
+t_auto  *create_new_list(char *line)
+{
+    t_auto *new;
+
+    if (!(new = (t_auto *)malloc(sizeof(t_auto))))
+        handle_exit_errors("Malloc returned NULL");
+    new->next = NULL;
+    if (line) {
+        new->name = ft_strdup(line);
+        new->size = ft_strlen(line);
+    }
+    else
+        new->name = NULL;
+    return (new);
+}

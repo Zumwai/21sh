@@ -75,7 +75,46 @@ static t_trie *fill_variant_list(char *orig, char *path, t_trie *head)
     free(dir);
     return head;
 }
-static t_trie    *construct_local_entry(char *original)
+
+static t_trie *fill_variant_dirs(char *orig, char *path, t_trie *head)
+{
+    DIR     *dir;
+    struct dirent *container;
+    char    tmp[PATH_MAX];
+    int     len;
+    unsigned int st;
+	struct stat		per;
+    int     ret = 0;
+
+    len = 0;
+    dir = opendir(path);
+    ft_strclr(tmp);
+    if (!dir)
+        return head;
+    if (!orig)
+        return NULL;
+    len = ft_strlen(orig);
+    while ((container = readdir(dir)))
+    {
+        if(container->d_reclen == 0)
+            break ; //test
+        if ((orig[0] == 0 || (ft_strnequ(container->d_name, orig, len)))) {
+            ft_strcpy(tmp, path);
+            ft_strcat(tmp, "/");
+            ft_strcat(tmp, container->d_name);
+            ret = lstat(tmp, &per);
+            if (ret != -1) {
+                st = per.st_mode & S_IFMT;
+                if (S_ISDIR(st))
+                    head = insert_word_trie(head, container->d_name);
+            }
+        }
+    }
+    free(dir);
+    return head;
+}
+
+static t_trie    *construct_local_entry(char *original, int flag)
 {
     t_trie  *head;
     char    *pwd;
@@ -84,7 +123,12 @@ static t_trie    *construct_local_entry(char *original)
     head = NULL;
     if (!(pwd = getcwd(pwd, 4096)))
         return NULL;
-    head = fill_variant_list(original, pwd, head);
+    if (flag == DEFAULT)
+        head = fill_variant_list(original, pwd, head);
+    if (flag == DIRECTORY) {
+        ft_strclr(original);
+        head = fill_variant_dirs(original, pwd, head);
+    }
     free(pwd);
     return head;
 }
@@ -202,11 +246,11 @@ t_trie    *construct_trie(char **orig, t_env **env, int source)
     }
     else if (source == LOCAL) {
         ft_memmove(*orig, &(*orig)[2], ft_strlen(*orig) - 1);
-        head = construct_local_entry(*orig);
+        head = construct_local_entry(*orig, DEFAULT);
     }
     else if (source == LOC_DIRECTORY)
     {
-        
+        head = construct_local_entry(*orig, DIRECTORY);
     }
     else if (source == DIRECTORY) {
         len = ft_strlen(*orig);
