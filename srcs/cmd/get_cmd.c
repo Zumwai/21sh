@@ -57,7 +57,7 @@ char                    **fill_res(char *s, int i, char **res)
     if (l != 0)
     	res[1] = ft_strsub(s, i + 1, l);
     else
-    	res[1] = '\0';
+    	res[1] = '\0'; /* what is the purpose? UB. res[1][0] to 0 or res[1] to NULL? */
     res[2] = '\0';
     return (res);
 }

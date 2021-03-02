@@ -29,7 +29,7 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 	{
 		j = 0;
 		while (flag[i + j] == needle[j]
-				&& needle != '\0' && i + j < len)
+				&& needle != 0 && i + j < len)
 		{
 			if (needle[j + 1] == '\0')
 				return (&flag[i]);

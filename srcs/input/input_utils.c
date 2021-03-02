@@ -100,3 +100,26 @@ char	*concat_symbol(char *frst, char *scnd, char c)
 	ft_strcat(new, scnd);
 	return new;
 }
+
+void       update_coord(t_term *pos)
+{
+	int	x = 0;
+	int y = 0;
+	t_term *curs;
+
+	curs = pos;
+	get_coordinates(&y, &x);
+	while (curs)
+	{
+		curs->x = x;
+		curs->y = y;
+		curs = curs->next;
+	}
+	curs = pos;
+	while (curs)
+	{
+		curs->x = x;
+		curs->y = y;
+		curs = curs->prev;
+	}
+}
