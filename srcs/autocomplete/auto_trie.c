@@ -290,6 +290,7 @@ int is_relative_path(char *orig)
     }
     return 0;
 }
+
 int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 {
 	char	*orig; 
@@ -308,20 +309,26 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         return 1;
     dup =  ft_strdup(orig);
     len = ft_strlen(orig);
-    if (orig[0] == '~') {
-        curs = find_env_variable(env, "HOME");
-        if (curs && curs->value)
-        {
-            path = ft_strnew(4096);
-            ft_strcpy(path, curs->value);
-            ptr = ft_strchr(orig, '~');
-            ft_strcat(path, ptr + 1);
-            free(orig);
-            orig = path;
+
+    if ('~' == orig[0] ) {
+        if (orig[1]) {
+            curs = find_env_variable(env, "HOME");
+            if (curs && curs->value)
+            {
+                path = ft_strnew(PATH_MAX);
+                ft_strcpy(path, curs->value);
+                ptr = ft_strchr(orig, '~');
+                ft_strcat(path, ptr + 1);
+                free(orig);
+                orig = path;
+            }
         }
     }
-    if (orig[len - 1] == ' ')
+    if (len > 0 && orig[len - 1] == ' ') {
+        if (!ft_strcmp("cd ", orig))
+            buf->trie = construct_trie(&orig, env, LOC_DIRECTORY);
         buf->trie = construct_trie(&orig, env, EMPTY);
+    }
     else if (orig[0] == '$')
         buf->trie = construct_trie(&orig, env, ENV_ONLY);
     else if (orig[0] == '.' && orig[1] == '/')

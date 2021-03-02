@@ -204,6 +204,10 @@ t_trie    *construct_trie(char **orig, t_env **env, int source)
         ft_memmove(*orig, &(*orig)[2], ft_strlen(*orig) - 1);
         head = construct_local_entry(*orig);
     }
+    else if (source == LOC_DIRECTORY)
+    {
+        
+    }
     else if (source == DIRECTORY) {
         len = ft_strlen(*orig);
         if (orig[0][len - 1] == '/')
