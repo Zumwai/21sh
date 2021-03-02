@@ -67,4 +67,6 @@ void    print_words(t_trie *node, char **line, int index, t_auto *list);
 void    print_varians(t_term *pos, t_auto *list);
 t_auto  *create_new_list(char *line);
 int is_relative_path(char *orig);
+char	*get_incomplete(t_term *pos, int *cd);
+
 #endif

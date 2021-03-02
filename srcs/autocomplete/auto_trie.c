@@ -1,34 +1,5 @@
 #include "sh.h"
 
-char	*get_incomplete(t_term *pos, int cd)
-{
-	int		curr;
-	int		end;
-	int 	abs = ft_abs(pos->delta_x);
-	char	*incomplete;
-
-    incomplete = NULL;
-	if (pos->index == 0 || pos->index - abs <= 0)
-		return NULL;
-	curr = pos->index - abs;
-	end = curr;
-	while(curr > 0 && pos->new[curr - 1] == ' ')
-		curr--;
-	while(curr > 0 && ft_ischar(pos->new[curr - 1]))
-		curr--;
-	incomplete = ft_strsub(pos->new, curr, end - curr);
-    if (curr > 0)
-    {
-        while (curr >0 && pos->new[curr -1] == ' ')
-            curr--;
-        end = curr;
-        while(curr > 0 && ft_ischar(pos->new[curr - 1]))
-		curr--;
-        char *test = ft_strsub(pos->new, curr, end - curr);
-    }
-	return incomplete;
-}
-
 int    get_to_the_diversion(t_trie *node, char **buf, int index)
 {
     int i;
@@ -140,7 +111,7 @@ char  *search_trie(t_trie *head, char *orig, t_auto *list)
         free(comp);
         return buf;
     }
-    return NULL;    
+    return NULL;
 }
 
 int     check_for_dir(char *orig, char *new)
@@ -180,7 +151,6 @@ int     check_for_dir(char *orig, char *new)
     return 0;
 }
 
-
 int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
 {
 	char	*orig; 
@@ -196,7 +166,7 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     //if (pos->state || pos->heredoc)
      //   return 1;
     new = NULL;
-	if (!(orig = get_incomplete(pos, cd)))
+	if (!(orig = get_incomplete(pos, &cd)))
         return 1;
     dup =  ft_strdup(orig);
     len = ft_strlen(orig);
@@ -217,9 +187,11 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
             dup = ft_strdup(orig);
         }
     }
-    if (len > 0 && orig[len - 1] == ' ') {
+    if (len > 0 && orig[len - 1] == ' ' || cd) {
         if (!ft_strcmp("cd ", orig))
             buf->trie = construct_trie(&orig, env, LOC_DIRECTORY);
+        else if (cd == 1)
+            buf->trie = construct_trie(&orig, env, LOC_FINISH); /*experiment*/
         else
             buf->trie = construct_trie(&orig, env, EMPTY);
     }
@@ -244,8 +216,6 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         } 
         if (new)
             yank_buffer(pos, new);
-        //if(check_for_dir(orig, new))
-         //   yank_buffer(pos, "/");
         set_free_null(&new);
         free(list);
         free_trie_node(buf->trie);

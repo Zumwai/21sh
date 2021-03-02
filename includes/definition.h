@@ -56,6 +56,7 @@
 # define HOMEDIR 6
 # define EMPTY	7
 # define LOC_DIRECTORY 8
+# define LOC_FINISH 9
 
 typedef struct	s_env
 {

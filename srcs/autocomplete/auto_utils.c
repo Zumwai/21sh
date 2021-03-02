@@ -83,7 +83,6 @@ extern int  convert_asc_value(char c)
         return -1;    
 }
 
-
 int is_relative_path(char *orig)
 {
     int     i = 0;

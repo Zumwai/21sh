@@ -129,6 +129,10 @@ static t_trie    *construct_local_entry(char *original, int flag)
         ft_strclr(original);
         head = fill_variant_dirs(original, pwd, head);
     }
+    if (flag == LOC_FINISH)
+    {
+        head = fill_variant_dirs(original, pwd, head);
+    }
     free(pwd);
     return head;
 }
@@ -248,7 +252,7 @@ t_trie    *construct_trie(char **orig, t_env **env, int source)
         ft_memmove(*orig, &(*orig)[2], ft_strlen(*orig) - 1);
         head = construct_local_entry(*orig, DEFAULT);
     }
-    else if (source == LOC_DIRECTORY)
+    else if (source == LOC_DIRECTORY || source == LOC_FINISH)
     {
         head = construct_local_entry(*orig, DIRECTORY);
     }
