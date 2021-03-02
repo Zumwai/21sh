@@ -25,27 +25,29 @@ static int	calc_pos(t_term *pos, int cols)
 
 static void calc_y_pos(t_term *pos, int diff)
 {
-	int		printed = 0;
+  	int		printed = 0;
 	if (diff && pos->y <= 0)
 	{
 		diff = pos->y + pos->delta_y - diff;
-
 		if (diff <= 0)
 		{
-			int tmp = diff;
+			int tmp = ft_abs(diff);
 			printed = pos->y + pos->delta_y;
 			int i = 0;
 			if (pos->store->size) {
-			while (i <= tmp) {
-				tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
-				tputs(tgetstr("sr", NULL), 1, putchar_like);
-				if (pos->store->size - i - 1 == 0 && !pos->prev)
-					ft_putstr("shelp&>");
-				ft_putstr(pos->store->arr[pos->store->size - i - 1]);
-				i++;
+				while (i <= tmp) {
+					tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
+					tputs(tgetstr("sr", NULL), 1, putchar_like);
+					int pr = pos->store->size - i - 1 - (pos->y + pos->delta_y);
+					if ((pr == 0 && !pos->prev) || pr < 0) {
+						ft_putstr("shelp&>");
+						ft_putstr(pos->store->arr[0]);
+					} else
+						ft_putstr(pos->store->arr[pr]);
+					i++;
+				}
 			}
-			}
-			tmp = diff;
+			tmp = ft_abs(diff);
 			/* Change to zero for unduplicated lines */
 			tmp += 1;
 			t_term *curs;
@@ -89,6 +91,7 @@ static void	correct_y(t_term *pos)
 		curs = curs->prev;
 	}
 }
+
 static void	handle_last_line(t_term *pos, int rows, int cols, int rem, int print) 
 {
 	/* Scroll down and correct starting y in previous lines */
@@ -104,7 +107,7 @@ static void	handle_last_line(t_term *pos, int rows, int cols, int rem, int print
 		pos->x = 0;
 	}
 	else {
-		tputs(tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
+		tputs(tgoto (tgetstr("cm", NULL), 0, 1), 1, putchar_like);
 		pos->x = 0;
 	}
 	pos->delta_y++;
@@ -116,12 +119,12 @@ void	append_arr(t_term *pos, char *line, int len)
 
 	new = NULL;
 	pos->store->size++;
-	if (!(new = (char **)malloc(sizeof(char *) * pos->store->size + 1)))
+	if (!(new = (char **)malloc(sizeof(char *) * (pos->store->size + 1))))
 		handle_exit_errors("Malloc returned NULL");
-	ft_memset(new, 0, sizeof(char *) * pos->store->size + 1);
+	ft_memset(new, 0, sizeof(char *) * (pos->store->size + 1));
 	int i = 0;
 	if (pos->store->arr) {
-		while (i < pos->store->size){
+		while (i < pos->store->size) {
 			new[i] = pos->store->arr[i];
 			i++;
 		}
@@ -129,8 +132,12 @@ void	append_arr(t_term *pos, char *line, int len)
 	if (pos->store->arr)
 		free(pos->store->arr);
 	pos->store->arr = NULL;
+	if (i > 0) {
+		pos->store->size = i;
+		i--;
+	}
+	new[i] = ft_strndup(line, len);
 	pos->store->arr = new;
-	pos->store->arr[pos->store->size - 1] = ft_strndup(line, len + 1);
 }
 
 void ft_putstr_size(char *line, size_t size)
@@ -162,7 +169,8 @@ static int draw_line(t_term *pos, int remainder)
 		ft_putstr_size(&pos->new[pos->index - remainder], print);
 		pos->x = print + curr;
 	}
-	else
+	//else
+	//if ((print + curr) >= dimensions.ws_col)
 		append_arr(pos, &pos->new[pos->index - remainder], print);
 	/* Calculate diff and y for current printed part */
 	if ((pos->next && remainder == print) || (print + curr == dimensions.ws_col))

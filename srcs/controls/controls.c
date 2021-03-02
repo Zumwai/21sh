@@ -37,6 +37,14 @@ static int	ft_history_down(void)
 	return (HIST_D);
 }
 
+static int is_printable(char key)
+{
+	if (key >= 32 && key <= 127)
+		return 1;
+	if (key == ' ' || key == '\t' || key == '\v' || key == '\f' || key == '\r')
+		return 1;
+	return 0;
+}
 int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env **env)
 {
 	t_term	*curs;
