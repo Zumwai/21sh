@@ -93,6 +93,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	i = 0;
 	j = 0;
 	q[0] = 0;
+	q[1] = 0;
 	while (t->data[i])
 	{
         if (t->data[i] == 92)
