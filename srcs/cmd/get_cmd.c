@@ -62,6 +62,79 @@ char                    **fill_res(char *s, int i, char **res)
     return (res);
 }
 
+/*int						skobka(char *s, int i)
+{
+	char				buf;
+
+	if (s[i] == '(')
+		buf = ')';
+	if (s[i] == '{')
+		buf = '}';
+	if (s[i] == '[')
+		buf = ']';
+	while (s[i] && s[i] != buf)
+		i++;
+	return (i);
+}
+
+int						count_args(char *s)
+{
+	int					res;
+	int					i;
+
+	i = 0;
+	res = 1;
+	while (s[i])
+	{
+		if (s[i] == ' ' && s[i + 1] && s[i + 1] != ' ')
+			res++;
+		if (s[i] == '{' || s[i] == '(' || s[i] == '[')
+		{
+			res++;
+			i = skobka(s, i);
+		}
+		i++;
+	}
+	return (res);
+}
+
+char					*get_struct(char *s, int *i)
+{
+
+}
+
+char					**save_the spaces(char *s)
+{
+	int					c;
+	char				**res;
+	int					i;
+	int					j;
+
+	i = 0;
+	j = 0;
+	c = count_argc(s);
+	res = (char *)malloc(sizeof(char) * c + 1);
+	while (i < c)
+	{
+		res[i] = get_struct(s, &j);
+		i++;
+	}
+	res[i] = '\0';
+	return (res);
+}*/
+
+char					get_spec(char s)
+{
+	char				res;
+
+	res = s;
+	if (s == 'n')
+		res = '\n';
+	if (s == 't')
+		res = '\t';
+	return (res);
+}
+
 char                    **save_the_spaces(char *s)
 {
 	char    **res;
@@ -72,7 +145,7 @@ char                    **save_the_spaces(char *s)
 	while (s[i] && s[i] != ' ' && s[i] != '\0')
 	    i++;
 	cm = ft_strsub(s, 0, i);
-	if (ft_strcmp(cm, "echo") != 0)
+	if (ft_strcmp(cm, "echo") != 0 && ft_strcmp(cm, "awk") != 0)
 	    res = ft_strsplit(s, ' ');
 	else
     {
@@ -85,194 +158,6 @@ char                    **save_the_spaces(char *s)
 
 static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 {
-    int			i;
-    int 		q[2]; /// 0 для одинарного, 1 для двойного
-    char		buf[10000];
-    int			j;
-
-    i = 0;
-    j = 0;
-    q[0] = 0;
-    q[1] = 0
-    while (t->data[i])
-    {
-        if (t->data[i] == 92)
-        {
-            if (t->data[i + 1] == 92)
-            {
-                buf[j] = t->data[i];
-                i = i + 2;
-                j++;
-            }
-            else
-                i++;
-        }
-        if (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0 && t->data[i])
-            buf[j++] = t->data[i++];
-        if (t->data[i] == 39 && q[1] == 0)
-        {
-            q[0] = 1;
-            i++;
-            while (t->data[i] != 39)
-            {
-                buf[j] = t->data[i];
-                j++;
-                i++;
-            }
-            if(t->data[i] == 39)
-            {
-                q[0] = 0;
-                i++;
-            }
-        }
-        if (t->data[i] == 34 && q[0] == 0)
-        {
-            q[1] = 1;
-            i++;
-            while (t->data[i] && t->data[i] != 34)
-            {
-                if (t->data[i] == 92)
-                {
-                    if (t->data[i + 1] == 92)
-                    {
-                        buf[j] = t->data[i];
-                        i = i + 2;
-                        j++;
-                    }
-                    if (t->data[i] == 92 && t->data[i + 1] == n)
-                    {
-                        buf[j] = '\n';
-                        i = i + 2;
-                        j++;
-                    }
-                }
-                if (t->data[i] == '$' && t->data[i + 1] != '$')
-                {
-                    if ((t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
-                        || (t->data[i] == '$' && j == 0 && t->data[i + 1] && t->data[i + 1] != ' '))
-                    {
-                        get_env_val(buf, &j, t->data, &i, env);
-                        i++;
-                    }
-                    else
-                        buf[j++] = t->data[i++];
-                }
-                else
-                    buf[j++] = t->data[i++];
-            }
-            q[1] = 0;
-            i++;
-        }
-        if (t->data[i] == '$' && t->data[i + 1] && t->data[i + 1] != '$')
-        {
-            if ((t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
-                || (t->data[i] == '$' && j == 0 && t->data[i + 1] && t->data[i + 1] != ' '))
-            {
-                get_env_val(buf, &j, t->data, &i, env);
-                i++;
-            }
-            else
-                buf[j++] = t->data[i++];
-        }
-        else
-            buf[j++] = t->data[i++];
-    }
-    buf[j] = '\0';
-    c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
-    return (c);
-   /* int			i;
-    int 		q[2]; /// 0 для одинарного, 1 для двойного
-    char		buf[10000];
-    int			j;
-
-    i = 0;
-    j = 0;
-    q[0] = 0;
-    q[1] = 0;
-    while (t->data[i])
-    {
-        if (t->data[i] == 92)
-        {
-            if (t->data[i + 1] == 92)
-            {
-                buf[j] = t->data[i];
-                i = i + 2;
-                j++;
-            }
-            else
-                i++;
-        }
-        if (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0 && t->data[i])
-            buf[j++] = t->data[i++];
-        if (t->data[i] == 39 && q[1] == 0)
-        {
-            q[0] = 1;
-            i++;
-            while (t->data[i] != 39)
-            {
-                buf[j] = t->data[i];
-                j++;
-                i++;
-            }
-            if(t->data[i] == 39)
-            {
-                q[0] = 0;
-                i++;
-            }
-        }
-        if (t->data[i] == 34 && q[0] == 0)
-        {
-            q[1] = 1;
-            i++;
-            while (t->data[i] && t->data[i] != 34)
-            {
-                if (t->data[i] == 92)
-                {
-                    if (t->data[i + 1] == 92)
-                    {
-                        buf[j] = t->data[i];
-                        i = i + 2;
-                        j++;
-                    }
-                    else
-                        i++;
-                }
-                if (t->data[i] == '$' && t->data[i + 1] != '$')
-                {
-                    if ((t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
-                        || (t->data[i] == '$' && j == 0 && t->data[i + 1] && t->data[i + 1] != ' '))
-                    {
-                        get_env_val(buf, &j, t->data, &i, env);
-                        i++;
-                    }
-                    else
-                        buf[j++] = t->data[i++];
-                }
-                else
-                    buf[j++] = t->data[i++];
-            }
-            q[1] = 0;
-            i++;
-        }
-        if (t->data[i] == '$' && t->data[i + 1] && t->data[i + 1] != '$')
-        {
-            if ((t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
-                || (t->data[i] == '$' && j == 0 && t->data[i + 1] && t->data[i + 1] != ' '))
-            {
-                get_env_val(buf, &j, t->data, &i, env);
-                i++;
-            }
-            else
-                buf[j++] = t->data[i++];
-        }
-        else
-            buf[j++] = t->data[i++];
-    }
-    buf[j] = '\0';
-    ft_putendl(buf);
-    c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
-    return (c);*/
-    /*
 	int			i;
 	int 		q[2]; /// 0 для одинарного, 1 для двойного
 	char		buf[10000];
@@ -284,86 +169,41 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	q[1] = 0;
 	while (t->data[i])
 	{
-        if (t->data[i] == 92)
-        {
-            if (t->data[i + 1] == 92)
-            {
-                buf[j] = t->data[i];
-                i = i + 2;
-                j++;
-            }
-            else
-                i++;
-        }
-		if (t->data[i] != 34 && t->data[i] != 39 && t->data[i] != '$' && q[1] == 0 && t->data[i])
-			buf[j++] = t->data[i++];
 		if (t->data[i] == 39 && q[1] == 0)
 		{
-			q[0] = 1;
+			q[0] = q[0] == 0 ? 1 : 0;
 			i++;
-			while (t->data[i] != 39)
-			{
-				buf[j] = t->data[i];
-				j++;
-				i++;
-			}
-			if(t->data[i] == 39)
-			{
-				q[0] = 0;
-				i++;
-			}
 		}
 		if (t->data[i] == 34 && q[0] == 0)
 		{
-			q[1] = 1;
-			i++;
-			while (t->data[i] && t->data[i] != 34)
-			{
-				if (t->data[i] == 92)
-                {
-				    if (t->data[i + 1] == 92)
-				    {
-                        buf[j] = t->data[i];
-                        i = i + 2;
-                        j++;
-                    }
-				    else
-				        i++;
-                }
-                if (t->data[i] == '$' && t->data[i + 1] != '$')
-                {
-                    if ((t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
-                        || (t->data[i] == '$' && j == 0 && t->data[i + 1] && t->data[i + 1] != ' '))
-                    {
-                        get_env_val(buf, &j, t->data, &i, env);
-                        i++;
-                    }
-                   else
-                        buf[j++] = t->data[i++];
-                }
-                else
-                    buf[j++] = t->data[i++];
-            }
-			q[1] = 0;
+			q[1] = q[1] == 0 ? 1 : 0;
 			i++;
 		}
-		if (t->data[i] == '$' && t->data[i + 1] && t->data[i + 1] != '$')
-        {
-		    if ((t->data[i - 1] && t->data[i - 1] != 92 && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
-		        || (t->data[i] == '$' && j == 0 && t->data[i + 1] && t->data[i + 1] != ' '))
-            {
-                get_env_val(buf, &j, t->data, &i, env);
-                i++;
-            }
-           else
-                buf[j++] = t->data[i++];
-        }
-		else
-            buf[j++] = t->data[i++];
+		if (t->data[i] == 92 && t->data[i + 1])
+		{
+			if (q[1] == 0 && q[0] == 0)
+			{
+				i++;
+				buf[j++] = t->data[i++];
+			}
+			else
+			{
+				i++;
+				buf[j++] = get_spec(t->data[i]);
+				i++;
+			}
+		}
+		if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != '$' && t->data[i + 1] != ' ')
+		{
+			get_env_val(buf, &j, t->data, &i, env);
+			i++;
+		}
+		if (t->data[i] != 92 && t->data[i] != 39 && t->data[i] != 34)
+			buf[j++] = t->data[i++];
 	}
 	buf[j] = '\0';
 	c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
-	return (c);*/
+	return (c);
 }
 
 t_cmd			*get_cmd(t_token *t, t_env **env)
