@@ -156,8 +156,19 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 	i--;
 	if (!(state & QUOTE) && str[i] == '\\')
 		state |= (GLUE);
-	if ((state & REQ_HDOC && !(state & GLUE))) {
+	if ((state & ARG_HDOC && !(state & GLUE))) {
 		printf("failed glue 3\n");
+		state |= FAILED;
+	}
+	if ((state & READ_HDOC) && str[i  + 1] == 0) {
+		state &= ~ (READ_HDOC);
+		state &= ~ (ARG_HDOC);
+		state |= HEREDOC;
+		save_coord_hdoc(del, i, size);
+	}
+	if ((state & REQ_HDOC) && !(state & GLUE))
+	{
+				printf("failed glue 5\n");
 		state |= FAILED;
 	}
 	return state;
