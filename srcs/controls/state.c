@@ -91,6 +91,14 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 		} else if (flag == IGNORE) {
 			i++;
 			flag = DEFAULT;
+			if (str[i] == 0)
+			{
+				if (state & ARG_HDOC) {
+					save_coord_hdoc(del, i - 1, size);
+					state &= ~(ARG_HDOC);
+					state |= HEREDOC;
+				}
+			}
 		}
 			if ((state & ARG_HDOC))
 			{
