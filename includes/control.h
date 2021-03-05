@@ -69,4 +69,7 @@ t_auto  *create_new_list(char *line);
 int is_relative_path(char *orig);
 char	*get_incomplete(t_term *pos, int *cd);
 
+void	handle_child_signal(int sig);
+void	handle_main_signal(int sig);
+void	handle_all_signals(int pid);
 #endif

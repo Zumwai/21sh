@@ -21,6 +21,7 @@
 # include "definition.h"
 # include "libft.h"
 
+extern t_yank   *g_sad;
 
 t_flag				*init_flag(void);
 t_flag 				*reset_flag(t_flag *flag);
@@ -32,7 +33,7 @@ int 				is_tokens_true(t_token *t);
 t_tree				*get_tree(t_token *token);
 
 /* EXEC */
-int			execute(t_cmd *t, t_env **env);
+int			execute(t_cmd *t, t_env **env, t_yank *buf);
 char				*get_path(char *s, t_env **env);
 
 void 				*init_tree(void);

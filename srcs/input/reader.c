@@ -22,7 +22,6 @@ char	*get_buf_line(char **line, int *size, int increase)
 	return (*line);
 }
 
-
 static t_term *init_prompt(struct termios *old_tty)
 {
 	struct termios	tty = {0};
@@ -96,6 +95,11 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 			if (red == -2) {
 				free_input_line(&buffer->current);
 						//free_input_line(&buffer->current);
+				ft_putchar('\n');
+				break ;
+			}
+			if (red == -6) {
+				buffer->current->main->state ^= (FAILED);
 				break ;
 			}
 			if (red == HIST_UP || red == HIST_D) {
