@@ -82,7 +82,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 		if (flag != IGNORE)
 		{
 			if (str[i] == '\\') {
-				if (str[i + 1] == 0) {
+				if (str[i + 1] != 0) {
 					flag = IGNORE;
 					if (state & REQ_HDOC)
 						state &= ~(REQ_HDOC);
@@ -135,18 +135,13 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				} else if (i > 0 && str[i] == '<' && str[i - 1] == '<' && !(state & QUOTE) && !(state & D_QUOTE)) {
 					state ^= ARG_HDOC;
 					state ^= REQ_HDOC;
-				} else if (i == 0 && str[0] != '\\' && str[1]) {
-					state |= FAILED;
-					printf("failed glue 1\n");
-						break ;
-				}
-				else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0) {
+				} else if (str[i] != '\\') {
+					state &= ~(REQ_HDOC);
+				} /* else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0) {
 					printf("failed glue 2\n");
 					state |= FAILED;
-					break ; /*useles ?*/
-					}
-				else
-					state ^= REQ_HDOC;
+					break ; useles ?
+				}*/
 			}
 			else if (str[i] == '\'' && !(state & D_QUOTE))
 				state ^= (QUOTE);
