@@ -91,7 +91,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 		} else if (flag == IGNORE) {
 			i++;
 			flag = DEFAULT;
-		} else {
+		}
 			if ((state & ARG_HDOC))
 			{
 				c = find_next_char(str, i);
@@ -165,7 +165,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 			} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) && !(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && doc == 2) {
 				doc = 0; /* probably an error? even if its going to happen, it will cause an error */
 				//state |= REQ_HDOC;
-			}
+			
 		}
 		i++;
 	}
