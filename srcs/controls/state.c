@@ -172,7 +172,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 		i++;
 	}
 	i--;
-	if (!(state & QUOTE) && str[i] == '\\' && ((str[i -1] && str[i - 1] != '\\') || i == 0))
+	if (!(state & QUOTE) && str[i] == '\\' && ((i > 0 && str[i - 1] != '\\') || i == 0))
 		state |= (GLUE);
 	if ((state & ARG_HDOC && !(state & GLUE))) {
 		printf("failed glue 3\n");

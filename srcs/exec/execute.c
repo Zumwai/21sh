@@ -77,7 +77,8 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	else
 		wait(&pid);
 	set_free_null(&cmd->target);
-	ft_free_tab(&environ);
+	ft_free_tab(environ);
+	environ = NULL;
 }
 
 static void *get_builtin(char *com)

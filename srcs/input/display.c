@@ -129,8 +129,8 @@ void	append_arr(t_term *pos, char *line, int len)
 			i++;
 		}
 	}
-	if (pos->store->arr)
-		free(pos->store->arr);
+	//pos->store->arr
+	free(pos->store->arr);
 	pos->store->arr = NULL;
 	if (i > 0) {
 		pos->store->size = i;
@@ -197,10 +197,9 @@ static void set_empty_line(t_term *pos, int y, int prev)
 /* delta currently is useless, always equals to zero */
 int display_input(t_term *pos, int delta)
 {
-	t_term	*curs = pos;
 	int	remainder;
 
-	if (!pos)
+	if (!pos)	/*prob useless */
 		return 0;
 	remainder = pos->index;
 	if (pos->prev)
@@ -211,12 +210,20 @@ int display_input(t_term *pos, int delta)
 	if (!pos->next)
 		tputs(tgetstr("cd", NULL), 1, putchar_like);
 	set_cursor(pos);
-	if (curs->next) {
-		display_input(curs->next, pos->delta_y + delta);
+	if (pos->next) {
+		display_input(pos->next, pos->delta_y + delta);
 	}
 	/* destruct scrollback buffer */
-	if (pos->store->arr)
-		ft_free_tab(&pos->store->arr);
+	int	i =0;
+	while (pos->store->arr[i])
+	{
+		free(pos->store->arr[i]);
+		pos->store->arr[i] = NULL;
+		i++;
+	}
+	//if (pos->store->arr)
+	//	ft_free_tab(pos->store->arr);
+	free(pos->store->arr);
 	pos->store->arr = NULL;
 	pos->store->size = 0;
 	pos->y -= delta;

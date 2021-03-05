@@ -80,7 +80,7 @@ int				display_env_list(char **com, t_env **ev);
 /* FREE */
 void set_free_null(char **line);
 void	set_free_all(t_env *ev, t_yank *buffer);
-void	ft_free_tab(char ***tab);
+void	ft_free_tab(char **tab);
 
 /* UTILS */
 int ft_abs(int i);
