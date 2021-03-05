@@ -89,16 +89,15 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 				}
 			}
 		} else if (flag == IGNORE) {
-			i++;
+
 			flag = DEFAULT;
-			if (str[i] == 0)
-			{
-				if (state & ARG_HDOC) {
-					save_coord_hdoc(del, i - 1, size);
-					state &= ~(ARG_HDOC);
-					state |= HEREDOC;
-				}
+			if (state & ARG_HDOC) {
+				//save_coord_hdoc(del, i - 1, size);
+				state &= ~(ARG_HDOC);
+				state ^= READ_HDOC;
+				state |= HEREDOC;
 			}
+			i++;
 		}
 			if ((state & ARG_HDOC))
 			{
@@ -179,7 +178,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 		printf("failed glue 3\n");
 		state |= FAILED;
 	}
-	if ((state & READ_HDOC) && str[i  + 1] == 0) {
+	if (!(state & GLUE) && (state & READ_HDOC) && str[i  + 1] == 0) {
 		state &= ~ (READ_HDOC);
 		state &= ~ (ARG_HDOC);
 		state |= HEREDOC;
@@ -301,6 +300,7 @@ int		determine_next_io_step(t_term *curs, int ret)
 
 int		consult_state(t_term *curs)
 {
+
 	int		ret = 0;
 	int		small = 0;
 	if (curs->prev) /* just to be safe */
