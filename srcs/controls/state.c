@@ -60,13 +60,15 @@ static int		verify_end_arg(char c, int n, int state)
 	return 0;
 }
 
+# define IGNORE 1
+
 static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 {
 	int	i = 0;
 	int	doc = 0;
 	int	state = prev;
 	char	c = 0;
-	int		flag ;
+	int		flag = 0;
 	state &= ~(GLUE);
 	if (!str[0]) {
 		if ((state & READ_HDOC)) {
@@ -77,84 +79,98 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 	}
 	while (str[i]) {
 		char b = str[i];
-		if ((state & ARG_HDOC))
+		if (flag != IGNORE)
 		{
-			c = find_next_char(str, i);
-			if (verify_char_heredoc(c)) { printf("failed verification 1%c\n", c);
-				state |= FAILED;
-			}
-			else if (str[i] != ' ' && c != '\\' && !check_for_zero(str, i)) {
-				state ^= ARG_HDOC;
-				state ^= READ_HDOC;
-				state |= HEREDOC;
-			}
-		}
-		else if ((state & READ_HDOC))
-		{
-			if ((verify_end_arg(str[i], str[i + 1], state) ||
-				(i == 0 && str[i] != '\\' && !str[i + 1]))) {
-					state ^= READ_HDOC;
-					save_coord_hdoc(del, i, size);
+			if (str[i] == '\\') {
+				if (str[i + 1] == 0) {
+					flag = IGNORE;
+					if (state & REQ_HDOC)
+						state &= ~(REQ_HDOC);
 				}
-		}
-		else if ((state & REQ_HDOC)) {
-			if (str[i] == '<') { /* dont need to check it here, useless and harmful */
-				c = find_next_char(str, i + 1);
-				if (verify_char_heredoc(c)) { printf("failed verification 2%c\n", c);
+			}
+		} else if (flag == IGNORE) {
+			i++;
+			flag = DEFAULT;
+		} else {
+			if ((state & ARG_HDOC))
+			{
+				c = find_next_char(str, i);
+				if (verify_char_heredoc(c)) { printf("failed verification 1%c\n", c);
 					state |= FAILED;
-					break ;
-					//return -1;
 				}
-				else if (c == '\\' && check_for_zero(str, i + 1)) {
+				else if (str[i] != ' ' && c != '\\' && !check_for_zero(str, i)) {
+					state ^= ARG_HDOC;
+					state ^= READ_HDOC;
+					state |= HEREDOC;
+				}
+			}
+			else if ((state & READ_HDOC))
+			{
+				if ((verify_end_arg(str[i], str[i + 1], state) ||
+					(i == 0 && str[i] != '\\' && !str[i + 1]))) {
+						state ^= READ_HDOC;
+						save_coord_hdoc(del, i, size);
+					}
+			}
+			else if ((state & REQ_HDOC)) {
+				if (str[i] == '<') { /* dont need to check it here, useless and harmful */
+					c = find_next_char(str, i + 1);
+					if (verify_char_heredoc(c)) { printf("failed verification 2%c\n", c);
+						state |= FAILED;
+					break ;
+							//return -1;
+					}
+					else if (c == '\\' && check_for_zero(str, i + 1)) {
+						state ^= ARG_HDOC;
+						state ^= REQ_HDOC;
+					} else {/*useless ?*/
+						state ^= ARG_HDOC; 
+						state ^= REQ_HDOC;
+					}
+					if (str[1] == 0) {
+						printf("failed sudden end of the line\n");
+						state |= FAILED;
+						break; /* useless? */
+					}
+				} else if (i > 0 && str[i] == '<' && str[i - 1] == '<' && !(state & QUOTE) && !(state & D_QUOTE)) {
 					state ^= ARG_HDOC;
 					state ^= REQ_HDOC;
-				} else {/*useless ?*/
-					state ^= ARG_HDOC; 
-					state ^= REQ_HDOC;
-				}
-				if (str[1] == 0) {
-					printf("failed sudden end of the line\n");
+				} else if (i == 0 && str[0] != '\\' && str[1]) {
 					state |= FAILED;
-					break; /* useless? */
+					printf("failed glue 1\n");
+						break ;
 				}
-			} else if (i > 0 && str[i] == '<' && str[i - 1] == '<' && !(state & QUOTE) && !(state & D_QUOTE)) {
-				state ^= ARG_HDOC;
-				state ^= REQ_HDOC;
-			} else if (i == 0 && str[0] != '\\' && str[1]) {
-				state |= FAILED;
-				printf("failed glue 1\n");
-				break ;
+				else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0) {
+					printf("failed glue 2\n");
+					state |= FAILED;
+					break ; /*useles ?*/
+					}
+				else
+					state ^= REQ_HDOC;
 			}
-			else if (str[i] != '<' && str[i + 1] != '\\' && str[i + 2] != 0) {
-				printf("failed glue 2\n");
-				state |= FAILED;
-				break ; /*useles ?*/
+			else if (str[i] == '\'' && !(state & D_QUOTE))
+				state ^= (QUOTE);
+			else if (str[i] == '\"'	&& !(state & QUOTE))
+			state ^= (D_QUOTE);
+			else if (!state && str[i] == '<') {
+				doc++;
+				state |= REQ_HDOC;
+			} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) &&!(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && str[i] == '<') {
+				doc++;
+				state |= REQ_HDOC;
 			}
-			else
+			else if (!state && doc == 2) {
+				doc = 0;
 				state ^= REQ_HDOC;
-		}
-		else if (str[i] == '\'' && !(state & D_QUOTE))
-			state ^= (QUOTE);
-		else if (str[i] == '\"'	&& !(state & QUOTE))
-		state ^= (D_QUOTE);
-		else if (!state && str[i] == '<') {
-			doc++;
-			state |= REQ_HDOC;
-		} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) &&!(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && str[i] == '<') {
-			doc++;
-			state |= REQ_HDOC;
-		}
-		else if (!state && doc == 2) {
-			doc = 0;
-			state ^= REQ_HDOC;
-		} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) && !(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && doc == 2) {
-			doc = 0; /* probably an error? even if its going to happen, it will cause an error */
-			//state |= REQ_HDOC;
+			} else if (!(state & REQ_HDOC) && !(state & ARG_HDOC) && !(state & QUOTE) && !(state & D_QUOTE) && (state & HEREDOC) && doc == 2) {
+				doc = 0; /* probably an error? even if its going to happen, it will cause an error */
+				//state |= REQ_HDOC;
+			}
 		}
 		i++;
 	}
 	i--;
-	if (!(state & QUOTE) && str[i] == '\\')
+	if (!(state & QUOTE) && str[i] == '\\' && ((str[i -1] && str[i - 1] != '\\') || i == 0))
 		state |= (GLUE);
 	if ((state & ARG_HDOC && !(state & GLUE))) {
 		printf("failed glue 3\n");
@@ -203,7 +219,7 @@ static void append_main_line(t_actual *main, char *sub, int state)
     if ((state & GLUE)) {
 		new[size--] = 0;
 		new[size--] = 0;
-		new[size--] = 0;
+		//new[size--] = 0;
 	}
 	else if ((state & HEREDOC) || (state & QUOTE) || (state & D_QUOTE)) {
 		size--;
