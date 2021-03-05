@@ -43,13 +43,33 @@ static void		init_tty(void)
 		handle_exit_errors("specify a valid terminal name with setenv\n");
 }
 
+static void init_tty_attr(t_yank *buf)
+{
+	struct termios	old_tty = {0};
+	struct termios	tty = {0};
+
+	tcgetattr(STDIN_FILENO, &old_tty);
+	tcgetattr(STDIN_FILENO, &tty);
+	//tty.c_lflag &= ~(ECHO | ICANON);
+	tty.c_lflag &= ~(ECHO | ICANON | ISIG);
+	//tty.c_oflag &= ~(TABDLY);
+//	tty.c_lflag &= ~(ECHO | IEXTEN | ISIG);
+	tty.c_cc[VMIN] = 1;
+	tty.c_cc[VTIME] = 1;
+	buf->old = old_tty;
+	buf->work= tty;
+	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+}
+
 static t_yank	*init_buffer(void)
 {
 	t_yank *new;
 
 	if(!(new = (t_yank *)malloc(sizeof(t_yank))))
 		return (NULL);
-	ft_memset(new, 0, sizeof(t_yank)); /*
+	ft_memset(new, 0, sizeof(t_yank));
+	init_tty_attr(new);
+	 /*
 	new->size = 0;
 	new->yanked = 0;
 	new->history = NULL;
@@ -217,6 +237,7 @@ t_env		*create_env_list(char **env)
 	set_dir_env(&head);
 	return (head);
 }
+
 t_env	*init_shell(int ac, char **av, char **env, t_yank **buffer)
 {
 	t_env	*ev;

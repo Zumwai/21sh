@@ -184,9 +184,9 @@ static void set_empty_line(t_term *pos, int y, int prev)
 {
 	/*skip clearing if y < 0 */
 	if (pos->y + pos->delta_y > 0) {
-		tputs (tgoto (tgetstr("cm", NULL), 0, y - 1), 1, putchar_like);
 		tputs(tgetstr("cb", NULL), 1, putchar_like);
 		tputs(tgetstr("cd", NULL), 1, putchar_like);
+		tputs (tgoto (tgetstr("cm", NULL), 0, y - 1), 1, putchar_like);
 		if (!prev)
 			ft_putstr_fd("shelp$>", 1);
 	} else {

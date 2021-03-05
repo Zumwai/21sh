@@ -49,18 +49,53 @@ int     check_sig(int sig)
      || sig == SIGSTOP || sig == SIGQUIT
       || sig == SIGCONT || sig == SIGSTOP
       || sig == SIGTSTP)
-    return (1);
+        return (1);
     return (0);
+}
+
+void    changer_y(t_yank *curr)
+{
+    t_term *pos = NULL;
+
+    pos = curr->input;
+    while (pos)
+    {
+        
+    }
+}
+void    erase_printed(int printed)
+{
+    int i = 0;
+    while (i < printed)
+    {
+		ft_printf("\010 \010");
+        
+	}
+}
+
+void    modify_yyz(t_term *pos)
+{
+
 }
 
 void	handle_main_signal(int sig)
 {
     char    *ret;
     ret = NULL;
+    struct winsize dimensions;
     if (sig == SIGWINCH)
     {
-        if (g_sad->current)
+        if (g_sad->current) {
+            ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
+            tcsetattr(STDIN_FILENO, TCSANOW, &g_sad->old);
+            g_sad->win_x = dimensions.ws_col;
+            g_sad->win_y = dimensions.ws_col;
             display_input(g_sad->current, 0);
+            tcsetattr(STDIN_FILENO, TCSANOW, &g_sad->work);
+            //modify yyz
+            //erase_printed(g_sad->current->main->size);
+            //
+        }
     } else if (check_sig(sig)) {
         if (sig == SIGINT)
             ft_putstr("^C");
@@ -85,16 +120,16 @@ void	handle_all_signals(int pid)
 	if (pid) {
 		//signal(SIGINT, handle_main_signal);
     	signal(SIGABRT, handle_main_signal);
-    	signal(SIGINT, handle_main_signal);
+    	//signal(SIGINT, handle_main_signal);
     	//signal(SIGSTOP, handle_main_signal);
     	signal(SIGCONT, handle_main_signal);
-    	signal(SIGTSTP, handle_main_signal);
+    	//signal(SIGTSTP, handle_main_signal);
     	//signal(SIGKILL, handle_main_signal);
     	signal(SIGQUIT, handle_main_signal);
     	signal(SIGCHLD, handle_main_signal);
         signal(SIGWINCH, handle_main_signal);
         signal(SIGPIPE, handle_main_signal);
-        signal(SIGTERM, handle_main_signal);
+        //signal(SIGTERM, handle_main_signal);
     }
 	if (!pid) {
         //signal(SIGSTOP, handle_child_signal);
