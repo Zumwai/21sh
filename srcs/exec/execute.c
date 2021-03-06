@@ -147,6 +147,24 @@ static int 		get_cmd_type(t_cmd *cmd, int fd)
 	return (1);
 }
 
+void			create_file_is_it_doent_exist(t_cmd *cmd)
+{
+	int fd;
+
+	fd = 0;
+	cmd = cmd->next;
+	while (cmd)
+	{
+		if (cmd->prev->type == 7 || cmd->prev->type == 6)
+		{
+			fd = open(cmd->arr[0], O_CREAT | O_RDWR | O_APPEND,
+					  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+			close(fd);
+		}
+		cmd = cmd->next;
+	}
+}
+
 int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 {
 	int			read;
@@ -168,6 +186,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	handle_all_signals(0);
 	if (!cmd->arr || !cmd->arr[0])
 		return 1;
+	create_file_is_it_doent_exist(cmd);
 	while (cmd)
 	{
 		//m = 0;
