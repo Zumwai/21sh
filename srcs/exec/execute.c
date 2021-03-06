@@ -51,6 +51,15 @@ static char	**convert_env_array(t_env **ev)
 	return (tab);
 }
 
+int				next_two(t_cmd * cmd)
+{
+	while (cmd && cmd->type == 8)
+		cmd = cmd->next;
+	if (cmd->type == 2)
+		return (1);
+	return (0);
+}
+
 void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 {
 	pid_t		pid;
@@ -64,7 +73,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 			dup2(read, 0);
 			close(read);
 		}
-		if (fd != 1 && (cmd->type == 2 || cmd->type == 6 || cmd->type == 7))
+		if (fd != 1 && (cmd->type == 2 || cmd->type == 6 || cmd->type == 7 || (cmd->type == 8 && next_two(cmd))))
 		{
 			dup2(fd, 1);
 			close(fd);
@@ -129,6 +138,33 @@ int             get_fd_write(t_cmd *cmd)
     return (fd);
 }
 
+static int 		get_cmd_type(t_cmd *cmd, int fd)
+{
+	while (cmd && cmd->type == 8)
+		cmd = cmd->next;
+	if (cmd->type == 2)
+		return (fd);
+	return (1);
+}
+
+void			create_file_is_it_doent_exist(t_cmd *cmd)
+{
+	int fd;
+
+	fd = 0;
+	cmd = cmd->next;
+	while (cmd)
+	{
+		if (cmd->prev->type == 7 || cmd->prev->type == 6)
+		{
+			fd = open(cmd->arr[0], O_CREAT | O_RDWR | O_APPEND,
+					  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+			close(fd);
+		}
+		cmd = cmd->next;
+	}
+}
+
 int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 {
 	int			read;
@@ -150,13 +186,14 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	handle_all_signals(0);
 	if (!cmd->arr || !cmd->arr[0])
 		return 1;
+	create_file_is_it_doent_exist(cmd);
 	while (cmd)
 	{
 		//m = 0;
 		//while (cmd->arr[m])
 			//ft_putendl(cmd->arr[m++]);
 	    pipe(fd);
-	    if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8)
+	    if (cmd->type == 6 || cmd->type == 7)
 	        wfd = get_fd_write(cmd);
 	    if ((builtin = get_builtin(cmd->arr[0])) != NULL)
 	    {
@@ -176,7 +213,11 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
             if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
                 do_proc(read, wfd, cmd->target, cmd, env);
             if (cmd->target != NULL && cmd->type == 8)
-                do_proc(wfd, fd[1], cmd->target, cmd, env);
+            {
+            	read = get_fd_write(cmd);
+            	wfd = get_cmd_type(cmd, fd[1]);
+				do_proc(read, wfd, cmd->target, cmd, env);
+			}
 		}
 	if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8)
 	{
