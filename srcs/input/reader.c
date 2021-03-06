@@ -23,23 +23,6 @@ char	*get_buf_line(char **line, int *size, int increase)
 }
 
 
-static t_term *init_prompt(struct termios *old_tty)
-{
-	struct termios	tty = {0};
-	t_term			*pos = NULL;
-	tcgetattr(STDIN_FILENO, old_tty);
-	tcgetattr(STDIN_FILENO, &tty);
-	//tty.c_lflag &= ~(ECHO | ICANON);
-	tty.c_lflag &= ~(ECHO | ICANON | ISIG);
-	//tty.c_oflag &= ~(TABDLY);
-//	tty.c_lflag &= ~(ECHO | IEXTEN | ISIG);
-	tty.c_cc[VMIN] = 1;
-	tty.c_cc[VTIME] = 1;
-	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
-	pos = create_new_io_struct(NULL);
-	return (pos);
-}
-
 static long long	incapsulate_read(void)
 {
 	long long key;
@@ -71,31 +54,37 @@ void	recalc_y(t_term *pos, int y)
 static t_term *get_input(t_yank *buffer, t_env **env)
 {
 	ssize_t		red;
-	struct termios	old_tty;
 	long long	key;
 	int tmp;
 	t_term	*pos;
-//	t_term	*head;
+    struct winsize dimensions;
 
-	ft_bzero(&old_tty, sizeof(struct termios));
-	pos = init_prompt(&old_tty);
+	tcsetattr(STDIN_FILENO, TCSANOW, &(buffer)->work);
+	pos = create_new_io_struct(NULL);
 	ft_putstr_size("shelp$>", 7);
 	pos->x += 7;
-//	head = pos;
 	key = 0;
 	red = 0;
 	buffer->current = pos;
 	buffer->saved = NULL;
+	ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
+    g_sad->win_x = dimensions.ws_col;
+    g_sad->win_y = dimensions.ws_col;
 	while (1)
 	{
 			key = incapsulate_read();
-			red = (read_key(key, buffer->current, old_tty, buffer, env));
+			red = (read_key(key, buffer->current, buffer->old, buffer, env));
 		//	printf("%lld\n", key);
 			if (red == DEFAULT || red == -5 || red == -1)
 				break ;
 			if (red == -2) {
 				free_input_line(&buffer->current);
 						//free_input_line(&buffer->current);
+				ft_putchar('\n');
+				break ;
+			}
+			if (red == -6) {
+				buffer->current->main->state ^= (FAILED);
 				break ;
 			}
 			if (red == HIST_UP || red == HIST_D) {
@@ -109,7 +98,7 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 	}
 	if (red == 0)
 		buffer->current->main->state = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &old_tty);
+	tcsetattr(STDIN_FILENO, TCSANOW, &(buffer)->old);
 	return (buffer->current);
 }
 

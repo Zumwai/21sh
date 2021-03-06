@@ -193,6 +193,10 @@ typedef struct s_yank
 	int				size;
 	int				counter;
 	char			*sub;
+	struct termios	old;
+	struct termios	work;
+	int				win_x;
+	int				win_y;
 	t_history		*hist_ptr;
 	t_term			*input;
 	t_term			*current;

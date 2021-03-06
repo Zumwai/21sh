@@ -15,9 +15,11 @@
 void	handle_empty_error(char *name, char *description)
 {
 	ft_putstr_fd("-shelp!: ", STDERR_FILENO);
-	ft_putstr_fd(name, STDERR_FILENO);
+	if (name)
+		ft_putstr_fd(name, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
-	ft_putstr_fd(description, STDERR_FILENO);
+	if (description)
+		ft_putstr_fd(description, STDERR_FILENO);
 }
 
 int		handle_return_error(int num, char *name)

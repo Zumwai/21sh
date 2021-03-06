@@ -28,10 +28,11 @@ void			free_cmd_list(t_cmd **cmd)
 	{
 		tmp = curs->next;
 		if (curs->arr)
-			ft_free_tab(&curs->arr);
+			ft_free_tab(curs->arr);
 		if (curs->target)
 			set_free_null(&curs->target);
 		free(curs);
+		curs->arr = NULL;
 		curs = NULL;
 		curs = tmp;
 	}
@@ -91,12 +92,13 @@ extern void	set_free_all(t_env *ev, t_yank *buffer)
 	}
 }
 
-void	ft_free_tab(char ***tab)
+void	ft_free_tab(char **tab)
 {
 	int		i;
+	int		j = 0;
 	char	**curs;
 
-	curs = *tab;
+	curs = tab;
 	i = 0;
 	if (!curs)
 		return ;
@@ -104,13 +106,12 @@ void	ft_free_tab(char ***tab)
 		return ;
 	while (curs[i])
 	{
-		if (curs[i])
-			set_free_null(&curs[i]);
+		free(curs[i]);
 		i++;
 	}
-	if (*tab)
-		free(*tab);
-	*tab = NULL;
+	if (tab)
+		free(tab);
+	tab = NULL;
 }
 
 void set_free_null(char **line)

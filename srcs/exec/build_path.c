@@ -138,7 +138,8 @@ static char			*is_system_wide(char *com, t_env **ev, int *res)
 	}
 	if (*res <= IXUS)
 		handle_return_error(*res, com);
-	ft_free_tab(&env_path);
+	ft_free_tab(env_path);
+	env_path = NULL;
 	if ((*res))
 	set_free_null(&path);
 	return path;

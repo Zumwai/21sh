@@ -77,7 +77,8 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	else
 		wait(&pid);
 	set_free_null(&cmd->target);
-	ft_free_tab(&environ);
+	ft_free_tab(environ);
+	environ = NULL;
 }
 
 static void *get_builtin(char *com)
@@ -128,7 +129,7 @@ int             get_fd_write(t_cmd *cmd)
     return (fd);
 }
 
-int			execute(t_cmd *cmd, t_env **env)
+int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 {
 	int			read;
 	int			fd[2];
@@ -146,6 +147,7 @@ int			execute(t_cmd *cmd, t_env **env)
 	int ffd;
 	ffd = 1;
 	//int m = 0;
+	handle_all_signals(0);
 	if (!cmd->arr || !cmd->arr[0])
 		return 1;
 	while (cmd)

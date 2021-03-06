@@ -38,7 +38,8 @@ SRCS =	main.c \
 		autocomplete/auto_trie.c \
 		autocomplete/auto_utils.c \
 		autocomplete/print.c \
-		autocomplete/auto_state.c
+		autocomplete/auto_state.c \
+		signals/sig_handler.c
 DIR_SRCS = srcs/
 SOURCE = $(addprefix $(DIR_SRCS), $(SRCS))
 OBJECT = $(patsubst %.c,%.o,$(SOURCE))

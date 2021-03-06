@@ -49,7 +49,9 @@ int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env
 {
 	t_term	*curs;
 	if (key == 27 || (key == 4 && (!pos->new || !pos->new[0])))
-		return (key_exit(old, pos, buf));
+		return (key_exit(buf->old, pos, buf));
+	if (key == 3)
+		return -6;
 	curs = get_last_pos(pos);
 	if (key == 4 && (!curs->new || !curs->new[0]))
 		return -5;

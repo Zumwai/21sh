@@ -141,7 +141,7 @@ t_history	*save_history(t_yank *buffer)
 	t_history	*temp;
 
 	temp = buffer->history;
-	if (!buffer->current || !buffer->current->main || buffer->current->main->line[0] == 0)
+	if (!buffer->current || !buffer->current->main || !buffer->current->main->line || buffer->current->main->line[0] == 0)
 		return (temp);
 	if (buffer->history)
 		if (!ft_strcmp(buffer->current->main->line, buffer->history->line->main->line)) {
