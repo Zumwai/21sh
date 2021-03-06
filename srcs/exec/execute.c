@@ -93,10 +93,10 @@ static void *get_builtin(char *com)
 		return(&sh_exit);
 	if (ft_strequ(com, "clear"))
 		return(&sh_clear);
-	//if (ft_strequ(com, "setenv"))
-		//return(&sh_setenv);
-//	if (ft_strequ(com, "unsetenv"))
-//		return(&sh_unset);
+	if (ft_strequ(com, "setenv"))
+		return(&sh_setenv);
+	if (ft_strequ(com, "unsetenv"))
+		return(&sh_unset);
 	if (ft_strequ(com, "ppid"))
 		return (&display_id_kid_parent);
 	/*if (ft_strequ(com, "pwd"))

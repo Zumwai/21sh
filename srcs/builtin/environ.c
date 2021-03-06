@@ -30,24 +30,28 @@ int					sh_setnew(char *nm, char *value, t_env **env)
 	return (1);
 }
 
-extern int			sh_setenv(char **cmd, t_env **env)
+extern int			sh_setenv(char **cmd, t_env **env, __attribute((unused))int fd)
 {
+	int m = 0;
+	while (cmd[m])
+		ft_putendl(cmd[m++]);
 	if (cmd[1] == NULL)
 		display_env_list(cmd, env);
-	else if (!cmd[3])
+	else if (ft_strsplit_len(cmd) > 3)
 	{
 		ft_putendl("setenv% TOO few arguments");
 		ft_putendl("Usage: setenv <variable> <value>");
 	}
-	else if (!(sh_setnew(cmd[1], cmd[2], env)))
+	else if (ft_strsplit_len(cmd) < 3)
 	{
 		ft_putstr("setenv: nothing to set for this variable ");
 		ft_putendl(cmd[1]);
 	}
+	sh_setnew(cmd[1], cmd[2], env);
 	return 1;
 }
 
-/* UNUSED */
+
 static void				do_unset(char *nm, t_env **env)
 {
 	t_env			*tmp;
@@ -72,8 +76,8 @@ static void				do_unset(char *nm, t_env **env)
 	}
 }
 
-/* UNUSED */
-extern t_env				*sh_unset(char **nm, t_env **env)
+
+extern t_env				*sh_unset(char **nm, t_env **env, __attribute((unused))int fd)
 {
 	t_env			*cur;
 	int				i;
