@@ -198,35 +198,37 @@ static void set_empty_line(t_term *pos, int y, int prev)
 int display_input(t_term *pos, int delta)
 {
 	int	remainder;
+	t_term	curr;
 
 	if (!pos)	/*prob useless */
 		return 0;
-	remainder = pos->index;
-	if (pos->prev)
-		pos->y += delta;
-	set_empty_line(pos, pos->y, !!pos->prev);
+	curr = *pos;
+	remainder = curr.index;
+	if (curr.prev)
+		curr.y += delta;
+	set_empty_line(&curr, curr.y, !!curr.prev);
 	while (remainder >= 0)
-		remainder = draw_line(pos, remainder);
-	if (!pos->next)
+		remainder = draw_line(&curr, remainder);
+	if (!curr.next)
 		tputs(tgetstr("cd", NULL), 1, putchar_like);
-	set_cursor(pos);
-	if (pos->next) {
-		display_input(pos->next, pos->delta_y + delta);
+	set_cursor(&curr);
+	if (curr.next) {
+		display_input(curr.next, curr.delta_y + delta);
 	}
 	/* destruct scrollback buffer */
 	int	i =0;
-	while (pos->store->arr[i])
+	while (curr.store->arr[i])
 	{
-		free(pos->store->arr[i]);
-		pos->store->arr[i] = NULL;
+		free(curr.store->arr[i]);
+		curr.store->arr[i] = NULL;
 		i++;
 	}
 	//if (pos->store->arr)
 	//	ft_free_tab(pos->store->arr);
-	free(pos->store->arr);
-	pos->store->arr = NULL;
-	pos->store->size = 0;
-	pos->y -= delta;
-	pos->delta_y = 0;
+	free(curr.store->arr);
+	curr.store->arr = NULL;
+	curr.store->size = 0;
+	curr.y -= delta;
+	curr.delta_y = 0;
 	return (0);
 }
