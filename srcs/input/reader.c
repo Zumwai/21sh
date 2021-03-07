@@ -33,7 +33,7 @@ static long long	incapsulate_read(void)
 	{
 		ret = 0;
 		ret = read(STDIN_FILENO, &key, sizeof(key));
-		printf("%lld\n", key);
+		//printf("%lld\n", key);
 		if (ret == -1)
 			handle_exit_errors("read ERRNO");
 		else
