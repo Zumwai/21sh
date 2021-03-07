@@ -132,10 +132,16 @@ char					get_spec(char s)
 		res = '\n';
 	if (s == 't')
 		res = '\t';
+	if (s == 'r')
+		res = '\r';
+	if (s == 'v')
+		res = '\v';
+	if (s == 'f')
+		res = '\f';
 	return (res);
 }
 
-char                    **save_the_spaces(char *s)
+char				**save_the_spaces(char *s)
 {
 	char    **res;
 	int i;
