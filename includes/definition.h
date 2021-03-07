@@ -197,6 +197,7 @@ typedef struct s_yank
 	struct termios	work;
 	int				win_x;
 	int				win_y;
+	int				winch;
 	t_history		*hist_ptr;
 	t_term			*input;
 	t_term			*current;

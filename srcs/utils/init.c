@@ -5,6 +5,8 @@ t_cmd			*init_cmd(void)
 	t_cmd		*new;
 
 	new = (t_cmd *)malloc(sizeof(t_cmd));
+	ft_memset(new, 0, sizeof(t_cmd));
+	/*
 	new->arr = NULL;
 	new->fd1 = -1;
 	new->fd2 = -1;
@@ -13,6 +15,7 @@ t_cmd			*init_cmd(void)
 	new->target = NULL;
 	new->next = NULL;
 	new->prev = NULL;
+	*/
 	return (new);
 }
 

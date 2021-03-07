@@ -31,8 +31,8 @@ void			free_cmd_list(t_cmd **cmd)
 			ft_free_tab(curs->arr);
 		if (curs->target)
 			set_free_null(&curs->target);
-		free(curs);
 		curs->arr = NULL;
+		free(curs);
 		curs = NULL;
 		curs = tmp;
 	}
