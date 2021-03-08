@@ -123,6 +123,65 @@ char					**save_the spaces(char *s)
 	return (res);
 }*/
 
+/*int						how_much_restreams(char *s)
+{
+	int					i;
+	int					res;
+
+	i = 0;
+	res = 0;
+	while (s[i])
+	{
+
+	}
+	return (res);
+}*/
+
+ /*int					how_much_words(char *s)
+ {
+ 	int					i;
+ 	int					res;
+ 	char				c;
+
+ 	i = 0;
+ 	res = 0;
+ 	while (s[i])
+	{
+ 		if (s[i] == '"' || s[i] == 39)
+		{
+ 			c = s[i++];
+ 			while (s[i] != c)
+ 				i++;
+ 			res = res + 1;
+ 			i++;
+		}
+ 		if (s[i] && s[i] != ' ' && (s[i + 1] == ' ' || s[i + 1] == '\0'))
+			res = res + 1;
+ 		i++;
+	}
+ 	return (res);
+ }
+
+ char					*s_to_arr(char *s)
+ {
+ 	int					i;
+ 	char				**res;
+ 	int					j;
+ 	int					c;
+
+ 	c = 0;
+ 	j = 0;
+ 	i = how_much_words(s);
+ 	res = (char **)malloc(sizeof(char *) * i + 1);
+ 	while (s[c])
+	{
+ 		res[j] = fill_str(s, &c);
+ 		j++;
+	}
+ 	res[j] = NULL;
+ 	return (res);
+ }*/
+
 char					get_spec(char s)
 {
 	char				res;
@@ -168,11 +227,15 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	int 		q[2]; /// 0 для одинарного, 1 для двойного
 	char		buf[10000];
 	int			j;
+	//int			d;
 
+	//d = how_much_words(t->data);
+	printf("words === %d\n", d);
 	i = 0;
 	j = 0;
 	q[0] = 0;
 	q[1] = 0;
+
 	while (t->data[i])
 	{
 		if (t->data[i] == 39 && q[1] == 0)
