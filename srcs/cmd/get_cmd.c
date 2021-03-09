@@ -123,7 +123,77 @@ char					**save_the spaces(char *s)
 	return (res);
 }*/
 
-/*int						how_much_restreams(char *s)
+/*int						len_of_word(char *s, int *i)
+{
+	int					res;
+	char				c;
+
+	res = 0
+	if (s[i] == '"' || s[i] == 39)
+	{
+		c = s[*i];
+		res = 2;
+		*i = *i + 1;
+		while (s[*i] != c)
+		{
+			res++;
+			*i = *i + 1;
+		}
+	}
+	else
+	{
+		while ( s[*i] != ' ')
+		{
+			res++;
+			*i = *i + 1;
+		}
+	}
+	return (res);
+}
+
+int						its_redir(char *s)
+{
+	int					i;
+
+	i = 0;
+	if (s[i] == '"' || s[i] == '\'')
+		return (0);
+	while (s[i])
+	{
+		if (s[i] == '>' && s[i] && s[i + 1] == '&')
+			return (1);
+		if (s[i] == '<' && s[i] && s[i + 1] == '&')
+			return (1);
+		if (s[i] == '>' && s[i - 1] && s[i - 1] == '&')
+			return (1);
+	}
+	return (0);
+}
+
+char					fill_str(char s, int *i)
+{
+	char				res;
+	int					j;
+	int					l;
+	char				buf[1000];
+
+	j = 0;
+	l = len_of_word(s, &i);
+	while (j < l)
+	{
+		buf[j] == s[*i];
+		j++;
+		*i = *i + 1;
+	}
+	buf[j] = '\0';
+	if (its_redir(buf))
+		fill_str(s, &i);
+	else
+		res = ft_strdup(buf);
+	return(res);
+}
+
+int						how_much_restreams(char *s)
 {
 	int					i;
 	int					res;
@@ -132,12 +202,18 @@ char					**save_the spaces(char *s)
 	res = 0;
 	while (s[i])
 	{
-
+		if (s[i] == '>' && s[i] && s[i + 1] == '&')
+			res++;
+		if (s[i] == '<' && s[i] && s[i + 1] == '&')
+			res++;
+		if (s[i] == '>' && s[i - 1] && s[i - 1] == '&')
+			res++;
+		i++;
 	}
 	return (res);
-}*/
+}
 
- /*int					how_much_words(char *s)
+ int					how_much_words(char *s)
  {
  	int					i;
  	int					res;
@@ -171,7 +247,7 @@ char					**save_the spaces(char *s)
 
  	c = 0;
  	j = 0;
- 	i = how_much_words(s);
+ 	i = how_much_words(s) - how_much_restreams(s);
  	res = (char **)malloc(sizeof(char *) * i + 1);
  	while (s[c])
 	{
