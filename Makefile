@@ -5,6 +5,7 @@ SRCS =	main.c \
 		builtin/env_list.c \
 		builtin/environ.c \
 		builtin/pwd_id_exit.c \
+		builtin/type.c \
 		cmd/get_cmd.c \
 		exec/builtin_fd.c \
 		exec/execute.c \
