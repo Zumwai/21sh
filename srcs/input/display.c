@@ -216,7 +216,7 @@ int display_input(t_term *pos, int delta)
 		display_input(curr.next, curr.delta_y + delta);
 	}
 	/* destruct scrollback buffer */
-	int	i =0;
+	int	i = 0;
 	while (curr.store->arr[i])
 	{
 		free(curr.store->arr[i]);
@@ -225,10 +225,15 @@ int display_input(t_term *pos, int delta)
 	}
 	//if (pos->store->arr)
 	//	ft_free_tab(pos->store->arr);
-	free(curr.store->arr);
+	if (pos->store->arr)
+		free(curr.store->arr);
 	curr.store->arr = NULL;
 	curr.store->size = 0;
 	curr.y -= delta;
+	//if (curr.y != pos->y)
+		pos->y = curr.y;
 	curr.delta_y = 0;
+	//if (curr.y != pos->y)
+	//	pos->y = curr.y - 1;
 	return (0);
 }

@@ -198,6 +198,7 @@ typedef struct s_yank
 	int				win_x;
 	int				win_y;
 	int				winch;
+	int				diff;
 	t_history		*hist_ptr;
 	t_term			*input;
 	t_term			*current;
