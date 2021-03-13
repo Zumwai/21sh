@@ -96,56 +96,33 @@ int						count_args(char *s)
 		i++;
 	}
 	return (res);
-}
-
-char					*get_struct(char *s, int *i)
-{
-
-}
-
-char					**save_the spaces(char *s)
-{
-	int					c;
-	char				**res;
-	int					i;
-	int					j;
-
-	i = 0;
-	j = 0;
-	c = count_argc(s);
-	res = (char *)malloc(sizeof(char) * c + 1);
-	while (i < c)
-	{
-		res[i] = get_struct(s, &j);
-		i++;
-	}
-	res[i] = '\0';
-	return (res);
 }*/
 
-/*int						len_of_word(char *s, int *i)
+
+int						len_of_word(char *s, int i)
 {
 	int					res;
 	char				c;
 
-	res = 0
+	res = 0;
+	printf("there!!! === len_of_word\n");
 	if (s[i] == '"' || s[i] == 39)
 	{
-		c = s[*i];
+		c = s[i];
 		res = 2;
-		*i = *i + 1;
-		while (s[*i] != c)
+		i = i + 1;
+		while (s[i] && s[i] != c)
 		{
 			res++;
-			*i = *i + 1;
+			i = i + 1;
 		}
 	}
 	else
 	{
-		while ( s[*i] != ' ')
+		while (s[i] && s[i] != ' ')
 		{
 			res++;
-			*i = *i + 1;
+			i = i + 1;
 		}
 	}
 	return (res);
@@ -166,30 +143,41 @@ int						its_redir(char *s)
 			return (1);
 		if (s[i] == '>' && s[i - 1] && s[i - 1] == '&')
 			return (1);
+		i++;
 	}
 	return (0);
 }
 
-char					fill_str(char s, int *i)
+char					*fill_str(char *s, int *i)
 {
-	char				res;
+	char				*res;
 	int					j;
 	int					l;
 	char				buf[1000];
+	int 				course;
 
+	course = (*i);
 	j = 0;
-	l = len_of_word(s, &i);
+	//printf("there!!!\n");
+	l = len_of_word(s, course);
+	printf("len === %d course === %d\n", l, course);
+	//printf("str === %s\n", s);
+	res = NULL;
 	while (j < l)
 	{
-		buf[j] == s[*i];
+	//	printf("len === %d\n", l);
+		buf[j] = s[*i];
+		printf("char === %c\n", buf[j]);
 		j++;
 		*i = *i + 1;
 	}
 	buf[j] = '\0';
+	printf("res === %s\n", buf);
 	if (its_redir(buf))
 		fill_str(s, &i);
 	else
 		res = ft_strdup(buf);
+	printf("res === %s\n", res);
 	return(res);
 }
 
@@ -207,6 +195,7 @@ int						how_much_restreams(char *s)
 		if (s[i] == '<' && s[i] && s[i + 1] == '&')
 			res++;
 		if (s[i] == '>' && s[i - 1] && s[i - 1] == '&')
+
 			res++;
 		i++;
 	}
@@ -238,25 +227,33 @@ int						how_much_restreams(char *s)
  	return (res);
  }
 
- char					*s_to_arr(char *s)
+ char					**s_to_arr(char *s)
  {
  	int					i;
  	char				**res;
  	int					j;
  	int					c;
+ 	int 				f;
+ 	int					g;
 
  	c = 0;
  	j = 0;
- 	i = how_much_words(s) - how_much_restreams(s);
+ 	f = how_much_words(s);
+ 	g = how_much_restreams(s);
+ 	printf("%d === f\n", f);
+	 printf("%d === g\n", g);
+ 	i = f - g;
  	res = (char **)malloc(sizeof(char *) * i + 1);
- 	while (s[c])
+ 	while (j < f)
 	{
  		res[j] = fill_str(s, &c);
  		j++;
+ 		printf("%d == int\n", c);
+ 		c++;
 	}
- 	res[j] = NULL;
+ 	res[j] = '\0';
  	return (res);
- }*/
+ }
 
 char					get_spec(char s)
 {
@@ -276,7 +273,7 @@ char					get_spec(char s)
 	return (res);
 }
 
-char				**save_the_spaces(char *s)
+/*char				**save_the_spaces(char *s)
 {
 	char    **res;
 	int i;
@@ -295,7 +292,7 @@ char				**save_the_spaces(char *s)
     }
 	free(cm);
     return (res);
-}
+}*/
 
 static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 {
@@ -303,10 +300,8 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	int 		q[2]; /// 0 для одинарного, 1 для двойного
 	char		buf[10000];
 	int			j;
-	//int			d;
+	int			d;
 
-	//d = how_much_words(t->data);
-	printf("words === %d\n", d);
 	i = 0;
 	j = 0;
 	q[0] = 0;
@@ -347,7 +342,11 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 			buf[j++] = t->data[i++];
 	}
 	buf[j] = '\0';
-	c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
+	printf("buf === %s\n", buf);
+	//d = how_much_words(t->data);
+	//printf("words === %d\n", d);
+	//c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
+	c->arr = s_to_arr(buf);
 	return (c);
 }
 
@@ -357,7 +356,7 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 	t_cmd		*head;
 	t_cmd		*cur;
 
-
+	printf("hi tghere\n");
 	cur_t = t;
 	head = init_cmd();
 	cur = head;
@@ -365,6 +364,7 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 		return NULL;
 	while (cur_t)
 	{
+		printf("%s == data\n", cur_t->data);
 		cur = get_data_cmd(cur_t, cur, env);
 		if (cur_t->next && cur_t->next->next)
 		{

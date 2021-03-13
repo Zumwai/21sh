@@ -57,58 +57,6 @@ static char 				*get_data(char *line, int *n, t_flag *flag)
 	ret = ft_strtrim(buf);
 	free(buf);
 	return (ret);
-	/*char 			res[1000];
-	int 			j;
-	char			*ret;
-	char			*buf;
-
-	j = 0;
-	while (line[*n] != '\0')
-	{
-		while (line[*n] != '|' && line[*n] != ';' && line[*n] != '&' && line[*n] != '>' &&
-			   line[*n] != '<'  && line[*n] != '\0')
-		{
-			update_flag(flag, line[*n]);
-			/*if (line[*n] == 92 && line[*n + 1])
-			{
-				res[j] = get_manage(line[*n + 1]);
-				if (res[j] != '\\')
-					*n = *n + 1;
-			}
-			else
-				res[j] = line[*n];
-			*n += 1;
-			j += 1;*/
-           /* res[j] = line[*n];
-            *n += 1;
-            j += 1;
-		}
-		if (line[*n] == '|' || line[*n] == ';' || line[*n] == '&' || line[*n] == '>' ||
-		line[*n] == '<' || line[*n] == '\0')
-		{
-			res[j] = line[*n];
-			if (semantica(flag, line, n, &j) == 0)
-				continue ;
-			if (semantica(flag, line, n, &j) == 1 && j != 0)
-			{
-				res[j] = '\0';
-				buf = ft_strdup(res);
-				ret = ft_strtrim(buf);
-				free(buf);
-				return (ret);
-			}
-			if (j == 0)
-			{
-				ret = get_semantica_ret(line, n, res, j);
-				*n += 1;
-				return (ret);
-			}
-		}
-	}
-	buf = ft_strdup(res);
-	ret = ft_strtrim(buf);
-	free(buf);
-	return (ret);*/
 }
 
 int						is_empty(char *s)
