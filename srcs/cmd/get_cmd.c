@@ -109,7 +109,7 @@ int						len_of_word(char *s, int i)
 	if (s[i] == '"' || s[i] == 39)
 	{
 		c = s[i];
-		res = 2;
+		//res = 2;
 		i = i + 1;
 		while (s[i] && s[i] != c)
 		{
@@ -165,6 +165,8 @@ char					*fill_str(char *s, int *i)
 	res = NULL;
 	while (j < l)
 	{
+		if (s[*i] == '"' || s[*i] == 39)
+				*i = *i + 1;
 	//	printf("len === %d\n", l);
 		buf[j] = s[*i];
 		printf("char === %c\n", buf[j]);
@@ -312,12 +314,14 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 		if (t->data[i] == 39 && q[1] == 0)
 		{
 			q[0] = q[0] == 0 ? 1 : 0;
-			i++;
+			//i++;
+			buf[j++] = t->data[i++];
 		}
 		if (t->data[i] == 34 && q[0] == 0)
 		{
 			q[1] = q[1] == 0 ? 1 : 0;
-			i++;
+			//i++;
+			buf[j++] = t->data[i++];
 		}
 		if (t->data[i] == 92 && t->data[i + 1])
 		{
@@ -336,7 +340,8 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 		if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != '$' && t->data[i + 1] != ' ')
 		{
 			get_env_val(buf, &j, t->data, &i, env);
-			i++;
+			//i++;
+			buf[j++] = t->data[i++];
 		}
 		if (t->data[i] != 92 && t->data[i] != 39 && t->data[i] != 34)
 			buf[j++] = t->data[i++];
