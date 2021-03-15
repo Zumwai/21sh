@@ -118,11 +118,13 @@ static t_trie    *construct_local_entry(char *original, int flag)
 {
     t_trie  *head;
     char    *pwd;
-
+           char *path = NULL;
     pwd = NULL;
     head = NULL;
+    int len = ft_strlen(original);
     if (!(pwd = getcwd(pwd, 4096)))
         return NULL;
+    path = ft_strjoin(pwd, original);
     if (flag == DEFAULT)
         head = fill_variant_list(original, pwd, head);
     if (flag == DIRECTORY) {
@@ -133,7 +135,13 @@ static t_trie    *construct_local_entry(char *original, int flag)
     {
         head = fill_variant_dirs(original, pwd, head);
     }
+    if (flag == LOC_DIRECTORY)
+    {
+        ft_strclr(original);
+        head = fill_variant_dirs(original, path, head);
+    }
     free(pwd);
+    free(path);
     return head;
 }
 
@@ -252,15 +260,17 @@ t_trie    *construct_trie(char **orig, t_env **env, int source)
         ft_memmove(*orig, &(*orig)[2], ft_strlen(*orig) - 1);
         head = construct_local_entry(*orig, DEFAULT);
     }
-    else if (source == LOC_DIRECTORY || source == LOC_FINISH)
-    {
-        head = construct_local_entry(*orig, DIRECTORY);
-    }
     else if (source == DIRECTORY) {
         len = ft_strlen(*orig);
         if (orig[0][len - 1] == '/')
             head = fill_variant_list("", *orig, head);
+        else
+            head = construct_local_entry(*orig, source);
         *orig[0] = 0;
+    }
+    else if (source == LOC_DIRECTORY || source == LOC_FINISH)
+    {
+        head = construct_local_entry(*orig, source);
     }
     else {
         sub = split_path(*orig, &path);
@@ -271,7 +281,7 @@ t_trie    *construct_trie(char **orig, t_env **env, int source)
         if (path)
             free(path);
     }
-    if (!head)
+            if (!head)
         return NULL;
     return head;
 }

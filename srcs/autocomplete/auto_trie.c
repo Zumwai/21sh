@@ -160,7 +160,7 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     t_auto *list;
     t_env   *curs;
     char    *ptr;
-    int     len = 0;
+        int     len = 0;
     int     cd = 0;
 
     //if (pos->state || pos->heredoc)
@@ -170,6 +170,8 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         return 1;
     dup =  ft_strdup(orig);
     len = ft_strlen(orig);
+
+    /*ENV*/
     if ('~' == orig[0] ) {
         curs = find_env_variable(env, "HOME");
         if (curs && curs->value)
@@ -186,14 +188,6 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
             free(dup);
             dup = ft_strdup(orig);
         }
-    }
-    if (len > 0 && orig[len - 1] == ' ' || cd) {
-        if (!ft_strcmp("cd ", orig))
-            buf->trie = construct_trie(&orig, env, LOC_DIRECTORY);
-        else if (cd == 1)
-            buf->trie = construct_trie(&orig, env, LOC_FINISH); /*experiment*/
-        else
-            buf->trie = construct_trie(&orig, env, EMPTY);
     }
     else if (orig[0] == '$')
         buf->trie = construct_trie(&orig, env, ENV_ONLY);
