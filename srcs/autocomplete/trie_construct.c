@@ -228,6 +228,7 @@ char        *split_path(char *orig, char **path)
         ft_strcat(*path, "/");
         ft_strncat(*path, orig, len - 1);
         ft_strcat(*path, "/");
+        free(pwd);
     }
     sub = ft_strnew(257);
     ft_strcpy(sub, &orig[len]);
