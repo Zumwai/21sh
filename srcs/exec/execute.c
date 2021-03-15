@@ -210,12 +210,12 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 			cmd->target = get_path(cmd->arr[0], env);
 			if (cmd->target != NULL && cmd->type != 6 && cmd->type != 7 && cmd->type != 8)
 				do_proc(read, fd[1], cmd->target, cmd, env);
-            if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
-                do_proc(read, wfd, cmd->target, cmd, env);
-            if (cmd->target != NULL && cmd->type == 8)
-            {
-            	read = get_fd_write(cmd);
-            	wfd = get_cmd_type(cmd, fd[1]);
+			if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
+				do_proc(read, wfd, cmd->target, cmd, env);
+			if (cmd->target != NULL && cmd->type == 8)
+			{
+				read = get_fd_write(cmd);
+				wfd = get_cmd_type(cmd, fd[1]);
 				do_proc(read, wfd, cmd->target, cmd, env);
 			}
 		}
