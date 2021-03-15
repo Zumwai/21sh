@@ -136,7 +136,7 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 				{
 					int tmp = dimensions.ws_row - g_sad->win_y;
 					//if (tmp > 0)
-						update_y_screensize(buffer->current, dimensions.ws_row - g_sad->win_y);
+						//update_y_screensize(buffer->current, dimensions.ws_row - g_sad->win_y);
 				}
 				g_sad->win_x = dimensions.ws_col;
     			g_sad->win_y = dimensions.ws_row;
