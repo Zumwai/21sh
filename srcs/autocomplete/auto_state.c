@@ -25,12 +25,8 @@ char	*get_incomplete(t_term *pos, int *cd)
         end = curr;
         while(curr > 0 && ft_ischar(pos->new[curr - 1]))
 		curr--;
-        test = ft_strsub(pos->new, curr, end - curr);
-		if (ft_strequ("cd", test))
-			*cd = DIRECTORY;
-		else
-			*cd = SECOND;
-		free(test);
+		if (curr != end)
+			*cd = 1;
     }
 	return incomplete;
 }

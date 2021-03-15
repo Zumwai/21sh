@@ -272,6 +272,9 @@ t_trie    *construct_trie(char **orig, t_env **env, int source)
     {
         head = construct_local_entry(*orig, source);
     }
+    else if (source == SECOND) {
+        head = construct_local_entry(*orig, DEFAULT);
+    }
     else {
         sub = split_path(*orig, &path);
         head = fill_variant_list(sub, path, head);

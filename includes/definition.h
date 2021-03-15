@@ -53,6 +53,7 @@
 # define GLOBAL  1
 # define LOCAL   2
 # define DIRECTORY 3
+# define RELATIVE 4
 # define HOMEDIR 6
 # define EMPTY	7
 # define LOC_DIRECTORY 8
