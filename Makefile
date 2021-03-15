@@ -44,26 +44,34 @@ SRCS =	main.c \
 DIR_SRCS = srcs/
 SOURCE = $(addprefix $(DIR_SRCS), $(SRCS))
 OBJECT = $(patsubst %.c,%.o,$(SOURCE))
-DIR_LIB = libft
+DEPEND = $(patsubst %.c,%.d,$(SOURCE))
+DIR_LIB = ./libft/
 LIB = $(DIR_LIB)/libft.a
-INCLUDES = ./includes/
+HEAD = ./includes/
 FLAGS = -g 
-REMOVE = -rm -rf
+REMOVE = rm -rf
+.PHONY: all clean re fclean
 
-.PHONY: all clean re
 
 all: $(NAME)
 
-$(NAME): $(OBJECT) $(LIB) 
-	$(COM) $(FLAGS) $(OBJECT) -o $(NAME) -L ./libft -lft -ltermcap
+$(NAME): $(OBJECT) $(LIB)
+	$(COM) $(FLAGS) $(OBJECT) -o $(NAME) $(LIB) -ltermcap
+$(LIB): $(DIR_LIB) 
+	$(MAKE) -C $(DIR_LIB) all
 %.o: %.c $(LIB)
-	$(COM) $(FLAGS) -c $< -o $@ -I$(DIR_LIB) -I$(INCLUDES) 
-$(LIB):
-	$(MAKE) -sC $(DIR_LIB) all
+	$(COM) $(FLAGS) -c $< -o $@ -I$(DIR_LIB) -I$(HEAD) -MD
 clean:
 	$(REMOVE) $(OBJECT) && \
+	$(REMOVE) $(DEPEND) && \
 	$(MAKE) -sC $(DIR_LIB) clean
+
 fclean : clean
 	$(REMOVE) $(NAME) && \
 	$(MAKE) -sC $(DIR_LIB) fclean
+
 re: fclean all
+
+include $(wildcard $(DEPEND))
+
+
