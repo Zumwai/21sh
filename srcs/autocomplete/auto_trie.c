@@ -10,7 +10,7 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
         return -1;
     //if (!buf[0][0])
     //    return 0;
-    buf[0][index] = 0;
+    //buf[0][index] = 0;
     if (node->sub)
     {
         index += ft_strlen(node->sub);
@@ -31,7 +31,7 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
     while (i < 94)
     {
         if (node->asc[i])
-            ret = get_to_the_diversion(node->asc[i], buf, index);
+            ret = get_to_the_diversion(node->asc[i], buf, index - 1);
         if (ret == -1 || ret == -2)
             return ret;
         i++;
@@ -90,6 +90,8 @@ char  *search_trie(t_trie *head, char *orig, t_auto *list)
         buf = ft_strnew(257);
         strcat(buf, orig);
         index = ft_strlen(buf);
+        if (index > 0)
+            index--;
         res = get_to_the_diversion(curs, &buf, index);
         if (ft_strcmp(buf, orig)) {
             ret = ft_strdup(&buf[index]);
