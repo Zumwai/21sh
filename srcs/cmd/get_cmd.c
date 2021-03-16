@@ -48,68 +48,15 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.в
 		set_free_null(&t_tmp);
 }
 
-char                    **fill_res(char *s, int i, char **res)
-{
-    int l;
-
-    l = ft_strlen(s) - i;
-    res[0] = ft_strsub(s, 0, i);
-    if (l != 0)
-    	res[1] = ft_strsub(s, i + 1, l);
-    else
-    	res[1] = '\0'; /* what is the purpose? UB. res[1][0] to 0 or res[1] to NULL? */
-    res[2] = '\0';
-    return (res);
-}
-
-/*int						skobka(char *s, int i)
-{
-	char				buf;
-
-	if (s[i] == '(')
-		buf = ')';
-	if (s[i] == '{')
-		buf = '}';
-	if (s[i] == '[')
-		buf = ']';
-	while (s[i] && s[i] != buf)
-		i++;
-	return (i);
-}
-
-int						count_args(char *s)
-{
-	int					res;
-	int					i;
-
-	i = 0;
-	res = 1;
-	while (s[i])
-	{
-		if (s[i] == ' ' && s[i + 1] && s[i + 1] != ' ')
-			res++;
-		if (s[i] == '{' || s[i] == '(' || s[i] == '[')
-		{
-			res++;
-			i = skobka(s, i);
-		}
-		i++;
-	}
-	return (res);
-}*/
-
-
 int						len_of_word(char *s, int i)
 {
 	int					res;
 	char				c;
 
 	res = 0;
-	printf("there!!! === len_of_word\n");
 	if (s[i] == '"' || s[i] == 39)
 	{
 		c = s[i];
-		//res = 2;
 		i = i + 1;
 		while (s[i] && s[i] != c)
 		{
@@ -156,30 +103,30 @@ char					*fill_str(char *s, int *i)
 	char				buf[1000];
 	int 				course;
 
-	course = (*i);
+
 	j = 0;
-	//printf("there!!!\n");
+	if (s[*i] == ' ')
+	{
+		while (s[*i] && s[*i] == ' ')
+			*i = *i + 1;
+	}
+	course = (*i);
 	l = len_of_word(s, course);
-	printf("len === %d course === %d\n", l, course);
-	//printf("str === %s\n", s);
 	res = NULL;
 	while (j < l)
 	{
 		if (s[*i] == '"' || s[*i] == 39)
 				*i = *i + 1;
-	//	printf("len === %d\n", l);
 		buf[j] = s[*i];
-		printf("char === %c\n", buf[j]);
 		j++;
 		*i = *i + 1;
 	}
 	buf[j] = '\0';
-	printf("res === %s\n", buf);
 	if (its_redir(buf))
 		fill_str(s, &i);
 	else
 		res = ft_strdup(buf);
-	printf("res === %s\n", res);
+	//printf("res === %s\n", res);
 	return(res);
 }
 
@@ -212,20 +159,29 @@ int						how_much_restreams(char *s)
 
  	i = 0;
  	res = 0;
+ 	//printf("start === %d", res);
+ 	//printf("s === %s\n", s);
  	while (s[i])
 	{
- 		if (s[i] == '"' || s[i] == 39)
+ 		if (s[i] == 34 || s[i] == 39)
 		{
- 			c = s[i++];
- 			while (s[i] != c)
- 				i++;
- 			res = res + 1;
+ 			c = s[i];
  			i++;
-		}
- 		if (s[i] && s[i] != ' ' && (s[i + 1] == ' ' || s[i + 1] == '\0'))
+ 			while (s[i] && s[i] != c)
+ 			{
+				i++;
+			}
+ 			i++;
 			res = res + 1;
+		}
+ 		if (s[i] && s[i] != ' ' && (s[i + 1] == ' ' || s[i + 1] == '\0' || s[i] == 34 || s[i] == 39))
+		{
+ 			//printf("here mistake?\n");
+			res = res + 1;
+		}
  		i++;
 	}
+ 	//printf("how much words === %d\n", res);
  	return (res);
  }
 
@@ -242,15 +198,12 @@ int						how_much_restreams(char *s)
  	j = 0;
  	f = how_much_words(s);
  	g = how_much_restreams(s);
- 	printf("%d === f\n", f);
-	 printf("%d === g\n", g);
  	i = f - g;
  	res = (char **)malloc(sizeof(char *) * i + 1);
  	while (j < f)
 	{
  		res[j] = fill_str(s, &c);
  		j++;
- 		printf("%d == int\n", c);
  		c++;
 	}
  	res[j] = '\0';
@@ -275,27 +228,6 @@ char					get_spec(char s)
 	return (res);
 }
 
-/*char				**save_the_spaces(char *s)
-{
-	char    **res;
-	int i;
-	char    *cm;
-
-	 i = 0;
-	while (s[i] && s[i] != ' ' && s[i] != '\0')
-	    i++;
-	cm = ft_strsub(s, 0, i);
-	if (ft_strcmp(cm, "echo") != 0 && ft_strcmp(cm, "awk") != 0)
-	    res = ft_strsplit(s, ' ');
-	else
-    {
-	    res = (char **)malloc(sizeof(char *) * 3);
-	    fill_res(s, i, res);
-    }
-	free(cm);
-    return (res);
-}*/
-
 static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 {
 	int			i;
@@ -303,6 +235,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	char		buf[10000];
 	int			j;
 	int			d;
+	char		*src;
 
 	i = 0;
 	j = 0;
@@ -314,13 +247,11 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 		if (t->data[i] == 39 && q[1] == 0)
 		{
 			q[0] = q[0] == 0 ? 1 : 0;
-			//i++;
 			buf[j++] = t->data[i++];
 		}
 		if (t->data[i] == 34 && q[0] == 0)
 		{
 			q[1] = q[1] == 0 ? 1 : 0;
-			//i++;
 			buf[j++] = t->data[i++];
 		}
 		if (t->data[i] == 92 && t->data[i + 1])
@@ -340,18 +271,15 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 		if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != '$' && t->data[i + 1] != ' ')
 		{
 			get_env_val(buf, &j, t->data, &i, env);
-			//i++;
-			buf[j++] = t->data[i++];
+			i++;
 		}
-		if (t->data[i] != 92 && t->data[i] != 39 && t->data[i] != 34)
+		if (t->data[i] && t->data[i] != 92 && t->data[i] != 39 && t->data[i] != 34)
 			buf[j++] = t->data[i++];
 	}
 	buf[j] = '\0';
-	printf("buf === %s\n", buf);
-	//d = how_much_words(t->data);
-	//printf("words === %d\n", d);
-	//c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
-	c->arr = s_to_arr(buf);
+	src = ft_strdup(buf);
+	c->arr = s_to_arr(src);
+	free(src);
 	return (c);
 }
 
@@ -361,7 +289,6 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 	t_cmd		*head;
 	t_cmd		*cur;
 
-	printf("hi tghere\n");
 	cur_t = t;
 	head = init_cmd();
 	cur = head;
@@ -369,7 +296,6 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 		return NULL;
 	while (cur_t)
 	{
-		printf("%s == data\n", cur_t->data);
 		cur = get_data_cmd(cur_t, cur, env);
 		if (cur_t->next && cur_t->next->next)
 		{
