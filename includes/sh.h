@@ -70,7 +70,7 @@ int				sh_exit(void);
 int				display_id_kid_parent(void);
 int				sh_pwd(void);
 int				check_rights(char *path, int cd);
-
+int             sh_type(char *com, t_env **env);
 /* INIT */
 t_env			*init_shell(int ac, char **av, char **env, t_yank **buffer);
 static t_yank	*init_buffer(void);

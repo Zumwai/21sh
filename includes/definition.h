@@ -53,10 +53,12 @@
 # define GLOBAL  1
 # define LOCAL   2
 # define DIRECTORY 3
+# define RELATIVE 4
 # define HOMEDIR 6
 # define EMPTY	7
 # define LOC_DIRECTORY 8
 # define LOC_FINISH 9
+# define SECOND 10
 
 typedef struct	s_env
 {
@@ -199,6 +201,7 @@ typedef struct s_yank
 	int				win_x;
 	int				win_y;
 	int				winch;
+	int				diff;
 	t_history		*hist_ptr;
 	t_term			*input;
 	t_term			*current;

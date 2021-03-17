@@ -10,7 +10,7 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
         return -1;
     //if (!buf[0][0])
     //    return 0;
-    buf[0][index] = 0;
+    //buf[0][index] = 0;
     if (node->sub)
     {
         index += ft_strlen(node->sub);
@@ -31,7 +31,7 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
     while (i < 94)
     {
         if (node->asc[i])
-            ret = get_to_the_diversion(node->asc[i], buf, index);
+            ret = get_to_the_diversion(node->asc[i], buf, index - 1);
         if (ret == -1 || ret == -2)
             return ret;
         i++;
@@ -88,9 +88,11 @@ char  *search_trie(t_trie *head, char *orig, t_auto *list)
         return NULL;
     if (!curs->sub) {
         buf = ft_strnew(257);
-        ft_strcpy(buf, orig);
+        strcat(buf, orig);
         index = ft_strlen(buf);
-        res = get_to_the_diversion(curs, &buf, index - 1);
+        if (index > 0)
+            index--;
+        res = get_to_the_diversion(curs, &buf, index);
         if (ft_strcmp(buf, orig)) {
             ret = ft_strdup(&buf[index]);
         }
@@ -99,7 +101,7 @@ char  *search_trie(t_trie *head, char *orig, t_auto *list)
                 ft_strclr(buf);
                 ft_strcpy(buf, orig);
             }
-            print_words(curs, &buf, ft_strlen(buf) - 1, list);
+            print_words(curs, &buf, 0, list);
         }
         free(buf);
         free(comp);
@@ -160,7 +162,7 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     t_auto *list;
     t_env   *curs;
     char    *ptr;
-    int     len = 0;
+        int     len = 0;
     int     cd = 0;
 
     //if (pos->state || pos->heredoc)
@@ -170,6 +172,8 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         return 1;
     dup =  ft_strdup(orig);
     len = ft_strlen(orig);
+
+    /*ENV*/
     if ('~' == orig[0] ) {
         curs = find_env_variable(env, "HOME");
         if (curs && curs->value)
@@ -187,24 +191,20 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
             dup = ft_strdup(orig);
         }
     }
-    if (len > 0 && orig[len - 1] == ' ' || cd) {
-        if (!ft_strcmp("cd ", orig))
-            buf->trie = construct_trie(&orig, env, LOC_DIRECTORY);
-        else if (cd == 1)
-            buf->trie = construct_trie(&orig, env, LOC_FINISH); /*experiment*/
-        else
-            buf->trie = construct_trie(&orig, env, EMPTY);
-    }
-    else if (orig[0] == '$')
+    if (orig[0] == '$')
         buf->trie = construct_trie(&orig, env, ENV_ONLY);
     else if (orig[0] == '.' && orig[1] == '/')
         buf->trie = construct_trie(&orig, env, LOCAL);
-    else if (orig[len - 1] == '/')
+    else if (len > 0 && orig[len - 1] == '/')
         buf->trie = construct_trie(&orig, env, DIRECTORY);
     else if (is_relative_path(orig))
-        buf->trie = construct_trie(&orig, env, 4);
-    else 
+        buf->trie = construct_trie(&orig, env, RELATIVE);
+    else  if (!cd)
         buf->trie = construct_trie(&orig, env, GLOBAL);
+    else
+        buf->trie = construct_trie(&orig, env, SECOND);
+   // else
+    //    buf->trie = construct_trie(&orig, env, )
     if (buf->trie) {
         list = create_new_list(NULL);
     	new = search_trie(buf->trie, orig, list);
