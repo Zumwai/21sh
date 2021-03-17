@@ -57,7 +57,7 @@ static void init_tty_attr(t_yank *buf)
 	tty.c_lflag &= ~(ECHO | ICANON | ISIG);
 	//tty.c_oflag &= ~(TABDLY);
 //	tty.c_lflag &= ~(ECHO | IEXTEN | ISIG);
-	tty.c_cc[VMIN] = 1;
+	tty.c_cc[VMIN] = 0;
 	tty.c_cc[VTIME] = 1;
 	buf->old = old_tty;
 	buf->work= tty;

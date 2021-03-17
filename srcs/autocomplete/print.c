@@ -17,6 +17,8 @@ void    print_words(t_trie *node, char **line, int index, t_auto *list)
 {
     if (!node)
         return ;
+    //if (index < 0)
+    //    index++;
     if (line[0][index])
         line[0][index] = 0;
     if (node->data != -1)
@@ -24,7 +26,7 @@ void    print_words(t_trie *node, char **line, int index, t_auto *list)
         if (node->sub) {
             ft_strcat(*line, node->sub);
             index += ft_strlen(node->sub);
-        } else {
+        } else if (node->data) {
             line[0][index] = node->data;
             line[0][index + 1] = '\0';
             index++;

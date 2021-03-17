@@ -86,11 +86,11 @@ void	handle_main_signal(int sig)
     if (sig == SIGWINCH)
     {
         g_sad->winch = 1;
+        //tcsetattr(STDIN_FILENO, TCSANOW, &g_sad->work);
         if (g_sad->current) {
-
             /*
             ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
-            tcsetattr(STDIN_FILENO, TCSANOW, &g_sad->old);
+
             //tputs (tgoto (tgetstr("cm", NULL), 0, g_sad->current->y - 1), 1, putchar_like);  for reentrancy 
             g_sad->win_x = dimensions.ws_col;
             g_sad->win_y = dimensions.ws_col;

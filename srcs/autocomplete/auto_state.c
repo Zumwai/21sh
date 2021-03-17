@@ -12,23 +12,27 @@ char	*get_incomplete(t_term *pos, int *cd)
 		return NULL;
 	curr = pos->index - abs;
 	end = curr;
-	while(curr > 0 && pos->new[curr - 1] == ' ')
-		curr--;
-	while(curr > 0 && ft_ischar(pos->new[curr - 1]))
+	//if (curr > 0 && pos->new[curr -1] == ' ')
+	//	return NULL;
+	while(curr > 0 && ft_ischar(pos->new[curr - 1]) && (pos->new[curr - 1] != ';' || pos->new[curr - 1] != '|' || pos->new[curr] != '&'))
 		curr--;
 	incomplete = ft_strsub(pos->new, curr, end - curr);
     if (curr > 0)
     {
-		*cd = 1;
+		*cd = 0;
         while (curr >0 && pos->new[curr -1] == ' ')
             curr--;
         end = curr;
         while(curr > 0 && ft_ischar(pos->new[curr - 1]))
 		curr--;
-        test = ft_strsub(pos->new, curr, end - curr);
-		if (ft_strequ("cd", test))
-			*cd = DIRECTORY;
-		free(test);
+		if (curr != end)
+			*cd = 1;
     }
 	return incomplete;
 }
+/*
+char	*get_incomplete(t_term *pos, int *cd)
+{
+
+}
+*/

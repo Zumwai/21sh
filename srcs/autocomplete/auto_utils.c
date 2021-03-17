@@ -106,7 +106,9 @@ t_auto  *create_new_list(char *line)
         new->name = ft_strdup(line);
         new->size = ft_strlen(line);
     }
-    else
+    else {
         new->name = NULL;
+        new->size = 0;
+    }
     return (new);
 }

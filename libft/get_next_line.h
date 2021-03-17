@@ -15,7 +15,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "libft.h"
-# define BUFF_SIZE 800
+# define BUFF_SIZE 2222
 
 typedef struct		s_glist
 {
