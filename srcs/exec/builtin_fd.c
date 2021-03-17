@@ -25,6 +25,8 @@ int			sh_echo(char **com, t_env **env, int fd)
 	while (com[i])
 	{
 		ft_putstr_fd(com[i], fd);
+		if (com[i + 1])
+			ft_putchar_fd(' ', fd);
 		i++;
 	}
 	if (!n)
