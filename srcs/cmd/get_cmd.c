@@ -54,24 +54,33 @@ int						len_of_word(char *s, int i)
 	char				c;
 
 	res = 0;
-	if (s[i] == '"' || s[i] == 39)
+	///printf("len s == %s i == %d\n", s, i);
+	while (s[i] && s[i] != ' ')
 	{
-		c = s[i];
-		i = i + 1;
-		while (s[i] && s[i] != c)
+		if (s[i] != ' ' && s[i] != 34 && s[i] != 39)
 		{
+			///printf("s[%d] === %c\n", i, s[i]);
+			i++;
 			res++;
-			i = i + 1;
 		}
-	}
-	else
-	{
-		while (s[i] && s[i] != ' ')
+		if (s[i] == 34 || s[i] == 39)
 		{
-			res++;
-			i = i + 1;
+			c = s[i];
+			i++;
+			while (s[i] != c && s[i])
+			{
+				if (s[i] == c)
+					break ;
+				///printf("s[%d] === %c\n", i, s[i]);
+				i++;
+				res++;
+			}
+			///res--;
 		}
+		if (s[i] == ' ')
+			break ;
 	}
+	///printf("len_of_word === %d\n", res);
 	return (res);
 }
 
@@ -105,28 +114,34 @@ char					*fill_str(char *s, int *i)
 
 
 	j = 0;
-	if (s[*i] == ' ')
-	{
-		while (s[*i] && s[*i] == ' ')
-			*i = *i + 1;
-	}
 	course = (*i);
+	///printf("start course === %d\n", course);
+	///printf("st.course === %c\n", s[course]);
+	if (s[course] == ' ')
+	{
+		while (s[course] == ' ' && s[course])
+			course++;
+	}
+	///printf("s === %s\n", s);
+	///printf("course === %d\n", course);
 	l = len_of_word(s, course);
 	res = NULL;
 	while (j < l)
 	{
-		if (s[*i] == '"' || s[*i] == 39)
-				*i = *i + 1;
-		buf[j] = s[*i];
+		if (s[course] == '"' || s[course] == 39)
+			course = course + 1;
+		buf[j] = s[course];
 		j++;
-		*i = *i + 1;
+		course = course + 1;
 	}
+	///*i = *i + 1;
 	buf[j] = '\0';
-	if (its_redir(buf))
-		fill_str(s, &i);
-	else
+	///if (its_redir(buf))
+		///fill_str(s, &i);
+	///else
 		res = ft_strdup(buf);
-	//printf("res === %s\n", res);
+		///printf("res == %s\n", res);
+	(*i) = course;
 	return(res);
 }
 
@@ -159,8 +174,7 @@ int						how_much_restreams(char *s)
 
  	i = 0;
  	res = 0;
- 	//printf("start === %d", res);
- 	//printf("s === %s\n", s);
+ 	c = 0;
  	while (s[i])
 	{
  		if (s[i] == 34 || s[i] == 39)
@@ -171,17 +185,20 @@ int						how_much_restreams(char *s)
  			{
 				i++;
 			}
- 			i++;
-			res = res + 1;
+ 			i = i + 1;
 		}
- 		if (s[i] && s[i] != ' ' && (s[i + 1] == ' ' || s[i + 1] == '\0' || s[i] == 34 || s[i] == 39))
+ 		if (s[i] != '\0' && s[i] != ' ')
 		{
- 			//printf("here mistake?\n");
-			res = res + 1;
+ 			while (s[i] != '\0' && s[i] != ' ')
+ 			i++;
 		}
- 		i++;
+ 		if (s[i] == ' ')
+		{
+ 			while (s[i] == ' ')
+ 				i++;
+		}
+ 		res++;
 	}
- 	//printf("how much words === %d\n", res);
  	return (res);
  }
 
@@ -204,7 +221,8 @@ int						how_much_restreams(char *s)
 	{
  		res[j] = fill_str(s, &c);
  		j++;
- 		c++;
+ 		///printf("s_to_arr c === %d\n", c);
+ 		c = c + 1;
 	}
  	res[j] = '\0';
  	return (res);
@@ -278,6 +296,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	}
 	buf[j] = '\0';
 	src = ft_strdup(buf);
+	///printf("src === %s\n", src);
 	c->arr = s_to_arr(src);
 	free(src);
 	return (c);
