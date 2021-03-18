@@ -48,80 +48,185 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.в
 		set_free_null(&t_tmp);
 }
 
-char                    **fill_res(char *s, int i, char **res)
-{
-    int l;
-
-    l = ft_strlen(s) - i;
-    res[0] = ft_strsub(s, 0, i);
-    if (l != 0)
-    	res[1] = ft_strsub(s, i + 1, l);
-    else
-    	res[1] = '\0'; /* what is the purpose? UB. res[1][0] to 0 or res[1] to NULL? */
-    res[2] = '\0';
-    return (res);
-}
-
-/*int						skobka(char *s, int i)
-{
-	char				buf;
-
-	if (s[i] == '(')
-		buf = ')';
-	if (s[i] == '{')
-		buf = '}';
-	if (s[i] == '[')
-		buf = ']';
-	while (s[i] && s[i] != buf)
-		i++;
-	return (i);
-}
-
-int						count_args(char *s)
+int						len_of_word(char *s, int i)
 {
 	int					res;
+	char				c;
+
+	res = 0;
+	///printf("len s == %s i == %d\n", s, i);
+	while (s[i] && s[i] != ' ')
+	{
+		if (s[i] != ' ' && s[i] != 34 && s[i] != 39)
+		{
+			///printf("s[%d] === %c\n", i, s[i]);
+			i++;
+			res++;
+		}
+		if (s[i] == 34 || s[i] == 39)
+		{
+			c = s[i];
+			i++;
+			while (s[i] != c && s[i])
+			{
+				if (s[i] == c)
+					break ;
+				///printf("s[%d] === %c\n", i, s[i]);
+				i++;
+				res++;
+			}
+			///res--;
+		}
+		if (s[i] == ' ')
+			break ;
+	}
+	///printf("len_of_word === %d\n", res);
+	return (res);
+}
+
+int						its_redir(char *s)
+{
 	int					i;
 
 	i = 0;
-	res = 1;
+	if (s[i] == '"' || s[i] == '\'')
+		return (0);
 	while (s[i])
 	{
-		if (s[i] == ' ' && s[i + 1] && s[i + 1] != ' ')
-			res++;
-		if (s[i] == '{' || s[i] == '(' || s[i] == '[')
-		{
-			res++;
-			i = skobka(s, i);
-		}
+		if (s[i] == '>' && s[i] && s[i + 1] == '&')
+			return (1);
+		if (s[i] == '<' && s[i] && s[i + 1] == '&')
+			return (1);
+		if (s[i] == '>' && s[i - 1] && s[i - 1] == '&')
+			return (1);
 		i++;
 	}
-	return (res);
+	return (0);
 }
 
-char					*get_struct(char *s, int *i)
+char					*fill_str(char *s, int *i)
 {
-
-}
-
-char					**save_the spaces(char *s)
-{
-	int					c;
-	char				**res;
-	int					i;
+	char				*res;
 	int					j;
+	int					l;
+	char				buf[1000];
+	int 				course;
+
+
+	j = 0;
+	course = (*i);
+	///printf("start course === %d\n", course);
+	///printf("st.course === %c\n", s[course]);
+	if (s[course] == ' ')
+	{
+		while (s[course] == ' ' && s[course])
+			course++;
+	}
+	///printf("s === %s\n", s);
+	///printf("course === %d\n", course);
+	l = len_of_word(s, course);
+	res = NULL;
+	while (j < l)
+	{
+		if (s[course] == '"' || s[course] == 39)
+			course = course + 1;
+		buf[j] = s[course];
+		j++;
+		course = course + 1;
+	}
+	///*i = *i + 1;
+	buf[j] = '\0';
+	///if (its_redir(buf))
+		///fill_str(s, &i);
+	///else
+		res = ft_strdup(buf);
+		///printf("res == %s\n", res);
+	(*i) = course;
+	return(res);
+}
+
+int						how_much_restreams(char *s)
+{
+	int					i;
+	int					res;
 
 	i = 0;
-	j = 0;
-	c = count_argc(s);
-	res = (char *)malloc(sizeof(char) * c + 1);
-	while (i < c)
+	res = 0;
+	while (s[i])
 	{
-		res[i] = get_struct(s, &j);
+		if (s[i] == '>' && s[i] && s[i + 1] == '&')
+			res++;
+		if (s[i] == '<' && s[i] && s[i + 1] == '&')
+			res++;
+		if (s[i] == '>' && s[i - 1] && s[i - 1] == '&')
+
+			res++;
 		i++;
 	}
-	res[i] = '\0';
 	return (res);
-}*/
+}
+
+ int					how_much_words(char *s)
+ {
+ 	int					i;
+ 	int					res;
+ 	char				c;
+
+ 	i = 0;
+ 	res = 0;
+ 	c = 0;
+ 	while (s[i])
+	{
+ 		if (s[i] == 34 || s[i] == 39)
+		{
+ 			c = s[i];
+ 			i++;
+ 			while (s[i] && s[i] != c)
+ 			{
+				i++;
+			}
+ 			i = i + 1;
+		}
+ 		if (s[i] != '\0' && s[i] != ' ')
+		{
+ 			while (s[i] != '\0' && s[i] != ' ')
+ 			i++;
+		}
+ 		if (s[i] == ' ')
+		{
+ 			while (s[i] == ' ')
+ 				i++;
+		}
+ 		res++;
+	}
+ 	return (res);
+ }
+
+ char					**s_to_arr(char *s)
+ {
+ 	int					i;
+ 	char				**res;
+ 	int					j;
+ 	int					c;
+ 	int 				f;
+ 	int					g;
+
+ 	c = 0;
+ 	j = 0;
+ 	f = how_much_words(s);
+ 	g = how_much_restreams(s);
+ 	i = f - g;
+ 	res = (char **)malloc(sizeof(char *) * i + 1);
+ 	while (j < f)
+	{
+ 		res[j] = fill_str(s, &c);
+ 		j++;
+ 		///printf("s_to_arr c === %d\n", c);
+ 		c = c + 1;
+	}
+ 	res[j] = '\0';
+ 	return (res);
+ }
 
 char					get_spec(char s)
 {
@@ -141,49 +246,31 @@ char					get_spec(char s)
 	return (res);
 }
 
-char				**save_the_spaces(char *s)
-{
-	char    **res;
-	int i;
-	char    *cm;
-
-	 i = 0;
-	while (s[i] && s[i] != ' ' && s[i] != '\0')
-	    i++;
-	cm = ft_strsub(s, 0, i);
-	if (ft_strcmp(cm, "echo") != 0 && ft_strcmp(cm, "awk") != 0)
-	    res = ft_strsplit(s, ' ');
-	else
-    {
-	    res = (char **)malloc(sizeof(char *) * 3);
-	    fill_res(s, i, res);
-    }
-	free(cm);
-    return (res);
-}
-
 static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 {
 	int			i;
 	int 		q[2]; /// 0 для одинарного, 1 для двойного
 	char		buf[10000];
 	int			j;
+	int			d;
+	char		*src;
 
 	i = 0;
 	j = 0;
 	q[0] = 0;
 	q[1] = 0;
+
 	while (t->data[i])
 	{
 		if (t->data[i] == 39 && q[1] == 0)
 		{
 			q[0] = q[0] == 0 ? 1 : 0;
-			i++;
+			buf[j++] = t->data[i++];
 		}
 		if (t->data[i] == 34 && q[0] == 0)
 		{
 			q[1] = q[1] == 0 ? 1 : 0;
-			i++;
+			buf[j++] = t->data[i++];
 		}
 		if (t->data[i] == 92 && t->data[i + 1])
 		{
@@ -204,11 +291,14 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 			get_env_val(buf, &j, t->data, &i, env);
 			i++;
 		}
-		if (t->data[i] != 92 && t->data[i] != 39 && t->data[i] != 34)
+		if (t->data[i] && t->data[i] != 92 && t->data[i] != 39 && t->data[i] != 34)
 			buf[j++] = t->data[i++];
 	}
 	buf[j] = '\0';
-	c->arr = save_the_spaces(buf); /// это надо, чтобы не потерять проебелы в начале строки в кавычках для echo a-la " hello "
+	src = ft_strdup(buf);
+	///printf("src === %s\n", src);
+	c->arr = s_to_arr(src);
+	free(src);
 	return (c);
 }
 
@@ -217,7 +307,6 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 	t_token		*cur_t;
 	t_cmd		*head;
 	t_cmd		*cur;
-
 
 	cur_t = t;
 	head = init_cmd();
