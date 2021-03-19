@@ -13,8 +13,9 @@ static int compare_bultin(char *com)
         "unsetenv",
         "ppid",
         "pwd",
+        "type",
     };
-    while (arr[i])
+    while (i< 9)
     {
         if (ft_strequ(com, arr[i]))
             return 1;
@@ -23,7 +24,7 @@ static int compare_bultin(char *com)
     return 0;
 }
 
-int     sh_type(char *com, t_env **env)
+int     sh_type(char **com, t_env **env)
 {
     char    *path;
 
@@ -32,12 +33,12 @@ int     sh_type(char *com, t_env **env)
         return 1;
     if (!com[1])
         return 1;
-    if (builtin_list(com[1])) {
-        ft_printf("%s - is builtin\n", com[1]);
+    if (compare_bultin(com[1])) {
+        ft_printf("%s - is a shell builtin\n", com[1]);
         return 1;
     }
-    if ((path = get_path(com, env))) {
-        ft_printf("s - is %s\n", com[1], path);
+    if ((path = get_path(com[1], env))) {
+        ft_printf("%s - is %s\n", com[1], path);
         return 1;
     }
     return 1;

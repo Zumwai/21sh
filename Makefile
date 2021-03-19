@@ -54,12 +54,12 @@ COMP_LIB = make -C $(DIR_LIB)
 .PHONY: all clean re fclean
 
 
-all: $(NAME) $(OBJECT) lib
+all: $(NAME)
 
 
-$(NAME): $(OBJECT) $(LIB)
+$(NAME): $(OBJECT)
 	$(COM) $(FLAGS) $(OBJECT) -o $(NAME) $(LIB) -ltermcap
-%.o: %.c $(LIB)
+%.o: %.c | $(LIB)
 	$(COM) $(FLAGS) -c $< -o $@ -I$(DIR_LIB) -I$(HEAD) -MD
 $(LIB): lib
 
