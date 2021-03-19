@@ -158,7 +158,7 @@ int			sh_cd(char **com, t_env **ev)
 }
 */
 
-static void	change_working_dir(char *path, t_env **env, char *com)
+static void	change_working_dir(char *path, t_env **env, char *com, int flag)
 {
 	char		*pwd;
 	//char		*old_pwd;
@@ -169,7 +169,14 @@ static void	change_working_dir(char *path, t_env **env, char *com)
 	if (!chdir(path))
 	{
 		sh_setnew("OLDPWD", pwd, env);
-		sh_setnew("PWD", path, env);
+		if (flag == PHYSICAL)
+		{
+			set_free_null(&pwd);
+			pwd = getcwd(pwd, PATH_MAX);
+			sh_setnew("PWD", pwd, env);
+		}
+		else
+			sh_setnew("PWD", path, env);
 	}
 	else
 		{
@@ -205,7 +212,12 @@ char	*create_path(char *com, t_env **env, int flag)
 
 	sep = ft_strsplit(com, '/');
 	if (sep[0][0] != '/' && sep[0][0] != '~') {
-		pwd = getcwd(pwd, PATH_MAX);
+		if (flag == PHYSICAL)
+			pwd = getcwd(pwd, PATH_MAX);
+		else
+			pwd = get_value_env("PWD", env);
+		if (!pwd)
+			pwd = getcwd(pwd, PATH_MAX);
 		ft_strcat(path, pwd);
 	}
 	if (sep[0][0] == '~')
@@ -223,6 +235,11 @@ char	*create_path(char *com, t_env **env, int flag)
 		{
 			j = ft_strlen(path);
 			while (path[j] != '/' && j > 0)
+			{
+				path[j] = 0;
+				j--;
+			}
+			while (j > 0 && path[j] == '/')
 			{
 				path[j] = 0;
 				j--;
@@ -263,7 +280,7 @@ int		sh_cd(char **com, t_env **env)
 		i++;
 	if (!curpath)
 		curpath = create_path(com[i], env, flag);
-	change_working_dir(curpath, env, com[i]);
+	change_working_dir(curpath, env, com[i], flag);
 	free(curpath);
 	return (1);
 }
