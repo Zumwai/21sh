@@ -87,7 +87,7 @@ static char	*determine_path(char *com, t_env **ev, int i)
 
 static void	change_working_dir(char *path, t_env **env, char *com)
 {
-	/*
+	
 	char	**set;
 
 	set = ft_newdim(4);
@@ -160,29 +160,6 @@ int			sh_cd(char **com, t_env **ev)
 
 static void	change_working_dir(char *path, t_env **env, char *com)
 {
-
-	char	**set;
-
-	set = ft_newdim(4);
-	set[2] = getcwd(set[2], PATH_MAX);
-	if (!chdir(path))
-	{
-		set[1] = "OLDPWD";
-		set_env(set, env);
-		set[1] = PWD;
-		free(set[2]);
-		set[2] = path;
-		set_env(set, env);
-		ft_free_tab(set);
-	}
-	else
-	{
-		free(set[2]);
-		ft_free_tab(&set);
-		handle_cd_err(check_rights(path, 1), com);
-	}
-	
-
 	char		*pwd;
 	//char		*old_pwd;
 	t_env		*cur;
@@ -200,8 +177,6 @@ static void	change_working_dir(char *path, t_env **env, char *com)
 		handle_cd_err(check_rights(path, 1), com);
 	}
 	free(pwd);
-	//set_free_null(&pwd);
-	//set_free_null(&old_pwd);
 }
 
 char	*get_value_env(char *sought, t_env **env)
@@ -211,7 +186,7 @@ char	*get_value_env(char *sought, t_env **env)
 
 	new = NULL;
 	curs = NULL;
-	curs = find_env_variable(sought, env);
+	curs = find_env_variable(env, sought);
 	if (curs && curs->value)
 		new = ft_strdup(curs->value);
 	return (new);
@@ -223,6 +198,7 @@ char	*process_part(char *part, int flag, t_env **env)
 	char	*new;
 
 	curs = NULL;
+	new = NULL;
 	if (ft_strequ(part, "~"))
 	{
 		new = get_value_env("HOME", env);
@@ -231,32 +207,37 @@ char	*process_part(char *part, int flag, t_env **env)
 	{
 		new = get_value_env(&part[1], env);
 	}
+	if (new) {
+		free(part);
+		return (new);
+	}
+	return part;
 }
 
 char	*create_path(char *com, t_env **env, int flag)
 {
 	char	**sep = NULL;
 	char	*curpath = NULL;
-	t_env	*curs;
+	char	path[4096] = {0};
+	char	*pwd = NULL;
+	t_env	*curs = NULL;
 	int		i = 0;
 
-	if (flag == HOMEDIR)
-	{
-		curpath = get_value_env("HOME", env);
+	sep = ft_strsplit(com, '/');
+	if (sep[0][0] != '/') {
+		pwd = getcwd(pwd, PATH_MAX);
+		ft_strcat(path, pwd);
 	}
-	else if (flag == PREVIOUS)
+	while (sep[i])
 	{
-		curpath = get_value_env("OLDPWD", env);
+		sep[i] = process_part(sep[i], flag, env);
+		ft_strcat(path, "/");
+		ft_strcat(path, sep[i]);
+		check_rights(path, 1);
+		i++;
 	}
-	else {
-		sep = ft_strsplit(com, '/');
-		if (sep[0][0] != '/') {
-			pwd = getcwd(pwd, PATH_MAX);
-		}
-		while (sep[i])
-		{
-			sep[i] = process_part(sep[i], flag);
-		}
+	curpath = ft_strdup(path);
+	return (curpath);
 }
 
 int		sh_cd(char **com, t_env **env)
@@ -269,16 +250,17 @@ int		sh_cd(char **com, t_env **env)
 	flag = DEFAULT;
 	i = 1;
 	if (!com[1])
-		flag = HOMEDIR;
+		curpath = get_value_env("HOME", env);
 	else if (ft_strequ(com[1], "-"))
-		flag = PREVIOUS;
+		curpath = get_value_env("OLDPWD", env);
 	else if (ft_strequ(com[1], "-P"))
 		flag = PHYSICAL;
 	else if (ft_strequ(com[1], "-L"))
 		flag = LOGICAL;
-	if (flag != DEFAULT && flag != HOMEDIR)
+	if (flag != DEFAULT)
 		i++;
-	curpath = create_path(com[i], env, flag);
+	if (!curpath)
+		curpath = create_path(com[i], env, flag);
 	change_working_dir(curpath, env, com[i]);
 	return (1);
 }
