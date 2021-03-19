@@ -53,39 +53,35 @@ int						len_of_word(char *s, int i)
 	int					res;
 	char				c;
 
+
 	res = 0;
+	c = 0;
 	printf("len s == %s i == %d\n", s, i);
 	while (s[i] && s[i] != ' ')
 	{
-		if (s[i] != ' ' && s[i] != 34 && s[i] != 39)
+		if (s[i] == c)
+			c = 0;
+		else if (s[i] != ' ' && s[i] != 34 && s[i] != 39)
 		{
 			printf("s[%d] === %c\n", i, s[i]);
-			i++;
 			res++;
 		}
-		if (s[i] == '"' || s[i] == '\'')
+		else if (s[i] == '"' || s[i] == '\'')
 		{
 			c = s[i];
-			printf("c === %c\n", c);
 			i++;
+			printf("c === %c\n", c);
 			while (s[i] != c && s[i]) {
 				printf("sss[%d] === %c\n", i, s[i]);
 				i++;
 				res++;
 			}
 		}
-		if (s[i] == c)
+		else if (s[i] == ' ' && !c)
 		{
-			i++;
 			break;
 		}
-		///res--;
-
-		if (s[i] == ' ')
-		{
-			i++;
-			break;
-		}
+		i++;
 	}
 	printf("len_of_word === %d\n", res);
 	return (res);
@@ -113,20 +109,19 @@ int						its_redir(char *s)
 
 char					*fill_str(char *s, int *i)
 {
-	char				*res;
-	int					j;
-	int					l;
-	char				buf[1000];
-	int 				course;
-	char 				c;
+	char				*res = NULL;
+	int					j = 0;
+	int					l = 0;
+	char				buf[1000] = {0};
+	int 				course = 0;
+	char 				c = 0;
 
 	j = 0;
 	course = 0;
 	course = (*i);
 
-	ft_putendl(course + 48);
 	ft_putendl("BEWARE");
-
+	ft_strclr(buf);
 	printf("start course === %d\n", course);
 	printf("st.course === %c\n", s[course]);
 	if (s[course] == ' ')
@@ -138,20 +133,18 @@ char					*fill_str(char *s, int *i)
 	///printf("course === %d\n", course);
 	l = len_of_word(s, course);
 	res = NULL;
-	if (s[course] == '"' || s[course] == 39)
-	{
-		c = s[course];
-		course = course + 1;
-	}
-	while (j < l)
+	while (j < l && s[course])
 	{
 		if (s[course] == c)
+			c = 0;
+		else if (c == 0 && (s[course] == '"' || s[course] == 39))
 		{
-			course = course + 1;
-			continue ;
+			c = s[course];
 		}
-		buf[j] = s[course];
-		j++;
+		else if (s[course] != c) {
+			buf[j] = s[course];
+			j++;
+		}
 		course = course + 1;
 	}
 	///*i = *i + 1;
@@ -239,14 +232,21 @@ char					**s_to_arr(char *s)
 	i = f - g;
 	printf("%d === words\n", i);
 	res = (char **)malloc(sizeof(char *) * (i + 1));
-	while (j <= i - 1)
+	int tmp = 0;
+	while (tmp < i)
+	{
+		res[tmp] = NULL;
+		tmp++;
+	}
+	while (j < i)
 	{
 		res[j] = fill_str(s, &c);
 		j++;
 		///printf("s_to_arr c === %d\n", c);
-		c = c + 1;
+		if (s[c] != 0)
+			c = c + 1;
 	}
-	res[j] = '\0';
+	res[j] = NULL;
 	return (res);
 }
 
