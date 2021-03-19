@@ -111,8 +111,8 @@ static void *get_builtin(char *com)
 		return (&display_id_kid_parent);
 	if (ft_strequ(com, "type"))
 		return (&sh_type);
-	/*if (ft_strequ(com, "pwd"))
-		return (&sh_pwd);*/
+	if (ft_strequ(com, "pwd"))
+		return (&sh_pwd);
 	return NULL;
 }
 

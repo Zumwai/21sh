@@ -192,27 +192,7 @@ char	*get_value_env(char *sought, t_env **env)
 	return (new);
 }
 
-char	*process_part(char *part, int flag, t_env **env)
-{
-	t_env	*curs;
-	char	*new;
 
-	curs = NULL;
-	new = NULL;
-	if (ft_strequ(part, "~"))
-	{
-		new = get_value_env("HOME", env);
-	}
-	if (part[0] == '$') 
-	{
-		new = get_value_env(&part[1], env);
-	}
-	if (new) {
-		free(part);
-		return (new);
-	}
-	return part;
-}
 
 char	*create_path(char *com, t_env **env, int flag)
 {
@@ -224,15 +204,34 @@ char	*create_path(char *com, t_env **env, int flag)
 	int		i = 0;
 
 	sep = ft_strsplit(com, '/');
-	if (sep[0][0] != '/') {
+	if (sep[0][0] != '/' && sep[0][0] != '~') {
 		pwd = getcwd(pwd, PATH_MAX);
 		ft_strcat(path, pwd);
 	}
+	if (sep[0][0] == '~')
+	{
+		pwd = get_value_env("HOME", env);
+		if (pwd)
+			ft_strcat(path, pwd);
+		i++;
+	}
+	int		j = 0;
 	while (sep[i])
 	{
-		sep[i] = process_part(sep[i], flag, env);
-		ft_strcat(path, "/");
-		ft_strcat(path, sep[i]);
+		j = 0;
+		if ((flag == LOGICAL || flag == DEFAULT) && ft_strequ(sep[i], ".."))
+		{
+			j = ft_strlen(path);
+			while (path[j] != '/' && j > 0)
+			{
+				path[j] = 0;
+				j--;
+			}
+		}
+		else {
+			ft_strcat(path, "/");
+			ft_strcat(path, sep[i]);
+		}
 		check_rights(path, 1);
 		i++;
 	}
@@ -251,8 +250,11 @@ int		sh_cd(char **com, t_env **env)
 	i = 1;
 	if (!com[1])
 		curpath = get_value_env("HOME", env);
-	else if (ft_strequ(com[1], "-"))
+	else if (ft_strequ(com[1], "-")) {
 		curpath = get_value_env("OLDPWD", env);
+		if (curpath)
+			ft_putendl(curpath);
+	}
 	else if (ft_strequ(com[1], "-P"))
 		flag = PHYSICAL;
 	else if (ft_strequ(com[1], "-L"))
@@ -262,5 +264,6 @@ int		sh_cd(char **com, t_env **env)
 	if (!curpath)
 		curpath = create_path(com[i], env, flag);
 	change_working_dir(curpath, env, com[i]);
+	free(curpath);
 	return (1);
 }
