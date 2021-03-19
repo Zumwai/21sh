@@ -3,6 +3,7 @@
 void		handle_cd_err(int num, char *name)
 {
 	ft_putstr_fd("-shelp!: ", STDERR_FILENO);
+
 	ft_putstr_fd(name, STDERR_FILENO);
 	if (num == -4)
 		ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
@@ -209,9 +210,9 @@ char	*create_path(char *com, t_env **env, int flag)
 	char	*pwd = NULL;
 	t_env	*curs = NULL;
 	int		i = 0;
-
+	
 	sep = ft_strsplit(com, '/');
-	if (sep[0][0] != '/' && sep[0][0] != '~') {
+	if (com[0] != '/' && com[0] != '~') {
 		if (flag == PHYSICAL)
 			pwd = getcwd(pwd, PATH_MAX);
 		else
@@ -220,13 +221,16 @@ char	*create_path(char *com, t_env **env, int flag)
 			pwd = getcwd(pwd, PATH_MAX);
 		ft_strcat(path, pwd);
 	}
-	if (sep[0][0] == '~')
+	sep = ft_strsplit(com, '/');
+	if (com[0] == '~')
 	{
 		pwd = get_value_env("HOME", env);
 		if (pwd)
 			ft_strcat(path, pwd);
 		i++;
 	}
+	if (com[0] == '/')
+		path[0] = '/';
 	int		j = 0;
 	while (sep[i])
 	{
