@@ -30,11 +30,11 @@ static long long	incapsulate_read(void)
 	int stdin_cpy;
 	ret = 0;
 	key = 0;
-	while (g_sad->winch == 0)
+	while (g_sig.winch == 0)
 	{
 		ret = 0;
 		ret = read(STDIN_FILENO, &key, sizeof(key));
-		if (g_sad->winch)
+		if (g_sig.winch)
 			break ;
 		if (ret > 0)
 			break ;
@@ -77,7 +77,7 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 	t_term	*pos;
     struct winsize dimensions;
 
-	tcsetattr(STDIN_FILENO, TCSANOW, &(buffer)->work);
+	tcsetattr(STDIN_FILENO, TCSANOW, &(g_sig).work);
 	pos = create_new_io_struct(NULL);
 	ft_putstr_size("shelp$>", 7);
 	pos->x += 7;
@@ -86,13 +86,13 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 	buffer->current = pos;
 	buffer->saved = NULL;
 	ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
-    g_sad->win_x = dimensions.ws_col;
-    g_sad->win_y = dimensions.ws_row;
+    buffer->win_x = dimensions.ws_col;
+    buffer->win_y = dimensions.ws_row;
 	while (1)
 	{
 			key = incapsulate_read();
 			//if (g_sad->winch == 0)
-				red = (read_key(key, buffer->current, buffer->old, buffer, env));
+				red = (read_key(key, buffer->current, buffer, env));
 			//else
 			//	red = 1;
 			//printf("! %zd - red\n", red);
@@ -114,24 +114,24 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 			}
 			red = 0;
 			key = 0;
-			if (g_sad->winch) {
-				g_sad->winch = 0;
+			if (g_sig.winch) {
+				g_sig.winch = 0;
 				ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
-				g_sad->diff = g_sad->win_y - dimensions.ws_row;
+				buffer->diff = buffer->win_y - dimensions.ws_row;
 				if (buffer->current)
 				{
-					int tmp = dimensions.ws_row - g_sad->win_y;
+					int tmp = dimensions.ws_row - buffer->win_y;
 					//if (tmp > 0)
 						//update_y_screensize(buffer->current, dimensions.ws_row - g_sad->win_y);
 				}
-				g_sad->win_x = dimensions.ws_col;
-    			g_sad->win_y = dimensions.ws_row;
+				buffer->win_x = dimensions.ws_col;
+    			buffer->win_y = dimensions.ws_row;
 			}
 			display_input(buffer->current, 0);
 	}
 	if (red == 0)
 		buffer->current->main->state = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &(buffer)->old);
+	tcsetattr(STDIN_FILENO, TCSANOW, &(g_sig).old);
 	return (buffer->current);
 }
 

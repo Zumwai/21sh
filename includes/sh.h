@@ -24,7 +24,7 @@
 # include <linux/limits.h>
 #endif
 
-extern t_yank   *g_sad;
+extern t_control   g_sig;
 
 t_flag				*init_flag(void);
 t_flag 				*reset_flag(t_flag *flag);

@@ -1,5 +1,5 @@
 #include "sh.h"
-t_yank *g_sad;
+t_control	g_sig;
 
 int		main(int ac, char **av, char **env)
 {
@@ -14,8 +14,6 @@ int		main(int ac, char **av, char **env)
 	buffer = NULL;
 	ev = init_shell(ac, av, env, &buffer);
 	loop = 1;
-	g_sad = 0;
-	g_sad = buffer;
 	while (loop > 0)
 	{
 		fail = 0;

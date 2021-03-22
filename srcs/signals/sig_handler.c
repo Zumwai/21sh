@@ -85,22 +85,9 @@ void	handle_main_signal(int sig)
     struct winsize dimensions;
     if (sig == SIGWINCH)
     {
-        g_sad->winch = 1;
-        //tcsetattr(STDIN_FILENO, TCSANOW, &g_sad->work);
-        if (g_sad->current) {
-            /*
-            ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
-
-            //tputs (tgoto (tgetstr("cm", NULL), 0, g_sad->current->y - 1), 1, putchar_like);  for reentrancy 
-            g_sad->win_x = dimensions.ws_col;
-            g_sad->win_y = dimensions.ws_col;
-            display_input(g_sad->current, 0);
-            tcsetattr(STDIN_FILENO, TCSANOW, &g_sad->work);
-            //modify yyz
-            //erase_printed(g_sad->current->main->size);
-            // */
-        }
-    } else if (check_sig(sig)) {
+        g_sig.winch = 1;
+    }
+    else if (check_sig(sig)) {
         if (sig == SIGINT)
             ft_putstr("^C");
 	//if (sig == SIGINT || sig == SIGABRT)

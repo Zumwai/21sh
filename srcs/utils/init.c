@@ -60,8 +60,8 @@ static void init_tty_attr(t_yank *buf)
 //	tty.c_lflag &= ~(ECHO | IEXTEN | ISIG);
 	tty.c_cc[VMIN] = 0;
 	tty.c_cc[VTIME] = 1;
-	buf->old = old_tty;
-	buf->work= tty;
+	g_sig.old = old_tty;
+	g_sig.work = tty;
 	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 }
 

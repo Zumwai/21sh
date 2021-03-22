@@ -235,7 +235,7 @@ typedef struct	s_shlist
 
 typedef struct s_control
 {
-	unsigned int	sign;
+	unsigned int	winch;
 	struct termios	old;
 	struct termios	work;
 }				t_control;

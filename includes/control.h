@@ -13,7 +13,7 @@
 	CONTROLS
 */
 
-int 		read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env **env);
+int 		read_key(long long key, t_term *pos, t_yank *buf, t_env **env);
 //void		init_tty(void);
 int			display_input(t_term *pos, int delta);
 void		move_left(t_term *pos);
@@ -25,7 +25,7 @@ void		insert_char (t_term *pos, char c);
 void		delete_char(t_term *pos);
 void		go_prev_word(t_term *pos);
 void 		go_next_word(t_term *pos);
-int key_exit(struct termios old_tty, t_term *pos, __attribute((unused))t_yank *buffer);
+int 		key_exit(t_term *pos, __attribute((unused))t_yank *buffer);
 char		*get_buf_line(char **line, int *size, int increase);
 void		cut_word(t_term *pos, t_yank *buffer);
 void		cut_after(t_term *pos, t_yank *buffer);
