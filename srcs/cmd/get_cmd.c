@@ -313,7 +313,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 			get_env_val(buf, &j, t->data, &i, env);
 			i++;
 		}
-		if (t->data[i] && t->data[i] != 92 /*&& t->data[i] != 39 && t->data[i] != 34*/)
+		if (t->data[i] && t->data[i] != 92)
 			buf[j++] = t->data[i++];
 	}
 	buf[j] = '\0';
@@ -336,7 +336,7 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 	if (!head)
 		return NULL;
 	while (cur_t)
-	{
+{
 		cur = get_data_cmd(cur_t, cur, env);
 		if (cur_t->next && cur_t->next->next)
 		{

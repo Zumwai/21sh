@@ -77,10 +77,16 @@ extern t_token 			*parsing_t(char *line)
 	token->data = get_data(line, &car, flag);
 	while (car < l)
 	{
-		token->next = init_token();
-		token->next->prev = token;
-		token = token->next;
-		token->data = get_data(line, &car, flag);
+		while (line[car] && line[car] == ' ')
+			car++;
+		if (line[car] != '\0')
+		{
+			token->next = init_token();
+			token->next->prev = token;
+			token = token->next;
+			token->data = get_data(line, &car, flag);
+			ft_putendl(token->data);
+		}
 		if (ft_strcmp(token->data, "") == 0)
 			token->data = get_data(line, &car, flag);
 		flag = reset_flag(flag);
