@@ -163,12 +163,12 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
     t_env   *curs;
     char    *ptr;
         int     len = 0;
-    int     cd = 0;
+    int     com = 0;
 
     //if (pos->state || pos->heredoc)
      //   return 1;
     new = NULL;
-	if (!(orig = get_incomplete(pos, &cd)))
+	if (!(orig = get_incomplete(pos, &com)))
         return 1;
     dup =  ft_strdup(orig);
     len = ft_strlen(orig);
@@ -199,7 +199,7 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         buf->trie = construct_trie(&orig, env, DIRECTORY);
     else if (is_relative_path(orig))
         buf->trie = construct_trie(&orig, env, RELATIVE);
-    else  if (!cd)
+    else  if (!com)
         buf->trie = construct_trie(&orig, env, GLOBAL);
     else
         buf->trie = construct_trie(&orig, env, SECOND);
