@@ -157,9 +157,10 @@ void append_arr(t_term *pos, char *line, int len)
 	pos->store->arr = new;
 }
 
-void ft_putstr_size(char *line, size_t size)
+void ft_putstr_size(char *line, ssize_t size)
 {
-	write(1, line, size);
+	if (size > 0)
+		write(1, line, size);
 }
 
 /*

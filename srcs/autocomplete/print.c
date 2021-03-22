@@ -49,14 +49,16 @@ void    print_words(t_trie *node, char **line, int index, t_auto *list)
  //   }
 }
 
-void    print_varians(t_term *pos, t_auto *list)
+void    print_varians(t_term *pos, t_auto *list, char *orig)
 {
     t_auto *curs = list;
     int     size = 0;
     int     max = 0;
 	struct winsize dimensions;
     int     cols = 0;
+    int     len_orig;
 
+    len_orig = ft_strlen(orig);
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
     while (curs)
     {
@@ -76,6 +78,7 @@ void    print_varians(t_term *pos, t_auto *list)
     {
         tmp = curs;
         curs = curs->next;
+        ft_putstr_size(orig, len_orig - 1);
         ft_putstr(tmp->name);
         while (tmp->size++ < max)
             ft_putchar(' ');

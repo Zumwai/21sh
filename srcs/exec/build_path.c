@@ -150,6 +150,8 @@ static char			*is_local(char *com, t_env **ev, int *res)
 	char	*path;
 
 	path = NULL;
+	if (!com)
+		return NULL;
 	if (com[0] != '.' && com[0] != '/')
 		return NULL;
 	*res = 0;
