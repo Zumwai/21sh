@@ -106,7 +106,7 @@ t_env			*ft_last_env(char *name, char *value)
 	return (tmp);
 }
 
-int				display_env_list(char **com, t_env **ev)
+int				display_env_list(char **com, t_env **ev, int scope)
 {
 	t_env	*cur;
 
@@ -115,10 +115,12 @@ int				display_env_list(char **com, t_env **ev)
 	cur = (*ev);
 	while (cur)
 	{
-		ft_putstr(cur->name);
-		ft_putchar('=');
-		ft_putstr(cur->value);
-		ft_putchar('\n');
+		if (cur->scope == scope) {
+			ft_putstr(cur->name);
+			ft_putchar('=');
+			ft_putstr(cur->value);
+			ft_putchar('\n');
+		}
 		cur = cur->next;
 	}
 	return (1);
@@ -165,7 +167,7 @@ t_env	*find_env(t_env **ev, char *name)
 int				set_env(char **com, t_env **ev)
 {
 	if (!com[1])
-		return (display_env_list(com, ev));
+		return (display_env_list(com, ev, 1));
 	if (!(ft_isletter(com[1][0])))
 	{
 		handle_empty_error(com[1], ": Variable name should start with a letter\n");
@@ -192,6 +194,7 @@ t_env		*add_env(char *env)
 		return (NULL);
 	tmp->name = ft_strncpy(tmp->name, env, c);
 	tmp->value = ft_strdup(&env[c + 1]);
+	tmp->scope = 1;
 	tmp->next = NULL;
 	return (tmp);
 }
@@ -205,9 +208,10 @@ static void	set_dir_env(t_env **ev)
 	tmp[0] = NULL;
 	tmp[1] = "OLDPWD";
 	tmp[2] = getcwd(buf, PATH_MAX);
-	set_env(tmp, ev);
+	sh_setnew(tmp[1], tmp[2], ev, 1);
+	sh_setenv(tmp, ev, 1);
 	tmp[1] = PWD;
-	set_env(tmp, ev);
+	sh_setenv(tmp, ev, 1);
 	free(tmp);
 }
 

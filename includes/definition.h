@@ -77,6 +77,7 @@
 
 typedef struct	s_env
 {
+	int			scope;
 	char		*name;
 	char		*value;
 	struct s_env *next;
@@ -228,7 +229,6 @@ typedef struct s_yank
 typedef struct	s_shlist
 {
 	t_env	**env;
-	t_env	**var;
 	int		fd[1024];
 	char	*line;
 }				t_shlist;

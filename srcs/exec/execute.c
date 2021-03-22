@@ -45,12 +45,14 @@ static char	**convert_env_array(t_env **ev)
 	i = 0;
 	while (curs)
 	{
-		tab[i] = ft_strnew(ft_strlen(curs->name) + ft_strlen(curs->value) + 1);
-		ft_strclr(tab[i]);
-		tab[i] = ft_strcpy(tab[i], curs->name);
-		tab[i] = ft_strcat(tab[i], "=");
-		tab[i] = ft_strcat(tab[i], curs->value);
-		i++;
+		if (curs->scope == 1) {
+			tab[i] = ft_strnew(ft_strlen(curs->name) + ft_strlen(curs->value) + 1);
+			ft_strclr(tab[i]);
+			tab[i] = ft_strcpy(tab[i], curs->name);
+			tab[i] = ft_strcat(tab[i], "=");
+			tab[i] = ft_strcat(tab[i], curs->value);
+			i++;
+		}
 		curs = curs->next;
 	}
 	return (tab);
@@ -119,6 +121,8 @@ static void *get_builtin(char *com)
 		return (&sh_type);
 	if (ft_strequ(com, "pwd"))
 		return (&sh_pwd);
+	if (ft_strequ(com, "set"))
+		return (&sh_set);
 	return NULL;
 }
 

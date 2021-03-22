@@ -23,15 +23,15 @@ static void	change_working_dir(char *path, t_env **env, char *com, int flag)
 	pwd = getcwd(pwd, PATH_MAX);
 	if (!chdir(path))
 	{
-		sh_setnew("OLDPWD", pwd, env);
+		sh_setnew("OLDPWD", pwd, env, 1);
 		if (flag == PHYSICAL)
 		{
 			set_free_null(&pwd);
 			pwd = getcwd(pwd, PATH_MAX);
-			sh_setnew("PWD", pwd, env);
+			sh_setnew("PWD", pwd, env, 1);
 		}
 		else
-			sh_setnew("PWD", path, env);
+			sh_setnew("PWD", path, env, 1);
 	}
 	else
 		{

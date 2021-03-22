@@ -1,7 +1,6 @@
 #include "sh.h"
 
-
-int					sh_setnew(char *nm, char *value, t_env **env)
+int					sh_setnew(char *nm, char *value, t_env **env, int scope)
 {
 	t_env	*curs;
 
@@ -13,6 +12,7 @@ int					sh_setnew(char *nm, char *value, t_env **env)
 		if (ft_strcmp(nm, curs->name) == 0)
 		{
 			if (ft_strlen(value) < MAX_ARG_STRLEN) {
+				curs->scope = scope;
 				curs->value = ft_strdup(value);
 				free(curs->value);
 			} else {
@@ -29,6 +29,7 @@ int					sh_setnew(char *nm, char *value, t_env **env)
 				curs = curs->next;
 				curs->name = ft_strdup(nm);
 				curs->value = ft_strdup(value);
+				curs->scope = scope;
 				curs->next = NULL;
 			}
 			else {
@@ -41,13 +42,13 @@ int					sh_setnew(char *nm, char *value, t_env **env)
 	return (1);
 }
 
-extern int			sh_setenv(char **cmd, t_env **env, __attribute((unused))int fd)
+extern int			sh_setenv(char **cmd, t_env **env, int scope)
 {
 	int m = 0;
 	while (cmd[m])
 		ft_putendl(cmd[m++]);
 	if (cmd[1] == NULL)
-		display_env_list(cmd, env);
+		display_env_list(cmd, env, scope);
 	else if (ft_strsplit_len(cmd) > 3)
 	{
 		ft_putendl("setenv% TOO few arguments");
@@ -58,10 +59,14 @@ extern int			sh_setenv(char **cmd, t_env **env, __attribute((unused))int fd)
 		ft_putstr("setenv: nothing to set for this variable ");
 		ft_putendl(cmd[1]);
 	}
-	sh_setnew(cmd[1], cmd[2], env);
+	sh_setnew(cmd[1], cmd[2], env, 1);
 	return 1;
 }
 
+extern int		sh_set(char **cmd, t_env **env)
+{
+	return (sh_setenv(cmd, env, 0));
+}
 
 static void				do_unset(char *nm, t_env **env)
 {
