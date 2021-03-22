@@ -9,7 +9,6 @@
 # include <termios.h>
 # include <termcap.h>
 # include <limits.h>
-//# include <linux/limits.h>		//temporary solution for some macros in linux
 # include <dirent.h>
 # include <string.h>
 # include <stdio.h>
@@ -20,6 +19,10 @@
 # include "control.h"
 # include "definition.h"
 # include "libft.h"
+
+#ifdef __linux__
+# include <linux/limits.h>
+#endif
 
 extern t_yank   *g_sad;
 

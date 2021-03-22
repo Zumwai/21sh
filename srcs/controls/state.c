@@ -153,7 +153,7 @@ static int		parse_incoming_subline(char *str, int prev, t_hdoc **del, int size)
 			else if (str[i] == '\'' && !(state & D_QUOTE))
 				state ^= (QUOTE);
 			else if (str[i] == '\"'	&& !(state & QUOTE))
-			state ^= (D_QUOTE);
+				state ^= (D_QUOTE);
 			else if (!state && str[i] == '<') {
 				doc++;
 				state |= REQ_HDOC;
