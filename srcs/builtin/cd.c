@@ -3,6 +3,7 @@
 void		handle_cd_err(int num, char *name)
 {
 	ft_putstr_fd("-shelp!: ", STDERR_FILENO);
+
 	ft_putstr_fd(name, STDERR_FILENO);
 	if (num == -4)
 		ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
@@ -11,148 +12,7 @@ void		handle_cd_err(int num, char *name)
 	else if (num == -7)
 		ft_putstr_fd(": Not a directory\n", STDERR_FILENO);
 }
-
 /*
-static void			mis_cd(char *p, int sig)
-{
-	if (sig == 1)
-	{
-		ft_putstr_fd(p, 2);
-		ft_putendl_fd(": No such file or directory", 2);
-	}
-	if (sig == 2)
-		ft_putendl_fd("cd: Too many arguments.", 2);
-	if (sig == 3)
-		ft_putendl_fd(": No such file or directory.", 2);
-	if (sig == 4)
-		ft_putendl_fd("It`s nothing set for HOME.", 2);
-}
-
-static char			*get_post(char *s)
-{
-	int			i;
-	int			j;
-	int			l;
-	char		*res;
-
-	i = 0;
-	j = 1;
-	l = ft_strlen(s);
-	res = (char *)malloc(sizeof(char) * l);
-	while (s[j] != '\0')
-	{
-		res[i] = s[j];
-		i++;
-		j++;
-	}
-	res[i] = '\0';
-	return (res);
-}
-
-
-static void			cd_rev(t_env **env)
-{
-	char		*pwd;
-	char		*old_pwd;
-	t_env		*cur;
-
-	cur = find_env_variable(env, "PWD");
-	pwd = ft_strdup(cur->value);
-	cur = find_env_variable(env, "OLDPWD");
-	old_pwd = ft_strdup(cur->value);
-	if (!chdir(old_pwd))
-	{
-		sh_setnew("OLDPWD", pwd, env);
-		sh_setnew("PWD", old_pwd, env);
-		set_free_null(&pwd);
-		set_free_null(&old_pwd);
-	} else {
-		//handle_cd_err
-		handle_empty_error("CD", "chdir failed");
-	}
-	set_free_null(&pwd);
-	set_free_null(&old_pwd);
-}
-
-static void			cd_home(t_env **env)
-{
-	t_env		*cur;
-	char		*way;
-	char		dir[256];
-
-	way = NULL;
-	getcwd(dir, 256);
-	cur = find_env_variable(env, "HOME");
-	way = ft_strdup(cur->value);
-	sh_setnew("OLDPWD", dir, env);
-	chdir(way);
-	getcwd(dir, 256);
-	sh_setnew("PWD", dir, env);
-	free(way);
-}
-
-static void			cd_cd(char *way, t_env **env)
-{
-	char		dir[256];
-	char		ndir[256];
-	int			sig;
-
-	getcwd(dir, 256);
-	sig = chdir(way);
-	if (sig < 0)
-		mis_cd(NULL, 1);
-	if (sig == 0)
-	{
-		getcwd(ndir, 256);
-		sh_setnew("PWD", ndir, env);
-		sh_setnew("OLDPWD", dir, env);
-	}
-}
-
-static void			path_from_home(char *way, t_env **env)
-{
-	char		*way1;
-	t_env		*cur;
-	char		*post;
-
-	post = get_post(way);
-	way1 = NULL;
-	if (!(cur = find_env_variable(env, "HOME")))
-	{
-		handle_empty_error("CD", "HOME variable is not defined");
-	}
-	if (!cur->value)
-	{
-		handle_empty_error("CD", "HOME variable is not defined");
-	}
-	else {
-		way1 = ft_strdup(cur->value);
-		ft_strcat(way1, post);
-		cd_cd(way1, env);
-		free(way1);
-		free(post);
-	}
-}
-
-int			sh_cd(char **cmd, t_env **env)
-{
-	if (cmd[1] == NULL)
-		cd_home(env);
-	else if (cmd[1][0] == '~' && cmd[1][1] == '\0')
-		cd_home(env);
-	else if (cmd[1][0] == '~' && cmd[1][1] != '\0')
-		path_from_home(cmd[1], env);
-	else if (cmd[1][0] == '-')
-		cd_rev(env);
-	else if (cmd[1][0] != '~' && cmd[1][0] != '-')
-		cd_cd(cmd[1], env);
-	else if (cmd[2] != NULL)
-		mis_cd(NULL, 2);
-	return 1;
-}
-*/
-
-
 static int	find_old_pwd_home(char *com, char **tmp)
 {
 	int		i;
@@ -228,7 +88,7 @@ static char	*determine_path(char *com, t_env **ev, int i)
 
 static void	change_working_dir(char *path, t_env **env, char *com)
 {
-	/*
+	
 	char	**set;
 
 	set = ft_newdim(4);
@@ -249,7 +109,7 @@ static void	change_working_dir(char *path, t_env **env, char *com)
 		ft_free_tab(&set);
 		handle_cd_err(check_rights(path, 1), com);
 	}
-	*/
+	
 
 	char		*pwd;
 	//char		*old_pwd;
@@ -297,4 +157,134 @@ int			sh_cd(char **com, t_env **ev)
 		handle_empty_error(com[1], ": Variable not set\n");
 	return (1);
 }
+*/
 
+static void	change_working_dir(char *path, t_env **env, char *com, int flag)
+{
+	char		*pwd;
+	//char		*old_pwd;
+	t_env		*cur;
+
+	pwd = NULL;
+	pwd = getcwd(pwd, PATH_MAX);
+	if (!chdir(path))
+	{
+		sh_setnew("OLDPWD", pwd, env);
+		if (flag == PHYSICAL)
+		{
+			set_free_null(&pwd);
+			pwd = getcwd(pwd, PATH_MAX);
+			sh_setnew("PWD", pwd, env);
+		}
+		else
+			sh_setnew("PWD", path, env);
+	}
+	else
+		{
+		//handle_cd_err
+		handle_cd_err(check_rights(path, 1), com);
+	}
+	free(pwd);
+}
+
+char	*get_value_env(char *sought, t_env **env)
+{
+	t_env	*curs;
+	char	*new;
+
+	new = NULL;
+	curs = NULL;
+	curs = find_env_variable(env, sought);
+	if (curs && curs->value)
+		new = ft_strdup(curs->value);
+	return (new);
+}
+
+
+
+char	*create_path(char *com, t_env **env, int flag)
+{
+	char	**sep = NULL;
+	char	*curpath = NULL;
+	char	path[4096] = {0};
+	char	*pwd = NULL;
+	t_env	*curs = NULL;
+	int		i = 0;
+	
+	sep = ft_strsplit(com, '/');
+	if (com[0] != '/' && com[0] != '~') {
+		if (flag == PHYSICAL)
+			pwd = getcwd(pwd, PATH_MAX);
+		else
+			pwd = get_value_env("PWD", env);
+		if (!pwd)
+			pwd = getcwd(pwd, PATH_MAX);
+		ft_strcat(path, pwd);
+	}
+	sep = ft_strsplit(com, '/');
+	if (com[0] == '~')
+	{
+		pwd = get_value_env("HOME", env);
+		if (pwd)
+			ft_strcat(path, pwd);
+		i++;
+	}
+	if (com[0] == '/')
+		path[0] = '/';
+	int		j = 0;
+	while (sep[i])
+	{
+		j = 0;
+		if ((flag == LOGICAL || flag == DEFAULT) && ft_strequ(sep[i], ".."))
+		{
+			j = ft_strlen(path);
+			while (path[j] != '/' && j > 0)
+			{
+				path[j] = 0;
+				j--;
+			}
+			while (j > 0 && path[j] == '/')
+			{
+				path[j] = 0;
+				j--;
+			}
+		}
+		else {
+			ft_strcat(path, "/");
+			ft_strcat(path, sep[i]);
+		}
+		check_rights(path, 1);
+		i++;
+	}
+	curpath = ft_strdup(path);
+	return (curpath);
+}
+
+int		sh_cd(char **com, t_env **env)
+{
+	char	*curpath;
+	int		i;
+	int		flag;
+
+	curpath = NULL;
+	flag = DEFAULT;
+	i = 1;
+	if (!com[1])
+		curpath = get_value_env("HOME", env);
+	else if (ft_strequ(com[1], "-")) {
+		curpath = get_value_env("OLDPWD", env);
+		if (curpath)
+			ft_putendl(curpath);
+	}
+	else if (ft_strequ(com[1], "-P"))
+		flag = PHYSICAL;
+	else if (ft_strequ(com[1], "-L"))
+		flag = LOGICAL;
+	if (flag != DEFAULT)
+		i++;
+	if (!curpath)
+		curpath = create_path(com[i], env, flag);
+	change_working_dir(curpath, env, com[i], flag);
+	free(curpath);
+	return (1);
+}
