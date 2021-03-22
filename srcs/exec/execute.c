@@ -35,6 +35,11 @@ static char	**convert_env_array(t_env **ev)
 		curs = curs->next;
 		i++;
 	}
+	if (MAX_ARG_STRINGS <= i)
+	{
+		handle_empty_error("env list is too long", "execve limit");
+		return NULL;
+	}
 	tab = ft_newdim(i + 1);
 	curs = (*ev);
 	i = 0;
@@ -65,7 +70,8 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	pid_t		pid;
 	char		**environ;
 
-	environ = convert_env_array(env);
+	if (!(environ = convert_env_array(env)))
+		return ;
 	if ((pid = fork()) == 0)
 	{
 		if (read != 0)

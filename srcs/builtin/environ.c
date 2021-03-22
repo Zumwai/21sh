@@ -1,5 +1,6 @@
 #include "sh.h"
 
+
 int					sh_setnew(char *nm, char *value, t_env **env)
 {
 	t_env	*curs;
@@ -11,18 +12,28 @@ int					sh_setnew(char *nm, char *value, t_env **env)
 	{
 		if (ft_strcmp(nm, curs->name) == 0)
 		{
-			free(curs->value);
-			curs->value = ft_strdup(value);
+			if (ft_strlen(value) < MAX_ARG_STRLEN) {
+				curs->value = ft_strdup(value);
+				free(curs->value);
+			} else {
+				handle_empty_error(value, "variable length if too long");
+			}
 			return (1);
 		}
 		if (curs->next == NULL)
 		{
-			if (!(curs->next = (t_env *)malloc(sizeof(t_env))))
-				return (0);
-			curs = curs->next;
-			curs->name = ft_strdup(nm);
-			curs->value = ft_strdup(value);
-			curs->next = NULL;
+			if (ft_strlen (nm) < MAX_ARG_STRLEN && ft_strlen(value) < MAX_ARG_STRLEN)
+			{
+				if (!(curs->next = (t_env *)malloc(sizeof(t_env))))
+					return (0);
+				curs = curs->next;
+				curs->name = ft_strdup(nm);
+				curs->value = ft_strdup(value);
+				curs->next = NULL;
+			}
+			else {
+				handle_empty_error(value, "variable length if too long");
+			}
 			return (1);
 		}
 		curs = curs->next;

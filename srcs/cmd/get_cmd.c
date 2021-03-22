@@ -9,8 +9,10 @@ static char				*get_value(char *name, t_env **env)
 	cur = NULL;
 	res = NULL;
 	cur = find_env_variable(env, name);
-	if (cur)
-		res = ft_strdup(cur->value);
+	if (cur) {
+		if (cur->value)
+			res = ft_strdup(cur->value);
+	}
 	return res;
 }
 
@@ -112,7 +114,7 @@ char					*fill_str(char *s, int *i)
 	char				*res = NULL;
 	int					j = 0;
 	int					l = 0;
-	char				buf[1000] = {0};
+	char				*buf;
 	int 				course = 0;
 	char 				c = 0;
 
@@ -120,10 +122,10 @@ char					*fill_str(char *s, int *i)
 	course = 0;
 	course = (*i);
 
-	ft_putendl("BEWARE");
-	ft_strclr(buf);
-	printf("start course === %d\n", course);
-	printf("st.course === %c\n", s[course]);
+	//ft_putendl("BEWARE");
+	buf = ft_strnew(ft_strlen(s));
+	//printf("start course === %d\n", course);
+	//printf("st.course === %c\n", s[course]);
 	if (s[course] == ' ')
 	{
 		while (s[course] == ' ' && s[course])
@@ -152,10 +154,9 @@ char					*fill_str(char *s, int *i)
 	///if (its_redir(buf))
 	///fill_str(s, &i);
 	///else
-	res = ft_strdup(buf);
-	printf("res == %s\n", res);
+	printf("res == %s\n", buf);
 	(*i) = course;
-	return(res);
+	return(buf);
 }
 
 int						how_much_restreams(char *s)

@@ -8,24 +8,21 @@ char 				*get_semantica_ret(char *line, int *i, char *res, int j)
 	if (line[*i] == ';')
 	{
 		res[j + 1] = '\0';
-		ret = ft_strtrim(ft_strdup(res));
-		return (ret);
+		ret = ft_strtrim(res);
 	}
-	if (line[*i] == '|')
+	else if (line[*i] == '|')
 	{
 		ret = if_vertical_bar(line, i, res, j);
-		return (ret);
 	}
-	if (line[*i] == '&')
+	else if (line[*i] == '&')
 	{
 		ret = if_ampersand(line, i, res, j);
-		return (ret);
 	}
-	if (line[*i] == '>' || line[*i] == '<')
+	else if (line[*i] == '>' || line[*i] == '<')
 	{
 		ret = get_redirect(line, i, res, j);
-		return (ret);
 	}
+	return (ret);
 }
 
 int 				semantica(t_flag *flag, char *line, int *i, int *j)
@@ -53,4 +50,5 @@ int 				semantica(t_flag *flag, char *line, int *i, int *j)
 	}
 	if (*j == 0)
 		return (2);
+	return (-1); /* control path ZAGLUSHKO, fix pls ^^ */
 }

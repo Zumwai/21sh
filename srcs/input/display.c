@@ -215,51 +215,6 @@ static void set_empty_line(t_term *pos, int y, int prev)
 		tputs(tgoto(tgetstr("cm", NULL), 0, 0), 1, putchar_like);
 	}
 }
-/*
-int display_input(t_term *curr, int delta)
-{
-	int remainder;
-	//t_term	curr;
-
-	if (!curr)
-		return 0;
-	//curr = *pos;
-	remainder = curr->index;
-	if (curr->prev)
-		curr->y += delta;
-	set_empty_line(curr, curr->y, !!curr->prev);
-	while (remainder >= 0)
-		remainder = draw_line(curr, remainder);
-	if (!curr->next)
-		tputs(tgetstr("cd", NULL), 1, putchar_like);
-	set_cursor(curr);
-	if (curr->next)
-	{
-		display_input(curr->next, curr->delta_y + delta);
-	}
-	int i = 0;
-	while (curr->store->arr[i])
-	{
-		free(curr->store->arr[i]);
-		curr->store->arr[i] = NULL;
-		i++;
-	}
-	//if (pos->store->arr)
-	//	ft_free_tab(pos->store->arr);
-	if (curr->store->arr)
-		free(curr->store->arr);
-	curr->store->arr = NULL;
-	curr->store->size = 0;
-	curr->y -= delta;
-	//if (curr.y != pos->y)
-	//pos->y = curr.y;
-	curr->delta_y = 0;
-	//if (curr.y != pos->y)
-	//*pos = curr;
-	//	pos->y = curr.y - 1;
-	return (0);
-}
-*/
 
 int display_input(t_term *pos, int delta)
 {

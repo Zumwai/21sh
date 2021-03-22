@@ -30,29 +30,15 @@ static long long	incapsulate_read(void)
 	int stdin_cpy;
 	ret = 0;
 	key = 0;
-	//stdin_cpy = dup(0);
-
 	while (g_sad->winch == 0)
 	{
 		ret = 0;
-		//tcsetattr(STDIN_FILENO, TCSANOW, &g_sad->work);
-		//close(STDIN_FILENO);
-
 		ret = read(STDIN_FILENO, &key, sizeof(key));
-		//printf("%lld ", key);
-		//printf("%lld\n", key);
-//		if (ret == -1)
-//			handle_exit_errors("read ERRNO");
-//		else
-//			break ;
 		if (g_sad->winch)
 			break ;
 		if (ret > 0)
 			break ;
 	}
-	//if (g_sad->winch == 1)
-		//printf("WINDOW SIZE HAS BEEN CHANGED\n");
-		//tcsetattr(STDIN_FILENO, TCSANOW, &g_sad->old);
 	return (key);
 }
 

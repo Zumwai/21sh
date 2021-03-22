@@ -4,7 +4,8 @@ t_cmd			*init_cmd(void)
 {
 	t_cmd		*new;
 
-	new = (t_cmd *)malloc(sizeof(t_cmd));
+	if (!(new = (t_cmd *)malloc(sizeof(t_cmd))))
+		handle_exit_errors("Malloc returned NULL");
 	ft_memset(new, 0, sizeof(t_cmd));
 	/*
 	new->arr = NULL;
