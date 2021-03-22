@@ -22,7 +22,7 @@ void go_prev_word(t_term *pos)
 	int abs = ft_abs(pos->delta_x);
 
 	int curs = pos->index - abs - 1;
-	while (curs > 0 && pos->new[curs] == ' ')
+	while (curs > 0 && !ft_isalnum(pos->new[curs]))
 		curs--;
 	while (curs > 0 && ft_isalnum(pos->new[curs]))
 		curs--;

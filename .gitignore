@@ -4,6 +4,8 @@ make
 .vscode
 .idea
 *.o
+*.d
+*.a
 21sh
 changes
 cmake-build-debug

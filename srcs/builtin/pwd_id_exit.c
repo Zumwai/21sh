@@ -21,15 +21,17 @@ int	display_id_kid_parent(void)
 	return 1;
 }
 
-/*int		sh_pwd(void)
+int		sh_pwd(char **com, t_env **env)
 {
 	char	*curr;
 
 	curr = NULL;
-	if (!(curr = getcwd(curr, PATH_MAX)))
-		return (-1);
+	curr = get_value_env("PWD", env);
+	if (!curr)
+		if (!(curr = getcwd(curr, PATH_MAX)))
+			return (-1);
 	ft_putstr(curr);
 	ft_putchar('\n');
 	free(curr);
 	return (1);
-}*/
+}

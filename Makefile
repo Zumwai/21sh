@@ -45,22 +45,26 @@ DIR_SRCS = srcs/
 SOURCE = $(addprefix $(DIR_SRCS), $(SRCS))
 OBJECT = $(patsubst %.c,%.o,$(SOURCE))
 DEPEND = $(patsubst %.c,%.d,$(SOURCE))
-DIR_LIB = ./libft/
+DIR_LIB = ./libft
 LIB = $(DIR_LIB)/libft.a
 HEAD = ./includes/
 FLAGS = -g 
 REMOVE = rm -rf
+COMP_LIB = make -C $(DIR_LIB)
 .PHONY: all clean re fclean
 
 
 all: $(NAME)
 
-$(NAME): $(OBJECT) $(LIB)
+
+$(NAME): $(OBJECT)
 	$(COM) $(FLAGS) $(OBJECT) -o $(NAME) $(LIB) -ltermcap
-$(LIB): $(DIR_LIB) 
-	$(MAKE) -C $(DIR_LIB) all
-%.o: %.c $(LIB)
+%.o: %.c | $(LIB)
 	$(COM) $(FLAGS) -c $< -o $@ -I$(DIR_LIB) -I$(HEAD) -MD
+$(LIB): lib
+
+lib:
+	@$(COMP_LIB)
 clean:
 	$(REMOVE) $(OBJECT) && \
 	$(REMOVE) $(DEPEND) && \

@@ -59,6 +59,9 @@
 # define LOC_DIRECTORY 8
 # define LOC_FINISH 9
 # define SECOND 10
+# define LOGICAL 1
+# define PHYSICAL 2
+# define PREVIOUS 3
 
 typedef struct	s_env
 {
