@@ -1,19 +1,5 @@
 #include "sh.h"
 
-char						get_manage(char t)
-{
-	if (t == '0')
-		return ('0');
-	if (t == 't')
-		return ('\t');
-	if (t == 'n')
-		return ('\n');
-	if (t == 92)
-		return ('\\');
-	else
-		return (t);
-}
-
 static char 				*get_data(char *line, int *n, t_flag *flag)
 {
 	char 			res[1000];
@@ -52,7 +38,6 @@ static char 				*get_data(char *line, int *n, t_flag *flag)
 			j += 1;
 		}
 	}
-	/*}*/
 	buf = ft_strdup(res);
 	ret = ft_strtrim(buf);
 	free(buf);
