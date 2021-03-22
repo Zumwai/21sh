@@ -83,7 +83,7 @@ static void				do_unset(char *nm, t_env **env)
 			break ;
 		}
 		prev = tmp;
-		tmp = tmp->next;
+		tmp = tmp->next; 
 	}
 }
 
