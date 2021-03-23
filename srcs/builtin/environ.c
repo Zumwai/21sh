@@ -51,9 +51,10 @@ int					sh_setnew(char *nm, char *value, t_env **env, int scope)
 
 extern int			sh_setenv(char **cmd, t_env **env, int scope)
 {
-	int m = 0;
-	while (cmd[m])
-		ft_putendl(cmd[m++]);
+	int i = 0;
+
+	while (cmd[i])
+		ft_putendl(cmd[i++]);
 	if (cmd[1] == NULL)
 		display_env_list(cmd, env, scope);
 	else if (ft_strsplit_len(cmd) > 3)
@@ -66,7 +67,8 @@ extern int			sh_setenv(char **cmd, t_env **env, int scope)
 		ft_putstr("setenv: nothing to set for this variable ");
 		ft_putendl(cmd[1]);
 	}
-	sh_setnew(cmd[1], cmd[2], env, scope);
+	else
+		sh_setnew(cmd[1], cmd[2], env, scope);
 	return 1;
 }
 

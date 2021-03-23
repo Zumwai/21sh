@@ -102,8 +102,8 @@ void	ft_free_tab(char **tab)
 	i = 0;
 	if (!curs)
 		return ;
-	if (!curs[i])
-		return ;
+	//if (!curs[i])
+	//	return ;
 	while (curs[i])
 	{
 		free(curs[i]);

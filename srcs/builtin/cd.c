@@ -62,7 +62,6 @@ char	*create_path(char *com, t_env **env, int flag)
 	t_env	*curs = NULL;
 	int		i = 0;
 
-	sep = ft_strsplit(com, '/');
 	if (com[0] != '/' && com[0] != '~') {
 		if (flag == PHYSICAL)
 			pwd = getcwd(pwd, PATH_MAX);
@@ -108,6 +107,8 @@ char	*create_path(char *com, t_env **env, int flag)
 		i++;
 	}
 	curpath = ft_strdup(path);
+	ft_free_tab(sep);
+	sep = NULL;
 	return (curpath);
 }
 
@@ -158,7 +159,8 @@ int		sh_cd(char **com, t_env **env)
 	if (!curpath)
 		curpath = create_path(com[i], env, flag);
 	if (curpath) {
-		if (ft_strlen(curpath) >= 4096)
+		size = ft_strlen(curpath);
+		if (size >= 4096)
 			size = trim_curpath(&curpath, env);
 		if (size <= 4096)
 			change_working_dir(curpath, env, com[i], flag);

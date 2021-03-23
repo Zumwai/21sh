@@ -16,10 +16,8 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 			if (line[*n] == ' ' && t->prev && (ft_strcmp(t->prev->data, "<<") == 0))
 			{
 				res[j] = '\0';
-				buf = ft_strdup(res);
-				ret = ft_strtrim(buf);
-				free(buf);
-				return (ret);
+				ret = ft_strtrim(res);
+				break ;
 			}
 			res[j] = line[*n];
 			*n += 1;
@@ -44,15 +42,9 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 			j += 1;
 		}
 	}
-<<<<<<< HEAD
 	if (!ret)
 		ret = ft_strtrim(res);
 	free(res);
-=======
-	buf = ft_strdup(res);
-	ret = ft_strtrim(buf);
-	free(buf);
->>>>>>> nnn
 	return (ret);
 }
 
