@@ -11,7 +11,7 @@
 #ifndef MAX_ARG_STRINGS 
 # define MAX_ARG_STRINGS 0x7FFFFFFF
 #endif
-
+# define ARG_MAX 2097152
 # define LEFT	4479771			//left arrow
 # define RIGHT	4414235			//right
 # define ENTER	10				//return

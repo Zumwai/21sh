@@ -213,6 +213,17 @@ static void	set_dir_env(t_env **ev)
 	free(tmp);
 }
 
+static void set_pid_env(t_env **ev)
+{
+	char	*pid;
+	int		kid;
+
+	kid = getpid();
+	pid = ft_itoa(kid);
+	sh_setnew("$", pid, ev, 0);
+	free(pid);
+}
+
 t_env		*create_env_list(char **env)
 {
 	t_env	*tmp;
@@ -241,6 +252,7 @@ t_env		*create_env_list(char **env)
 		i++;
 	}
 	set_dir_env(&head);
+	set_pid_env(&head);
 	return (head);
 }
 
