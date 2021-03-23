@@ -35,17 +35,24 @@ static char	**convert_env_array(t_env **ev)
 		curs = curs->next;
 		i++;
 	}
+	if (MAX_ARG_STRINGS <= i)
+	{
+		handle_empty_error("env list is too long", "execve limit");
+		return NULL;
+	}
 	tab = ft_newdim(i + 1);
 	curs = (*ev);
 	i = 0;
 	while (curs)
 	{
-		tab[i] = ft_strnew(ft_strlen(curs->name) + ft_strlen(curs->value) + 1);
-		ft_strclr(tab[i]);
-		tab[i] = ft_strcpy(tab[i], curs->name);
-		tab[i] = ft_strcat(tab[i], "=");
-		tab[i] = ft_strcat(tab[i], curs->value);
-		i++;
+		if (curs->scope == 1) {
+			tab[i] = ft_strnew(ft_strlen(curs->name) + ft_strlen(curs->value) + 1);
+			ft_strclr(tab[i]);
+			tab[i] = ft_strcpy(tab[i], curs->name);
+			tab[i] = ft_strcat(tab[i], "=");
+			tab[i] = ft_strcat(tab[i], curs->value);
+			i++;
+		}
 		curs = curs->next;
 	}
 	return (tab);
@@ -65,7 +72,8 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	pid_t		pid;
 	char		**environ;
 
-	environ = convert_env_array(env);
+	if (!(environ = convert_env_array(env)))
+		return ;
 	if ((pid = fork()) == 0)
 	{
 		if (read != 0)
@@ -90,30 +98,50 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	environ = NULL;
 }
 
-static void *get_builtin(char *com)
+static int	check_isbuiltin(char *com)
 {
-
 	if (ft_strequ(com, "cd"))
-		return (&sh_cd);
-	if (ft_strequ(com, "clear"))
-		return(&sh_clear);
+		return 1;
 	if (ft_strequ(com, "echo"))
-		return(&sh_echo);
+		return 2;
 	if (ft_strequ(com, "exit"))
-		return(&sh_exit);
-	if (ft_strequ(com, "clear"))
-		return(&sh_clear);
+		return 3;
 	if (ft_strequ(com, "setenv"))
-		return(&sh_setenv);
+		return 4;
 	if (ft_strequ(com, "unsetenv"))
-		return(&sh_unset);
+		return 5;
 	if (ft_strequ(com, "ppid"))
-		return (&display_id_kid_parent);
+		return 6;
 	if (ft_strequ(com, "type"))
-		return (&sh_type);
+		return 7;
 	if (ft_strequ(com, "pwd"))
-		return (&sh_pwd);
-	return NULL;
+		return 8;
+	if (ft_strequ(com, "set"))
+		return 9;
+	return 0;
+}
+
+int	exec_builtin(char **com, t_env **env, int fd, int num)
+{
+	if (num == 1)
+		return (sh_cd(com, env));
+	if (num == 2)
+		return (sh_echo(com, env, fd));
+	if (num == 3)
+		return (sh_exit());
+	if (num == 4)
+		return (sh_setenv(com, env, 1));
+	if (num == 5)
+		return (sh_unset(com, env, fd));
+	if (num == 6)
+		return (display_id_kid_parent());
+	if (num == 7)
+		return (sh_type(com, env));
+	if (num == 8)
+		return (sh_pwd(com, env));
+	if (num == 9)
+		return (sh_set(com, env));
+	return (1);
 }
 
 int             get_fd_write(t_cmd *cmd)
@@ -173,7 +201,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	int			fd[2];
 	pid_t		pid;
 	t_cmd 		*head;
-	int		(*builtin)();
+	int		builtin;
 	int     wfd;
 
 	int res;
@@ -181,7 +209,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	res = 1;
 	head = cmd;
 	read = 0;
-	builtin = NULL;
+	builtin = 0;
 	int ffd;
 	ffd = 1;
 	//int m = 0;
@@ -197,7 +225,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	    pipe(fd);
 	    if (cmd->type == 6 || cmd->type == 7)
 	        wfd = get_fd_write(cmd);
-	    if ((builtin = get_builtin(cmd->arr[0])) != NULL)
+	    if ((builtin = check_isbuiltin(cmd->arr[0])) != 0)
 	    {
 	       if ((cmd->type == 6 || cmd->type == 7) && wfd != 1)
 	            ffd = wfd;
@@ -205,7 +233,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	           ffd = fd[1];
 	       if (cmd->type != 2 && cmd->type != 7 && cmd->type != 6)
 	           ffd = 1;
-	     res = builtin(cmd->arr, env, ffd);
+	     res = exec_builtin(cmd->arr, env, ffd, builtin);		 
         }
 	    else
 	    {

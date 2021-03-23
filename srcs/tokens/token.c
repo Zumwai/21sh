@@ -96,8 +96,7 @@ extern int 				is_tokens_true(t_token *t)
 	else
 	    ft_putendl_fd("error of parsing", 2);
 	return (0);
-	/* error */
-	return 0;
+
 }
 
 extern t_token 			*init_token(void)
@@ -106,13 +105,6 @@ extern t_token 			*init_token(void)
 
 	if(!(new = (t_token *)malloc(sizeof(t_token))))
 		return (NULL);
-	ft_memset(new, 0, sizeof(t_token)); /*
-	new->data = NULL;
-	new->priority = 0;
-	new->next = NULL;
-	new->prev = NULL;
-	new->c_type = 0;
-	new->type = 0;
-	new->status = 0;*/
+	ft_memset(new, 0, sizeof(t_token));
 	return (new);
 }

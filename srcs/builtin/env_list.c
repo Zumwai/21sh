@@ -1,5 +1,5 @@
 #include "sh.h"
-
+/*
 static char			*get_env_name(char *s)
 {
 	char		*nm;
@@ -95,3 +95,4 @@ extern t_env			*env_list(void)
 	get_env(env);
 	return (env);
 }
+*/

@@ -13,7 +13,7 @@
 	CONTROLS
 */
 
-int 		read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env **env);
+int 		read_key(long long key, t_term *pos, t_yank *buf, t_env **env);
 //void		init_tty(void);
 int			display_input(t_term *pos, int delta);
 void		move_left(t_term *pos);
@@ -25,7 +25,7 @@ void		insert_char (t_term *pos, char c);
 void		delete_char(t_term *pos);
 void		go_prev_word(t_term *pos);
 void 		go_next_word(t_term *pos);
-int key_exit(struct termios old_tty, t_term *pos, __attribute((unused))t_yank *buffer);
+int 		key_exit(t_term *pos, __attribute((unused))t_yank *buffer);
 char		*get_buf_line(char **line, int *size, int increase);
 void		cut_word(t_term *pos, t_yank *buffer);
 void		cut_after(t_term *pos, t_yank *buffer);
@@ -43,7 +43,7 @@ int		putchar_like(int n);
 void	handle_empty_error(char *name, char *description);
 int		handle_return_error(int num, char *name);
 void	handle_exit_errors(char *description);
-void	ft_putstr_size(char *line, size_t size);
+void	ft_putstr_size(char *line, ssize_t size);
 char	*concat_lines(t_term *input);
 t_trie	*find_best_match(char *orig, t_env **env);
 int		autocomplete(t_term *pos, t_env **env, t_yank *buf);
@@ -64,7 +64,7 @@ int		verify_char_heredoc(char c);
 t_hdoc	*clone_hdoc(t_hdoc *old);
 void       update_coord(t_term *pos);
 void    print_words(t_trie *node, char **line, int index, t_auto *list);
-void    print_varians(t_term *pos, t_auto *list);
+void    print_varians(t_term *pos, t_auto *list, char *orig);
 t_auto  *create_new_list(char *line);
 int is_relative_path(char *orig);
 char	*get_incomplete(t_term *pos, int *cd);

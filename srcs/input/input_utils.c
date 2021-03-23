@@ -2,9 +2,9 @@
 
 
 
-int key_exit(struct termios old_tty, t_term *pos, __attribute((unused))t_yank *buffer)
+int key_exit(t_term *pos, __attribute((unused))t_yank *buffer)
 {
-	tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
+	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_sig.old);
 //	if (pos->new)
 //		set_free_null(pos->new);
 	//free_input_line(&pos);

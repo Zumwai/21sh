@@ -287,5 +287,7 @@ t_trie    *construct_trie(char **orig, t_env **env, int source)
     }
             if (!head)
         return NULL;
+    if (head)
+        head->data = 0;
     return head;
 }
