@@ -1,19 +1,6 @@
 #include "sh.h"
 #include <stdio.h>
 
-/*
-static	int					command(char *s)
-{
-	if (ft_strcmp(s, ECHO) == 0) ||
-		(ft_strcmp(s, ENV) == 0) || (ft_strcmp(s, SETENV) == 0) ||
-		(ft_strcmp(s, UNSETENV) == 0) || (ft_strcmp(s, CD) == 0) ||
-		(ft_strcmp(s, EXIT) == 0) || (ft_strcmp(s, "clear") == 0))
-		return (1);
-	else
-		return (0);
-}
-*/
-
 static void terminate_child(char *command)
 {
 	ft_putstr_fd("Execve failed to execute ", STDERR_FILENO);
@@ -85,6 +72,10 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	}
 	else
 		wait(&pid);
+	if (read != 0)
+		close(read);
+	if (fd != 1 && fd != 2)
+		close(fd);
 	set_free_null(&cmd->target);
 	ft_free_tab(environ);
 	environ = NULL;
@@ -149,24 +140,6 @@ static int 		get_cmd_type(t_cmd *cmd, int fd)
 	return (1);
 }
 
-void			create_file_is_it_doent_exist(t_cmd *cmd)
-{
-	int fd;
-
-	fd = 0;
-	cmd = cmd->next;
-	while (cmd)
-	{
-		if (cmd->prev->type == 7 || cmd->prev->type == 6)
-		{
-			fd = open(cmd->arr[0], O_CREAT | O_RDWR | O_APPEND,
-					  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-			close(fd);
-		}
-		cmd = cmd->next;
-	}
-}
-
 int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 {
 	int			read;
@@ -184,17 +157,12 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	builtin = NULL;
 	int ffd;
 	ffd = 1;
-	//int m = 0;
 	handle_all_signals(0);
 	if (!cmd->arr || !cmd->arr[0])
 		return 1;
-	create_file_is_it_doent_exist(cmd);
 	while (cmd)
 	{
-		//m = 0;
-		//while (cmd->arr[m])
-			//ft_putendl(cmd->arr[m++]);
-	    pipe(fd);
+	    ///pipe(fd);
 	    if (cmd->type == 6 || cmd->type == 7)
 	        wfd = get_fd_write(cmd);
 	    if ((builtin = get_builtin(cmd->arr[0])) != NULL)
@@ -202,7 +170,11 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	       if ((cmd->type == 6 || cmd->type == 7) && wfd != 1)
 	            ffd = wfd;
 	       if (cmd->type == 2)
-	           ffd = fd[1];
+	       {
+			   pipe(fd);
+			   ffd = fd[1];
+			   close(fd[0]);
+		   }
 	       if (cmd->type != 2 && cmd->type != 7 && cmd->type != 6)
 	           ffd = 1;
 	     res = builtin(cmd->arr, env, ffd);
@@ -210,10 +182,20 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	    else
 	    {
 			cmd->target = get_path(cmd->arr[0], env);
-			if (cmd->target != NULL && cmd->type != 6 && cmd->type != 7 && cmd->type != 8)
+			if (cmd->target != NULL && (cmd->type == 2 || (cmd->prev && cmd->prev->type == 2)))
+			{
+				pipe(fd);
 				do_proc(read, fd[1], cmd->target, cmd, env);
-			if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
+				///close(fd[0]);
+				close(fd[1]);
+			}
+			if (cmd->target != NULL && cmd->type != 2 && cmd->type != 6 && cmd->type != 7 && cmd->type != 8)
 				do_proc(read, wfd, cmd->target, cmd, env);
+			if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
+			{
+				do_proc(read, wfd, cmd->target, cmd, env);
+				close(wfd);
+			}
 			if (cmd->target != NULL && cmd->type == 8)
 			{
 				read = get_fd_write(cmd);
@@ -221,12 +203,13 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 				do_proc(read, wfd, cmd->target, cmd, env);
 			}
 		}
-	if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8)
-	{
-        while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8))
-            cmd = cmd->next;
-    }
-		close(fd[1]);
+		if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8)
+		{
+        	while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8))
+            	cmd = cmd->next;
+    	}
+		if (fd[1])
+			close(fd[1]);
 	    //close(fd[0]);
 		if (cmd->type == 2)
 		    read = fd[0];
@@ -234,5 +217,13 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 			close(wfd);
 		cmd = cmd->next;
 	}
+	if (read != 0)
+		close(read);
+	if (wfd != 1 && wfd != 2)
+		close (wfd);
+	if (fd[0])
+		close(fd[0]);
+	if (fd[1])
+		close(fd[1]);
 	return (res);
 }
