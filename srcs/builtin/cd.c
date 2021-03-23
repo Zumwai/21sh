@@ -106,6 +106,7 @@ char	*create_path(char *com, t_env **env, int flag)
 		check_rights(path, 1);
 		i++;
 	}
+	free(pwd);
 	curpath = ft_strdup(path);
 	ft_free_tab(sep);
 	sep = NULL;
