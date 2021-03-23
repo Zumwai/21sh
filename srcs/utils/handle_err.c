@@ -54,6 +54,7 @@ void	handle_exit_errors(char *description)
 {
 	ft_putstr_fd("-shelp!: ", STDERR_FILENO);
 	ft_putstr_fd(description, STDERR_FILENO);
+	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_sig.old);
 //	reset_tty();
 	exit(EXIT_FAILURE);
 }
