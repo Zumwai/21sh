@@ -21,6 +21,8 @@ void insert_char (t_term *pos, char c)
 {
 	int abs = ft_abs(pos->delta_x);
 
+	if (pos-> index >= ARG_MAX)
+		return ;
 	ft_memmove(&pos->new[pos->index - abs + 1], &pos->new[pos->index - abs], abs);
 	pos->new[pos->index - abs] = c;
 	pos->x++;
