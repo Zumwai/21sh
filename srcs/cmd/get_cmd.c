@@ -29,7 +29,9 @@ static char		*get_env_val(char *buf, int *j, char *orig, int *i, t_env **env, in
 	buffer = NULL;
 	while (orig[*i + size] != ' ' && orig[*i + size] != '/' && orig[*i + size] != '\\'
 	&& orig[*i + size] != '\"' && orig[*i + size]  != '\'' && orig[*i + size]
-	&& orig[*i + size] != ';')
+	&& orig[*i + size] != ';' && orig[*i + size + 1] != '$')
+		size++;
+	if (orig[*i + size] && orig[*i + size + 1] == '$')
 		size++;
 	if (size)
 		var = ft_strndup(&orig[*i], size);
@@ -37,13 +39,13 @@ static char		*get_env_val(char *buf, int *j, char *orig, int *i, t_env **env, in
 		value = get_value(&var[1], env);
 	if (value)
 	{
-		*i = *i + size - 1;
+		*i = *i + size;
 		size = ft_strlen(value);
 		buffer = ft_strnew(*o_size + size);
 		ft_strcpy(buffer, buf);
 		ft_strcat(buffer, value);
 		*o_size = *o_size + size;
-		*j = *j + size - 1;
+		*j = *j + size;
 		free(buf);
 		buf = buffer;
 		free(value);
@@ -294,12 +296,12 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 			q[0] = q[0] == 0 ? 1 : 0;
 			buf[j++] = t->data[i++];
 		}
-		if (t->data[i] == 34 && q[0] == 0)
+		else if (t->data[i] == 34 && q[0] == 0)
 		{
 			q[1] = q[1] == 0 ? 1 : 0;
 			buf[j++] = t->data[i++];
 		}
-		if (t->data[i] == 92 && t->data[i + 1])
+		else if (t->data[i] == 92 && t->data[i + 1])
 		{
 			if (q[1] == 0 && q[0] == 0)
 			{
@@ -313,13 +315,12 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 				i++;
 			}
 		}
-		if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != '$' && t->data[i + 1] != ' ')
+		else if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != '$' && t->data[i + 1] != ' ')
 		{
 
 			buf = get_env_val(buf, &j, t->data, &i, env, &size);
-			i++;
 		}
-		if (t->data[i] && t->data[i] != 92)
+		else if (t->data[i] && t->data[i] != 92)
 			buf[j++] = t->data[i++];
 	}
 	buf[j] = '\0';
