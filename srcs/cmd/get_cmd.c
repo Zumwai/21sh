@@ -22,7 +22,7 @@ static char		*get_env_val(char *buf, int *j, char *orig, int *i, t_env **env, in
 	char	*var;
 	char	*value;
 	char	*buffer;
-	int		new_size;
+
 	size = 0;
 	var = NULL;
 	value = NULL;
@@ -43,7 +43,7 @@ static char		*get_env_val(char *buf, int *j, char *orig, int *i, t_env **env, in
 		ft_strcpy(buffer, buf);
 		ft_strcat(buffer, value);
 		*o_size = *o_size + size;
-		*j = *j + size;
+		*j = *j + size - 1;
 		free(buf);
 		buf = buffer;
 		free(value);
@@ -51,41 +51,6 @@ static char		*get_env_val(char *buf, int *j, char *orig, int *i, t_env **env, in
 	free(var);
 	return (buf);
 }
-/*
-static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.вынуть переменную среды
-{
-	char			tmp[246];
-	int				u;
-	char			*t_tmp;
-
-	u = 0;
-	*i = *i + 1;
-	while (t[*i] != ' ' && t[*i] != '/' && t[*i] != 92
-	&& t[*i] != 34 && t[*i] !=39 && t[*i])
-	{
-		tmp[u] = t[*i];
-		*i = *i + 1;
-		u++;
-	}
-	tmp[u] = '\0';
-	if (t[*i] == '"')
-	    *i = *i + 1;
-	t_tmp = get_value(tmp, env);
-	if (t_tmp)
-	{
-		u = 0;
-		while (t_tmp[u])
-		{
-			buf[*j] = t_tmp[u];
-			*j = *j + 1;
-			u++;
-		}
-	}
-	*i = *i - 1;
-	if (t_tmp)
-		set_free_null(&t_tmp);
-}
-*/
 
 int						len_of_word(char *s, int i)
 {
