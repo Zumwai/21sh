@@ -305,14 +305,13 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 		}
 		else if (t->data[i] == 92 && t->data[i + 1])
 		{
+			i++;
 			if (q[1] == 0 && q[0] == 0)
 			{
-				i++;
 				buf[j++] = t->data[i];
 			}
 			else
 			{
-				i++;
 				buf[j++] = get_spec(t->data[i]);
 			}
 		}
