@@ -208,10 +208,8 @@ static void	set_dir_env(t_env **ev)
 	tmp[0] = NULL;
 	tmp[1] = "OLDPWD";
 	tmp[2] = getcwd(buf, PATH_MAX);
-	sh_setnew(tmp[1], tmp[2], ev, 1);
-	sh_setenv(tmp, ev, 1);
 	tmp[1] = PWD;
-	sh_setenv(tmp, ev, 1);
+	sh_setnew(tmp[1], tmp[2], ev, 1);
 	free(tmp);
 }
 

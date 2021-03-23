@@ -7,28 +7,35 @@ int					sh_setnew(char *nm, char *value, t_env **env, int scope)
 	curs = *env;
 	if (value == NULL)
 		return (0);
+	if (!nm)
+		return (0);
 	while (curs)
 	{
 		if (ft_strcmp(nm, curs->name) == 0)
 		{
 			if (ft_strlen(value) < MAX_ARG_STRLEN) {
 				curs->scope = scope;
-				curs->value = ft_strdup(value);
-				free(curs->value);
+				if (curs->value)
+					free(curs->value);
+				curs->value = NULL;
+				if (value)
+					curs->value = ft_strdup(value);
 			} else {
 				handle_empty_error(value, "variable length if too long");
 			}
 			return (1);
 		}
-		if (curs->next == NULL)
+		else if (curs->next == NULL)
 		{
 			if (ft_strlen (nm) < MAX_ARG_STRLEN && ft_strlen(value) < MAX_ARG_STRLEN)
 			{
 				if (!(curs->next = (t_env *)malloc(sizeof(t_env))))
 					return (0);
 				curs = curs->next;
-				curs->name = ft_strdup(nm);
-				curs->value = ft_strdup(value);
+				if (nm)
+					curs->name = ft_strdup(nm);
+				if (value)
+					curs->value = ft_strdup(value);
 				curs->scope = scope;
 				curs->next = NULL;
 			}
@@ -59,7 +66,7 @@ extern int			sh_setenv(char **cmd, t_env **env, int scope)
 		ft_putstr("setenv: nothing to set for this variable ");
 		ft_putendl(cmd[1]);
 	}
-	sh_setnew(cmd[1], cmd[2], env, 1);
+	sh_setnew(cmd[1], cmd[2], env, scope);
 	return 1;
 }
 
@@ -93,7 +100,7 @@ static void				do_unset(char *nm, t_env **env)
 }
 
 
-extern t_env				*sh_unset(char **nm, t_env **env, __attribute((unused))int fd)
+extern int				sh_unset(char **nm, t_env **env, __attribute((unused))int fd)
 {
 	t_env			*cur;
 	int				i;
@@ -102,5 +109,5 @@ extern t_env				*sh_unset(char **nm, t_env **env, __attribute((unused))int fd)
 	cur = *env;
 	while (nm[i] != NULL)
 		do_unset(nm[i++], env);
-	return (cur);
+	return (1);
 }

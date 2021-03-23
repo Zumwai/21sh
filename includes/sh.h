@@ -65,7 +65,7 @@ int				sh_env(char **com, t_env **env, __attribute((unused))int fd);
 int				sh_echo(char **com, t_env **env, int fd);
 // static -> t_env			*clear_list(t_env *env);
 extern int			sh_setenv(char **nm, t_env **env, __attribute((unused))int fd);
-extern t_env				*sh_unset(char **nm, t_env **env, __attribute((unused))int fd);
+extern int				sh_unset(char **nm, t_env **env, __attribute((unused))int fd);
 int				sh_cd(char **cmd, t_env **env);
 char	*get_value_env(char *sought, t_env **env);
 t_token 		*parsing_t(char *line);
