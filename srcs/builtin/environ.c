@@ -113,3 +113,21 @@ extern int				sh_unset(char **nm, t_env **env, __attribute((unused))int fd)
 		do_unset(nm[i++], env);
 	return (1);
 }
+
+extern int				sh_export(char **com, t_env **env)
+{
+	t_env *curs;
+	char	**set;
+	int		i = 1;
+	set = NULL;
+	if (!com[1])
+		return 1;
+	while (com[i])
+	{
+		set = ft_strsplit(com[i], '=');
+		sh_setnew(set[0], set[1], env, 1);
+		i++;
+		ft_free_tab(set);
+	}
+	return 1;
+}

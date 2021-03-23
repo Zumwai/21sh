@@ -16,6 +16,42 @@ static char				*get_value(char *name, t_env **env)
 	return res;
 }
 
+static char		*get_env_val(char *buf, int *j, char *orig, int *i, t_env **env, int *o_size)
+{
+	int		size;
+	char	*var;
+	char	*value;
+	char	*buffer;
+	int		new_size;
+	size = 0;
+	var = NULL;
+	value = NULL;
+	buffer = NULL;
+	while (orig[*i + size] != ' ' && orig[*i + size] != '/' && orig[*i + size] != '\\'
+	&& orig[*i + size] != '\"' && orig[*i + size]  != '\'' && orig[*i + size]
+	&& orig[*i + size] != ';')
+		size++;
+	if (size)
+		var = ft_strndup(&orig[*i], size);
+	if (var)
+		value = get_value(&var[1], env);
+	if (value)
+	{
+		*i = *i + size - 1;
+		size = ft_strlen(value);
+		buffer = ft_strnew(*o_size + size);
+		ft_strcpy(buffer, buf);
+		ft_strcat(buffer, value);
+		*o_size = *o_size + size;
+		*j = *j + size;
+		free(buf);
+		buf = buffer;
+		free(value);
+	}
+	free(var);
+	return (buf);
+}
+/*
 static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.вынуть переменную среды
 {
 	char			tmp[246];
@@ -49,6 +85,7 @@ static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.в
 	if (t_tmp)
 		set_free_null(&t_tmp);
 }
+*/
 
 int						len_of_word(char *s, int i)
 {
@@ -273,16 +310,18 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 {
 	int			i;
 	int 		q[2]; /// 0 для одинарного, 1 для двойного
-	char		buf[10000];
+	char		*buf;
 	int			j;
 	int			d;
 	char		*src;
-
+	int			size;
 	i = 0;
 	j = 0;
 	q[0] = 0;
 	q[1] = 0;
 
+	size = ft_strlen(t->data);
+	buf = ft_strnew(size);
 	while (t->data[i])
 	{
 		if (t->data[i] == 39 && q[1] == 0)
@@ -311,7 +350,8 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 		}
 		if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != '$' && t->data[i + 1] != ' ')
 		{
-			get_env_val(buf, &j, t->data, &i, env);
+
+			buf = get_env_val(buf, &j, t->data, &i, env, &size);
 			i++;
 		}
 		if (t->data[i] && t->data[i] != 92)
@@ -322,6 +362,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	printf("src === %s\n", src);
 	c->arr = s_to_arr(src);
 	free(src);
+	free(buf);
 	return (c);
 }
 
