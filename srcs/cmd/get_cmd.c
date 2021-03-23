@@ -16,7 +16,7 @@ static char				*get_value(char *name, t_env **env)
 	return res;
 }
 
-static char		*get_env_val(char *buf, int *j, char *orig, int *i, t_env **env, int *o_size)
+static char		*insert_env_val(char *buf, int *j, char *orig, int *i, t_env **env, int *o_size)
 {
 	int		size;
 	char	*var;
@@ -39,7 +39,7 @@ static char		*get_env_val(char *buf, int *j, char *orig, int *i, t_env **env, in
 		value = get_value(&var[1], env);
 	if (value)
 	{
-		*i = *i + size;
+		*i = *i + size - 1;
 		size = ft_strlen(value);
 		buffer = ft_strnew(*o_size + size);
 		ft_strcpy(buffer, buf);
@@ -295,37 +295,34 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	{
 		if (t->data[i] == 39 && q[1] == 0)
 		{
-			q[0] = q[0] == 0 ? 1 : 0;
-			buf[j++] = t->data[i++];
+			q[0] = (q[0] == 0) ? 1 : 0;
+			buf[j++] = t->data[i];
 		}
 		else if (t->data[i] == 34 && q[0] == 0)
 		{
-			q[1] = q[1] == 0 ? 1 : 0;
-			buf[j++] = t->data[i++];
+			q[1] = (q[1] == 0) ? 1 : 0;
+			buf[j++] = t->data[i];
 		}
 		else if (t->data[i] == 92 && t->data[i + 1])
 		{
 			if (q[1] == 0 && q[0] == 0)
 			{
 				i++;
-				buf[j++] = t->data[i++];
+				buf[j++] = t->data[i];
 			}
 			else
 			{
 				i++;
 				buf[j++] = get_spec(t->data[i]);
-				i++;
 			}
 		}
 		else if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != '$' && t->data[i + 1] != ' ')
 		{
-
-			buf = get_env_val(buf, &j, t->data, &i, env, &size);
+			buf = insert_env_val(buf, &j, t->data, &i, env, &size);
 		}
 		else if (t->data[i] && t->data[i] != 92)
-			buf[j++] = t->data[i++];
-		else
-			i++;
+			buf[j++] = t->data[i];
+		i++;
 	}
 	buf[j] = '\0';
 	src = ft_strdup(buf);
