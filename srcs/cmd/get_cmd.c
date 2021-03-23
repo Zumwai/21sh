@@ -23,7 +23,7 @@ static char		*insert_env_val(char *buf, int *j, char *orig, int *i, t_env **env,
 	char	*value;
 	char	*buffer;
 
-	size = 0;
+	size = 1;
 	var = NULL;
 	value = NULL;
 	buffer = NULL;
@@ -315,7 +315,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 				buf[j++] = get_spec(t->data[i]);
 			}
 		}
-		else if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != '$' && t->data[i + 1] != ' ')
+		else if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
 		{
 			buf = insert_env_val(buf, &j, t->data, &i, env, &size);
 		}
