@@ -47,7 +47,8 @@ char	*get_incomplete(t_term *pos, int *cd)
 	curr = pos->index - abs;
 	end = curr;
 	while(curr > 0 && ft_ischar(pos->new[curr - 1])
-	&& pos->new[curr - 1] != ';' && pos->new[curr - 1] != '|' && pos->new[curr] != '&')
+	&& pos->new[curr - 1] != ';' && pos->new[curr - 1] != '|'
+	&& pos->new[curr] != '&' && pos->new[curr] != '$')
 		curr--;
 	incomplete = ft_strsub(pos->new, curr, end - curr);
 	curr--;

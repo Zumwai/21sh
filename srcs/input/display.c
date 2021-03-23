@@ -33,6 +33,8 @@ static void calc_y_pos(t_term *pos, int diff)
 		{
 			int tmp = ft_abs(diff);
 			printed = pos->y + pos->delta_y;
+			if (tmp > pos->store->size)
+				tmp = pos->store->size;
 			int i = 0;
 			if (pos->store->size)
 			{
@@ -41,6 +43,8 @@ static void calc_y_pos(t_term *pos, int diff)
 					tputs(tgoto(tgetstr("cm", NULL), 0, 0), 1, putchar_like);
 					tputs(tgetstr("sr", NULL), 1, putchar_like);
 					int pr = pos->store->size - i - 1 - (pos->y + pos->delta_y);
+					if (pr > pos->store->size)
+						pr = pos->store->size;
 					if ((pr == 0 && !pos->prev) || pr < 0)
 					{
 						ft_putstr("shelp&>");

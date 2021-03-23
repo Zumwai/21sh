@@ -16,38 +16,44 @@ static char				*get_value(char *name, t_env **env)
 	return res;
 }
 
-static void			get_env_val(char *buf, int *j, char *t, int *i, t_env **env) //.вынуть переменную среды
+static char		*insert_env_val(char *buf, int *j, char *orig, int *i, t_env **env, int *o_size)
 {
-	char			tmp[246];
-	int				u;
-	char			*t_tmp;
+	int		size;
+	char	*var;
+	char	*value;
+	char	*buffer;
 
-	u = 0;
-	*i = *i + 1;
-	while (t[*i] != ' ' && t[*i] != '/' && t[*i] != 92
-	&& t[*i] != 34 && t[*i] !=39 && t[*i])
+	size = 0;
+	var = NULL;
+	value = NULL;
+	buffer = NULL;
+	while (orig[*i + size] != ' ' && orig[*i + size] != '/' && orig[*i + size] != '\\'
+	&& orig[*i + size] != '\"' && orig[*i + size]  != '\'' && orig[*i + size]
+	&& orig[*i + size] != ';' && orig[*i + size + 1] != '$')
+		size++;
+	if (orig[*i + size] && orig[*i + size + 1] == '$')
+		size++;
+	if (size)
+		var = ft_strndup(&orig[*i], size);
+	if (var)
+		value = get_value(&var[1], env);
+	if (value)
 	{
-		tmp[u] = t[*i];
+		*i = *i + size - 1;
+		size = ft_strlen(value);
+		buffer = ft_strnew(*o_size + size);
+		ft_strcpy(buffer, buf);
+		ft_strcat(buffer, value);
+		*o_size = *o_size + size;
+		*j = *j + size;
+		free(buf);
+		buf = buffer;
+		free(value);
+	}
+	else
 		*i = *i + 1;
-		u++;
-	}
-	tmp[u] = '\0';
-	if (t[*i] == '"')
-	    *i = *i + 1;
-	t_tmp = get_value(tmp, env);
-	if (t_tmp)
-	{
-		u = 0;
-		while (t_tmp[u])
-		{
-			buf[*j] = t_tmp[u];
-			*j = *j + 1;
-			u++;
-		}
-	}
-	*i = *i - 1;
-	if (t_tmp)
-		set_free_null(&t_tmp);
+	free(var);
+	return (buf);
 }
 
 int						len_of_word(char *s, int i)
@@ -123,7 +129,7 @@ char					*fill_str(char *s, int *i)
 	course = (*i);
 
 	//ft_putendl("BEWARE");
-	buf = ft_strnew(ft_strlen(s));
+	buf = ft_strdup(s);
 	//printf("start course === %d\n", course);
 	//printf("st.course === %c\n", s[course]);
 	if (s[course] == ' ')
@@ -273,55 +279,56 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 {
 	int			i;
 	int 		q[2]; /// 0 для одинарного, 1 для двойного
-	char		buf[10000];
+	char		*buf;
 	int			j;
 	int			d;
 	char		*src;
-
+	int			size;
 	i = 0;
 	j = 0;
 	q[0] = 0;
 	q[1] = 0;
 
+	size = ft_strlen(t->data);
+	buf = ft_strnew(size);
 	while (t->data[i])
 	{
 		if (t->data[i] == 39 && q[1] == 0)
 		{
-			q[0] = q[0] == 0 ? 1 : 0;
-			buf[j++] = t->data[i++];
+			q[0] = (q[0] == 0) ? 1 : 0;
+			buf[j++] = t->data[i];
 		}
-		if (t->data[i] == 34 && q[0] == 0)
+		else if (t->data[i] == 34 && q[0] == 0)
 		{
-			q[1] = q[1] == 0 ? 1 : 0;
-			buf[j++] = t->data[i++];
+			q[1] = (q[1] == 0) ? 1 : 0;
+			buf[j++] = t->data[i];
 		}
-		if (t->data[i] == 92 && t->data[i + 1])
+		else if (t->data[i] == 92 && t->data[i + 1])
 		{
+			i++;
 			if (q[1] == 0 && q[0] == 0)
 			{
-				i++;
-				buf[j++] = t->data[i++];
+				buf[j++] = t->data[i];
 			}
 			else
 			{
-				i++;
 				buf[j++] = get_spec(t->data[i]);
-				i++;
 			}
 		}
-		if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != '$' && t->data[i + 1] != ' ')
+		else if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != '$' && t->data[i + 1] != ' ')
 		{
-			get_env_val(buf, &j, t->data, &i, env);
-			i++;
+			buf = insert_env_val(buf, &j, t->data, &i, env, &size);
 		}
-		if (t->data[i] && t->data[i] != 92)
-			buf[j++] = t->data[i++];
+		else if (t->data[i] && t->data[i] != 92)
+			buf[j++] = t->data[i];
+		i++;
 	}
 	buf[j] = '\0';
 	src = ft_strdup(buf);
 	printf("src === %s\n", src);
 	c->arr = s_to_arr(src);
 	free(src);
+	free(buf);
 	return (c);
 }
 

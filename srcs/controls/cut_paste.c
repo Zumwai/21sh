@@ -61,8 +61,8 @@ void	cut_after(t_term *pos, t_yank *buffer)
 
 void	cut_before(t_term *pos, t_yank *buffer)
 {
-	int		curr;
-	int 	abs = ft_abs(pos->delta_x);
+	size_t		curr;
+	size_t	 	abs = ft_abs(pos->delta_x);
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
 	curr = pos->index - abs;

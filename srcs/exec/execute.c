@@ -108,7 +108,7 @@ static int	check_isbuiltin(char *com)
 		return 3;
 	if (ft_strequ(com, "setenv"))
 		return 4;
-	if (ft_strequ(com, "unsetenv"))
+	if (ft_strequ(com, "unset"))
 		return 5;
 	if (ft_strequ(com, "ppid"))
 		return 6;
@@ -118,6 +118,8 @@ static int	check_isbuiltin(char *com)
 		return 8;
 	if (ft_strequ(com, "set"))
 		return 9;
+	if (ft_strequ(com, "export"))
+		return 10;
 	return 0;
 }
 
@@ -141,6 +143,8 @@ int	exec_builtin(char **com, t_env **env, int fd, int num)
 		return (sh_pwd(com, env));
 	if (num == 9)
 		return (sh_set(com, env));
+	if (num == 10)
+		return (sh_export(com, env));
 	return (1);
 }
 
