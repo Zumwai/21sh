@@ -50,6 +50,8 @@ static char		*get_env_val(char *buf, int *j, char *orig, int *i, t_env **env, in
 		buf = buffer;
 		free(value);
 	}
+	else
+		*i = *i + 1;
 	free(var);
 	return (buf);
 }
@@ -127,7 +129,7 @@ char					*fill_str(char *s, int *i)
 	course = (*i);
 
 	//ft_putendl("BEWARE");
-	buf = ft_strnew(ft_strlen(s));
+	buf = ft_strdup(s);
 	//printf("start course === %d\n", course);
 	//printf("st.course === %c\n", s[course]);
 	if (s[course] == ' ')
@@ -322,6 +324,8 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 		}
 		else if (t->data[i] && t->data[i] != 92)
 			buf[j++] = t->data[i++];
+		else
+			i++;
 	}
 	buf[j] = '\0';
 	src = ft_strdup(buf);
