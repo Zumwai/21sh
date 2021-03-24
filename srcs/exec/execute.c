@@ -181,6 +181,8 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	int		builtin;
 	int     wfd;
 
+	fd[1] = -1;
+	fd[0] = -1;
 	int res;
 	wfd = 1;
 	res = 1;
@@ -240,8 +242,8 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
         	while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8))
             	cmd = cmd->next;
     	}
-		if (fd[1])
-			close(fd[1]);
+		///if (fd[1])
+			///close(fd[1]);
 	    //close(fd[0]);
 		if (cmd->type == 2)
 		    read = fd[0];
@@ -253,9 +255,9 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 		close(read);
 	if (wfd != 1 && wfd != 2)
 		close (wfd);
-	if (fd[0])
+	if (fd[0] != -1)
 		close(fd[0]);
-	if (fd[1])
+	if (fd[1] != -1)
 		close(fd[1]);
 	return (res);
 }
