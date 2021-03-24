@@ -332,6 +332,24 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	return (c);
 }
 
+void			create_file_is_it_doent_exist(t_cmd *cmd)
+{
+	int fd;
+
+	fd = 0;
+	cmd = cmd->next;
+	while (cmd)
+	{
+		if (cmd->prev->type == 7 || cmd->prev->type == 6)
+		{
+			fd = open(cmd->arr[0], O_CREAT | O_RDWR | O_APPEND,
+					  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+			close(fd);
+		}
+		cmd = cmd->next;
+	}
+}
+
 t_cmd			*get_cmd(t_token *t, t_env **env)
 {
 	t_token		*cur_t;
@@ -356,5 +374,6 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 		else
 			break ;
 	}
+	create_file_is_it_doent_exist(head);
 	return (head);
 }
