@@ -211,8 +211,9 @@ char	*create_path(char *com, t_env **env, int flag)
 	t_env	*curs = NULL;
 	int		i = 0;
 	
-	sep = ft_strsplit(com, '/');
-	if (com[0] != '/' && com[0] != '~') {
+	///sep = ft_strsplit(com, '/');
+	if (com[0] != '/' && com[0] != '~')
+	{
 		if (flag == PHYSICAL)
 			pwd = getcwd(pwd, PATH_MAX);
 		else
