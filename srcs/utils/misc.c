@@ -1,11 +1,11 @@
 #include "sh.h"
 
-int ft_abs(int x)
+int			ft_abs(int x)
 {
 	return ((x >> 31) + x) ^ (x >> 31);
 }
 
-t_env	*find_env_variable(t_env **env, char *sought)
+t_env		*find_env_variable(t_env **env, char *sought)
 {
 	t_env *curs;
 
@@ -13,13 +13,13 @@ t_env	*find_env_variable(t_env **env, char *sought)
 	while (curs)
 	{
 		if (!ft_strcmp(curs->name, sought))
-			return curs;
+			return (curs);
 		curs = curs->next;
 	}
-	return NULL;
+	return (NULL);
 }
 
-void	ft_concat(char *str, char **path, char *name)
+void		ft_concat(char *str, char **path, char *name)
 {
 	ft_strclr((*path));
 	(*path) = strcpy((*path), str);
@@ -27,7 +27,8 @@ void	ft_concat(char *str, char **path, char *name)
 	if (name)
 		(*path) = strcat((*path), name);
 }
-void	ft_strclr(char *s)
+
+void		ft_strclr(char *s)
 {
 	size_t		i;
 
@@ -40,7 +41,8 @@ void	ft_strclr(char *s)
 		i++;
 	}
 }
-char	*get_full_path(char *path, char *name)
+
+char		*get_full_path(char *path, char *name)
 {
 	char	*str;
 	char	buf[PATH_MAX];

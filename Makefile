@@ -20,7 +20,10 @@ SRCS =	main.c \
 		tree/tree_ft.c \
 		tree/tree.c \
 		utils/free.c \
+		utils/freemore.c \
 		utils/init.c \
+		utils/init_env.c \
+		utils/init_cmd.c \
 		utils/handle_err.c \
 		utils/misc.c \
 		input/display.c \

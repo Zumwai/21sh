@@ -49,6 +49,26 @@ int					sh_setnew(char *nm, char *value, t_env **env, int scope)
 	return (1);
 }
 
+int				display_env_list(char **com, t_env **ev, int scope)
+{
+	t_env	*cur;
+
+	if (com)
+		(void)com;
+	cur = (*ev);
+	while (cur)
+	{
+		if (cur->scope == scope) {
+			ft_putstr(cur->name);
+			ft_putchar('=');
+			ft_putstr(cur->value);
+			ft_putchar('\n');
+		}
+		cur = cur->next;
+	}
+	return (1);
+}
+
 extern int			sh_setenv(char **cmd, t_env **env, int scope)
 {
 	int i = 0;
