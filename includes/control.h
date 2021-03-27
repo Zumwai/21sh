@@ -56,7 +56,10 @@ t_hdoc	*create_new_hdoc(void);
 t_hdoc	*clone_hdoc(t_hdoc *old);
 void       update_coord(t_term *pos);
 extern int			set_quotes(char c, int quotes);
-
+extern t_term *get_last_pos(t_term *pos);
+extern int is_printable(char key);
+int		determine_next_io_step(t_term *curs, int ret, t_norm *norm);
+void	move_cursor(t_term *pos, long long key);
 void	handle_child_signal(int sig);
 void	handle_main_signal(int sig);
 void	handle_all_signals(int pid);

@@ -25,15 +25,17 @@ SRCS =	main.c \
 		utils/misc.c \
 		input/display.c \
 		input/reader.c \
-		input/history.c \
 		input/input_utils.c \
 		input/concater.c \
+		history/history.c \
 		controls/state.c \
+		controls/next_io.c \
 		controls/heredoc.c \
 		controls/heredoc_utils.c \
 		controls/controls.c \
 		controls/arrow_movement.c \
 		controls/edition.c \
+		controls/ctrl_utils.c \
 		controls/jump_words.c \
 		controls/cut_paste.c \
 		controls/parser.c \
