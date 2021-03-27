@@ -1,7 +1,7 @@
 #include "sh.h"
 #include <stdio.h>
 
-static void			echo_env(char *s, t_env **env, int fd)
+static void			echo_env(char *s, t_env **env, int fd, __attribute((unused))int cmd)
 {
 	char		*name;
 	t_env		*cur;
@@ -10,7 +10,7 @@ static void			echo_env(char *s, t_env **env, int fd)
 	ft_putstr_fd(cur->value, fd);
 }
 
-int			sh_echo(char **com, t_env **env, int fd)
+int			sh_echo(char **com, t_env **env, int fd, __attribute((unused))int cmd)
 {
 	int			i;
 	int			n;
@@ -34,7 +34,7 @@ int			sh_echo(char **com, t_env **env, int fd)
 	return 1;
 }
 
-int			sh_env(char **com, t_env **env, __attribute((unused))int fd)
+int			sh_env(char **com, t_env **env, __attribute((unused))int fd, __attribute((unused))int cmd)
 {
 	int			i;
 	t_env		*curs;
@@ -52,7 +52,7 @@ int			sh_env(char **com, t_env **env, __attribute((unused))int fd)
 	return 1;
 }
 
-int				sh_clear(__attribute__((unused))char **com, __attribute__((unused))t_env **env)
+int				sh_clear(__attribute__((unused))char **com, __attribute__((unused))t_env **env, __attribute((unused))int cmd)
 {
 	write(1, " \e[1;1H\e[2J", 12);
 	return 1;

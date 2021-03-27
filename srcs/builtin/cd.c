@@ -257,11 +257,13 @@ char	*create_path(char *com, t_env **env, int flag)
 		check_rights(path, 1);
 		i++;
 	}
+	if (sep)
+		ft_strsplit_free(&sep);
 	curpath = ft_strdup(path);
 	return (curpath);
 }
 
-int		sh_cd(char **com, t_env **env)
+int		sh_cd(char **com, t_env **env, int ch, __attribute((unused))int cmd)
 {
 	char	*curpath;
 	int		i;
@@ -270,6 +272,8 @@ int		sh_cd(char **com, t_env **env)
 	curpath = NULL;
 	flag = DEFAULT;
 	i = 1;
+	if (cmd == 2)
+		return (1);
 	if (!com[1])
 		curpath = get_value_env("HOME", env);
 	else if (ft_strequ(com[1], "-")) {
