@@ -30,6 +30,7 @@ SRCS =	main.c \
 		history/history.c \
 		history/cpy_history.c \
 		history/scroll.c \
+		history/new_struct.c \
 		controls/state.c \
 		controls/next_io.c \
 		controls/heredoc.c \
