@@ -47,7 +47,8 @@ char	*create_path(char *com, t_env **env, int flag)
 	int		i = 0;
 
 	path = ft_strnew(PATH_MAX);
-	if (com[0] != '/' && com[0] != '~') {
+	if (com[0] != '/' && com[0] != '~')
+	{
 		if (flag == PHYSICAL)
 			pwd = getcwd(pwd, PATH_MAX);
 		else
@@ -92,6 +93,8 @@ char	*create_path(char *com, t_env **env, int flag)
 		i++;
 	}
 	free(pwd);
+	if (sep)
+		ft_strsplit_free(&sep);
 	curpath = ft_strdup(path);
 	ft_free_tab(sep);
 	free(path);
@@ -99,7 +102,7 @@ char	*create_path(char *com, t_env **env, int flag)
 	return (curpath);
 }
 
-int	trim_curpath(char **curpath, t_env **env) 
+int		sh_cd(char **com, t_env **env, int ch, __attribute((unused))int cmd)
 {
 	char	*pwd;
 	int		i;
@@ -132,6 +135,8 @@ int		sh_cd(char **com, t_env **env)
 	curpath = NULL;
 	flag = DEFAULT;
 	i = 1;
+	if (cmd == 2)
+		return (1);
 	if (!com[1])
 		curpath = get_value_env("HOME", env);
 	else if (ft_strequ(com[1], "-"))

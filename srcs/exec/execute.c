@@ -172,6 +172,53 @@ static int 		get_cmd_type(t_cmd *cmd, int fd)
 	return (1);
 }
 
+/*void			create_file_is_it_doent_exist(t_cmd *cmd)
+{
+	int fd;
+
+	fd = 0;
+	cmd = cmd->next;
+	while (cmd)
+	{
+		if (cmd->prev->type == 7 || cmd->prev->type == 6)
+		{
+			fd = open(cmd->arr[0], O_CREAT | O_RDWR | O_APPEND,
+					  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+			close(fd);
+		}
+		cmd = cmd->next;
+	}
+}*/
+
+void		what_about_file(t_cmd *cmd)
+{
+	t_cmd 	*cur;
+	struct stat	buf;
+	int 			fd;
+
+	cur = cmd;
+	if (cur->type == 2)
+	{
+		while (cur->type == 2)
+			cur = cur->next;
+	}
+	if (cur->type == 6 || cur->type == 7)
+	{
+		while (cur->type == 6 || cur->type == 7)
+			cur = cur->next;
+		ft_putstr("for search ");
+		ft_putendl(cur->arr[0]);
+		if (stat(cur->arr[0], &buf) == -1)
+		{
+			ft_putstr("in while ");
+			ft_putendl(cur->arr[0]);
+			fd = open(cur->arr[0], O_CREAT | O_RDWR | O_APPEND,
+					  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+			close(fd);
+		}
+	}
+}
+
 int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 {
 	int			read;
@@ -181,8 +228,8 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	int		builtin;
 	int     wfd;
 
-	fd[1] = -1;
-	fd[0] = -1;
+	fd[0] = 0;
+	fd[1] = 1;
 	int res;
 	wfd = 1;
 	res = 1;
@@ -191,12 +238,14 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	builtin = 0;
 	int ffd;
 	ffd = 1;
+	//create_file_is_it_doent_exist(cmd);
 	handle_all_signals(0);
 	if (!cmd->arr || !cmd->arr[0])
 		return 1;
 	while (cmd)
 	{
-	    ///pipe(fd);
+		if (cmd->type == 6 || cmd->type == 7 || cmd->type == 2)
+			what_about_file(cmd);
 	    if (cmd->type == 6 || cmd->type == 7)
 	        wfd = get_fd_write(cmd);
 	    if ((builtin = check_isbuiltin(cmd->arr[0])) != 0)
@@ -216,24 +265,27 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	    else
 	    {
 			cmd->target = get_path(cmd->arr[0], env);
-			if (cmd->target != NULL && (cmd->type == 2 || (cmd->prev && cmd->prev->type == 2)))
+			if (cmd->target != NULL && cmd->type == 2)
 			{
 				pipe(fd);
 				do_proc(read, fd[1], cmd->target, cmd, env);
-				///close(fd[0]);
 				close(fd[1]);
 			}
-			if (cmd->target != NULL && cmd->type != 2 && cmd->type != 6 && cmd->type != 7 && cmd->type != 8)
+			if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0))
 				do_proc(read, wfd, cmd->target, cmd, env);
 			if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
 			{
+				pipe(fd);
+				dup2(wfd, fd[1]);
 				do_proc(read, wfd, cmd->target, cmd, env);
 				close(wfd);
 			}
 			if (cmd->target != NULL && cmd->type == 8)
 			{
+				pipe(fd);
 				read = get_fd_write(cmd);
 				wfd = get_cmd_type(cmd, fd[1]);
+				dup2(read, fd[0]);
 				do_proc(read, wfd, cmd->target, cmd, env);
 			}
 		}
@@ -255,9 +307,9 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 		close(read);
 	if (wfd != 1 && wfd != 2)
 		close (wfd);
-	if (fd[0] != -1)
+	if (fd[0] != 0)
 		close(fd[0]);
-	if (fd[1] != -1)
+	if (fd[1] != 1)
 		close(fd[1]);
 	return (res);
 }

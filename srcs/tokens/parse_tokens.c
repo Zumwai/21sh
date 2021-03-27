@@ -62,7 +62,7 @@ int						is_empty(char *s)
 	return (1);
 }
 
-void print(t_token *cur)
+/*void print(t_token *cur)
 {
 	while (cur)
 	{
@@ -70,7 +70,7 @@ void print(t_token *cur)
 		ft_putendl(cur->data);
 		cur = cur->next;
 	}
-}
+}*/
 
 extern t_token 			*parsing_t(char *line)
 {
@@ -99,14 +99,14 @@ extern t_token 			*parsing_t(char *line)
 			token->next->prev = token;
 			token = token->next;
 			token->data = get_data(line, &car, flag, token);
-			ft_putendl(token->data);
+			///ft_putendl(token->data);
 		}
 		if (ft_strcmp(token->data, "") == 0)
 			token->data = get_data(line, &car, flag, token);
 		flag = reset_flag(flag);
 	}
 	free(flag);
-	print(cur);
+	///print(cur);
 	if (is_tokens_true(cur))
 		return (cur);
 	return (0);
