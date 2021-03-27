@@ -6,7 +6,7 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 12:37:39 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 15:48:46 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/27 17:49:34 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	move_cursor(t_term *curs, long long key)
 		move_right(curs);
 	else if (key == LEFT)
 		move_left(curs);
-	else if (key == L_UP )
+	else if (key == L_UP)
 		change_line_up(curs);
 	else if (key == L_DOWN)
 		change_line_down(curs);

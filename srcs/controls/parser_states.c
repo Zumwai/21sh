@@ -6,7 +6,7 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 14:43:59 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 15:26:14 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/27 17:49:47 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int		state_save_zero_hdoc(t_norm *norm, int state)
 	}
 	return (state);
 }
-
 
 static int		unignore_state(t_norm *norm, int *flag, int state)
 {
@@ -58,4 +57,3 @@ int		modify_ignored(t_norm *norm, int state, int *flag)
 		state = skip_ignored(norm, flag, state);
 	return (state);
 }
-

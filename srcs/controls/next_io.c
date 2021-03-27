@@ -6,13 +6,13 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 16:00:00 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 16:00:20 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/27 17:51:36 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
 
-static t_term *create_next_io(t_actual **line, int y, t_term *curs)
+static t_term	*create_next_io(t_actual **line, int y, t_term *curs)
 {
 	t_term *input;
 
@@ -21,7 +21,7 @@ static t_term *create_next_io(t_actual **line, int y, t_term *curs)
 	if (*line)
 		input->main = *line;
 	input->prev = curs;
-	return input;
+	return (input);
 }
 
 static int		check_hdoc_eot(t_hdoc **head, char *sub)
@@ -39,7 +39,7 @@ static int		check_hdoc_eot(t_hdoc **head, char *sub)
 			{
 				curs->used = true;
 				if (!curs->next)
-					return 0;
+					return (0);
 				return (1);
 			}
 			break ;
@@ -49,7 +49,7 @@ static int		check_hdoc_eot(t_hdoc **head, char *sub)
 	return (1);
 }
 
-int		determine_next_io_step(t_term *curs, int ret, t_norm *norm)
+int				determine_next_io_step(t_term *curs, int ret, t_norm *norm)
 {
 	int		res;
 

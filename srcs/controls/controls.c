@@ -6,7 +6,7 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 15:53:08 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 15:54:34 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/27 17:50:29 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,12 @@ void			norminate_keyhandler(long long key, t_term *curs, t_yank *buf)
 		ft_clear(curs);
 }
 
-int 			read_key(long long key, t_term *pos, t_yank *buf, t_env **env)
+int				read_key(long long key, t_term *pos, t_yank *buf, t_env **env)
 {
 	t_term	*curs;
 
 	if (key == 27 || (key == 4 && (!pos->new || !pos->new[0])))
-		return key_exit(pos, buf);
+		return (key_exit(pos, buf));
 	if (key == 3)
 		return (-6);
 	curs = get_curs(pos);

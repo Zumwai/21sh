@@ -21,6 +21,7 @@
 # include "libft.h"
 # include "auto.h"
 # include "input_parser.h"
+# include "history.h"
 
 #ifdef __linux__
 # include <linux/limits.h>

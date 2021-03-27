@@ -28,6 +28,8 @@ SRCS =	main.c \
 		input/input_utils.c \
 		input/concater.c \
 		history/history.c \
+		history/cpy_history.c \
+		history/scroll.c \
 		controls/state.c \
 		controls/next_io.c \
 		controls/heredoc.c \
