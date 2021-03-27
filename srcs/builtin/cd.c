@@ -1,22 +1,8 @@
 #include "sh.h"
 
-void		handle_cd_err(int num, char *name)
-{
-	ft_putstr_fd("-shelp!: ", STDERR_FILENO);
-
-	ft_putstr_fd(name, STDERR_FILENO);
-	if (num == -4)
-		ft_putstr_fd(": Permission denied\n", STDERR_FILENO);
-	else if (num == -2 || num == -3)
-		ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
-	else if (num == -7)
-		ft_putstr_fd(": Not a directory\n", STDERR_FILENO);
-}
-
 static void	change_working_dir(char *path, t_env **env, char *com, int flag)
 {
 	char		*pwd;
-	//char		*old_pwd;
 	t_env		*cur;
 
 	pwd = NULL;
@@ -34,9 +20,7 @@ static void	change_working_dir(char *path, t_env **env, char *com, int flag)
 			sh_setnew("PWD", path, env, 1);
 	}
 	else
-		{
 		handle_cd_err(check_rights(path, 1), com);
-	}
 	free(pwd);
 }
 
@@ -57,11 +41,12 @@ char	*create_path(char *com, t_env **env, int flag)
 {
 	char	**sep = NULL;
 	char	*curpath = NULL;
-	char	path[4096] = {0};
+	char	*path;
 	char	*pwd = NULL;
 	t_env	*curs = NULL;
 	int		i = 0;
 
+	path = ft_strnew(PATH_MAX);
 	if (com[0] != '/' && com[0] != '~') {
 		if (flag == PHYSICAL)
 			pwd = getcwd(pwd, PATH_MAX);
@@ -109,6 +94,7 @@ char	*create_path(char *com, t_env **env, int flag)
 	free(pwd);
 	curpath = ft_strdup(path);
 	ft_free_tab(sep);
+	free(path);
 	sep = NULL;
 	return (curpath);
 }
@@ -129,16 +115,18 @@ int	trim_curpath(char **curpath, t_env **env)
 	}
 	while (pwd[i] == *curpath[i])
 		i++;
-	ft_memmove(*curpath, &(*curpath)[i], size - i); /*check bytes after safety net */
+	ft_memmove(*curpath, &(*curpath)[i], size - i);
 	(*curpath)[size - i] = 0;
+	if (pwd)
+		free(pwd);
 	return (size - i);
 }
 
 int		sh_cd(char **com, t_env **env)
 {
-	char	*curpath;
-	int		i;
-	int		flag;
+	char		*curpath;
+	int			i;
+	int			flag;
 	size_t		size;
 
 	curpath = NULL;
@@ -146,7 +134,8 @@ int		sh_cd(char **com, t_env **env)
 	i = 1;
 	if (!com[1])
 		curpath = get_value_env("HOME", env);
-	else if (ft_strequ(com[1], "-")) {
+	else if (ft_strequ(com[1], "-"))
+	{
 		curpath = get_value_env("OLDPWD", env);
 		if (curpath)
 			ft_putendl(curpath);
@@ -159,7 +148,8 @@ int		sh_cd(char **com, t_env **env)
 		i++;
 	if (!curpath)
 		curpath = create_path(com[i], env, flag);
-	if (curpath) {
+	if (curpath)
+	{
 		size = ft_strlen(curpath);
 		if (size >= 4096)
 			size = trim_curpath(&curpath, env);
