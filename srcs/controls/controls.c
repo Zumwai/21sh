@@ -45,11 +45,11 @@ static int is_printable(char key)
 		return 1;
 	return 0;
 }
-int 	read_key(long long key, t_term *pos, struct termios old, t_yank *buf, t_env **env)
+int 	read_key(long long key, t_term *pos, t_yank *buf, t_env **env)
 {
 	t_term	*curs;
 	if (key == 27 || (key == 4 && (!pos->new || !pos->new[0])))
-		return (key_exit(buf->old, pos, buf));
+		return key_exit(pos, buf);
 	if (key == 3)
 		return -6;
 	curs = get_last_pos(pos);

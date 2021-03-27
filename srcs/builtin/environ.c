@@ -1,28 +1,47 @@
 #include "sh.h"
 
-int					sh_setnew(char *nm, char *value, t_env **env)
+int					sh_setnew(char *nm, char *value, t_env **env, int scope)
 {
 	t_env	*curs;
 
 	curs = *env;
 	if (value == NULL)
 		return (0);
+	if (!nm)
+		return (0);
 	while (curs)
 	{
 		if (ft_strcmp(nm, curs->name) == 0)
 		{
-			free(curs->value);
-			curs->value = ft_strdup(value);
+			if (ft_strlen(value) < MAX_ARG_STRLEN) {
+				curs->scope = scope;
+				if (curs->value)
+					free(curs->value);
+				curs->value = NULL;
+				if (value)
+					curs->value = ft_strdup(value);
+			} else {
+				handle_empty_error(value, "variable length if too long");
+			}
 			return (1);
 		}
-		if (curs->next == NULL)
+		else if (curs->next == NULL)
 		{
-			if (!(curs->next = (t_env *)malloc(sizeof(t_env))))
-				return (0);
-			curs = curs->next;
-			curs->name = ft_strdup(nm);
-			curs->value = ft_strdup(value);
-			curs->next = NULL;
+			if (ft_strlen (nm) < MAX_ARG_STRLEN && ft_strlen(value) < MAX_ARG_STRLEN)
+			{
+				if (!(curs->next = (t_env *)malloc(sizeof(t_env))))
+					return (0);
+				curs = curs->next;
+				if (nm)
+					curs->name = ft_strdup(nm);
+				if (value)
+					curs->value = ft_strdup(value);
+				curs->scope = scope;
+				curs->next = NULL;
+			}
+			else {
+				handle_empty_error(value, "variable length if too long");
+			}
 			return (1);
 		}
 		curs = curs->next;
@@ -30,13 +49,14 @@ int					sh_setnew(char *nm, char *value, t_env **env)
 	return (1);
 }
 
-extern int			sh_setenv(char **cmd, t_env **env, __attribute((unused))int fd)
+extern int			sh_setenv(char **cmd, t_env **env, int scope)
 {
-	int m = 0;
-	while (cmd[m])
-		ft_putendl(cmd[m++]);
+	int i = 0;
+
+	while (cmd[i])
+		ft_putendl(cmd[i++]);
 	if (cmd[1] == NULL)
-		display_env_list(cmd, env);
+		display_env_list(cmd, env, scope);
 	else if (ft_strsplit_len(cmd) > 3)
 	{
 		ft_putendl("setenv% TOO few arguments");
@@ -47,10 +67,15 @@ extern int			sh_setenv(char **cmd, t_env **env, __attribute((unused))int fd)
 		ft_putstr("setenv: nothing to set for this variable ");
 		ft_putendl(cmd[1]);
 	}
-	sh_setnew(cmd[1], cmd[2], env);
+	else
+		sh_setnew(cmd[1], cmd[2], env, scope);
 	return 1;
 }
 
+extern int		sh_set(char **cmd, t_env **env)
+{
+	return (sh_setenv(cmd, env, 0));
+}
 
 static void				do_unset(char *nm, t_env **env)
 {
@@ -72,12 +97,12 @@ static void				do_unset(char *nm, t_env **env)
 			break ;
 		}
 		prev = tmp;
-		tmp = tmp->next;
+		tmp = tmp->next; 
 	}
 }
 
 
-extern t_env				*sh_unset(char **nm, t_env **env, __attribute((unused))int fd)
+extern int				sh_unset(char **nm, t_env **env, __attribute((unused))int fd)
 {
 	t_env			*cur;
 	int				i;
@@ -86,5 +111,23 @@ extern t_env				*sh_unset(char **nm, t_env **env, __attribute((unused))int fd)
 	cur = *env;
 	while (nm[i] != NULL)
 		do_unset(nm[i++], env);
-	return (cur);
+	return (1);
+}
+
+extern int				sh_export(char **com, t_env **env)
+{
+	t_env *curs;
+	char	**set;
+	int		i = 1;
+	set = NULL;
+	if (!com[1])
+		return 1;
+	while (com[i])
+	{
+		set = ft_strsplit(com[i], '=');
+		sh_setnew(set[0], set[1], env, 1);
+		i++;
+		ft_free_tab(set);
+	}
+	return 1;
 }

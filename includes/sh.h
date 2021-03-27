@@ -9,7 +9,6 @@
 # include <termios.h>
 # include <termcap.h>
 # include <limits.h>
-//# include <linux/limits.h>		//temporary solution for some macros in linux
 # include <dirent.h>
 # include <string.h>
 # include <stdio.h>
@@ -21,7 +20,11 @@
 # include "definition.h"
 # include "libft.h"
 
-extern t_yank   *g_sad;
+#ifdef __linux__
+# include <linux/limits.h>
+#endif
+
+extern t_control   g_sig;
 
 t_flag				*init_flag(void);
 t_flag 				*reset_flag(t_flag *flag);
@@ -58,15 +61,18 @@ t_env			*env_list(void);
 
 ///int				sh_clear(__attribute__((unused))char **com, __attribute__((unused))t_env **env);
 int				do_builtin(t_cmd *cmd, t_env **env);
-///int				sh_env(char **com, t_env **env, __attribute((unused))int fd);
-///int				sh_echo(char **com, t_env **env, int fd);
+int				sh_env(char **com, t_env **env, __attribute((unused))int fd);
+int				sh_echo(char **com, t_env **env, int fd);
+extern int				sh_export(char **com, t_env **env);
 // static -> t_env			*clear_list(t_env *env);
 extern int			sh_setenv(char **nm, t_env **env, __attribute((unused))int fd);
-extern t_env				*sh_unset(char **nm, t_env **env, __attribute((unused))int fd);
-///int				sh_cd(char **cmd, t_env **env);
+extern int				sh_unset(char **nm, t_env **env, __attribute((unused))int fd);
+int				sh_cd(char **cmd, t_env **env);
 char	*get_value_env(char *sought, t_env **env);
 t_token 		*parsing_t(char *line);
-int				sh_setnew(char *nm, char *value, t_env **env);
+int				sh_setnew(char *nm, char *value, t_env **env, int scope);
+extern int		sh_set(char **cmd, t_env **env);
+
 int				sh_exit(void);
 int				display_id_kid_parent(void);
 int				sh_pwd(char **com, t_env **env);
@@ -76,7 +82,7 @@ int             sh_type(char **com, t_env **env);
 t_env			*init_shell(int ac, char **av, char **env, t_yank **buffer);
 static t_yank	*init_buffer(void);
 static void		init_tty(void);
-int				display_env_list(char **com, t_env **ev);
+int				display_env_list(char **com, t_env **ev, int scope);
 
 /* FREE */
 void set_free_null(char **line);

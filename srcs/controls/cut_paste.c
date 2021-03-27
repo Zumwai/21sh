@@ -61,8 +61,8 @@ void	cut_after(t_term *pos, t_yank *buffer)
 
 void	cut_before(t_term *pos, t_yank *buffer)
 {
-	int		curr;
-	int 	abs = ft_abs(pos->delta_x);
+	size_t		curr;
+	size_t	 	abs = ft_abs(pos->delta_x);
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
 	curr = pos->index - abs;
@@ -87,6 +87,8 @@ void	yank_buffer(t_term *pos, char *line)//overflow multiple pastes + lines
 	if (line[0] == 0)
 		return ;
 	size = ft_strlen(line); //calc at creation time, not here
+	if (size + pos->index >= ARG_MAX)
+		return ;
 	if (size + pos->index >= pos->buf_size)
 		pos->new = get_buf_line(&pos->new, &pos->buf_size, size);
 	curr = pos->index - abs;

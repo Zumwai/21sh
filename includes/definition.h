@@ -1,6 +1,17 @@
 #ifndef DEFINITION_H
 # define DEFINITION_H
 
+#ifdef __APPLE__ 
+/*todo macos keys */
+#else
+#ifndef MAX_ARG_STRLEN
+# define MAX_ARG_STRLEN 131072
+#endif
+
+#ifndef MAX_ARG_STRINGS 
+# define MAX_ARG_STRINGS 0x7FFFFFFF
+#endif
+# define ARG_MAX 2097152
 # define LEFT	4479771			//left arrow
 # define RIGHT	4414235			//right
 # define ENTER	10				//return
@@ -22,6 +33,8 @@
 # define COPY_W	15				//ctrl + o
 # define TAB 	9				//tab or ctrl + i, unfortunately
 # define BACK_TAB	5921563		//backtab
+#endif
+
 # define HIST_UP -3
 # define HIST_D -4
 # define BK "&"
@@ -65,6 +78,7 @@
 
 typedef struct	s_env
 {
+	int			scope;
 	char		*name;
 	char		*value;
 	struct s_env *next;
@@ -200,8 +214,6 @@ typedef struct s_yank
 	int				size;
 	int				counter;
 	char			*sub;
-	struct termios	old;
-	struct termios	work;
 	int				win_x;
 	int				win_y;
 	int				winch;
@@ -216,6 +228,19 @@ typedef struct s_yank
 	char			*actual;
 }					t_yank;
 
+typedef struct	s_shlist
+{
+	t_env	**env;
+	int		fd[1024];
+	char	*line;
+}				t_shlist;
+
+typedef struct s_control
+{
+	unsigned int	winch;
+	struct termios	old;
+	struct termios	work;
+}				t_control;
 
 # define	DEFAULT		0
 # define	QUOTE		1<<0
@@ -226,6 +251,7 @@ typedef struct s_yank
 # define	ARG_HDOC	1<<5
 # define	READ_HDOC	1<<6
 # define	FAILED		1<<7
+
 /*
 enum				e_state
 {

@@ -31,7 +31,7 @@ int    get_to_the_diversion(t_trie *node, char **buf, int index)
     while (i < 94)
     {
         if (node->asc[i])
-            ret = get_to_the_diversion(node->asc[i], buf, index - 1);
+            ret = get_to_the_diversion(node->asc[i], buf, index);
         if (ret == -1 || ret == -2)
             return ret;
         i++;
@@ -80,6 +80,7 @@ char  *search_trie(t_trie *head, char *orig, t_auto *list)
     char    *ret = NULL;
     int     index = 0;
     int     res = 0;
+    int     cost = 0;
 
 
     comp = ft_strnew(257);
@@ -91,8 +92,8 @@ char  *search_trie(t_trie *head, char *orig, t_auto *list)
         strcat(buf, orig);
         index = ft_strlen(buf);
         if (index > 0)
-            index--;
-        res = get_to_the_diversion(curs, &buf, index);
+            cost++;
+        res = get_to_the_diversion(curs, &buf, index - cost);
         if (ft_strcmp(buf, orig)) {
             ret = ft_strdup(&buf[index]);
         }
@@ -209,7 +210,7 @@ int	autocomplete(t_term *pos, t_env **env, t_yank *buf)
         list = create_new_list(NULL);
     	new = search_trie(buf->trie, orig, list);
         if (list->next)
-            print_varians(pos, list->next);
+            print_varians(pos, list->next, orig);
         if (new && !new[0]) {
             if (check_for_dir(dup, new))
                   yank_buffer(pos, "/");
