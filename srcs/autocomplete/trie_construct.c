@@ -1,293 +1,106 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   trie_construct.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/27 11:11:02 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/27 12:32:53 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 
-static t_trie    *insert_word_trie(t_trie *head, char *word)
+static t_trie		*init_auto_trie(char *original, t_env **env)
 {
-    int     index;
-    int     value;
-    t_trie  *curs;
+	t_trie	*head;
+	t_env	*way;
+	int		len;
+	char	**ways;
+	char	*pwd;
 
-    if (!head)
-        head = create_trie_node(0);
-    curs = head;
-    index = 0;
-    value = 0;
-    while (word[index])
-    {
-        value = convert_asc_value(word[index]);
-        if (value < 0)
-            handle_exit_errors("Trie value is negative!\n");
-//        if (!curs->asc) {
-//            curs->asc = init_array();
-//        }
-        if (!curs->asc[value]) {
-            curs->asc[value] = create_trie_node(word[index]);
-            curs->counter++;
-            curs = curs->asc[value];
-            if (word[index + 1]) {
-                curs->sub = ft_strdup(&word[index]);
-//                curs->asc = NULL;
-            }
-            else {
-                curs->data = word[index];
-            }
-            curs->leaf = 1;
-            return head;
-        } else {
-            curs = curs->asc[value];
-            if (curs->sub)
-            {
-                if (curs->sub[1])
-                    insert_word_trie(curs, &curs->sub[1]);
-                  set_free_null(&curs->sub);
-                  //curs->counter--;
-                  curs->leaf = 0;
-            }
-        }
-		curs->data = word[index];
-        //curs->counter++;
-		index++;
-    }
-    curs->leaf = 1;
-    return head;
+	pwd = NULL;
+	head = NULL;
+	way = find_env_variable(env, "PATH");
+	ways = ft_strsplit(way->value, ':');
+	if (!(pwd = getcwd(pwd, PATH_MAX)))
+		return (NULL);
+	head = fill_variant_list(original, pwd, head);
+	head = fill_env_path(head, original, env, ways);
+	free(pwd);
+	ft_strsplit_free(&ways);
+	return (head);
 }
 
-static t_trie *fill_variant_list(char *orig, char *path, t_trie *head)
+t_trie				*construct_env_trie(char *orig, t_env **env)
 {
-    DIR     *dir;
-    struct dirent *container;
-    int     len;
+	t_env	*curs;
+	t_trie	*head;
 
-    len = 0;
-    dir = opendir(path);
-    if (!dir)
-        return head;
-    if (!orig)
-        return NULL;
-    len = ft_strlen(orig);
-    while ((container = readdir(dir)))
-    {
-        if(container->d_reclen == 0)
-            break ; //test
-        if ((orig[0] == 0 || ft_strnequ(container->d_name, orig, len)) && ft_strcmp(container->d_name, ".") && ft_strcmp(container->d_name, "..")) {
-            head = insert_word_trie(head, container->d_name);
-        }
-    }
-    free(dir);
-    return head;
+	head = create_trie_node(0);
+	head->asc[4] = create_trie_node('$');
+	curs = *env;
+	while (curs)
+	{
+		head->asc[4] = insert_word_trie(head->asc[4], curs->name);
+		curs = curs->next;
+	}
+	return (head);
 }
 
-static t_trie *fill_variant_dirs(char *orig, char *path, t_trie *head)
+t_trie				*construct_local_entry(char *original, int flag)
 {
-    DIR     *dir;
-    struct dirent *container;
-    char    tmp[PATH_MAX];
-    int     len;
-    unsigned int st;
-	struct stat		per;
-    int     ret = 0;
+	t_trie	*head;
+	char	*pwd;
+	char	*path;
+	int		len;
 
-    len = 0;
-    dir = opendir(path);
-    ft_strclr(tmp);
-    if (!dir)
-        return head;
-    if (!orig)
-        return NULL;
-    len = ft_strlen(orig);
-    while ((container = readdir(dir)))
-    {
-        if(container->d_reclen == 0)
-            break ; //test
-        if ((orig[0] == 0 || (ft_strnequ(container->d_name, orig, len)))) {
-            ft_strcpy(tmp, path);
-            ft_strcat(tmp, "/");
-            ft_strcat(tmp, container->d_name);
-            ret = lstat(tmp, &per);
-            if (ret != -1) {
-                st = per.st_mode & S_IFMT;
-                if (S_ISDIR(st))
-                    head = insert_word_trie(head, container->d_name);
-            }
-        }
-    }
-    free(dir);
-    return head;
+	pwd = NULL;
+	head = NULL;
+	len = ft_strlen(original);
+	if (!(pwd = getcwd(pwd, PATH_MAX)))
+		return (NULL);
+	path = ft_strjoin(pwd, original);
+	if (flag == DEFAULT)
+		head = fill_variant_list(original, pwd, head);
+	if (flag == DIRECTORY || flag == LOC_DIRECTORY)
+	{
+		ft_strclr(original);
+		head = fill_variant_dirs(original, pwd, head);
+	}
+	if (flag == LOC_FINISH)
+		head = fill_variant_dirs(original, pwd, head);
+	free(pwd);
+	free(path);
+	return (head);
 }
 
-static t_trie    *construct_local_entry(char *original, int flag)
+t_trie				*construct_trie(char **orig, t_env **env, int source)
 {
-    t_trie  *head;
-    char    *pwd;
-           char *path = NULL;
-    pwd = NULL;
-    head = NULL;
-    int len = ft_strlen(original);
-    if (!(pwd = getcwd(pwd, 4096)))
-        return NULL;
-    path = ft_strjoin(pwd, original);
-    if (flag == DEFAULT)
-        head = fill_variant_list(original, pwd, head);
-    if (flag == DIRECTORY) {
-        ft_strclr(original);
-        head = fill_variant_dirs(original, pwd, head);
-    }
-    if (flag == LOC_FINISH)
-    {
-        head = fill_variant_dirs(original, pwd, head);
-    }
-    if (flag == LOC_DIRECTORY)
-    {
-        ft_strclr(original);
-        head = fill_variant_dirs(original, path, head);
-    }
-    free(pwd);
-    free(path);
-    return head;
-}
+	t_trie	*head;
+	int		len;
 
-static t_trie    *init_auto_trie(char *original, t_env **env)
-{
-    t_auto  *arg;
-    t_trie  *head;
-    t_env    *way;
-    int     len;
-    char    **ways;
-    char    *pwd;
-    int     i;
-
-    i = 0;
-    pwd = NULL;
-    arg = NULL;
-    head = NULL;
-    way = find_env_variable(env, "PATH");
-    ways = ft_strsplit(way->value, ':');
-    if (!(pwd = getcwd(pwd, 4096)))
-        return NULL;
-    head = fill_variant_list(original, pwd, head);
-    while (ways[i])
-    {
-        head = fill_variant_list(original, ways[i], head);
-        i++;
-    }
-    i = 0;
-    len = ft_strlen(original);
-    char    *bilt;
-    while (i <= 6)
-    {
-        bilt = builtin_list(i);
-        if (ft_strnequ(bilt, original, len))
-            head = insert_word_trie(head, builtin_list(i));
-        i++;
-    }
-    free(pwd);
-    ft_strsplit_free(&ways);
-    return head;
-}
-
-
-t_trie      *construct_env_trie(char *orig, t_env **env)
-{
-    t_env   *curs;
-    t_trie  *head;
-
-    head = create_trie_node(0);
-    head->asc[4] = create_trie_node('$');
-    curs = *env;
-    while(curs)
-    {
-        head->asc[4] = insert_word_trie(head->asc[4], curs->name);
-        curs = curs->next;
-    }
-    return head;
-}
-
-char        *split_path(char *orig, char **path)
-{
-    int     len;
-    int     tmp;
-    char    *sub;
-
-    
-    len = ft_strlen(orig) - 1;
-    tmp = len;
-    while (len >= 0)
-    {
-        if (orig[len] == '/')
-            break ;
-        len--;
-    }
-    len++;
-    if (orig[0] == '/')
-        *path = ft_strsub(orig, 0, len);
-    else {
-        *path = ft_strnew(4096);
-        char        *pwd = NULL;
-        if (!(pwd = getcwd(pwd, 4096)))
-            return NULL;
-        ft_strcat(*path, pwd);
-        ft_strcat(*path, "/");
-        ft_strncat(*path, orig, len - 1);
-        ft_strcat(*path, "/");
-        free(pwd);
-    }
-    sub = ft_strnew(257);
-    ft_strcpy(sub, &orig[len]);
-    //sub = ft_strdup(&orig[len]);
-    return sub;
-}
-
-static t_trie    *construct_trie(char **orig, t_env **env, int source)
-{
-    t_trie *head;
-    t_env   *curs;
-    char    *ptr;
-    char    *path;
-    char    *sub;
-    int     len;
-    head = NULL;
-    path = NULL;
-
-    if (source == ENV_ONLY) {
-        head = construct_env_trie(*orig, env);
-    }
-    else if (source == EMPTY) {
-        orig[0][0] = 0;
-        head = fill_variant_list("", ".", head);
-    }
-    else if (source == GLOBAL) {
-        head = init_auto_trie(*orig, env);
-    }
-    else if (source == LOCAL) {
-        ft_memmove(*orig, &(*orig)[2], ft_strlen(*orig) - 1);
-        head = construct_local_entry(*orig, DEFAULT);
-    }
-    else if (source == DIRECTORY) {
-        len = ft_strlen(*orig);
-        if (orig[0][len - 1] == '/')
-            head = fill_variant_list("", *orig, head);
-        else
-            head = construct_local_entry(*orig, source);
-        *orig[0] = 0;
-    }
-    else if (source == LOC_DIRECTORY || source == LOC_FINISH)
-    {
-        head = construct_local_entry(*orig, source);
-    }
-    else if (source == SECOND) {
-        head = construct_local_entry(*orig, DEFAULT);
-    }
-    else {
-        sub = split_path(*orig, &path);
-        head = fill_variant_list(sub, path, head);
-        if (*orig)
-            free(*orig);
-        *orig = sub;
-        if (path)
-            free(path);
-    }
-            if (!head)
-        return NULL;
-    if (head)
-        head->data = 0;
-    return head;
+	head = NULL;
+	len = ft_strlen(*orig);
+	if ((*orig)[0] == '$')
+		head = construct_env_trie(*orig, env);
+	else if ((*orig)[0] == '.' && (*orig)[1] == '/')
+	{
+		ft_memmove(*orig, &(*orig)[2], ft_strlen(*orig) - 1);
+		head = construct_local_entry(*orig, DEFAULT);
+	}
+	else if (!source)
+		head = init_auto_trie(*orig, env);
+	else if (len > 0 && (*orig)[len - 1] == '/')
+		head = fill_local_dir(orig, len, source);
+	else if (is_relative_path(*orig))
+		head = fill_relative_path(orig);
+	else
+		head = construct_local_entry(*orig, DEFAULT);
+	if (!head)
+		return (NULL);
+	if (head)
+		head->data = 0;
+	return (head);
 }

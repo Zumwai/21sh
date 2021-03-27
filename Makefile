@@ -39,7 +39,14 @@ SRCS =	main.c \
 		autocomplete/auto_trie.c \
 		autocomplete/auto_utils.c \
 		autocomplete/print.c \
+		autocomplete/search_trie.c \
+		autocomplete/check_existence.c \
 		autocomplete/auto_state.c \
+		autocomplete/check_ifdir.c \
+		autocomplete/print_words.c \
+		autocomplete/insert_word_trie.c \
+		autocomplete/auto_dop_utils.c \
+		autocomplete/filler.c \
 		signals/sig_handler.c
 DIR_SRCS = srcs/
 SOURCE = $(addprefix $(DIR_SRCS), $(SRCS))

@@ -19,7 +19,7 @@
 # include "control.h"
 # include "definition.h"
 # include "libft.h"
-
+# include "auto.h"
 #ifdef __linux__
 # include <linux/limits.h>
 #endif
