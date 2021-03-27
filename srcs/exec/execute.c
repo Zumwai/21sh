@@ -174,11 +174,9 @@ void		what_about_file(t_cmd *cmd)
 	{
 		while (cur->type == 6 || cur->type == 7)
 			cur = cur->next;
-		ft_putstr("for search ");
 		ft_putendl(cur->arr[0]);
 		if (stat(cur->arr[0], &buf) == -1)
 		{
-			ft_putstr("in while ");
 			ft_putendl(cur->arr[0]);
 			fd = open(cur->arr[0], O_CREAT | O_RDWR | O_APPEND,
 					  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
