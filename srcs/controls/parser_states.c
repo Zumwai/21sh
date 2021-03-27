@@ -6,7 +6,7 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 14:43:59 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 14:46:53 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/27 15:26:14 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,3 +58,4 @@ int		modify_ignored(t_norm *norm, int state, int *flag)
 		state = skip_ignored(norm, flag, state);
 	return (state);
 }
+

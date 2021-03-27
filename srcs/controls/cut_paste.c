@@ -1,20 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cut_paste.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/27 15:00:42 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/27 15:03:02 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 
 void	copy_word(t_term *pos, t_yank *buffer)
 {
 	int		curr;
 	int		end;
-	int 	abs = ft_abs(pos->delta_x);
+	int		abs;
 
+	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
 	if (pos->index == 0 || pos->index - abs <= 0)
 		return ;
 	curr = pos->index - abs - 1;
 	end = curr;
-	while(curr > 0 && pos->new[curr] == ' ')
+	while (curr > 0 && pos->new[curr] == ' ')
 		curr--;
-	while(curr > 0 && ft_ischar(pos->new[curr]))
+	while (curr > 0 && ft_ischar(pos->new[curr]))
 		curr--;
 	if (!ft_ischar(pos->new[curr]))
 		curr++;
@@ -23,21 +36,21 @@ void	copy_word(t_term *pos, t_yank *buffer)
 
 void	cut_word(t_term *pos, t_yank *buffer)
 {
-	int		curr;
-	int		end;
-	int 	abs = ft_abs(pos->delta_x);
+	int	curr;
+	int	end;
+	int	abs;
 
+	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
 	if (pos->index == 0 || pos->index - abs <= 0)
 		return ;
 	curr = pos->index - abs;
 	end = curr;
-	while(curr > 0 && pos->new[curr - 1] == ' ')
+	while (curr > 0 && pos->new[curr - 1] == ' ')
 		curr--;
-	while(curr > 0 && ft_ischar(pos->new[curr - 1]))
+	while (curr > 0 && ft_ischar(pos->new[curr - 1]))
 		curr--;
-//	curr++;
 	buffer->yanked = ft_strsub(pos->new, curr, end - curr);
 	ft_memmove(&pos->new[curr], &pos->new[end], pos->index - end);
 	pos->index -= (end - curr);
@@ -47,9 +60,10 @@ void	cut_word(t_term *pos, t_yank *buffer)
 
 void	cut_after(t_term *pos, t_yank *buffer)
 {
-	int		curr;
-	int 	abs = ft_abs(pos->delta_x);
+	int	curr;
+	int abs;
 
+	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
 	curr = pos->index - abs;
@@ -61,8 +75,10 @@ void	cut_after(t_term *pos, t_yank *buffer)
 
 void	cut_before(t_term *pos, t_yank *buffer)
 {
-	size_t		curr;
-	size_t	 	abs = ft_abs(pos->delta_x);
+	size_t	curr;
+	size_t	abs;
+
+	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
 	curr = pos->index - abs;
@@ -76,17 +92,18 @@ void	cut_before(t_term *pos, t_yank *buffer)
 		pos->x = 0;
 }
 
-void	yank_buffer(t_term *pos, char *line)//overflow multiple pastes + lines
+void	yank_buffer(t_term *pos, char *line)
 {
 	int	size;
-	int		curr;
-	int 	abs = ft_abs(pos->delta_x);
+	int	curr;
+	int abs;
 
+	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
 	if (!line)
 		return ;
 	if (line[0] == 0)
 		return ;
-	size = ft_strlen(line); //calc at creation time, not here
+	size = ft_strlen(line);
 	if (size + pos->index >= ARG_MAX)
 		return ;
 	if (size + pos->index >= pos->buf_size)

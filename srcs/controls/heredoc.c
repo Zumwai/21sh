@@ -1,134 +1,128 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/27 15:04:23 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/27 15:27:59 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 
-static t_hdoc	*create_new_hdoc(void)
+static char		*trim_inword(char *line, int size, int count)
 {
-	t_hdoc	*new;
+	char	*ret;
+	int		i;
+	int		j;
 
-	if (!(new = (t_hdoc *)malloc(sizeof(t_hdoc))))
-		handle_exit_errors("Malloc returned NULL");
-	new->cord = -1;
-	new->eot = NULL;
-	new->quotes = 0;
-    new->used = false;
-	new->next = NULL;
-    return new;
-}
-
-extern void	save_coord_hdoc(t_norm *norm)
-{
-	t_hdoc	*curs;
-
-	if ((*norm->del)) {
-		curs = *(norm->del);
-		while (curs->next)
-			curs = curs->next;
-		curs->next = create_new_hdoc();
-		curs = curs->next;
-	}
-	else {
-		curs = create_new_hdoc();
-		(*norm->del) = curs;
-	}
-	curs->cord = norm->size + norm->i;
-}
-
-static	char *trim_inword(char *line, int size, int count)
-{
-	char	*ret = NULL;
-	int		i = 0;
-	int		j = 0;
+	ret = NULL;
+	i = 0;
+	j = 0;
 	if (count)
 	{
 		ret = ft_strnew(size - count);
 		while (line[i])
 		{
-			if (line[i] != '\'' && line[i] != '\"') {
+			if (line[i] != '\'' && line[i] != '\"')
+			{
 				ret[j] = line[i];
 				j++;
 			}
 			i++;
 		}
 		free(line);
-		return ret;
+		return (ret);
 	}
-	return line;
+	return (line);
 }
 
-static char	*grub_eot(char *line, int i, int *quotes)
+char			*handle_eot(char *line, int size, int count, int i)
 {
-	char	*eot= NULL;
-	int		count = 0;
-	int		size = 0;
-	char	*eot2 = NULL;
-	while(line[i] == ' ') {
-		i--;
-	}
-	while (i > 0)
-	{
-		if (line[i] == '<' || line[i] == ' ')
-			break ;
-		if (line[i] == '\'' || line[i] == '\"') {
-			if (!(*quotes)) {
-				if (line[i] == '\'')
-					(*quotes) |= (QUOTE);
-				else
-					(*quotes) |= (D_QUOTE);
-			}
-			count++;
-		}
-		i--;
-		size++;
-	}
+	char	*eot;
+
+	eot = NULL;
 	eot = ft_strndup(&line[i + 1], size);
 	if (verify_char_heredoc(eot[size - 1]))
 		eot[size - 1] = 0;
 	if (count)
 		eot = trim_inword(eot, size, count);
-	return eot;
+	return (eot);
 }
 
-extern int	update_hdoc_list(t_hdoc **lst, char *line)
+static char		*grub_eot(char *line, int i, int *quotes)
+{
+	char	*eot;
+	int		count;
+	int		size;
+
+	count = 0;
+	size = 0;
+	while (i > 0)
+	{
+		if (line[i] == '<' || line[i] == ' ')
+			break ;
+		if (line[i] == '\'' || line[i] == '\"')
+		{
+			(*quotes) = set_quotes(line[i], *quotes);
+			count++;
+		}
+		i--;
+		size++;
+	}
+	eot = handle_eot(line, size, count, i);
+	return (eot);
+}
+
+extern int		update_hdoc_list(t_hdoc **lst, char *line)
 {
 	t_hdoc	*curs;
 	int		size;
-	int		ret = 0;
+	int		ret;
 
+	ret = 0;
 	size = ft_strlen(line);
 	if (!*lst)
-		return 0; /*not sure*/
+		return (0);
 	curs = *lst;
 	while (curs)
 	{
-		if (!curs->eot) {
+		if (!curs->eot)
+		{
+			while (line[curs->cord] == ' ')
+				curs->cord--;
 			curs->eot = grub_eot(line, curs->cord, &curs->quotes);
 			ret = 1;
 		}
 		curs = curs->next;
 	}
-	return ret;
+	return (ret);
 }
 
-extern t_hdoc *clone_hdoc(t_hdoc *old)
+extern t_hdoc	*clone_hdoc(t_hdoc *old)
 {
-    t_hdoc *new;
-    t_hdoc *head;
+	t_hdoc *new;
+	t_hdoc *head;
 
-    new = create_new_hdoc();
-    head = new;
+	new = create_new_hdoc();
+	head = new;
 	new->next = NULL;
-    while (old)
-    {
-        new->cord = old->cord;
-        new->used = old->used;
+	while (old)
+	{
+		new->cord = old->cord;
+		new->used = old->used;
 		new->quotes = old->quotes;
-        new->eot = ft_strdup(old->eot);
+		new->eot = ft_strdup(old->eot);
 		new->next = NULL;
-        old = old->next;
-		if (old) {
+		old = old->next;
+		if (old)
+		{
 			new->next = create_new_hdoc();
 			new = new->next;
 		}
-    }
+	}
 	new->used = false;
-    return head;
+	return (head);
 }
