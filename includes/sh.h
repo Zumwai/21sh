@@ -20,6 +20,8 @@
 # include "definition.h"
 # include "libft.h"
 # include "auto.h"
+# include "input_parser.h"
+
 #ifdef __linux__
 # include <linux/limits.h>
 #endif

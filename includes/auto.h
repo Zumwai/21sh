@@ -1,5 +1,18 @@
-#include "sh.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   auto.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/27 13:01:55 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/27 13:02:49 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+
+#ifndef AUTO_H
+# define AUTO_H
 void    print_words(t_trie *node, char **line, int index, t_auto *list);
 void    print_varians(t_term *pos, t_auto *list, char *orig);
 t_auto  *create_new_list(char *line);
@@ -29,3 +42,5 @@ extern t_trie		*fill_variant_dirs(char *orig, char *path, t_trie *head);
 extern t_trie		*fill_env_path(t_trie *head, char *orig,
 					t_env **env, char **ways);
 extern t_trie *fill_variant_list(char *orig, char *path, t_trie *head);
+
+#endif

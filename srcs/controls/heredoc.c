@@ -14,12 +14,12 @@ static t_hdoc	*create_new_hdoc(void)
     return new;
 }
 
-extern void	save_coord_hdoc(t_hdoc **lst, int i, int size)
+extern void	save_coord_hdoc(t_norm *norm)
 {
 	t_hdoc	*curs;
 
-	if (*lst) {
-		curs = *lst;
+	if ((*norm->del)) {
+		curs = *(norm->del);
 		while (curs->next)
 			curs = curs->next;
 		curs->next = create_new_hdoc();
@@ -27,9 +27,9 @@ extern void	save_coord_hdoc(t_hdoc **lst, int i, int size)
 	}
 	else {
 		curs = create_new_hdoc();
-		*lst = curs;
+		(*norm->del) = curs;
 	}
-	curs->cord = size + i;
+	curs->cord = norm->size + norm->i;
 }
 
 static	char *trim_inword(char *line, int size, int count)
@@ -53,6 +53,7 @@ static	char *trim_inword(char *line, int size, int count)
 	}
 	return line;
 }
+
 static char	*grub_eot(char *line, int i, int *quotes)
 {
 	char	*eot= NULL;
@@ -131,30 +132,3 @@ extern t_hdoc *clone_hdoc(t_hdoc *old)
 	new->used = false;
     return head;
 }
-
-/*
-extern t_hdoc *clone_hdoc(t_hdoc *old)
-{
-	t_hdoc *new = NULL;
-	t_hdoc *head = NULL;
-
-	while (old)
-	{
-		if (old->next){
-			if (!new)
-			{
-				new = create_new_hdoc();
-				head = new;
-			} else {
-				new->next = create_new_hdoc();
-				new = new->next;
-			}
-			new->cord = old->cord;
-			new->used = old->used;
-			new->eot = ft_strdup(old->eot);
-		}
-		old = old->next;
-	}
-	return head;
-}
-*/

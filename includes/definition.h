@@ -242,6 +242,15 @@ typedef struct s_control
 	struct termios	work;
 }				t_control;
 
+
+typedef struct s_norm
+{
+	int		i;
+	int		size;
+	t_hdoc	**del;
+	char	*str;
+}				t_norm;
+
 # define	DEFAULT		0
 # define	QUOTE		1<<0
 # define	D_QUOTE		1<<1
@@ -251,7 +260,7 @@ typedef struct s_control
 # define	ARG_HDOC	1<<5
 # define	READ_HDOC	1<<6
 # define	FAILED		1<<7
-
+# define	IGNORE		1
 /*
 enum				e_state
 {

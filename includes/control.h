@@ -50,9 +50,9 @@ int		determine_state(char *line, int prev, t_term *pos);
 char	*determine_glue(char *line, t_term *pos, int index);
 t_actual	*create_main_line(void);
 int		consult_state(t_term *curs);
-void	save_coord_hdoc(t_hdoc **lst, int i, int size);
-int		update_hdoc_list(t_hdoc **lst, char *line);
-int		verify_char_heredoc(char c);
+void	save_coord_hdoc(t_norm *norm);
+int		update_hdoc_list(t_hdoc **list, char *line);
+
 t_hdoc	*clone_hdoc(t_hdoc *old);
 void       update_coord(t_term *pos);
 
