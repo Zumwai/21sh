@@ -36,6 +36,9 @@ SRCS =	main.c \
 		controls/jump_words.c \
 		controls/cut_paste.c \
 		controls/parser.c \
+		controls/parser_states.c \
+		controls/parser_heredoc.c \
+		controls/parser_utils.c \
 		autocomplete/trie_construct.c \
 		autocomplete/auto_trie.c \
 		autocomplete/auto_utils.c \
