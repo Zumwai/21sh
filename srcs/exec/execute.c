@@ -119,7 +119,7 @@ int	exec_builtin(char **com, t_env **env, int fd, int num)
 	if (num == 1)
 		return (sh_cd(com, env));
 	if (num == 2)
-		return (sh_echo(com, env, fd));
+		return (sh_echo(com, env, fd, 1));
 	if (num == 3)
 		return (sh_exit());
 	if (num == 4)

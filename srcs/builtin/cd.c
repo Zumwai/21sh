@@ -102,7 +102,7 @@ char	*create_path(char *com, t_env **env, int flag)
 	return (curpath);
 }
 
-int		sh_cd(char **com, t_env **env, int ch, __attribute((unused))int cmd)
+int	trim_curpath(char **curpath, t_env **env) 
 {
 	char	*pwd;
 	int		i;
@@ -120,11 +120,8 @@ int		sh_cd(char **com, t_env **env, int ch, __attribute((unused))int cmd)
 		i++;
 	ft_memmove(*curpath, &(*curpath)[i], size - i);
 	(*curpath)[size - i] = 0;
-	if (pwd)
-		free(pwd);
 	return (size - i);
 }
-
 int		sh_cd(char **com, t_env **env)
 {
 	char		*curpath;
