@@ -6,7 +6,7 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 15:29:49 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 15:29:59 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/27 19:19:33 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	go_next_word(t_term *pos)
 	int abs;
 	int curs;
 
-	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
+	abs = ft_abs(pos->delta_x);
 	curs = pos->index - abs;
 	while (pos->new[curs] != '\0' && !ft_isalnum(pos->new[curs]))
 		curs++;
@@ -36,7 +36,7 @@ void	go_prev_word(t_term *pos)
 	int abs;
 	int curs;
 
-	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
+	abs = ft_abs(pos->delta_x);
 	curs = pos->index - abs - 1;
 	while (curs > 0 && !ft_isalnum(pos->new[curs]))
 		curs--;

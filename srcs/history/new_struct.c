@@ -6,12 +6,11 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 18:36:20 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 18:36:27 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/27 18:41:12 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "sh.h"
-
 
 static void	copy_data_term(t_term **curs, t_term *old)
 {
@@ -29,7 +28,7 @@ static void	copy_data_term(t_term **curs, t_term *old)
 	new->store = NULL;
 }
 
-static void cpy_struct(t_term *curs, t_term *current, t_actual *clone)
+static void	cpy_struct(t_term *curs, t_term *current, t_actual *clone)
 {
 	if (current->new)
 		curs->new = ft_strdup_size(current->new, current->buf_size);
@@ -43,9 +42,9 @@ static void cpy_struct(t_term *curs, t_term *current, t_actual *clone)
 		curs->main = clone;
 }
 
-void	cycling_hist(t_term *current, t_term *curs, t_actual *clone)
+void		cycling_hist(t_term *current, t_term *curs, t_actual *clone)
 {
-	t_term *head;
+	t_term	*head;
 	t_term	*tmp;
 
 	head = curs;

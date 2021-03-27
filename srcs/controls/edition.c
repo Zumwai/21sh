@@ -6,7 +6,7 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 14:53:28 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 14:58:16 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/27 19:13:20 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	backspace_char(t_term *pos)
 {
 	int abs;
 
-	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
+	abs = ft_abs(pos->delta_x);
 	if (!pos->delta_x && pos->index)
 	{
 		ft_printf("\010 \010");
@@ -36,7 +36,7 @@ void	insert_char(t_term *pos, char c)
 {
 	int abs;
 
-	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
+	abs = ft_abs(pos->delta_x);
 	if (pos->index >= ARG_MAX)
 		return ;
 	ft_memmove(&pos->new[pos->index - abs + 1],
@@ -50,7 +50,7 @@ void	delete_char(t_term *pos)
 {
 	int abs;
 
-	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
+	abs = ft_abs(pos->delta_x);
 	if (abs == pos->index && pos->index)
 	{
 		pos->new = ft_memmove(pos->new, &pos->new[1], pos->index - 1);

@@ -1,8 +1,8 @@
 #include "sh.h"
 
-int ft_abs(int i)
+int ft_abs(int x)
 {
-	return ((i > 0) ? i : -i);
+	return ((x >> 31) + x) ^ (x >> 31);
 }
 
 t_env	*find_env_variable(t_env **env, char *sought)

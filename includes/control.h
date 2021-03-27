@@ -45,7 +45,7 @@ int			handle_return_error(int num, char *name);
 void		handle_exit_errors(char *description);
 void		ft_putstr_size(char *line, ssize_t size);
 char		*concat_lines(t_term *input);
-
+void	free_storage(t_term *curr);
 int		determine_state(char *line, int prev, t_term *pos);
 char	*determine_glue(char *line, t_term *pos, int index);
 t_actual	*create_main_line(void);
@@ -60,6 +60,8 @@ extern t_term *get_last_pos(t_term *pos);
 extern int is_printable(char key);
 int		determine_next_io_step(t_term *curs, int ret, t_norm *norm);
 void	move_cursor(t_term *pos, long long key);
+void	set_cursor(t_term *pos);
+void	correct_y(t_term *pos);
 void	handle_child_signal(int sig);
 void	handle_main_signal(int sig);
 void	handle_all_signals(int pid);

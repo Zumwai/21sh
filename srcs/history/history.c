@@ -6,7 +6,7 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 17:53:57 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 18:04:00 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/27 18:41:03 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static t_history	*push_history(t_history **history)
 	return (new);
 }
 
-void	remove_last_command(t_history **head)
+void				remove_last_command(t_history **head)
 {
 	t_history *curs;
 
@@ -47,7 +47,7 @@ void	remove_last_command(t_history **head)
 	curs = NULL;
 }
 
-t_history	*save_history(t_yank *buffer)
+t_history			*save_history(t_yank *buffer)
 {
 	t_history	*temp;
 
@@ -74,7 +74,7 @@ t_history	*save_history(t_yank *buffer)
 	return (temp);
 }
 
-void	envoke_history(t_yank *buffer, int key)
+void				envoke_history(t_yank *buffer, int key)
 {
 	t_history	*temp;
 

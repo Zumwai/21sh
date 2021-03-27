@@ -6,7 +6,7 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 17:58:55 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 18:36:06 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/27 18:40:40 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ static t_actual	*clone_main_line(t_actual *main)
 
 t_term	*copy_input_struct(t_term *current, int read)
 {
-	t_term	*curs;
-	t_term	*head;
-	t_actual *clone;
+	t_term		*curs;
+	t_term		*head;
+	t_actual	*clone;
 
 	if (!(curs = (t_term *)malloc(sizeof(t_term))))
 		handle_exit_errors("malloc returned NULL");

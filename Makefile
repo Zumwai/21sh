@@ -26,7 +26,7 @@ SRCS =	main.c \
 		input/display.c \
 		input/reader.c \
 		input/input_utils.c \
-		input/concater.c \
+		input/cursor.c \
 		history/history.c \
 		history/cpy_history.c \
 		history/scroll.c \

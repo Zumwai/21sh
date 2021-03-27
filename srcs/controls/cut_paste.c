@@ -6,7 +6,7 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 15:00:42 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 15:55:15 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/27 19:21:22 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	copy_word(t_term *pos, t_yank *buffer)
 	int		end;
 	int		abs;
 
-	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
+	abs = ft_abs(pos->delta_x);
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
 	if (pos->index == 0 || pos->index - abs <= 0)
@@ -40,7 +40,7 @@ void	cut_word(t_term *pos, t_yank *buffer)
 	int	end;
 	int	abs;
 
-	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
+	abs = ft_abs(pos->delta_x);
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
 	if (pos->index == 0 || pos->index - abs <= 0)
@@ -63,7 +63,7 @@ void	cut_after(t_term *pos, t_yank *buffer)
 	int	curr;
 	int abs;
 
-	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
+	abs = ft_abs(pos->delta_x);
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
 	curr = pos->index - abs;
@@ -78,7 +78,7 @@ void	cut_before(t_term *pos, t_yank *buffer)
 	size_t	curr;
 	size_t	abs;
 
-	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
+	abs = ft_abs(pos->delta_x);
 	if (buffer->yanked)
 		set_free_null(&buffer->yanked);
 	curr = pos->index - abs;
@@ -98,7 +98,7 @@ void	yank_buffer(t_term *pos, char *line)
 	int	curr;
 	int abs;
 
-	abs = (pos->delta_x ^ (pos->delta_x >> 31) - (pos->delta_x >> 31));
+	abs = ft_abs(pos->delta_x);
 	if (!line)
 		return ;
 	if (line[0] == 0)
