@@ -1,27 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   jump_words.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/27 15:29:49 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/27 19:19:33 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 
-void go_next_word(t_term *pos)
+void	go_next_word(t_term *pos)
 {
-	int abs = ft_abs(pos->delta_x);
+	int abs;
+	int curs;
 
-	int curs = pos->index - abs;
+	abs = ft_abs(pos->delta_x);
+	curs = pos->index - abs;
 	while (pos->new[curs] != '\0' && !ft_isalnum(pos->new[curs]))
 		curs++;
 	while (pos->new[curs] && ft_isalnum(pos->new[curs]))
 		curs++;
 	curs = pos->index - curs;
 	pos->delta_x = -curs;
-	if (pos->delta_x > 0) {
+	if (pos->delta_x > 0)
+	{
 		pos->delta_x = 0;
-		//tputs(tgetstr("cd", NULL), 1, putchar_like);
 	}
 }
 
-void go_prev_word(t_term *pos)
+void	go_prev_word(t_term *pos)
 {
-	int abs = ft_abs(pos->delta_x);
+	int abs;
+	int curs;
 
-	int curs = pos->index - abs - 1;
+	abs = ft_abs(pos->delta_x);
+	curs = pos->index - abs - 1;
 	while (curs > 0 && !ft_isalnum(pos->new[curs]))
 		curs--;
 	while (curs > 0 && ft_isalnum(pos->new[curs]))
@@ -34,6 +50,4 @@ void go_prev_word(t_term *pos)
 	}
 	else
 		pos->delta_x = -pos->index;
-	//if (!pos->delta_x)
-		//tputs(tgetstr("cd", NULL), 1, putchar_like);
 }

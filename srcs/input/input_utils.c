@@ -1,16 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/27 19:33:25 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/27 19:33:25 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "sh.h"
 
-
-
-int key_exit(struct termios old_tty, t_term *pos, __attribute((unused))t_yank *buffer)
+int key_exit(t_term *pos, __attribute((unused))t_yank *buffer)
 {
-	tcsetattr(STDIN_FILENO, TCSADRAIN, &old_tty);
-//	if (pos->new)
-//		set_free_null(pos->new);
-	//free_input_line(&pos);
-//	free(pos->new);
-//	pos->new = NULL;
-//	set_free_all(NULL, buffer);
+	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_sig.old);
 	return(-2);
 }
 
@@ -121,5 +126,47 @@ void       update_coord(t_term *pos)
 		curs->x = x;
 		curs->y = y;
 		curs = curs->prev;
+	}
+}
+
+void ft_putstr_size(char *line, ssize_t size)
+{
+	if (size > 0)
+		write(1, line, size);
+}
+
+
+void	free_storage(t_term *curr)
+{
+	int	i;
+
+	i = 0;
+	while (curr->store->arr[i])
+	{
+		free(curr->store->arr[i]);
+		curr->store->arr[i] = NULL;
+		i++;
+	}
+	if (curr->store->arr)
+		free(curr->store->arr);
+	curr->store->size = 0;
+	curr->delta_y = 0;
+	curr->store->arr = NULL;
+}
+
+void correct_y(t_term *pos)
+{
+	t_term *curs = pos;
+
+	while (curs)
+	{
+		curs->y--;
+		curs = curs->prev;
+	}
+	curs = pos->next;
+	while (curs)
+	{
+		curs->y--;
+		curs = curs->next;
 	}
 }

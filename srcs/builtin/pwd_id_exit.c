@@ -2,6 +2,7 @@
 
 int		sh_exit(void)
 {
+	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_sig.old);
 	return (0);
 }
 

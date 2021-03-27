@@ -9,7 +9,6 @@
 # include <termios.h>
 # include <termcap.h>
 # include <limits.h>
-//# include <linux/limits.h>		//temporary solution for some macros in linux
 # include <dirent.h>
 # include <string.h>
 # include <stdio.h>
@@ -20,8 +19,15 @@
 # include "control.h"
 # include "definition.h"
 # include "libft.h"
+# include "auto.h"
+# include "input_parser.h"
+# include "history.h"
 
-extern t_yank   *g_sad;
+#ifdef __linux__
+# include <linux/limits.h>
+#endif
+
+extern t_control   g_sig;
 
 t_flag				*init_flag(void);
 t_flag 				*reset_flag(t_flag *flag);
@@ -58,6 +64,8 @@ t_env			*env_list(void);
 
 ///int				sh_clear(__attribute__((unused))char **com, __attribute__((unused))t_env **env);
 int				do_builtin(t_cmd *cmd, t_env **env);
+extern int				sh_export(char **com, t_env **env);
+
 ///int				sh_env(char **com, t_env **env, __attribute((unused))int fd);
 ///int				sh_echo(char **com, t_env **env, int fd);
 // static -> t_env			*clear_list(t_env *env);
@@ -66,7 +74,9 @@ extern t_env				*sh_unset(char **nm, t_env **env, __attribute((unused))int fd);
 ///int				sh_cd(char **cmd, t_env **env);
 char	*get_value_env(char *sought, t_env **env);
 t_token 		*parsing_t(char *line);
-int				sh_setnew(char *nm, char *value, t_env **env);
+int				sh_setnew(char *nm, char *value, t_env **env, int scope);
+extern int		sh_set(char **cmd, t_env **env);
+
 int				sh_exit(void);
 int				display_id_kid_parent(void);
 int				sh_pwd(char **com, t_env **env);
@@ -76,7 +86,7 @@ int             sh_type(char **com, t_env **env);
 t_env			*init_shell(int ac, char **av, char **env, t_yank **buffer);
 static t_yank	*init_buffer(void);
 static void		init_tty(void);
-int				display_env_list(char **com, t_env **ev);
+int				display_env_list(char **com, t_env **ev, int scope);
 
 /* FREE */
 void set_free_null(char **line);
@@ -84,10 +94,12 @@ void	set_free_all(t_env *ev, t_yank *buffer);
 void	ft_free_tab(char **tab);
 
 /* UTILS */
-int ft_abs(int i);
+int		ft_abs(int i);
 t_env	*find_env_variable(t_env **env, char *sought);
 void	ft_concat(char *str, char **path, char *name);
 char	*get_full_path(char *path, char *name);
+t_env		*create_env_list(char **env);
+void		handle_cd_err(int num, char *name);
 int				sh_clear(__attribute__((unused))char **com, __attribute__((unused))t_env **env, __attribute((unused))int cmd);
 int			sh_env(char **com, t_env **env, __attribute((unused))int fd, __attribute((unused))int cmd);
 int			sh_echo(char **com, t_env **env, int fd, __attribute((unused))int cmd);

@@ -1,91 +1,81 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/27 10:18:57 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/27 10:43:23 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 
-
-static t_auto  *find_last(t_auto *head)
+static int		find_max_elem(t_auto *list)
 {
-    t_auto *curs;
+	int		size;
+	int		max;
+	t_auto	*curs;
 
-    curs = head;
-    if (!curs)
-        return NULL;
-    while (curs->next)
-            curs = curs->next;
-    return curs;
+	curs = list;
+	size = 0;
+	max = 0;
+	while (curs)
+	{
+		size++;
+		if (curs->size > max)
+			max = curs->size;
+		curs = curs->next;
+	}
+	max += 1;
+	return (max);
 }
 
-void    print_words(t_trie *node, char **line, int index, t_auto *list)
+void			display_vars(t_auto *list, char *orig, int cols, int max)
 {
-    if (!node)
-        return ;
-    //if (index < 0)
-    //    index++;
-    if (line[0][index])
-        line[0][index] = 0;
-    if (node->data != -1)
-    {
-        if (node->sub) {
-            ft_strcat(*line, node->sub);
-            index += ft_strlen(node->sub);
-        } else if (node->data) {
-            line[0][index] = node->data;
-            line[0][index + 1] = '\0';
-            index++;
-        }
-    }
-    if (node->leaf == true) {
-        t_auto *curs;
-        curs = find_last(list);
-        curs->next = create_new_list(*line);
-    }
-    int i = 0;
-//    if (node->asc) {
-    while (i < 94)
-    {
-        if (node->asc[i]) {
-            print_words(node->asc[i], line, index, list);
-        }
-        i++;
-    }
- //   }
+	t_auto	*curs;
+	t_auto	*tmp;
+	int		len_orig;
+	int		i;
+
+	i = 0;
+	len_orig = ft_strlen(orig);
+	curs = list;
+	while (curs)
+	{
+		tmp = curs;
+		curs = curs->next;
+		ft_putstr_size(orig, len_orig - 1);
+		ft_putstr(tmp->name);
+		while (tmp->size++ < max)
+			ft_putchar(' ');
+		i++;
+		if (i == cols)
+		{
+			ft_putchar('\n');
+			i = 0;
+		}
+		free(tmp->name);
+		free(tmp);
+	}
 }
 
-void    print_varians(t_term *pos, t_auto *list)
+void			print_varians(t_term *pos, t_auto *list, char *orig)
 {
-    t_auto *curs = list;
-    int     size = 0;
-    int     max = 0;
-	struct winsize dimensions;
-    int     cols = 0;
+	struct winsize	dimensions;
+	t_auto			*curs;
+	int				max;
+	int				cols;
 
+	curs = list;
+	cols = 0;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-    while (curs)
-    {
-        size++;
-        if (curs->size > max)
-            max = curs->size;
-        curs = curs->next;
-    }
-    max += 1;
-    curs = list;
-    if (max)
-        cols = dimensions.ws_col / max;
-    int     i = 0;
-    t_auto *tmp;
-    ft_putchar('\n');
-    while (curs)
-    {
-        tmp = curs;
-        curs = curs->next;
-        ft_putstr(tmp->name);
-        while (tmp->size++ < max)
-            ft_putchar(' ');
-        i++;
-        if (i == cols) {
-            ft_putchar('\n'); i = 0;
-        }
-        free(tmp->name);
-        free(tmp);
-    }
-    ft_putchar('\n');
-    update_coord(pos);
+	max = find_max_elem(list);
+	curs = list;
+	cols = dimensions.ws_col / max;
+	ft_putchar('\n');
+	display_vars(list, orig, cols, max);
+	ft_putchar('\n');
+	update_coord(pos);
 }
