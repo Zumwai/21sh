@@ -236,7 +236,7 @@ char        *split_path(char *orig, char **path)
     return sub;
 }
 
-t_trie    *construct_trie(char **orig, t_env **env, int source)
+static t_trie    *construct_trie(char **orig, t_env **env, int source)
 {
     t_trie *head;
     t_env   *curs;

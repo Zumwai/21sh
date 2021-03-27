@@ -1,0 +1,3417 @@
+Norme: ./ srcs/autocomplete/auto_state.d 
+Warning: Not a valid file
+Norme: ./ srcs/autocomplete/auto_state.o 
+Warning: Not a valid file
+Norme: ./ srcs/autocomplete/auto_trie.d 
+Warning: Not a valid file
+Norme: ./ srcs/autocomplete/auto_trie.o 
+Warning: Not a valid file
+Norme: ./ srcs/autocomplete/auto_utils.d 
+Warning: Not a valid file
+Norme: ./ srcs/autocomplete/auto_utils.o 
+Warning: Not a valid file
+Norme: ./ srcs/autocomplete/print.d 
+Warning: Not a valid file
+Norme: ./ srcs/autocomplete/print.o 
+Warning: Not a valid file
+Norme: ./ srcs/autocomplete/trie_construct.d 
+Warning: Not a valid file
+Norme: ./ srcs/autocomplete/trie_construct.o 
+Warning: Not a valid file
+Norme: ./ srcs/builtin/cd.d 
+Warning: Not a valid file
+Norme: ./ srcs/builtin/cd.o 
+Warning: Not a valid file
+Norme: ./ srcs/builtin/env_list.d 
+Warning: Not a valid file
+Norme: ./ srcs/builtin/env_list.o 
+Warning: Not a valid file
+Norme: ./ srcs/builtin/environ.d 
+Warning: Not a valid file
+Norme: ./ srcs/builtin/environ.o 
+Warning: Not a valid file
+Norme: ./ srcs/builtin/pwd_id_exit.d 
+Warning: Not a valid file
+Norme: ./ srcs/builtin/pwd_id_exit.o 
+Warning: Not a valid file
+Norme: ./ srcs/builtin/type.d 
+Warning: Not a valid file
+Norme: ./ srcs/builtin/type.o 
+Warning: Not a valid file
+Norme: ./ srcs/cmd/get_cmd.d 
+Warning: Not a valid file
+Norme: ./ srcs/cmd/get_cmd.o 
+Warning: Not a valid file
+Norme: ./ srcs/controls/arrow_movement.d 
+Warning: Not a valid file
+Norme: ./ srcs/controls/arrow_movement.o 
+Warning: Not a valid file
+Norme: ./ srcs/controls/controls.d 
+Warning: Not a valid file
+Norme: ./ srcs/controls/controls.o 
+Warning: Not a valid file
+Norme: ./ srcs/controls/cut_paste.d 
+Warning: Not a valid file
+Norme: ./ srcs/controls/cut_paste.o 
+Warning: Not a valid file
+Norme: ./ srcs/controls/edition.d 
+Warning: Not a valid file
+Norme: ./ srcs/controls/edition.o 
+Warning: Not a valid file
+Norme: ./ srcs/controls/heredoc.d 
+Warning: Not a valid file
+Norme: ./ srcs/controls/heredoc.o 
+Warning: Not a valid file
+Norme: ./ srcs/controls/jump_words.d 
+Warning: Not a valid file
+Norme: ./ srcs/controls/jump_words.o 
+Warning: Not a valid file
+Norme: ./ srcs/controls/state.d 
+Warning: Not a valid file
+Norme: ./ srcs/controls/state.o 
+Warning: Not a valid file
+Norme: ./ srcs/exec/build_path.d 
+Warning: Not a valid file
+Norme: ./ srcs/exec/build_path.o 
+Warning: Not a valid file
+Norme: ./ srcs/exec/builtin_fd.d 
+Warning: Not a valid file
+Norme: ./ srcs/exec/builtin_fd.o 
+Warning: Not a valid file
+Norme: ./ srcs/exec/execute.d 
+Warning: Not a valid file
+Norme: ./ srcs/exec/execute.o 
+Warning: Not a valid file
+Norme: ./ srcs/input/arrow_movement.o 
+Warning: Not a valid file
+Norme: ./ srcs/input/auto_trie.o 
+Warning: Not a valid file
+Norme: ./ srcs/input/concater.d 
+Warning: Not a valid file
+Norme: ./ srcs/input/concater.o 
+Warning: Not a valid file
+Norme: ./ srcs/input/controls.o 
+Warning: Not a valid file
+Norme: ./ srcs/input/cut_paste.o 
+Warning: Not a valid file
+Norme: ./ srcs/input/display.d 
+Warning: Not a valid file
+Norme: ./ srcs/input/display.o 
+Warning: Not a valid file
+Norme: ./ srcs/input/edition.o 
+Warning: Not a valid file
+Norme: ./ srcs/input/history.d 
+Warning: Not a valid file
+Norme: ./ srcs/input/history.o 
+Warning: Not a valid file
+Norme: ./ srcs/input/input_utils.d 
+Warning: Not a valid file
+Norme: ./ srcs/input/input_utils.o 
+Warning: Not a valid file
+Norme: ./ srcs/input/jump_words.o 
+Warning: Not a valid file
+Norme: ./ srcs/input/reader.d 
+Warning: Not a valid file
+Norme: ./ srcs/input/reader.o 
+Warning: Not a valid file
+Norme: ./ srcs/main.d 
+Warning: Not a valid file
+Norme: ./ srcs/main.o 
+Warning: Not a valid file
+Norme: ./ srcs/signals/sig_handler.d 
+Warning: Not a valid file
+Norme: ./ srcs/signals/sig_handler.o 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/ampersand.d 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/ampersand.o 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/eject_redirect.d 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/eject_redirect.o 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/flag.d 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/flag.o 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/parse_tokens.d 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/parse_tokens.o 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/pipe.d 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/pipe.o 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/semantica.d 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/semantica.o 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/token.d 
+Warning: Not a valid file
+Norme: ./ srcs/tokens/token.o 
+Warning: Not a valid file
+Norme: ./ srcs/tree/.DS_Store 
+Warning: Not a valid file
+Norme: ./ srcs/tree/tree.d 
+Warning: Not a valid file
+Norme: ./ srcs/tree/tree.o 
+Warning: Not a valid file
+Norme: ./ srcs/tree/tree_ft.d 
+Warning: Not a valid file
+Norme: ./ srcs/tree/tree_ft.o 
+Warning: Not a valid file
+Norme: ./ srcs/utils/free.d 
+Warning: Not a valid file
+Norme: ./ srcs/utils/free.o 
+Warning: Not a valid file
+Norme: ./ srcs/utils/handle_err.d 
+Warning: Not a valid file
+Norme: ./ srcs/utils/handle_err.o 
+Warning: Not a valid file
+Norme: ./ srcs/utils/init.d 
+Warning: Not a valid file
+Norme: ./ srcs/utils/init.o 
+Warning: Not a valid file
+Norme: ./ srcs/utils/misc.d 
+Warning: Not a valid file
+Norme: ./ srcs/utils/misc.o 
+Warning: Not a valid file
+Norme: srcs/builtin/env_list.c
+Error: 42 header not at top of the file
+Norme: srcs/autocomplete/auto_state.c
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error (line 5, col 44): missing space around ==
+Error (line 6, col 13): bad spacing
+Error (line 7, col 9): missing parentheses in return statement
+Error (line 8, col 8): missing parentheses in return statement
+Error (line 19): line has 87 characters
+Error (line 37): declarations must be followed by one empty line in get_incomplete
+Error (line 41, col 4): bad spacing
+Error (line 41, col 6): abs is instanciated during declaration
+Error (line 43, col 7): test is instanciated during declaration
+Error (line 44): must begin only by tabulations
+Error (line 44): bad indentation
+Error (line 46, col 9): missing parentheses in return statement
+Error (line 49, col 1): missing space after while
+Error (line 56, col 8): missing parentheses in return statement
+Error (line 57, col 0): no newline after block
+Norme: srcs/builtin/environ.c
+Warning: srcs/builtin/environ.c may not compile or is invalid for some reasons.
+Norme: srcs/autocomplete/auto_utils.c
+Error: 42 header not at top of the file
+Error: 7 functions in the file
+Error: global scope bad aligned
+Error: file must end with a single empty line
+Error (line 3): Space before function name
+Error (line 3): declarations must be followed by one empty line in builtin_list
+Error (line 5): bad indentation
+Error (line 5): must begin only by tabulations
+Error (line 5, col 8): bad spacing
+Error (line 5, col 13): arr is instanciated during declaration
+Error (line 6): must begin only by tabulations
+Error (line 7): must begin only by tabulations
+Error (line 8): must begin only by tabulations
+Error (line 9): must begin only by tabulations
+Error (line 10): must begin only by tabulations
+Error (line 11): must begin only by tabulations
+Error (line 12): must begin only by tabulations
+Error (line 13): must begin only by tabulations
+Error (line 14): must begin only by tabulations
+Error (line 15): must begin only by tabulations
+Error (line 15): bad indentation
+Error (line 16): must begin only by tabulations
+Error (line 16): bad indentation
+Error (line 16, col 15): missing parentheses in return statement
+Error (line 17): must begin only by tabulations
+Error (line 17): bad indentation
+Error (line 17, col 11): missing parentheses in return statement
+Error (line 20): Space before function name
+Error (line 20, col 33): space after pointer
+Error (line 20, col 41): no newline before block
+Error (line 21): must begin only by tabulations
+Error (line 21): bad indentation
+Error (line 21, col 7): bad spacing
+Error (line 23): must begin only by tabulations
+Error (line 23): bad indentation
+Error (line 24): must begin only by tabulations
+Error (line 24): bad indentation
+Error (line 25): must begin only by tabulations
+Error (line 25): bad indentation
+Error (line 26): must begin only by tabulations
+Error (line 26): bad indentation
+Error (line 27): must begin only by tabulations
+Error (line 27): bad indentation
+Error (line 28): C++ comment
+Error (line 28): must begin only by tabulations
+Error (line 28): bad indentation
+Error (line 29): bad indentation
+Error (line 29): must begin only by tabulations
+Error (line 29): missing newline after if
+Error (line 29, col 33): no newline before block
+Error (line 30): must begin only by tabulations
+Error (line 30): bad indentation
+Error (line 30): C++ comment
+Error (line 31): bad indentation
+Error (line 31): must begin only by tabulations
+Error (line 32): must begin only by tabulations
+Error (line 32): bad indentation
+Error (line 33): must begin only by tabulations
+Error (line 33): bad indentation
+Error (line 34): bad indentation
+Error (line 34): must begin only by tabulations
+Error (line 35): must begin only by tabulations
+Error (line 35): C++ comment
+Error (line 35): bad indentation
+Error (line 36): must begin only by tabulations
+Error (line 36): C++ comment
+Error (line 36): bad indentation
+Error (line 37): must begin only by tabulations
+Error (line 37): bad indentation
+Error (line 38): must begin only by tabulations
+Error (line 38): bad indentation
+Error (line 39): must begin only by tabulations
+Error (line 39): bad indentation
+Error (line 40): must begin only by tabulations
+Error (line 40): bad indentation
+Error (line 41): must begin only by tabulations
+Error (line 41): bad indentation
+Error (line 44): bad spacing after create_trie_node
+Error (line 44): Space before function name
+Error (line 44, col 40): no newline before block
+Error (line 45): bad indentation
+Error (line 45): must begin only by tabulations
+Error (line 45, col 10): bad spacing
+Error (line 46): bad indentation
+Error (line 46): must begin only by tabulations
+Error (line 46, col 7): bad spacing
+Error (line 48): must begin only by tabulations
+Error (line 48): bad indentation
+Error (line 49): must begin only by tabulations
+Error (line 49): bad indentation
+Error (line 50): bad indentation
+Error (line 50): must begin only by tabulations
+Error (line 51): bad indentation
+Error (line 51): must begin only by tabulations
+Error (line 52): must begin only by tabulations
+Error (line 52): bad indentation
+Error (line 53): must begin only by tabulations
+Error (line 53): bad indentation
+Error (line 54): C++ comment
+Error (line 55): must begin only by tabulations
+Error (line 55): bad indentation
+Error (line 56): bad indentation
+Error (line 56): must begin only by tabulations
+Error (line 57): bad indentation
+Error (line 57): must begin only by tabulations
+Error (line 57, col 19): missing space around =
+Error (line 58): must begin only by tabulations
+Error (line 58): bad indentation
+Error (line 59): must begin only by tabulations
+Error (line 59): bad indentation
+Error (line 60): must begin only by tabulations
+Error (line 60): bad indentation
+Error (line 61): bad indentation
+Error (line 61): must begin only by tabulations
+Error (line 61, col 11): missing parentheses in return statement
+Error (line 63): Space before function name
+Error (line 63): bad spacing before init_array
+Error (line 63): declarations in init_array are bad aligned
+Error (line 63): declarations must be followed by one empty line in init_array
+Error (line 65): bad indentation
+Error (line 65): must begin only by tabulations
+Error (line 65, col 8): i is instanciated during declaration
+Error (line 66): must begin only by tabulations
+Error (line 66): bad indentation
+Error (line 66, col 10): bad spacing
+Error (line 67): bad indentation
+Error (line 67): must begin only by tabulations
+Error (line 67, col 4): missing space after if
+Error (line 68): bad indentation
+Error (line 68): must begin only by tabulations
+Error (line 69): bad indentation
+Error (line 69): must begin only by tabulations
+Error (line 70): bad indentation
+Error (line 70): must begin only by tabulations
+Error (line 71): must begin only by tabulations
+Error (line 71): bad indentation
+Error (line 72): must begin only by tabulations
+Error (line 72): bad indentation
+Error (line 73): must begin only by tabulations
+Error (line 73): bad indentation
+Error (line 74): must begin only by tabulations
+Error (line 74): bad indentation
+Error (line 75): bad indentation
+Error (line 75): must begin only by tabulations
+Error (line 75, col 12): missing parentheses in return statement
+Error (line 78): Space before function name
+Error (line 78): Space before function name
+Error (line 78, col 10): bad spacing
+Error (line 80): must begin only by tabulations
+Error (line 80): bad indentation
+Error (line 81): bad indentation
+Error (line 81): must begin only by tabulations
+Error (line 81, col 15): missing parentheses in return statement
+Error (line 82): must begin only by tabulations
+Error (line 82): bad indentation
+Error (line 83): must begin only by tabulations
+Error (line 83): bad indentation
+Error (line 83): spaces at the end of line
+Error (line 83, col 15): missing parentheses in return statement
+Error (line 86): declarations must be followed by one empty line in is_relative_path
+Error (line 86): Space before function name
+Error (line 88): must begin only by tabulations
+Error (line 88): bad indentation
+Error (line 88, col 7): bad spacing
+Error (line 88, col 12): i is instanciated during declaration
+Error (line 89): must begin only by tabulations
+Error (line 89): bad indentation
+Error (line 90): must begin only by tabulations
+Error (line 90): bad indentation
+Error (line 91): bad indentation
+Error (line 91): must begin only by tabulations
+Error (line 92): must begin only by tabulations
+Error (line 92): bad indentation
+Error (line 92, col 19): missing parentheses in return statement
+Error (line 93): must begin only by tabulations
+Error (line 93): bad indentation
+Error (line 94): bad indentation
+Error (line 94): must begin only by tabulations
+Error (line 95): bad indentation
+Error (line 95): must begin only by tabulations
+Error (line 95, col 11): missing parentheses in return statement
+Error (line 98): Space before function name
+Error (line 98): Space before function name
+Error (line 98, col 6): bad spacing
+Error (line 100): must begin only by tabulations
+Error (line 100): bad indentation
+Error (line 102): must begin only by tabulations
+Error (line 102): bad indentation
+Error (line 103): bad indentation
+Error (line 103): must begin only by tabulations
+Error (line 104): bad indentation
+Error (line 104): must begin only by tabulations
+Error (line 105): bad indentation
+Error (line 105): missing newline after if
+Error (line 105): must begin only by tabulations
+Error (line 105, col 14): no newline before block
+Error (line 106): bad indentation
+Error (line 106): must begin only by tabulations
+Error (line 107): must begin only by tabulations
+Error (line 107): bad indentation
+Error (line 108): must begin only by tabulations
+Error (line 108): bad indentation
+Error (line 109): must begin only by tabulations
+Error (line 109): bad indentation
+Error (line 109, col 9): no newline before block
+Error (line 110): bad indentation
+Error (line 110): must begin only by tabulations
+Error (line 111): bad indentation
+Error (line 111): must begin only by tabulations
+Error (line 112): must begin only by tabulations
+Error (line 112): bad indentation
+Error (line 113): bad indentation
+Error (line 113): must begin only by tabulations
+Error (line 114, col 0): no newline after block
+Norme: srcs/builtin/set.c
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error (line 3): Space before function name
+Error (line 3): Space before function name
+Error (line 3): Space before function name
+Error (line 3): Bad spacing for argument com
+Error (line 3): Space before function name
+Error (line 3): Space before function name
+Error (line 3, col 3): bad spacing
+Error (line 3, col 22): bad spacing
+Error (line 5): must begin only by tabulations
+Error (line 5): spaces at the end of line
+Error (line 6, col 0): no newline after block
+Norme: srcs/autocomplete/print.c
+Error: file must end with a single empty line
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error (line 3): multiple empty lines
+Error (line 4): Space before function name
+Error (line 4): bad spacing before find_last
+Error (line 4): Space before function name
+Error (line 4, col 13): bad spacing
+Error (line 6): must begin only by tabulations
+Error (line 6): bad indentation
+Error (line 8): bad indentation
+Error (line 8): must begin only by tabulations
+Error (line 9): must begin only by tabulations
+Error (line 9): bad indentation
+Error (line 10): bad indentation
+Error (line 10): must begin only by tabulations
+Error (line 10, col 15): missing parentheses in return statement
+Error (line 11): bad indentation
+Error (line 11): must begin only by tabulations
+Error (line 12): bad indentation
+Error (line 12): must begin only by tabulations
+Error (line 13): bad indentation
+Error (line 13): must begin only by tabulations
+Error (line 13, col 11): missing parentheses in return statement
+Error (line 16): function print_words has 32 lines
+Error (line 16): Space before function name
+Error (line 16): declarations in print_words must be at the top of the function
+Error (line 16): Space before function name
+Error (line 16): Space before function name
+Error (line 16): Space before function name
+Error (line 16, col 4): bad spacing
+Error (line 18): must begin only by tabulations
+Error (line 18): bad indentation
+Error (line 19): must begin only by tabulations
+Error (line 19): bad indentation
+Error (line 20): C++ comment
+Error (line 20): bad indentation
+Error (line 20): must begin only by tabulations
+Error (line 21): must begin only by tabulations
+Error (line 21): C++ comment
+Error (line 21): bad indentation
+Error (line 22): bad indentation
+Error (line 22): must begin only by tabulations
+Error (line 23): bad indentation
+Error (line 23): must begin only by tabulations
+Error (line 24): must begin only by tabulations
+Error (line 24): bad indentation
+Error (line 25): must begin only by tabulations
+Error (line 25): bad indentation
+Error (line 26): bad indentation
+Error (line 26): must begin only by tabulations
+Error (line 26): missing newline after if
+Error (line 26, col 23): no newline before block
+Error (line 27): bad indentation
+Error (line 27): must begin only by tabulations
+Error (line 28): bad indentation
+Error (line 28): must begin only by tabulations
+Error (line 29): must begin only by tabulations
+Error (line 29): bad indentation
+Error (line 29): missing newline after if
+Error (line 29, col 8): no newline after block
+Error (line 29, col 31): no newline before block
+Error (line 30): bad indentation
+Error (line 30): must begin only by tabulations
+Error (line 31): must begin only by tabulations
+Error (line 31): bad indentation
+Error (line 32): must begin only by tabulations
+Error (line 32): bad indentation
+Error (line 33): bad indentation
+Error (line 33): must begin only by tabulations
+Error (line 34): bad indentation
+Error (line 34): must begin only by tabulations
+Error (line 35): bad indentation
+Error (line 35): must begin only by tabulations
+Error (line 35): missing newline after if
+Error (line 35, col 28): no newline before block
+Error (line 36): bad indentation
+Error (line 36): must begin only by tabulations
+Error (line 37): must begin only by tabulations
+Error (line 37): bad indentation
+Error (line 38): bad indentation
+Error (line 38): must begin only by tabulations
+Error (line 39): must begin only by tabulations
+Error (line 39): bad indentation
+Error (line 40): must begin only by tabulations
+Error (line 40): bad indentation
+Error (line 40, col 8): i is instanciated during declaration
+Error (line 41): C++ comment
+Error (line 42): must begin only by tabulations
+Error (line 42): bad indentation
+Error (line 43): must begin only by tabulations
+Error (line 43): bad indentation
+Error (line 44): missing newline after if
+Error (line 44): must begin only by tabulations
+Error (line 44): bad indentation
+Error (line 44, col 26): no newline before block
+Error (line 45): bad indentation
+Error (line 45): must begin only by tabulations
+Error (line 46): bad indentation
+Error (line 46): must begin only by tabulations
+Error (line 47): bad indentation
+Error (line 47): must begin only by tabulations
+Error (line 48): must begin only by tabulations
+Error (line 48): bad indentation
+Error (line 49): must begin only by tabulations
+Error (line 49): bad indentation
+Error (line 49): C++ comment
+Error (line 52): function print_varians has 40 lines
+Error (line 52): Space before function name
+Error (line 52): declarations in print_varians are bad aligned
+Error (line 52): Space before function name
+Error (line 52): declarations must be followed by one empty line in print_varians
+Error (line 52): declarations in print_varians must be at the top of the function
+Error (line 52): Space before function name
+Error (line 52): Space before function name
+Error (line 52, col 0): print_varians has 8 variables
+Error (line 52, col 4): bad spacing
+Error (line 54): bad indentation
+Error (line 54): must begin only by tabulations
+Error (line 54, col 12): curs is instanciated during declaration
+Error (line 55): bad indentation
+Error (line 55): must begin only by tabulations
+Error (line 55, col 7): bad spacing
+Error (line 55, col 12): size is instanciated during declaration
+Error (line 56): must begin only by tabulations
+Error (line 56): bad indentation
+Error (line 56, col 7): bad spacing
+Error (line 56, col 12): max is instanciated during declaration
+Error (line 58): bad indentation
+Error (line 58): must begin only by tabulations
+Error (line 58, col 7): bad spacing
+Error (line 58, col 12): cols is instanciated during declaration
+Error (line 59): bad indentation
+Error (line 59): must begin only by tabulations
+Error (line 59, col 7): bad spacing
+Error (line 61): bad indentation
+Error (line 61): must begin only by tabulations
+Error (line 63): must begin only by tabulations
+Error (line 63): bad indentation
+Error (line 64): must begin only by tabulations
+Error (line 64): bad indentation
+Error (line 65): must begin only by tabulations
+Error (line 65): bad indentation
+Error (line 66): bad indentation
+Error (line 66): must begin only by tabulations
+Error (line 67): must begin only by tabulations
+Error (line 67): bad indentation
+Error (line 68): bad indentation
+Error (line 68): must begin only by tabulations
+Error (line 69): bad indentation
+Error (line 69): must begin only by tabulations
+Error (line 70): must begin only by tabulations
+Error (line 70): bad indentation
+Error (line 71): must begin only by tabulations
+Error (line 71): bad indentation
+Error (line 72): must begin only by tabulations
+Error (line 72): bad indentation
+Error (line 73): bad indentation
+Error (line 73): must begin only by tabulations
+Error (line 74): bad indentation
+Error (line 74): must begin only by tabulations
+Error (line 74, col 7): bad spacing
+Error (line 74, col 12): i is instanciated during declaration
+Error (line 75): bad indentation
+Error (line 75): must begin only by tabulations
+Error (line 76): bad indentation
+Error (line 76): must begin only by tabulations
+Error (line 77): must begin only by tabulations
+Error (line 77): bad indentation
+Error (line 78): must begin only by tabulations
+Error (line 78): bad indentation
+Error (line 79): bad indentation
+Error (line 79): must begin only by tabulations
+Error (line 80): bad indentation
+Error (line 80): must begin only by tabulations
+Error (line 81): must begin only by tabulations
+Error (line 81): bad indentation
+Error (line 82): must begin only by tabulations
+Error (line 82): bad indentation
+Error (line 83): bad indentation
+Error (line 83): must begin only by tabulations
+Error (line 84): must begin only by tabulations
+Error (line 84): bad indentation
+Error (line 85): bad indentation
+Error (line 85): must begin only by tabulations
+Error (line 86): must begin only by tabulations
+Error (line 86): bad indentation
+Error (line 86): missing newline after if
+Error (line 86, col 23): no newline before block
+Error (line 87): 2 instructions
+Error (line 87): bad indentation
+Error (line 87): must begin only by tabulations
+Error (line 88): must begin only by tabulations
+Error (line 88): bad indentation
+Error (line 89): bad indentation
+Error (line 89): must begin only by tabulations
+Error (line 90): bad indentation
+Error (line 90): must begin only by tabulations
+Error (line 91): bad indentation
+Error (line 91): must begin only by tabulations
+Error (line 92): must begin only by tabulations
+Error (line 92): bad indentation
+Error (line 93): bad indentation
+Error (line 93): must begin only by tabulations
+Error (line 94, col 0): no newline after block
+Norme: srcs/builtin/type.c
+Error: file must end with a single empty line
+Error: 42 header not at top of the file
+Error: global scope bad aligned
+Error (line 3): multiple empty lines
+Error (line 4): declarations must be followed by one empty line in compare_bultin
+Error (line 4): Space before function name
+Error (line 4): bad spacing before compare_bultin
+Error (line 6): must begin only by tabulations
+Error (line 6): bad indentation
+Error (line 6, col 7): bad spacing
+Error (line 6, col 12): i is instanciated during declaration
+Error (line 7): bad indentation
+Error (line 7): must begin only by tabulations
+Error (line 7, col 8): bad spacing
+Error (line 7, col 13): arr is instanciated during declaration
+Error (line 8): must begin only by tabulations
+Error (line 9): must begin only by tabulations
+Error (line 10): must begin only by tabulations
+Error (line 11): must begin only by tabulations
+Error (line 12): must begin only by tabulations
+Error (line 13): must begin only by tabulations
+Error (line 14): must begin only by tabulations
+Error (line 15): must begin only by tabulations
+Error (line 16): must begin only by tabulations
+Error (line 17): must begin only by tabulations
+Error (line 18): must begin only by tabulations
+Error (line 18): bad indentation
+Error (line 18, col 12): missing space around <
+Error (line 19): must begin only by tabulations
+Error (line 19): bad indentation
+Error (line 20): must begin only by tabulations
+Error (line 20): bad indentation
+Error (line 21): bad indentation
+Error (line 21): must begin only by tabulations
+Error (line 21, col 19): missing parentheses in return statement
+Error (line 22): must begin only by tabulations
+Error (line 22): bad indentation
+Error (line 23): must begin only by tabulations
+Error (line 23): bad indentation
+Error (line 24): must begin only by tabulations
+Error (line 24): bad indentation
+Error (line 24, col 11): missing parentheses in return statement
+Error (line 27): Space before function name
+Error (line 27): Space before function name
+Error (line 27): Space before function name
+Error (line 27): Space before function name
+Error (line 27): Space before function name
+Error (line 27, col 3): bad spacing
+Error (line 29): must begin only by tabulations
+Error (line 29): bad indentation
+Error (line 29, col 8): bad spacing
+Error (line 31): bad indentation
+Error (line 31): must begin only by tabulations
+Error (line 32): bad indentation
+Error (line 32): must begin only by tabulations
+Error (line 33): bad indentation
+Error (line 33): must begin only by tabulations
+Error (line 33, col 15): missing parentheses in return statement
+Error (line 34): bad indentation
+Error (line 34): must begin only by tabulations
+Error (line 35): must begin only by tabulations
+Error (line 35): bad indentation
+Error (line 35, col 15): missing parentheses in return statement
+Error (line 36): bad indentation
+Error (line 36): missing newline after if
+Error (line 36): must begin only by tabulations
+Error (line 36, col 32): no newline before block
+Error (line 37): must begin only by tabulations
+Error (line 37): bad indentation
+Error (line 38): bad indentation
+Error (line 38): must begin only by tabulations
+Error (line 38, col 15): missing parentheses in return statement
+Error (line 39): bad indentation
+Error (line 39): must begin only by tabulations
+Error (line 40): must begin only by tabulations
+Error (line 40): missing newline after if
+Error (line 40): bad indentation
+Error (line 40, col 40): no newline before block
+Error (line 41): must begin only by tabulations
+Error (line 41): bad indentation
+Error (line 42): must begin only by tabulations
+Error (line 42): bad indentation
+Error (line 42, col 15): missing parentheses in return statement
+Error (line 43): bad indentation
+Error (line 43): must begin only by tabulations
+Error (line 44): must begin only by tabulations
+Error (line 44): bad indentation
+Error (line 44, col 11): missing parentheses in return statement
+Error (line 45, col 0): no newline after block
+Norme: srcs/controls/controls.c
+Error: 8 functions in the file
+Error: global scope bad aligned
+Error: file must end with a single empty line
+Error: 42 header not at top of the file
+Error (line 5): bad indentation
+Error (line 6): bad indentation
+Error (line 6, col 8): Spacing after call to tputs
+Error (line 6, col 15): Spacing after call to tgoto
+Error (line 7): bad indentation
+Error (line 20): Space before function name
+Error (line 40): bad spacing after is_printable
+Error (line 40): Space before function name
+Error (line 43, col 9): missing parentheses in return statement
+Error (line 45, col 9): missing parentheses in return statement
+Error (line 46, col 8): missing parentheses in return statement
+Error (line 48): Space before function name
+Error (line 48): declarations must be followed by one empty line in read_key
+Error (line 48): function read_key has 55 lines
+Error (line 48): bad spacing before read_key
+Error (line 48, col 3): bad spacing
+Error (line 52, col 9): missing parentheses in return statement
+Error (line 54, col 9): missing parentheses in return statement
+Error (line 57, col 9): missing parentheses in return statement
+Error (line 82, col 22): space before )
+Error (line 97): bad indentation
+Error (line 99): bad indentation
+Error (line 101): bad indentation
+Error (line 105, col 0): no newline after block
+Norme: srcs/controls/jump_words.c
+Error: 42 header not at top of the file
+Error (line 3): declarations must be followed by one empty line in go_next_word
+Error (line 3): declarations in go_next_word must be at the top of the function
+Error (line 3): Space before function name
+Error (line 5, col 5): abs is instanciated during declaration
+Error (line 7, col 5): curs is instanciated during declaration
+Error (line 14): missing newline after if
+Error (line 14, col 23): no newline before block
+Error (line 16): C++ comment
+Error (line 20): declarations in go_prev_word must be at the top of the function
+Error (line 20): declarations must be followed by one empty line in go_prev_word
+Error (line 20): Space before function name
+Error (line 22, col 5): abs is instanciated during declaration
+Error (line 24, col 5): curs is instanciated during declaration
+Error (line 37): C++ comment
+Error (line 37): bad indentation
+Error (line 38): C++ comment
+Norme: srcs/exec/builtin_fd.c
+Warning: srcs/exec/builtin_fd.c may not compile or is invalid for some reasons.
+Norme: srcs/main.c
+Error: 42 header not at top of the file
+Error (line 1): preprocessor block must be followed by one empty line
+Error (line 4): declarations in main are bad aligned
+Error (line 4): function main has 39 lines
+Error (line 4): declarations must be followed by one empty line in main
+Error (line 4): declarations in main must be at the top of the function
+Error (line 4, col 0): main has 7 variables
+Error (line 24): missing newline after if
+Error (line 24, col 13): no newline before block
+Error (line 29, col 2): no newline after block
+Error (line 34): bad indentation
+Error (line 34): must begin only by tabulations
+Error (line 35): must begin only by tabulations
+Error (line 35): bad indentation
+Error (line 36): bad indentation
+Error (line 36): must begin only by tabulations
+Error (line 37): must begin only by tabulations
+Error (line 37): bad indentation
+Error (line 38): must begin only by tabulations
+Error (line 38): bad indentation
+Norme: srcs/controls/cut_paste.c
+Error: file must end with a single empty line
+Error: 42 header not at top of the file
+Error (line 7, col 4): bad spacing
+Error (line 7, col 6): abs is instanciated during declaration
+Error (line 15, col 1): missing space after while
+Error (line 17, col 1): missing space after while
+Error (line 28, col 4): bad spacing
+Error (line 28, col 6): abs is instanciated during declaration
+Error (line 36, col 1): missing space after while
+Error (line 38, col 1): missing space after while
+Error (line 40): C++ comment
+Error (line 51, col 4): bad spacing
+Error (line 51, col 6): abs is instanciated during declaration
+Error (line 62): declarations must be followed by one empty line in cut_before
+Error (line 65, col 7): bad spacing
+Error (line 65, col 10): abs is instanciated during declaration
+Error (line 79): C++ comment
+Error (line 79): declarations in yank_buffer are bad aligned
+Error (line 83, col 4): bad spacing
+Error (line 83, col 6): abs is instanciated during declaration
+Error (line 89): C++ comment
+Error (line 100, col 0): no newline after block
+Norme: srcs/controls/heredoc.c
+Error: file must end with a single empty line
+Error: global scope bad aligned
+Error: 6 functions in the file
+Error: 42 header not at top of the file
+Error (line 12): must begin only by tabulations
+Error (line 12): bad indentation
+Error (line 14): must begin only by tabulations
+Error (line 14): bad indentation
+Error (line 14, col 11): missing parentheses in return statement
+Error (line 21): missing newline after if
+Error (line 21, col 11): no newline before block
+Error (line 28, col 6): no newline before block
+Error (line 35): declarations must be followed by one empty line in trim_inword
+Error (line 35): bad spacing after trim_inword
+Error (line 35): Space before function name
+Error (line 37, col 7): ret is instanciated during declaration
+Error (line 38, col 6): i is instanciated during declaration
+Error (line 39, col 6): j is instanciated during declaration
+Error (line 45): missing newline after if
+Error (line 45, col 43): no newline before block
+Error (line 52, col 9): missing parentheses in return statement
+Error (line 54, col 8): missing parentheses in return statement
+Error (line 56): declarations must be followed by one empty line in grub_eot
+Error (line 56): function grub_eot has 29 lines
+Error (line 56): bad spacing before grub_eot
+Error (line 58, col 7): eot is instanciated during declaration
+Error (line 58, col 10): missing space around =
+Error (line 59, col 6): count is instanciated during declaration
+Error (line 60, col 6): size is instanciated during declaration
+Error (line 61, col 7): eot2 is instanciated during declaration
+Error (line 62): missing newline after while
+Error (line 62, col 1): missing space after while
+Error (line 62, col 23): no newline before block
+Error (line 69): missing newline after if
+Error (line 69, col 42): no newline before block
+Error (line 70): missing newline after if
+Error (line 70, col 19): no newline before block
+Error (line 86, col 8): missing parentheses in return statement
+Error (line 93, col 6): ret is instanciated during declaration
+Error (line 97): comment not well formatted
+Error (line 97): comment not well placed
+Error (line 97, col 9): missing parentheses in return statement
+Error (line 101): missing newline after if
+Error (line 101, col 18): no newline before block
+Error (line 107, col 8): missing parentheses in return statement
+Error (line 110): Space before function name
+Error (line 112): bad indentation
+Error (line 112): must begin only by tabulations
+Error (line 113): bad indentation
+Error (line 113): must begin only by tabulations
+Error (line 115): must begin only by tabulations
+Error (line 115): bad indentation
+Error (line 116): bad indentation
+Error (line 116): must begin only by tabulations
+Error (line 118): must begin only by tabulations
+Error (line 118): bad indentation
+Error (line 119): bad indentation
+Error (line 119): must begin only by tabulations
+Error (line 120): bad indentation
+Error (line 120): must begin only by tabulations
+Error (line 121): must begin only by tabulations
+Error (line 121): bad indentation
+Error (line 123): bad indentation
+Error (line 123): must begin only by tabulations
+Error (line 125): bad indentation
+Error (line 125): must begin only by tabulations
+Error (line 126): missing newline after if
+Error (line 126, col 11): no newline before block
+Error (line 130): must begin only by tabulations
+Error (line 130): bad indentation
+Error (line 132): must begin only by tabulations
+Error (line 132): bad indentation
+Error (line 132, col 11): missing parentheses in return statement
+Error (line 135): comment not well formatted
+Norme: srcs/tokens/semantica.c
+Error: file must end with a single empty line
+Error: 42 header not at top of the file
+Error (line 3): Space before function name
+Error (line 3, col 4): bad spacing
+Error (line 29): Space before function name
+Error (line 29, col 3): bad spacing
+Error (line 31): missing newline after if
+Error (line 32): line has 91 characters
+Error (line 33): C++ comment
+Error (line 33): line has 89 characters
+Error (line 39): line has 117 characters
+Error (line 39): C++ comment
+Error (line 42): line has 170 characters
+Error (line 42, col 124): missing space around +
+Error (line 54): comment not well placed
+Error (line 54): comment not well formatted
+Error (line 55, col 0): no newline after block
+Norme: srcs/utils/misc.c
+Error: 42 header not at top of the file
+Error: global scope bad aligned
+Error (line 3): Space before function name
+Error (line 16, col 10): missing parentheses in return statement
+Error (line 19, col 8): missing parentheses in return statement
+Error (line 22): bad spacing after ft_concat
+Error (line 30): bad spacing after ft_strclr
+Error (line 30): bad spacing before ft_strclr
+Error (line 43): bad spacing before get_full_path
+Norme: srcs/builtin/cd.c
+Error: 6 functions in the file
+Error: file must end with a single empty line
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error (line 6): Empty line
+Error (line 16): declarations in change_working_dir must be at the top of the function
+Error (line 19): C++ comment
+Error (line 37): bad indentation
+Error (line 56): declarations in create_path must be at the top of the function
+Error (line 56): declarations must be followed by one empty line in create_path
+Error (line 56): function create_path has 56 lines
+Error (line 56, col 0): create_path has 7 variables
+Error (line 58, col 8): sep is instanciated during declaration
+Error (line 59, col 7): curpath is instanciated during declaration
+Error (line 60, col 6): path is instanciated during declaration
+Error (line 61, col 7): pwd is instanciated during declaration
+Error (line 62, col 8): curs is instanciated during declaration
+Error (line 63, col 6): i is instanciated during declaration
+Error (line 65): missing newline after if
+Error (line 65, col 37): no newline before block
+Error (line 84, col 6): j is instanciated during declaration
+Error (line 102, col 7): no newline before block
+Error (line 116): spaces at the end of line
+Error (line 125, col 12): bad spacing
+Error (line 132): line has 86 characters
+Error (line 132): comment not well placed
+Error (line 132): comment not well formatted
+Error (line 137): function sh_cd has 32 lines
+Error (line 137): declarations in sh_cd are bad aligned
+Error (line 149): missing newline after if
+Error (line 149, col 34): no newline before block
+Error (line 162): missing newline after if
+Error (line 162, col 14): no newline before block
+Error (line 171, col 0): no newline after block
+Norme: srcs/controls/arrow_movement.c
+Error: file must end with a single empty line
+Error: 42 header not at top of the file
+Error (line 3): Space before function name
+Error (line 11): Space before function name
+Error (line 13, col 1): missing space after if
+Error (line 14): bad indentation
+Error (line 19): Space before function name
+Error (line 19): declarations in change_line_down are bad aligned
+Error (line 19): declarations in change_line_down must be at the top of the function
+Error (line 25, col 5): tmp is instanciated during declaration
+Error (line 36): declarations in change_line_up must be at the top of the function
+Error (line 36): declarations in change_line_up are bad aligned
+Error (line 36): Space before function name
+Error (line 42, col 5): tmp is instanciated during declaration
+Error (line 44): C++ comment
+Error (line 44): bad indentation
+Error (line 45): C++ comment
+Error (line 45): bad indentation
+Error (line 54, col 0): no newline after block
+Norme: srcs/exec/build_path.c
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error (line 3): declarations must be followed by one empty line in check_rights
+Error (line 10): missing newline after if
+Error (line 10, col 10): no newline before block
+Error (line 30): function is_system_wide has 26 lines
+Error (line 56): bad indentation
+Error (line 57, col 8): missing parentheses in return statement
+Error (line 66, col 9): missing parentheses in return statement
+Error (line 68, col 9): missing parentheses in return statement
+Error (line 75, col 9): missing parentheses in return statement
+Error (line 76): missing newline after if
+Error (line 76, col 19): no newline before block
+Error (line 80, col 8): missing parentheses in return statement
+Error (line 91, col 9): missing parentheses in return statement
+Error (line 93, col 9): missing parentheses in return statement
+Error (line 95, col 9): missing parentheses in return statement
+Error (line 97, col 9): missing parentheses in return statement
+Error (line 99, col 8): missing parentheses in return statement
+Error (line 100, col 0): no newline after block
+Norme: srcs/autocomplete/auto_trie.c
+Error: 42 header not at top of the file
+Error: global scope bad aligned
+Error: file must end with a single empty line
+Error (line 3): Space before function name
+Error (line 3): Space before function name
+Error (line 3): function get_to_the_diversion has 35 lines
+Error (line 3): Space before function name
+Error (line 3): Space before function name
+Error (line 3, col 3): bad spacing
+Error (line 5): must begin only by tabulations
+Error (line 5): bad indentation
+Error (line 6): bad indentation
+Error (line 6): must begin only by tabulations
+Error (line 6, col 8): ret is instanciated during declaration
+Error (line 8): must begin only by tabulations
+Error (line 8): bad indentation
+Error (line 9): must begin only by tabulations
+Error (line 9): bad indentation
+Error (line 10): bad indentation
+Error (line 10): must begin only by tabulations
+Error (line 10, col 15): missing parentheses in return statement
+Error (line 11): bad indentation
+Error (line 11): C++ comment
+Error (line 11): must begin only by tabulations
+Error (line 12): C++ comment
+Error (line 12): must begin only by tabulations
+Error (line 12): bad indentation
+Error (line 13): bad indentation
+Error (line 13): C++ comment
+Error (line 13): must begin only by tabulations
+Error (line 14): must begin only by tabulations
+Error (line 14): bad indentation
+Error (line 15): must begin only by tabulations
+Error (line 15): bad indentation
+Error (line 16): bad indentation
+Error (line 16): must begin only by tabulations
+Error (line 17): must begin only by tabulations
+Error (line 17): bad indentation
+Error (line 18): must begin only by tabulations
+Error (line 18): bad indentation
+Error (line 19): bad indentation
+Error (line 19): must begin only by tabulations
+Error (line 19): C++ comment
+Error (line 20): bad indentation
+Error (line 20): must begin only by tabulations
+Error (line 20, col 15): missing parentheses in return statement
+Error (line 21): must begin only by tabulations
+Error (line 21): bad indentation
+Error (line 22): must begin only by tabulations
+Error (line 22): bad indentation
+Error (line 23): bad indentation
+Error (line 23): must begin only by tabulations
+Error (line 24): bad indentation
+Error (line 24): must begin only by tabulations
+Error (line 25): bad indentation
+Error (line 25): must begin only by tabulations
+Error (line 26): bad indentation
+Error (line 26): must begin only by tabulations
+Error (line 26, col 15): missing parentheses in return statement
+Error (line 27): bad indentation
+Error (line 27): must begin only by tabulations
+Error (line 28): bad indentation
+Error (line 28): must begin only by tabulations
+Error (line 28): spaces at the end of line
+Error (line 28, col 4): no newline after block
+Error (line 29): must begin only by tabulations
+Error (line 29): bad indentation
+Error (line 29, col 15): missing parentheses in return statement
+Error (line 30): bad indentation
+Error (line 30): must begin only by tabulations
+Error (line 31): bad indentation
+Error (line 31): must begin only by tabulations
+Error (line 32): must begin only by tabulations
+Error (line 32): bad indentation
+Error (line 33): must begin only by tabulations
+Error (line 33): bad indentation
+Error (line 34): must begin only by tabulations
+Error (line 34): bad indentation
+Error (line 35): must begin only by tabulations
+Error (line 35): bad indentation
+Error (line 36): must begin only by tabulations
+Error (line 36): bad indentation
+Error (line 36, col 19): missing parentheses in return statement
+Error (line 37): must begin only by tabulations
+Error (line 37): bad indentation
+Error (line 38): bad indentation
+Error (line 38): must begin only by tabulations
+Error (line 39): must begin only by tabulations
+Error (line 39): bad indentation
+Error (line 39, col 11): missing parentheses in return statement
+Error (line 42): Space before function name
+Error (line 42): declarations in check_existence are bad aligned
+Error (line 42): Space before function name
+Error (line 42): function check_existence has 27 lines
+Error (line 42, col 6): bad spacing
+Error (line 44): bad indentation
+Error (line 44): must begin only by tabulations
+Error (line 44, col 8): value is instanciated during declaration
+Error (line 45): bad indentation
+Error (line 45): must begin only by tabulations
+Error (line 45, col 8): ret is instanciated during declaration
+Error (line 46): bad indentation
+Error (line 46): must begin only by tabulations
+Error (line 46, col 7): bad spacing
+Error (line 46, col 12): size is instanciated during declaration
+Error (line 47): must begin only by tabulations
+Error (line 47): bad indentation
+Error (line 47, col 8): i is instanciated during declaration
+Error (line 48): bad indentation
+Error (line 48): must begin only by tabulations
+Error (line 50): must begin only by tabulations
+Error (line 50): bad indentation
+Error (line 51): must begin only by tabulations
+Error (line 51): bad indentation
+Error (line 52): bad indentation
+Error (line 52): must begin only by tabulations
+Error (line 53): bad indentation
+Error (line 53): must begin only by tabulations
+Error (line 54): must begin only by tabulations
+Error (line 54): bad indentation
+Error (line 55): must begin only by tabulations
+Error (line 55): bad indentation
+Error (line 55, col 19): missing parentheses in return statement
+Error (line 56): bad indentation
+Error (line 56): must begin only by tabulations
+Error (line 56): missing newline after if
+Error (line 56, col 23): no newline before block
+Error (line 57): must begin only by tabulations
+Error (line 57): bad indentation
+Error (line 58): bad indentation
+Error (line 58): must begin only by tabulations
+Error (line 59): missing newline after if
+Error (line 59): must begin only by tabulations
+Error (line 59): bad indentation
+Error (line 59, col 22): no newline before block
+Error (line 60): must begin only by tabulations
+Error (line 60): bad indentation
+Error (line 61): must begin only by tabulations
+Error (line 61): bad indentation
+Error (line 61, col 23): missing parentheses in return statement
+Error (line 62): bad indentation
+Error (line 62): must begin only by tabulations
+Error (line 63): must begin only by tabulations
+Error (line 63): bad indentation
+Error (line 63, col 19): missing parentheses in return statement
+Error (line 64): bad indentation
+Error (line 64): must begin only by tabulations
+Error (line 65): bad indentation
+Error (line 65): must begin only by tabulations
+Error (line 66): bad indentation
+Error (line 66): must begin only by tabulations
+Error (line 67): must begin only by tabulations
+Error (line 67): bad indentation
+Error (line 68): must begin only by tabulations
+Error (line 68): bad indentation
+Error (line 69): bad indentation
+Error (line 69): must begin only by tabulations
+Error (line 70): bad indentation
+Error (line 70): must begin only by tabulations
+Error (line 70, col 11): missing parentheses in return statement
+Error (line 73): function search_trie has 46 lines
+Error (line 73): Space before function name
+Error (line 73): Space before function name
+Error (line 73): declarations must be followed by one empty line in search_trie
+Error (line 73): declarations in search_trie are bad aligned
+Error (line 73, col 0): search_trie has 9 variables
+Error (line 73, col 4): bad spacing
+Error (line 75): must begin only by tabulations
+Error (line 75): bad indentation
+Error (line 75, col 10): bad spacing
+Error (line 76): bad indentation
+Error (line 76): must begin only by tabulations
+Error (line 76, col 7): bad spacing
+Error (line 76, col 12): j is instanciated during declaration
+Error (line 77): bad indentation
+Error (line 77): must begin only by tabulations
+Error (line 77, col 7): bad spacing
+Error (line 77, col 12): i is instanciated during declaration
+Error (line 78): must begin only by tabulations
+Error (line 78): bad indentation
+Error (line 78, col 9): bad spacing
+Error (line 79): bad indentation
+Error (line 79): must begin only by tabulations
+Error (line 79, col 8): bad spacing
+Error (line 80): bad indentation
+Error (line 80): must begin only by tabulations
+Error (line 80, col 8): bad spacing
+Error (line 80, col 13): ret is instanciated during declaration
+Error (line 81): must begin only by tabulations
+Error (line 81): bad indentation
+Error (line 81, col 7): bad spacing
+Error (line 81, col 12): index is instanciated during declaration
+Error (line 82): bad indentation
+Error (line 82): must begin only by tabulations
+Error (line 82, col 7): bad spacing
+Error (line 82, col 12): res is instanciated during declaration
+Error (line 83): must begin only by tabulations
+Error (line 83): bad indentation
+Error (line 83, col 7): bad spacing
+Error (line 83, col 12): cost is instanciated during declaration
+Error (line 85): multiple empty lines
+Error (line 85): Empty line
+Error (line 86): must begin only by tabulations
+Error (line 86): bad indentation
+Error (line 87): bad indentation
+Error (line 87): must begin only by tabulations
+Error (line 88): must begin only by tabulations
+Error (line 88): missing newline after if
+Error (line 88): bad indentation
+Error (line 88, col 15): no newline before block
+Error (line 89): bad indentation
+Error (line 89): must begin only by tabulations
+Error (line 90): bad indentation
+Error (line 90): must begin only by tabulations
+Error (line 90, col 15): missing parentheses in return statement
+Error (line 91): bad indentation
+Error (line 91): must begin only by tabulations
+Error (line 92): missing newline after if
+Error (line 92): bad indentation
+Error (line 92): must begin only by tabulations
+Error (line 92, col 20): no newline before block
+Error (line 93): must begin only by tabulations
+Error (line 93): bad indentation
+Error (line 94): bad indentation
+Error (line 94): must begin only by tabulations
+Error (line 95): bad indentation
+Error (line 95): must begin only by tabulations
+Error (line 96): must begin only by tabulations
+Error (line 96): bad indentation
+Error (line 97): must begin only by tabulations
+Error (line 97): bad indentation
+Error (line 98): bad indentation
+Error (line 98): must begin only by tabulations
+Error (line 99): must begin only by tabulations
+Error (line 99): missing newline after if
+Error (line 99): bad indentation
+Error (line 99, col 34): no newline before block
+Error (line 100): bad indentation
+Error (line 100): must begin only by tabulations
+Error (line 101): bad indentation
+Error (line 101): must begin only by tabulations
+Error (line 102): bad indentation
+Error (line 102): missing newline after if
+Error (line 102): must begin only by tabulations
+Error (line 102, col 21): no newline before block
+Error (line 103): must begin only by tabulations
+Error (line 103): missing newline after if
+Error (line 103): bad indentation
+Error (line 103, col 27): no newline before block
+Error (line 104): must begin only by tabulations
+Error (line 104): bad indentation
+Error (line 105): bad indentation
+Error (line 105): must begin only by tabulations
+Error (line 106): must begin only by tabulations
+Error (line 106): bad indentation
+Error (line 107): must begin only by tabulations
+Error (line 107): bad indentation
+Error (line 108): bad indentation
+Error (line 108): must begin only by tabulations
+Error (line 109): must begin only by tabulations
+Error (line 109): bad indentation
+Error (line 110): must begin only by tabulations
+Error (line 110): bad indentation
+Error (line 111): bad indentation
+Error (line 111): must begin only by tabulations
+Error (line 111, col 15): missing parentheses in return statement
+Error (line 112): bad indentation
+Error (line 112): must begin only by tabulations
+Error (line 113): bad indentation
+Error (line 113): must begin only by tabulations
+Error (line 113, col 9): no newline before block
+Error (line 114): bad indentation
+Error (line 114): must begin only by tabulations
+Error (line 115): bad indentation
+Error (line 115): must begin only by tabulations
+Error (line 116): must begin only by tabulations
+Error (line 116): bad indentation
+Error (line 117): bad indentation
+Error (line 117): must begin only by tabulations
+Error (line 117, col 15): missing parentheses in return statement
+Error (line 118): must begin only by tabulations
+Error (line 118): bad indentation
+Error (line 119): spaces at the end of line
+Error (line 119): must begin only by tabulations
+Error (line 119): bad indentation
+Error (line 120): bad indentation
+Error (line 120): must begin only by tabulations
+Error (line 120, col 11): missing parentheses in return statement
+Error (line 123): Space before function name
+Error (line 123): declarations in check_for_dir must be at the top of the function
+Error (line 123): Space before function name
+Error (line 123): declarations in check_for_dir are bad aligned
+Error (line 123): Space before function name
+Error (line 123): Space before function name
+Error (line 123): function check_for_dir has 33 lines
+Error (line 123): Space before function name
+Error (line 123, col 3): bad spacing
+Error (line 125): must begin only by tabulations
+Error (line 125): bad indentation
+Error (line 125, col 8): bad spacing
+Error (line 125, col 12): path is instanciated during declaration
+Error (line 129): must begin only by tabulations
+Error (line 129): bad indentation
+Error (line 129, col 7): bad spacing
+Error (line 129, col 20): len is instanciated during declaration
+Error (line 130): bad indentation
+Error (line 130): must begin only by tabulations
+Error (line 131): must begin only by tabulations
+Error (line 131): bad indentation
+Error (line 132): must begin only by tabulations
+Error (line 132): bad indentation
+Error (line 133): bad indentation
+Error (line 133): must begin only by tabulations
+Error (line 134): bad indentation
+Error (line 134): 2 instructions
+Error (line 134): must begin only by tabulations
+Error (line 135): bad indentation
+Error (line 135): must begin only by tabulations
+Error (line 135, col 4): no newline after block
+Error (line 135, col 11): no newline before block
+Error (line 136): bad indentation
+Error (line 136): must begin only by tabulations
+Error (line 136, col 14): curr is instanciated during declaration
+Error (line 138): bad indentation
+Error (line 138): missing newline after if
+Error (line 138): must begin only by tabulations
+Error (line 138, col 43): no newline before block
+Error (line 139): bad indentation
+Error (line 139): must begin only by tabulations
+Error (line 140): must begin only by tabulations
+Error (line 140): bad indentation
+Error (line 141): bad indentation
+Error (line 141): must begin only by tabulations
+Error (line 142): bad indentation
+Error (line 142): must begin only by tabulations
+Error (line 143): must begin only by tabulations
+Error (line 143): bad indentation
+Error (line 144): must begin only by tabulations
+Error (line 144): bad indentation
+Error (line 145): must begin only by tabulations
+Error (line 145): bad indentation
+Error (line 146): bad indentation
+Error (line 146): must begin only by tabulations
+Error (line 147): must begin only by tabulations
+Error (line 147): bad indentation
+Error (line 148): must begin only by tabulations
+Error (line 148): bad indentation
+Error (line 149): must begin only by tabulations
+Error (line 150): bad indentation
+Error (line 150): must begin only by tabulations
+Error (line 151): missing newline after if
+Error (line 151): bad indentation
+Error (line 151): must begin only by tabulations
+Error (line 151, col 22): no newline before block
+Error (line 152): bad indentation
+Error (line 152): must begin only by tabulations
+Error (line 153): bad indentation
+Error (line 153): must begin only by tabulations
+Error (line 154): must begin only by tabulations
+Error (line 154): bad indentation
+Error (line 154, col 19): missing parentheses in return statement
+Error (line 155): bad indentation
+Error (line 155): must begin only by tabulations
+Error (line 156): must begin only by tabulations
+Error (line 156): bad indentation
+Error (line 157): bad indentation
+Error (line 157): must begin only by tabulations
+Error (line 157, col 11): missing parentheses in return statement
+Error (line 160): function autocomplete has 74 lines
+Error (line 160): declarations in autocomplete are bad aligned
+Error (line 160, col 0): autocomplete has 9 variables
+Error (line 162): spaces at the end of line
+Error (line 164): bad indentation
+Error (line 164): must begin only by tabulations
+Error (line 164, col 8): bad spacing
+Error (line 165): must begin only by tabulations
+Error (line 165): bad indentation
+Error (line 165, col 8): bad spacing
+Error (line 166): must begin only by tabulations
+Error (line 166): bad indentation
+Error (line 167): must begin only by tabulations
+Error (line 167): bad indentation
+Error (line 167, col 9): bad spacing
+Error (line 168): bad indentation
+Error (line 168): must begin only by tabulations
+Error (line 168, col 8): bad spacing
+Error (line 169): bad indentation
+Error (line 169): must begin only by tabulations
+Error (line 169, col 11): bad spacing
+Error (line 169, col 16): len is instanciated during declaration
+Error (line 170): must begin only by tabulations
+Error (line 170): bad indentation
+Error (line 170, col 7): bad spacing
+Error (line 170, col 12): com is instanciated during declaration
+Error (line 172): C++ comment
+Error (line 172): bad indentation
+Error (line 172): must begin only by tabulations
+Error (line 173): must begin only by tabulations
+Error (line 173): C++ comment
+Error (line 173): bad indentation
+Error (line 174): bad indentation
+Error (line 174): must begin only by tabulations
+Error (line 176): bad indentation
+Error (line 176): must begin only by tabulations
+Error (line 176, col 15): missing parentheses in return statement
+Error (line 177): bad indentation
+Error (line 177): must begin only by tabulations
+Error (line 177, col 9): bad spacing
+Error (line 178): must begin only by tabulations
+Error (line 178): bad indentation
+Error (line 179): Empty line
+Error (line 180): must begin only by tabulations
+Error (line 180): comment not well formatted
+Error (line 180): bad indentation
+Error (line 180): comment not well placed
+Error (line 181): missing newline after if
+Error (line 181): must begin only by tabulations
+Error (line 181): bad indentation
+Error (line 181, col 23): space before )
+Error (line 181, col 25): no newline before block
+Error (line 182): must begin only by tabulations
+Error (line 182): bad indentation
+Error (line 183): bad indentation
+Error (line 183): must begin only by tabulations
+Error (line 184): bad indentation
+Error (line 184): must begin only by tabulations
+Error (line 185): must begin only by tabulations
+Error (line 185): bad indentation
+Error (line 186): must begin only by tabulations
+Error (line 186): bad indentation
+Error (line 187): missing newline after if
+Error (line 187): must begin only by tabulations
+Error (line 187): bad indentation
+Error (line 187, col 25): no newline before block
+Error (line 188): bad indentation
+Error (line 188): must begin only by tabulations
+Error (line 189): bad indentation
+Error (line 189): must begin only by tabulations
+Error (line 190): bad indentation
+Error (line 190): must begin only by tabulations
+Error (line 191): must begin only by tabulations
+Error (line 191): bad indentation
+Error (line 192): bad indentation
+Error (line 192): must begin only by tabulations
+Error (line 193): must begin only by tabulations
+Error (line 193): bad indentation
+Error (line 194): bad indentation
+Error (line 194): must begin only by tabulations
+Error (line 195): must begin only by tabulations
+Error (line 195): bad indentation
+Error (line 196): must begin only by tabulations
+Error (line 196): bad indentation
+Error (line 197): bad indentation
+Error (line 197): must begin only by tabulations
+Error (line 198): bad indentation
+Error (line 198): must begin only by tabulations
+Error (line 199): must begin only by tabulations
+Error (line 199): bad indentation
+Error (line 200): must begin only by tabulations
+Error (line 200): bad indentation
+Error (line 201): must begin only by tabulations
+Error (line 201): bad indentation
+Error (line 202): must begin only by tabulations
+Error (line 202): bad indentation
+Error (line 203): bad indentation
+Error (line 203): must begin only by tabulations
+Error (line 204): must begin only by tabulations
+Error (line 204): bad indentation
+Error (line 205): must begin only by tabulations
+Error (line 205): bad indentation
+Error (line 206): must begin only by tabulations
+Error (line 206): bad indentation
+Error (line 206, col 8): bad spacing
+Error (line 207): must begin only by tabulations
+Error (line 207): bad indentation
+Error (line 208): must begin only by tabulations
+Error (line 208): bad indentation
+Error (line 209): bad indentation
+Error (line 209): must begin only by tabulations
+Error (line 210): must begin only by tabulations
+Error (line 210): bad indentation
+Error (line 210): C++ comment
+Error (line 211): C++ comment
+Error (line 211): bad indentation
+Error (line 211): must begin only by tabulations
+Error (line 212): must begin only by tabulations
+Error (line 212): bad indentation
+Error (line 212): missing newline after if
+Error (line 212, col 19): no newline before block
+Error (line 213): must begin only by tabulations
+Error (line 213): bad indentation
+Error (line 214): must begin only by tabulations
+Error (line 214): bad indentation
+Error (line 215): bad indentation
+Error (line 215): must begin only by tabulations
+Error (line 216): bad indentation
+Error (line 216): must begin only by tabulations
+Error (line 217): missing newline after if
+Error (line 217): must begin only by tabulations
+Error (line 217): bad indentation
+Error (line 217, col 28): no newline before block
+Error (line 218): must begin only by tabulations
+Error (line 218): bad indentation
+Error (line 219): must begin only by tabulations
+Error (line 219): bad indentation
+Error (line 220): bad indentation
+Error (line 220): must begin only by tabulations
+Error (line 220): spaces at the end of line
+Error (line 220, col 8): no newline after block
+Error (line 221): bad indentation
+Error (line 221): must begin only by tabulations
+Error (line 222): must begin only by tabulations
+Error (line 222): bad indentation
+Error (line 223): bad indentation
+Error (line 223): must begin only by tabulations
+Error (line 224): bad indentation
+Error (line 224): must begin only by tabulations
+Error (line 225): must begin only by tabulations
+Error (line 225): bad indentation
+Error (line 226): must begin only by tabulations
+Error (line 226): bad indentation
+Error (line 227): bad indentation
+Error (line 227): must begin only by tabulations
+Error (line 228): must begin only by tabulations
+Error (line 228): bad indentation
+Error (line 228, col 9): no newline before block
+Error (line 229): bad indentation
+Error (line 229): must begin only by tabulations
+Error (line 230): must begin only by tabulations
+Error (line 230): bad indentation
+Error (line 231): bad indentation
+Error (line 231): must begin only by tabulations
+Error (line 232): bad indentation
+Error (line 232): must begin only by tabulations
+Error (line 233): bad indentation
+Error (line 233): must begin only by tabulations
+Error (line 234): bad indentation
+Error (line 234): must begin only by tabulations
+Error (line 235): bad indentation
+Error (line 235): must begin only by tabulations
+Error (line 235, col 11): missing parentheses in return statement
+Norme: srcs/builtin/pwd_id_exit.c
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error (line 22, col 8): missing parentheses in return statement
+Error (line 38, col 0): no newline after block
+Norme: srcs/input/history.c
+Error: file must end with a single empty line
+Error: 10 functions in the file
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error (line 3): line has 95 characters
+Error (line 3, col 50): bad character after ,
+Error (line 30): Empty line
+Error (line 36, col 1): missing space after if
+Error (line 42, col 8): missing parentheses in return statement
+Error (line 45): declarations must be followed by one empty line in cut_last_suffix
+Error (line 51): Empty line
+Error (line 52): C++ comment
+Error (line 53): C++ comment
+Error (line 53): bad indentation
+Error (line 54): missing newline after if
+Error (line 54): comment not well formatted
+Error (line 54): comment not well placed
+Error (line 59): C++ comment
+Error (line 60): bad indentation
+Error (line 80): declarations in copy_input_struct are bad aligned
+Error (line 80): function copy_input_struct has 42 lines
+Error (line 80): Space before function name
+Error (line 85, col 11): clone is instanciated during declaration
+Error (line 103): missing newline after if
+Error (line 103, col 22): no newline before block
+Error (line 119): C++ comment
+Error (line 120): comment not well formatted
+Error (line 120): comment not well placed
+Error (line 144): line has 123 characters
+Error (line 147): missing newline after if
+Error (line 147): line has 90 characters
+Error (line 147, col 82): no newline before block
+Error (line 168): missing newline after if
+Error (line 168, col 18): no newline before block
+Error (line 174, col 7): no newline before block
+Error (line 194, col 9): missing parentheses in return statement
+Error (line 196, col 6): no newline before block
+Error (line 202, col 9): missing parentheses in return statement
+Error (line 207): function envoke_history has 26 lines
+Error (line 212): missing newline after if
+Error (line 212, col 16): no newline before block
+Error (line 215): missing newline after if
+Error (line 215, col 16): no newline before block
+Error (line 218): missing newline after if
+Error (line 218, col 19): no newline before block
+Error (line 221): missing newline after if
+Error (line 221, col 40): no newline before block
+Error (line 229): missing newline after if
+Error (line 229, col 28): no newline before block
+Error (line 235, col 0): no newline after block
+Norme: srcs/tokens/flag.c
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error (line 3): Space before function name
+Error (line 3, col 4): bad spacing
+Error (line 26, col 0): no newline after block
+Norme: srcs/controls/edition.c
+Error: global scope bad aligned
+Error: file must end with a single empty line
+Error: 42 header not at top of the file
+Error (line 3): declarations must be followed by one empty line in backspace_char
+Error (line 5, col 5): abs is instanciated during declaration
+Error (line 14): line has 87 characters
+Error (line 20): Spacing after function name
+Error (line 20): Space before function name
+Error (line 22, col 5): abs is instanciated during declaration
+Error (line 24, col 8): space after arrow
+Error (line 26): line has 83 characters
+Error (line 32): declarations must be followed by one empty line in delete_char
+Error (line 32): Space before function name
+Error (line 34, col 5): abs is instanciated during declaration
+Error (line 43): line has 87 characters
+Error (line 47, col 0): no newline after block
+Norme: srcs/input/concater.c
+Error: 42 header not at top of the file
+Error (line 3): multiple empty lines
+Error (line 4): multiple empty lines
+Error (line 5): bad spacing before concat_lines
+Error (line 5): function concat_lines has 28 lines
+Error (line 13, col 1): missing space after while
+Error (line 16): missing newline after if
+Error (line 16, col 17): no newline before block
+Error (line 17): bad indentation
+Error (line 17): spaces at the end of line
+Error (line 18): bad indentation
+Error (line 18): C++ comment
+Error (line 24): C++ comment
+Error (line 30): line has 90 characters
+Norme: srcs/tokens/ampersand.c
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error (line 3): Space before function name
+Error (line 3, col 4): bad spacing
+Error (line 13, col 0): no newline after block
+Norme: srcs/input/reader.c
+Error: file must end with a single empty line
+Error: 42 header not at top of the file
+Error: global scope bad aligned
+Error: 6 functions in the file
+Error (line 3): multiple empty lines
+Error (line 4): bad spacing before get_buf_line
+Error (line 4): declarations in get_buf_line are bad aligned
+Error (line 4): declarations in get_buf_line must be at the top of the function
+Error (line 4): bad spacing after get_buf_line
+Error (line 8, col 16): dimensions is instanciated during declaration
+Error (line 13): C++ comment
+Error (line 13): line has 105 characters
+Error (line 25): multiple empty lines
+Error (line 26): declarations must be followed by one empty line in incapsulate_read
+Error (line 26): declarations in incapsulate_read are bad aligned
+Error (line 26): bad spacing before incapsulate_read
+Error (line 61): Space before function name
+Error (line 66): missing newline after while
+Error (line 66, col 14): no newline before block
+Error (line 72): declarations in get_input must be at the top of the function
+Error (line 72): declarations in get_input are bad aligned
+Error (line 72): function get_input has 62 lines
+Error (line 72): declarations must be followed by one empty line in get_input
+Error (line 72): Space before function name
+Error (line 72, col 7): get_input has 7 variables
+Error (line 78): must begin only by tabulations
+Error (line 78): bad indentation
+Error (line 89): bad indentation
+Error (line 89): must begin only by tabulations
+Error (line 90): must begin only by tabulations
+Error (line 90): bad indentation
+Error (line 93): bad indentation
+Error (line 94): bad indentation
+Error (line 94): C++ comment
+Error (line 95): bad indentation
+Error (line 96): bad indentation
+Error (line 96): C++ comment
+Error (line 97): bad indentation
+Error (line 97): C++ comment
+Error (line 98): bad indentation
+Error (line 98): C++ comment
+Error (line 99): bad indentation
+Error (line 100): bad indentation
+Error (line 101): bad indentation
+Error (line 101): missing newline after if
+Error (line 101, col 18): no newline before block
+Error (line 102): bad indentation
+Error (line 103): bad indentation
+Error (line 104): bad indentation
+Error (line 105): bad indentation
+Error (line 106): missing newline after if
+Error (line 106): bad indentation
+Error (line 106, col 18): no newline before block
+Error (line 107): bad indentation
+Error (line 108): bad indentation
+Error (line 109): bad indentation
+Error (line 110): missing newline after if
+Error (line 110): bad indentation
+Error (line 110, col 40): no newline before block
+Error (line 111): bad indentation
+Error (line 111, col 8): tmp is instanciated during declaration
+Error (line 112): bad indentation
+Error (line 113): bad indentation
+Error (line 114): bad indentation
+Error (line 115): bad indentation
+Error (line 116): bad indentation
+Error (line 117): missing newline after if
+Error (line 117): bad indentation
+Error (line 117, col 20): no newline before block
+Error (line 118): bad indentation
+Error (line 119): bad indentation
+Error (line 120): bad indentation
+Error (line 121): bad indentation
+Error (line 122): bad indentation
+Error (line 123): bad indentation
+Error (line 123, col 9): tmp is instanciated during declaration
+Error (line 124): bad indentation
+Error (line 124): C++ comment
+Error (line 125): line has 98 characters
+Error (line 125): bad indentation
+Error (line 125): C++ comment
+Error (line 126): bad indentation
+Error (line 127): bad indentation
+Error (line 128): bad indentation
+Error (line 128): must begin only by tabulations
+Error (line 129): bad indentation
+Error (line 130): bad indentation
+Error (line 142, col 7): bad spacing
+Error (line 144): missing newline after if
+Error (line 144, col 22): no newline before block
+Error (line 145): missing newline after if
+Error (line 145, col 47): no newline before block
+Error (line 150): C++ comment
+Error (line 157, col 0): no newline after block
+Norme: srcs/tokens/pipe.c
+Error: 42 header not at top of the file
+Error (line 3): Space before function name
+Error (line 3, col 4): bad spacing
+Error (line 5, col 5): bad spacing
+Norme: srcs/input/display.c
+Error: global scope bad aligned
+Error: 10 functions in the file
+Error: file must end with a single empty line
+Error: 42 header not at top of the file
+Error (line 3): declarations in calc_pos must be at the top of the function
+Error (line 3): Space before function name
+Error (line 8, col 5): diff_x is instanciated during declaration
+Error (line 9, col 5): tmp is instanciated during declaration
+Error (line 23, col 8): missing parentheses in return statement
+Error (line 26): function calc_y_pos has 42 lines
+Error (line 26): Space before function name
+Error (line 26): declarations in calc_y_pos must be at the top of the function
+Error (line 26): declarations must be followed by one empty line in calc_y_pos
+Error (line 28, col 5): printed is instanciated during declaration
+Error (line 34, col 7): tmp is instanciated during declaration
+Error (line 38, col 7): i is instanciated during declaration
+Error (line 45, col 9): pr is instanciated during declaration
+Error (line 59): comment not well formatted
+Error (line 72): declarations in set_cursor are bad aligned
+Error (line 72): declarations must be followed by one empty line in set_cursor
+Error (line 72): Space before function name
+Error (line 74, col 16): dimensions is instanciated during declaration
+Error (line 76, col 5): counter is instanciated during declaration
+Error (line 78): Empty line
+Error (line 82): comment not well placed
+Error (line 82): comment not well formatted
+Error (line 89): C++ comment
+Error (line 90): line has 100 characters
+Error (line 93): Space before function name
+Error (line 95, col 9): curs is instanciated during declaration
+Error (line 110): line has 82 characters
+Error (line 110): handle_last_line have 5 parameters
+Error (line 110): Space before function name
+Error (line 112): bad indentation
+Error (line 112): comment not well formatted
+Error (line 112): comment not well placed
+Error (line 120): comment not well formatted
+Error (line 123): line has 86 characters
+Error (line 134): declarations must be followed by one empty line in append_arr
+Error (line 134): declarations in append_arr are bad aligned
+Error (line 134): Space before function name
+Error (line 134): declarations in append_arr must be at the top of the function
+Error (line 134): function append_arr has 26 lines
+Error (line 143, col 5): i is instanciated during declaration
+Error (line 152): C++ comment
+Error (line 164): Space before function name
+Error (line 170): comment not well formatted
+Error (line 174): Space before function name
+Error (line 174): declarations in draw_line are bad aligned
+Error (line 174): function draw_line has 28 lines
+Error (line 176, col 5): print is instanciated during declaration
+Error (line 177, col 5): curr is instanciated during declaration
+Error (line 181): comment not well formatted
+Error (line 181): comment not well placed
+Error (line 185): comment not well formatted
+Error (line 185): comment not well placed
+Error (line 188): comment not well placed
+Error (line 188): comment not well formatted
+Error (line 188): bad indentation
+Error (line 189): Empty line
+Error (line 195): C++ comment
+Error (line 196): C++ comment
+Error (line 198): comment not well formatted
+Error (line 198): comment not well placed
+Error (line 199): line has 82 characters
+Error (line 200): line has 94 characters
+Error (line 202, col 9): missing parentheses in return statement
+Error (line 206): Space before function name
+Error (line 208): comment not well placed
+Error (line 208): bad indentation
+Error (line 208): comment not well formatted
+Error (line 213): line has 85 characters
+Error (line 223): declarations in display_input are bad aligned
+Error (line 223): function display_input has 41 lines
+Error (line 223): declarations must be followed by one empty line in display_input
+Error (line 223): Space before function name
+Error (line 223): declarations in display_input must be at the top of the function
+Error (line 228): multiple empty lines
+Error (line 230, col 9): missing parentheses in return statement
+Error (line 241, col 5): tmp_y is instanciated during declaration
+Error (line 242): missing newline after if
+Error (line 242, col 16): no newline before block
+Error (line 245, col 5): i is instanciated during declaration
+Error (line 257): bad indentation
+Error (line 258): bad indentation
+Error (line 260): C++ comment
+Error (line 263): bad indentation
+Error (line 263): C++ comment
+Error (line 264): C++ comment
+Error (line 264): bad indentation
+Norme: srcs/utils/free.c
+Error: 10 functions in the file
+Error: 42 header not at top of the file
+Error: global scope bad aligned
+Error (line 4): bad spacing before free_token_list
+Error (line 21): bad spacing after free_cmd_list
+Error (line 40): comment not well formatted
+Error (line 60): comment not well formatted
+Error (line 61): bad spacing before delete_env_list
+Error (line 98, col 6): j is instanciated during declaration
+Error (line 105): bad indentation
+Error (line 105): C++ comment
+Error (line 106): C++ comment
+Error (line 106): bad indentation
+Error (line 117): Space before function name
+Error (line 124): bad spacing after free_eot_list
+Error (line 142): bad spacing before free_main_line
+Error (line 147, col 1): missing space after if
+Error (line 159): Space before function name
+Error (line 163): missing newline after if
+Error (line 163, col 22): no newline before block
+Error (line 165): 2 instructions
+Error (line 166, col 1): no newline after block
+Error (line 166, col 8): no newline before block
+Error (line 171): missing newline after if
+Error (line 171, col 22): no newline before block
+Error (line 182): Space before function name
+Error (line 188): spaces at the end of line
+Norme: srcs/tokens/eject_redirect.c
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error (line 16, col 0): no newline after block
+Norme: srcs/tree/tree_ft.c
+Error: 42 header not at top of the file
+Error: global scope bad aligned
+Error: file must end with a single empty line
+Error (line 3): Space before function name
+Error (line 3, col 11): bad spacing
+Error (line 5): missing newline after if
+Error (line 5): C++ comment
+Error (line 7): missing newline after if
+Error (line 7): C++ comment
+Error (line 12): Space before function name
+Error (line 12, col 4): bad spacing
+Error (line 14, col 7): bad spacing
+Error (line 23, col 0): no newline after block
+Norme: srcs/autocomplete/trie_construct.c
+Error: 42 header not at top of the file
+Error: 8 functions in the file
+Error: file must end with a single empty line
+Error: global scope bad aligned
+Error (line 3): Space before function name
+Error (line 3): function insert_word_trie has 47 lines
+Error (line 3): Space before function name
+Error (line 3): Space before function name
+Error (line 3): Space before function name
+Error (line 3, col 13): bad spacing
+Error (line 5): bad indentation
+Error (line 5): must begin only by tabulations
+Error (line 5, col 7): bad spacing
+Error (line 6): bad indentation
+Error (line 6): must begin only by tabulations
+Error (line 6, col 7): bad spacing
+Error (line 7): bad indentation
+Error (line 7): must begin only by tabulations
+Error (line 7, col 10): bad spacing
+Error (line 9): must begin only by tabulations
+Error (line 9): bad indentation
+Error (line 10): must begin only by tabulations
+Error (line 10): bad indentation
+Error (line 11): bad indentation
+Error (line 11): must begin only by tabulations
+Error (line 12): bad indentation
+Error (line 12): must begin only by tabulations
+Error (line 13): must begin only by tabulations
+Error (line 13): bad indentation
+Error (line 14): must begin only by tabulations
+Error (line 14): bad indentation
+Error (line 15): must begin only by tabulations
+Error (line 15): bad indentation
+Error (line 16): must begin only by tabulations
+Error (line 16): bad indentation
+Error (line 17): must begin only by tabulations
+Error (line 17): bad indentation
+Error (line 18): must begin only by tabulations
+Error (line 18): bad indentation
+Error (line 19): C++ comment
+Error (line 20): C++ comment
+Error (line 21): C++ comment
+Error (line 22): missing newline after if
+Error (line 22): must begin only by tabulations
+Error (line 22): bad indentation
+Error (line 22, col 31): no newline before block
+Error (line 23): bad indentation
+Error (line 23): must begin only by tabulations
+Error (line 24): bad indentation
+Error (line 24): must begin only by tabulations
+Error (line 25): bad indentation
+Error (line 25): must begin only by tabulations
+Error (line 26): bad indentation
+Error (line 26): missing newline after if
+Error (line 26): must begin only by tabulations
+Error (line 26, col 33): no newline before block
+Error (line 27): bad indentation
+Error (line 27): must begin only by tabulations
+Error (line 28): C++ comment
+Error (line 29): must begin only by tabulations
+Error (line 29): bad indentation
+Error (line 29, col 12): no empty line before block
+Error (line 30): bad indentation
+Error (line 30): must begin only by tabulations
+Error (line 30, col 17): no newline before block
+Error (line 31): bad indentation
+Error (line 31): must begin only by tabulations
+Error (line 32): bad indentation
+Error (line 32): must begin only by tabulations
+Error (line 33): bad indentation
+Error (line 33): must begin only by tabulations
+Error (line 34): must begin only by tabulations
+Error (line 34): bad indentation
+Error (line 34): 2 instructions
+Error (line 34, col 19): missing parentheses in return statement
+Error (line 35): bad indentation
+Error (line 35): must begin only by tabulations
+Error (line 35, col 8): no newline after block
+Error (line 35, col 15): no newline before block
+Error (line 36): bad indentation
+Error (line 36): must begin only by tabulations
+Error (line 37): must begin only by tabulations
+Error (line 37): bad indentation
+Error (line 38): must begin only by tabulations
+Error (line 38): bad indentation
+Error (line 39): bad indentation
+Error (line 39): must begin only by tabulations
+Error (line 40): bad indentation
+Error (line 40): must begin only by tabulations
+Error (line 41): bad indentation
+Error (line 41): must begin only by tabulations
+Error (line 42): C++ comment
+Error (line 42): bad indentation
+Error (line 42): must begin only by tabulations
+Error (line 43): bad indentation
+Error (line 43): must begin only by tabulations
+Error (line 44): bad indentation
+Error (line 44): must begin only by tabulations
+Error (line 45): bad indentation
+Error (line 45): must begin only by tabulations
+Error (line 47): C++ comment
+Error (line 47): must begin only by tabulations
+Error (line 47): bad indentation
+Error (line 49): bad indentation
+Error (line 49): must begin only by tabulations
+Error (line 50): bad indentation
+Error (line 50): must begin only by tabulations
+Error (line 51): must begin only by tabulations
+Error (line 51): bad indentation
+Error (line 51, col 11): missing parentheses in return statement
+Error (line 54): declarations in fill_variant_list are bad aligned
+Error (line 54): Space before function name
+Error (line 56): bad indentation
+Error (line 56): must begin only by tabulations
+Error (line 56, col 7): bad spacing
+Error (line 57): bad indentation
+Error (line 57): must begin only by tabulations
+Error (line 58): bad indentation
+Error (line 58): must begin only by tabulations
+Error (line 58, col 7): bad spacing
+Error (line 60): bad indentation
+Error (line 60): must begin only by tabulations
+Error (line 61): bad indentation
+Error (line 61): must begin only by tabulations
+Error (line 62): bad indentation
+Error (line 62): must begin only by tabulations
+Error (line 63): must begin only by tabulations
+Error (line 63): bad indentation
+Error (line 63, col 15): missing parentheses in return statement
+Error (line 64): must begin only by tabulations
+Error (line 64): bad indentation
+Error (line 65): must begin only by tabulations
+Error (line 65): bad indentation
+Error (line 65, col 15): missing parentheses in return statement
+Error (line 66): bad indentation
+Error (line 66): must begin only by tabulations
+Error (line 67): bad indentation
+Error (line 67): must begin only by tabulations
+Error (line 68): must begin only by tabulations
+Error (line 68): bad indentation
+Error (line 69): bad indentation
+Error (line 69): must begin only by tabulations
+Error (line 69, col 8): missing space after if
+Error (line 70): bad indentation
+Error (line 70): must begin only by tabulations
+Error (line 70): C++ comment
+Error (line 71): missing newline after if
+Error (line 71): bad indentation
+Error (line 71): line has 149 characters
+Error (line 71): must begin only by tabulations
+Error (line 71, col 147): no newline before block
+Error (line 72): must begin only by tabulations
+Error (line 72): bad indentation
+Error (line 73): bad indentation
+Error (line 73): must begin only by tabulations
+Error (line 74): bad indentation
+Error (line 74): must begin only by tabulations
+Error (line 75): must begin only by tabulations
+Error (line 75): bad indentation
+Error (line 76): bad indentation
+Error (line 76): must begin only by tabulations
+Error (line 76, col 11): missing parentheses in return statement
+Error (line 79): Space before function name
+Error (line 79): declarations in fill_variant_dirs are bad aligned
+Error (line 79): function fill_variant_dirs has 34 lines
+Error (line 79, col 7): fill_variant_dirs has 7 variables
+Error (line 81): must begin only by tabulations
+Error (line 81): bad indentation
+Error (line 81, col 7): bad spacing
+Error (line 82): must begin only by tabulations
+Error (line 82): bad indentation
+Error (line 83): bad indentation
+Error (line 83): must begin only by tabulations
+Error (line 83, col 8): bad spacing
+Error (line 84): must begin only by tabulations
+Error (line 84): bad indentation
+Error (line 84, col 7): bad spacing
+Error (line 85): bad indentation
+Error (line 85): must begin only by tabulations
+Error (line 87): must begin only by tabulations
+Error (line 87): bad indentation
+Error (line 87, col 7): bad spacing
+Error (line 87, col 12): ret is instanciated during declaration
+Error (line 89): must begin only by tabulations
+Error (line 89): bad indentation
+Error (line 90): must begin only by tabulations
+Error (line 90): bad indentation
+Error (line 91): bad indentation
+Error (line 91): must begin only by tabulations
+Error (line 92): bad indentation
+Error (line 92): must begin only by tabulations
+Error (line 93): bad indentation
+Error (line 93): must begin only by tabulations
+Error (line 93, col 15): missing parentheses in return statement
+Error (line 94): bad indentation
+Error (line 94): must begin only by tabulations
+Error (line 95): bad indentation
+Error (line 95): must begin only by tabulations
+Error (line 95, col 15): missing parentheses in return statement
+Error (line 96): bad indentation
+Error (line 96): must begin only by tabulations
+Error (line 97): bad indentation
+Error (line 97): must begin only by tabulations
+Error (line 98): must begin only by tabulations
+Error (line 98): bad indentation
+Error (line 99): bad indentation
+Error (line 99): must begin only by tabulations
+Error (line 99, col 8): missing space after if
+Error (line 100): bad indentation
+Error (line 100): C++ comment
+Error (line 100): must begin only by tabulations
+Error (line 101): must begin only by tabulations
+Error (line 101): missing newline after if
+Error (line 101): bad indentation
+Error (line 101, col 74): no newline before block
+Error (line 102): bad indentation
+Error (line 102): must begin only by tabulations
+Error (line 103): bad indentation
+Error (line 103): must begin only by tabulations
+Error (line 104): must begin only by tabulations
+Error (line 104): bad indentation
+Error (line 105): must begin only by tabulations
+Error (line 105): bad indentation
+Error (line 106): missing newline after if
+Error (line 106): bad indentation
+Error (line 106): must begin only by tabulations
+Error (line 106, col 27): no newline before block
+Error (line 107): bad indentation
+Error (line 107): must begin only by tabulations
+Error (line 108): bad indentation
+Error (line 108): must begin only by tabulations
+Error (line 109): bad indentation
+Error (line 109): must begin only by tabulations
+Error (line 110): bad indentation
+Error (line 110): must begin only by tabulations
+Error (line 111): bad indentation
+Error (line 111): must begin only by tabulations
+Error (line 112): bad indentation
+Error (line 112): must begin only by tabulations
+Error (line 113): must begin only by tabulations
+Error (line 113): bad indentation
+Error (line 114): must begin only by tabulations
+Error (line 114): bad indentation
+Error (line 114, col 11): missing parentheses in return statement
+Error (line 117): declarations in construct_local_entry must be at the top of the function
+Error (line 117): Space before function name
+Error (line 117): Space before function name
+Error (line 117): Space before function name
+Error (line 117): function construct_local_entry has 27 lines
+Error (line 117): declarations must be followed by one empty line in construct_local_entry
+Error (line 117): declarations in construct_local_entry are bad aligned
+Error (line 117): Space before function name
+Error (line 117, col 13): bad spacing
+Error (line 119): bad indentation
+Error (line 119): must begin only by tabulations
+Error (line 119, col 10): bad spacing
+Error (line 120): must begin only by tabulations
+Error (line 120): bad indentation
+Error (line 120, col 8): bad spacing
+Error (line 121): bad indentation
+Error (line 121): must begin only by tabulations
+Error (line 121, col 17): path is instanciated during declaration
+Error (line 122): bad indentation
+Error (line 122): must begin only by tabulations
+Error (line 123): bad indentation
+Error (line 123): must begin only by tabulations
+Error (line 124): bad indentation
+Error (line 124): must begin only by tabulations
+Error (line 124, col 8): len is instanciated during declaration
+Error (line 125): must begin only by tabulations
+Error (line 125): bad indentation
+Error (line 126): bad indentation
+Error (line 126): must begin only by tabulations
+Error (line 126, col 15): missing parentheses in return statement
+Error (line 127): must begin only by tabulations
+Error (line 127): bad indentation
+Error (line 128): must begin only by tabulations
+Error (line 128): bad indentation
+Error (line 129): bad indentation
+Error (line 129): must begin only by tabulations
+Error (line 130): missing newline after if
+Error (line 130): must begin only by tabulations
+Error (line 130): bad indentation
+Error (line 130, col 27): no newline before block
+Error (line 131): must begin only by tabulations
+Error (line 131): bad indentation
+Error (line 132): must begin only by tabulations
+Error (line 132): bad indentation
+Error (line 133): must begin only by tabulations
+Error (line 133): bad indentation
+Error (line 134): bad indentation
+Error (line 134): must begin only by tabulations
+Error (line 135): bad indentation
+Error (line 135): must begin only by tabulations
+Error (line 136): bad indentation
+Error (line 136): must begin only by tabulations
+Error (line 137): bad indentation
+Error (line 137): must begin only by tabulations
+Error (line 138): bad indentation
+Error (line 138): must begin only by tabulations
+Error (line 139): must begin only by tabulations
+Error (line 139): bad indentation
+Error (line 140): must begin only by tabulations
+Error (line 140): bad indentation
+Error (line 141): must begin only by tabulations
+Error (line 141): bad indentation
+Error (line 142): must begin only by tabulations
+Error (line 142): bad indentation
+Error (line 143): bad indentation
+Error (line 143): must begin only by tabulations
+Error (line 144): bad indentation
+Error (line 144): must begin only by tabulations
+Error (line 145): bad indentation
+Error (line 145): must begin only by tabulations
+Error (line 145, col 11): missing parentheses in return statement
+Error (line 148): bad spacing after init_auto_trie
+Error (line 148): function init_auto_trie has 35 lines
+Error (line 148): declarations must be followed by one empty line in init_auto_trie
+Error (line 148): declarations in init_auto_trie must be at the top of the function
+Error (line 148): Space before function name
+Error (line 148): Space before function name
+Error (line 148): Space before function name
+Error (line 148): Space before function name
+Error (line 148): declarations in init_auto_trie are bad aligned
+Error (line 148, col 7): init_auto_trie has 8 variables
+Error (line 148, col 13): bad spacing
+Error (line 150): bad indentation
+Error (line 150): must begin only by tabulations
+Error (line 150, col 10): bad spacing
+Error (line 151): must begin only by tabulations
+Error (line 151): bad indentation
+Error (line 151, col 10): bad spacing
+Error (line 152): bad indentation
+Error (line 152): must begin only by tabulations
+Error (line 152, col 9): bad spacing
+Error (line 153): must begin only by tabulations
+Error (line 153): bad indentation
+Error (line 153, col 7): bad spacing
+Error (line 154): bad indentation
+Error (line 154): must begin only by tabulations
+Error (line 154, col 8): bad spacing
+Error (line 155): bad indentation
+Error (line 155): must begin only by tabulations
+Error (line 155, col 8): bad spacing
+Error (line 156): bad indentation
+Error (line 156): must begin only by tabulations
+Error (line 156, col 7): bad spacing
+Error (line 158): must begin only by tabulations
+Error (line 158): bad indentation
+Error (line 159): bad indentation
+Error (line 159): must begin only by tabulations
+Error (line 160): bad indentation
+Error (line 160): must begin only by tabulations
+Error (line 161): bad indentation
+Error (line 161): must begin only by tabulations
+Error (line 162): must begin only by tabulations
+Error (line 162): bad indentation
+Error (line 163): bad indentation
+Error (line 163): must begin only by tabulations
+Error (line 164): bad indentation
+Error (line 164): must begin only by tabulations
+Error (line 165): must begin only by tabulations
+Error (line 165): bad indentation
+Error (line 165, col 15): missing parentheses in return statement
+Error (line 166): must begin only by tabulations
+Error (line 166): bad indentation
+Error (line 167): must begin only by tabulations
+Error (line 167): bad indentation
+Error (line 168): bad indentation
+Error (line 168): must begin only by tabulations
+Error (line 169): must begin only by tabulations
+Error (line 169): bad indentation
+Error (line 170): bad indentation
+Error (line 170): must begin only by tabulations
+Error (line 171): bad indentation
+Error (line 171): must begin only by tabulations
+Error (line 172): bad indentation
+Error (line 172): must begin only by tabulations
+Error (line 173): must begin only by tabulations
+Error (line 173): bad indentation
+Error (line 174): bad indentation
+Error (line 174): must begin only by tabulations
+Error (line 174, col 8): bad spacing
+Error (line 175): must begin only by tabulations
+Error (line 175): bad indentation
+Error (line 176): bad indentation
+Error (line 176): must begin only by tabulations
+Error (line 177): bad indentation
+Error (line 177): must begin only by tabulations
+Error (line 178): bad indentation
+Error (line 178): must begin only by tabulations
+Error (line 179): must begin only by tabulations
+Error (line 179): bad indentation
+Error (line 180): bad indentation
+Error (line 180): must begin only by tabulations
+Error (line 181): bad indentation
+Error (line 181): must begin only by tabulations
+Error (line 182): bad indentation
+Error (line 182): must begin only by tabulations
+Error (line 183): bad indentation
+Error (line 183): must begin only by tabulations
+Error (line 184): bad indentation
+Error (line 184): must begin only by tabulations
+Error (line 184, col 11): missing parentheses in return statement
+Error (line 187): multiple empty lines
+Error (line 188): Space before function name
+Error (line 188): Space before function name
+Error (line 188): Space before function name
+Error (line 188): Space before function name
+Error (line 188): Space before function name
+Error (line 188): Space before function name
+Error (line 188): bad spacing before construct_env_trie
+Error (line 188, col 6): bad spacing
+Error (line 190): must begin only by tabulations
+Error (line 190): bad indentation
+Error (line 190, col 9): bad spacing
+Error (line 191): bad indentation
+Error (line 191): must begin only by tabulations
+Error (line 191, col 10): bad spacing
+Error (line 193): must begin only by tabulations
+Error (line 193): bad indentation
+Error (line 194): must begin only by tabulations
+Error (line 194): bad indentation
+Error (line 195): bad indentation
+Error (line 195): must begin only by tabulations
+Error (line 196): bad indentation
+Error (line 196): must begin only by tabulations
+Error (line 196, col 4): missing space after while
+Error (line 197): bad indentation
+Error (line 197): must begin only by tabulations
+Error (line 198): bad indentation
+Error (line 198): must begin only by tabulations
+Error (line 199): bad indentation
+Error (line 199): must begin only by tabulations
+Error (line 200): must begin only by tabulations
+Error (line 200): bad indentation
+Error (line 201): bad indentation
+Error (line 201): must begin only by tabulations
+Error (line 201, col 11): missing parentheses in return statement
+Error (line 204): declarations must be followed by one empty line in split_path
+Error (line 204): Space before function name
+Error (line 204): Space before function name
+Error (line 204): Space before function name
+Error (line 204): Space before function name
+Error (line 204): function split_path has 31 lines
+Error (line 204): Space before function name
+Error (line 204): Space before function name
+Error (line 204): Space before function name
+Error (line 204): declarations in split_path must be at the top of the function
+Error (line 204): Space before function name
+Error (line 204, col 4): bad spacing
+Error (line 206): must begin only by tabulations
+Error (line 206): bad indentation
+Error (line 206, col 7): bad spacing
+Error (line 207): bad indentation
+Error (line 207): must begin only by tabulations
+Error (line 207, col 7): bad spacing
+Error (line 208): must begin only by tabulations
+Error (line 208): bad indentation
+Error (line 208, col 8): bad spacing
+Error (line 210): must begin only by tabulations
+Error (line 210): bad indentation
+Error (line 210): spaces at the end of line
+Error (line 211): must begin only by tabulations
+Error (line 211): bad indentation
+Error (line 212): bad indentation
+Error (line 212): must begin only by tabulations
+Error (line 213): bad indentation
+Error (line 213): must begin only by tabulations
+Error (line 214): must begin only by tabulations
+Error (line 214): bad indentation
+Error (line 215): bad indentation
+Error (line 215): must begin only by tabulations
+Error (line 216): must begin only by tabulations
+Error (line 216): bad indentation
+Error (line 217): bad indentation
+Error (line 217): must begin only by tabulations
+Error (line 218): must begin only by tabulations
+Error (line 218): bad indentation
+Error (line 219): must begin only by tabulations
+Error (line 219): bad indentation
+Error (line 220): must begin only by tabulations
+Error (line 220): bad indentation
+Error (line 221): bad indentation
+Error (line 221): 2 instructions
+Error (line 221): must begin only by tabulations
+Error (line 222): bad indentation
+Error (line 222): must begin only by tabulations
+Error (line 222, col 9): no newline before block
+Error (line 223): bad indentation
+Error (line 223): must begin only by tabulations
+Error (line 224): bad indentation
+Error (line 224): must begin only by tabulations
+Error (line 224, col 12): bad spacing
+Error (line 224, col 21): pwd is instanciated during declaration
+Error (line 225): must begin only by tabulations
+Error (line 225): bad indentation
+Error (line 226): bad indentation
+Error (line 226): must begin only by tabulations
+Error (line 226, col 19): missing parentheses in return statement
+Error (line 227): bad indentation
+Error (line 227): must begin only by tabulations
+Error (line 228): bad indentation
+Error (line 228): must begin only by tabulations
+Error (line 229): bad indentation
+Error (line 229): must begin only by tabulations
+Error (line 230): must begin only by tabulations
+Error (line 230): bad indentation
+Error (line 231): bad indentation
+Error (line 231): must begin only by tabulations
+Error (line 232): must begin only by tabulations
+Error (line 232): bad indentation
+Error (line 233): bad indentation
+Error (line 233): must begin only by tabulations
+Error (line 234): must begin only by tabulations
+Error (line 234): bad indentation
+Error (line 235): C++ comment
+Error (line 235): must begin only by tabulations
+Error (line 235): bad indentation
+Error (line 236): must begin only by tabulations
+Error (line 236): bad indentation
+Error (line 236, col 11): missing parentheses in return statement
+Error (line 239): Space before function name
+Error (line 239): Space before function name
+Error (line 239): function construct_trie has 52 lines
+Error (line 239): declarations in construct_trie are bad aligned
+Error (line 239): Space before function name
+Error (line 239): declarations must be followed by one empty line in construct_trie
+Error (line 239): Space before function name
+Error (line 239, col 0): construct_trie has 6 variables
+Error (line 239, col 6): bad spacing
+Error (line 241): must begin only by tabulations
+Error (line 241): bad indentation
+Error (line 242): bad indentation
+Error (line 242): must begin only by tabulations
+Error (line 242, col 9): bad spacing
+Error (line 243): bad indentation
+Error (line 243): must begin only by tabulations
+Error (line 243, col 8): bad spacing
+Error (line 244): bad indentation
+Error (line 244): must begin only by tabulations
+Error (line 244, col 8): bad spacing
+Error (line 245): must begin only by tabulations
+Error (line 245): bad indentation
+Error (line 245, col 8): bad spacing
+Error (line 246): bad indentation
+Error (line 246): must begin only by tabulations
+Error (line 246, col 7): bad spacing
+Error (line 247): must begin only by tabulations
+Error (line 247): bad indentation
+Error (line 248): must begin only by tabulations
+Error (line 248): bad indentation
+Error (line 249): Empty line
+Error (line 250): missing newline after if
+Error (line 250): bad indentation
+Error (line 250): must begin only by tabulations
+Error (line 250, col 28): no newline before block
+Error (line 251): must begin only by tabulations
+Error (line 251): bad indentation
+Error (line 252): bad indentation
+Error (line 252): must begin only by tabulations
+Error (line 253): bad indentation
+Error (line 253): must begin only by tabulations
+Error (line 253): missing newline after if
+Error (line 253, col 30): no newline before block
+Error (line 254): must begin only by tabulations
+Error (line 254): bad indentation
+Error (line 255): bad indentation
+Error (line 255): must begin only by tabulations
+Error (line 256): must begin only by tabulations
+Error (line 256): bad indentation
+Error (line 257): must begin only by tabulations
+Error (line 257): bad indentation
+Error (line 257): missing newline after if
+Error (line 257, col 31): no newline before block
+Error (line 258): must begin only by tabulations
+Error (line 258): bad indentation
+Error (line 259): must begin only by tabulations
+Error (line 259): bad indentation
+Error (line 260): bad indentation
+Error (line 260): must begin only by tabulations
+Error (line 260): missing newline after if
+Error (line 260, col 30): no newline before block
+Error (line 261): bad indentation
+Error (line 261): must begin only by tabulations
+Error (line 262): bad indentation
+Error (line 262): must begin only by tabulations
+Error (line 263): bad indentation
+Error (line 263): must begin only by tabulations
+Error (line 264): bad indentation
+Error (line 264): must begin only by tabulations
+Error (line 264): missing newline after if
+Error (line 264, col 34): no newline before block
+Error (line 265): bad indentation
+Error (line 265): must begin only by tabulations
+Error (line 266): bad indentation
+Error (line 266): must begin only by tabulations
+Error (line 267): must begin only by tabulations
+Error (line 267): bad indentation
+Error (line 268): bad indentation
+Error (line 268): must begin only by tabulations
+Error (line 269): must begin only by tabulations
+Error (line 269): bad indentation
+Error (line 270): must begin only by tabulations
+Error (line 270): bad indentation
+Error (line 271): bad indentation
+Error (line 271): must begin only by tabulations
+Error (line 272): bad indentation
+Error (line 272): must begin only by tabulations
+Error (line 273): must begin only by tabulations
+Error (line 273): bad indentation
+Error (line 274): must begin only by tabulations
+Error (line 274): bad indentation
+Error (line 275): must begin only by tabulations
+Error (line 275): bad indentation
+Error (line 276): missing newline after if
+Error (line 276): must begin only by tabulations
+Error (line 276): bad indentation
+Error (line 276, col 31): no newline before block
+Error (line 277): must begin only by tabulations
+Error (line 277): bad indentation
+Error (line 278): must begin only by tabulations
+Error (line 278): bad indentation
+Error (line 279): must begin only by tabulations
+Error (line 279): bad indentation
+Error (line 279, col 9): no newline before block
+Error (line 280): bad indentation
+Error (line 280): must begin only by tabulations
+Error (line 281): must begin only by tabulations
+Error (line 281): bad indentation
+Error (line 282): must begin only by tabulations
+Error (line 282): bad indentation
+Error (line 283): bad indentation
+Error (line 283): must begin only by tabulations
+Error (line 284): must begin only by tabulations
+Error (line 284): bad indentation
+Error (line 285): must begin only by tabulations
+Error (line 285): bad indentation
+Error (line 286): bad indentation
+Error (line 286): must begin only by tabulations
+Error (line 287): must begin only by tabulations
+Error (line 287): bad indentation
+Error (line 288): must begin only by tabulations
+Error (line 288): bad indentation
+Error (line 289): bad indentation
+Error (line 289): must begin only by tabulations
+Error (line 289, col 15): missing parentheses in return statement
+Error (line 290): bad indentation
+Error (line 290): must begin only by tabulations
+Error (line 291): must begin only by tabulations
+Error (line 291): bad indentation
+Error (line 292): bad indentation
+Error (line 292): must begin only by tabulations
+Error (line 292, col 11): missing parentheses in return statement
+Error (line 293, col 0): no newline after block
+Norme: srcs/exec/execute.c
+Error: 10 functions in the file
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error (line 17): Space before function name
+Error (line 25): function convert_env_array has 32 lines
+Error (line 41, col 9): missing parentheses in return statement
+Error (line 48): missing newline after if
+Error (line 48, col 24): no newline before block
+Error (line 49): line has 84 characters
+Error (line 61, col 22): space after pointer
+Error (line 70): function do_proc has 27 lines
+Error (line 70): do_proc have 5 parameters
+Error (line 84): line has 114 characters
+Error (line 91): C++ comment
+Error (line 92): bad indentation
+Error (line 92): C++ comment
+Error (line 104, col 9): missing parentheses in return statement
+Error (line 106, col 9): missing parentheses in return statement
+Error (line 108, col 9): missing parentheses in return statement
+Error (line 110, col 9): missing parentheses in return statement
+Error (line 112, col 9): missing parentheses in return statement
+Error (line 114, col 9): missing parentheses in return statement
+Error (line 116, col 9): missing parentheses in return statement
+Error (line 118, col 9): missing parentheses in return statement
+Error (line 120, col 9): missing parentheses in return statement
+Error (line 122, col 9): missing parentheses in return statement
+Error (line 123, col 8): missing parentheses in return statement
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151): Space before function name
+Error (line 151, col 3): bad spacing
+Error (line 153): must begin only by tabulations
+Error (line 153): bad indentation
+Error (line 153, col 7): bad spacing
+Error (line 154): bad indentation
+Error (line 154): must begin only by tabulations
+Error (line 154, col 9): bad spacing
+Error (line 156): must begin only by tabulations
+Error (line 156): bad indentation
+Error (line 157): must begin only by tabulations
+Error (line 157): bad indentation
+Error (line 158): bad indentation
+Error (line 158): must begin only by tabulations
+Error (line 159): must begin only by tabulations
+Error (line 159): bad indentation
+Error (line 160): must begin only by tabulations
+Error (line 160): bad indentation
+Error (line 161): must begin only by tabulations
+Error (line 161): bad indentation
+Error (line 162): must begin only by tabulations
+Error (line 162): line has 82 characters
+Error (line 163): must begin only by tabulations
+Error (line 163): bad indentation
+Error (line 164): must begin only by tabulations
+Error (line 164): bad indentation
+Error (line 165): must begin only by tabulations
+Error (line 165): line has 82 characters
+Error (line 166): must begin only by tabulations
+Error (line 166): bad indentation
+Error (line 167): bad indentation
+Error (line 167): must begin only by tabulations
+Error (line 168): bad indentation
+Error (line 168): must begin only by tabulations
+Error (line 169): bad indentation
+Error (line 169): must begin only by tabulations
+Error (line 170): must begin only by tabulations
+Error (line 170): bad indentation
+Error (line 171): bad indentation
+Error (line 171): must begin only by tabulations
+Error (line 172): must begin only by tabulations
+Error (line 172): bad indentation
+Error (line 175): Space before function name
+Error (line 175, col 10): bad spacing
+Error (line 195): must begin only by tabulations
+Error (line 195): line has 82 characters
+Error (line 202): declarations in execute are bad aligned
+Error (line 202): function execute has 66 lines
+Error (line 202): declarations must be followed by one empty line in execute
+Error (line 202): declarations in execute must be at the top of the function
+Error (line 202, col 0): execute has 8 variables
+Error (line 207, col 6): bad spacing
+Error (line 209, col 4): bad spacing
+Error (line 219): C++ comment
+Error (line 222, col 9): missing parentheses in return statement
+Error (line 226): C++ comment
+Error (line 226): bad indentation
+Error (line 227): C++ comment
+Error (line 227): bad indentation
+Error (line 228): C++ comment
+Error (line 228): bad indentation
+Error (line 229): bad indentation
+Error (line 229): must begin only by tabulations
+Error (line 230): must begin only by tabulations
+Error (line 230): bad indentation
+Error (line 231): must begin only by tabulations
+Error (line 231): bad indentation
+Error (line 232): bad indentation
+Error (line 232): must begin only by tabulations
+Error (line 233): must begin only by tabulations
+Error (line 233): bad indentation
+Error (line 234): must begin only by tabulations
+Error (line 234): bad indentation
+Error (line 235): bad indentation
+Error (line 235): must begin only by tabulations
+Error (line 236): bad indentation
+Error (line 236): must begin only by tabulations
+Error (line 237): must begin only by tabulations
+Error (line 237): bad indentation
+Error (line 238): bad indentation
+Error (line 238): must begin only by tabulations
+Error (line 239): must begin only by tabulations
+Error (line 239): bad indentation
+Error (line 240): bad indentation
+Error (line 240): must begin only by tabulations
+Error (line 240): spaces at the end of line
+Error (line 240, col 53): bad character after ;
+Error (line 241): bad indentation
+Error (line 241): must begin only by tabulations
+Error (line 242): must begin only by tabulations
+Error (line 242): bad indentation
+Error (line 243): must begin only by tabulations
+Error (line 243): bad indentation
+Error (line 245): line has 91 characters
+Error (line 256): bad indentation
+Error (line 257): bad indentation
+Error (line 258): line has 82 characters
+Error (line 258): must begin only by tabulations
+Error (line 258): bad indentation
+Error (line 259): bad indentation
+Error (line 259): must begin only by tabulations
+Error (line 260): bad indentation
+Error (line 260): must begin only by tabulations
+Error (line 262): must begin only by tabulations
+Error (line 262): bad indentation
+Error (line 262): C++ comment
+Error (line 264): bad indentation
+Error (line 264): must begin only by tabulations
+Norme: srcs/utils/init.c
+Error: 15 functions in the file
+Error: file must end with a single empty line
+Error: 42 header not at top of the file
+Error: global scope bad aligned
+Error (line 10): comment not well placed
+Error (line 37): comment not well placed
+Error (line 37): missing newline after if
+Error (line 37): comment not well formatted
+Error (line 50): Space before function name
+Error (line 52, col 16): old_tty is instanciated during declaration
+Error (line 53, col 16): tty is instanciated during declaration
+Error (line 57): C++ comment
+Error (line 59): C++ comment
+Error (line 60): C++ comment
+Error (line 72, col 1): missing space after if
+Error (line 76): comment not well formatted
+Error (line 76): must begin only by tabulations
+Error (line 76): comment not well placed
+Error (line 118): missing newline after if
+Error (line 118, col 27): no newline before block
+Error (line 173): line has 84 characters
+Error (line 176): missing newline after if
+Error (line 176, col 30): no newline before block
+Error (line 216): Space before function name
+Error (line 227): function create_env_list has 28 lines
+Error (line 273, col 0): no newline after block
+Norme: srcs/signals/sig_handler.c
+Error: file must end with a single empty line
+Error: 8 functions in the file
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error (line 3): Space before function name
+Error (line 3): declarations must be followed by one empty line in lookup_sig
+Error (line 5): bad indentation
+Error (line 5): must begin only by tabulations
+Error (line 5, col 8): bad spacing
+Error (line 5, col 13): signame is instanciated during declaration
+Error (line 6): must begin only by tabulations
+Error (line 7): must begin only by tabulations
+Error (line 8): must begin only by tabulations
+Error (line 9): must begin only by tabulations
+Error (line 10): must begin only by tabulations
+Error (line 11): must begin only by tabulations
+Error (line 12): must begin only by tabulations
+Error (line 13): must begin only by tabulations
+Error (line 13): bad indentation
+Error (line 14): bad indentation
+Error (line 14): must begin only by tabulations
+Error (line 15): must begin only by tabulations
+Error (line 15): bad indentation
+Error (line 16): bad indentation
+Error (line 16): must begin only by tabulations
+Error (line 17): bad indentation
+Error (line 17): must begin only by tabulations
+Error (line 18): must begin only by tabulations
+Error (line 18): bad indentation
+Error (line 19): must begin only by tabulations
+Error (line 19): bad indentation
+Error (line 20): must begin only by tabulations
+Error (line 20): bad indentation
+Error (line 21): must begin only by tabulations
+Error (line 21): bad indentation
+Error (line 22): must begin only by tabulations
+Error (line 22): bad indentation
+Error (line 23): bad indentation
+Error (line 23): must begin only by tabulations
+Error (line 24): bad indentation
+Error (line 24): must begin only by tabulations
+Error (line 25): must begin only by tabulations
+Error (line 25): bad indentation
+Error (line 28): bad spacing after handle_child_signal
+Error (line 30): bad indentation
+Error (line 30): must begin only by tabulations
+Error (line 30, col 8): bad spacing
+Error (line 32): must begin only by tabulations
+Error (line 32): bad indentation
+Error (line 36): bad indentation
+Error (line 36): must begin only by tabulations
+Error (line 37): bad indentation
+Error (line 37): must begin only by tabulations
+Error (line 37): missing newline after if
+Error (line 37, col 28): no newline before block
+Error (line 38): bad indentation
+Error (line 38): must begin only by tabulations
+Error (line 39): bad indentation
+Error (line 39): must begin only by tabulations
+Error (line 40): must begin only by tabulations
+Error (line 40): bad indentation
+Error (line 45): multiple empty lines
+Error (line 46): Space before function name
+Error (line 46): Space before function name
+Error (line 46): bad spacing before check_sig
+Error (line 46): Space before function name
+Error (line 46): Space before function name
+Error (line 46): Space before function name
+Error (line 46, col 3): bad spacing
+Error (line 48): must begin only by tabulations
+Error (line 48): bad indentation
+Error (line 49): must begin only by tabulations
+Error (line 50): must begin only by tabulations
+Error (line 51): must begin only by tabulations
+Error (line 52): bad indentation
+Error (line 52): must begin only by tabulations
+Error (line 53): bad indentation
+Error (line 53): must begin only by tabulations
+Error (line 56): bad spacing after changer_y
+Error (line 56): Space before function name
+Error (line 56): Space before function name
+Error (line 56): Space before function name
+Error (line 56): Space before function name
+Error (line 56, col 4): bad spacing
+Error (line 58): must begin only by tabulations
+Error (line 58): bad indentation
+Error (line 58, col 12): pos is instanciated during declaration
+Error (line 60): must begin only by tabulations
+Error (line 60): bad indentation
+Error (line 61): bad indentation
+Error (line 61): must begin only by tabulations
+Error (line 62): must begin only by tabulations
+Error (line 62): bad indentation
+Error (line 63): bad indentation
+Error (line 63): spaces at the end of line
+Error (line 63): must begin only by tabulations
+Error (line 64): must begin only by tabulations
+Error (line 64): bad indentation
+Error (line 66): Space before function name
+Error (line 66): Space before function name
+Error (line 66): Space before function name
+Error (line 66): Space before function name
+Error (line 66): bad spacing before erase_printed
+Error (line 66): declarations must be followed by one empty line in erase_printed
+Error (line 66, col 4): bad spacing
+Error (line 68): must begin only by tabulations
+Error (line 68): bad indentation
+Error (line 68, col 8): i is instanciated during declaration
+Error (line 69): must begin only by tabulations
+Error (line 69): bad indentation
+Error (line 70): must begin only by tabulations
+Error (line 70): bad indentation
+Error (line 72): spaces at the end of line
+Error (line 72): must begin only by tabulations
+Error (line 72): bad indentation
+Error (line 76): Space before function name
+Error (line 76): Space before function name
+Error (line 76): Space before function name
+Error (line 76): Space before function name
+Error (line 76, col 4): bad spacing
+Error (line 79, col 0): no empty line before block
+Error (line 81): declarations in handle_main_signal are bad aligned
+Error (line 81): declarations in handle_main_signal must be at the top of the function
+Error (line 81): declarations must be followed by one empty line in handle_main_signal
+Error (line 83): bad indentation
+Error (line 83): must begin only by tabulations
+Error (line 83, col 8): bad spacing
+Error (line 84): bad indentation
+Error (line 84): must begin only by tabulations
+Error (line 85): must begin only by tabulations
+Error (line 85): bad indentation
+Error (line 86): must begin only by tabulations
+Error (line 86): bad indentation
+Error (line 87): bad indentation
+Error (line 87): must begin only by tabulations
+Error (line 88): must begin only by tabulations
+Error (line 88): bad indentation
+Error (line 89): bad indentation
+Error (line 89): must begin only by tabulations
+Error (line 90): missing newline after if
+Error (line 90): must begin only by tabulations
+Error (line 90): bad indentation
+Error (line 90, col 29): no newline before block
+Error (line 91): must begin only by tabulations
+Error (line 91): bad indentation
+Error (line 92): must begin only by tabulations
+Error (line 92): bad indentation
+Error (line 93): C++ comment
+Error (line 93): bad indentation
+Error (line 94): C++ comment
+Error (line 94): bad indentation
+Error (line 95): must begin only by tabulations
+Error (line 95): bad indentation
+Error (line 95): C++ comment
+Error (line 96): must begin only by tabulations
+Error (line 96): bad indentation
+Error (line 97): bad indentation
+Error (line 97): must begin only by tabulations
+Error (line 98): must begin only by tabulations
+Error (line 98): bad indentation
+Error (line 99): must begin only by tabulations
+Error (line 99): bad indentation
+Error (line 100): must begin only by tabulations
+Error (line 100): bad indentation
+Error (line 100): C++ comment
+Error (line 102): bad indentation
+Error (line 102): must begin only by tabulations
+Error (line 103): bad indentation
+Error (line 103): must begin only by tabulations
+Error (line 105): bad indentation
+Error (line 105): C++ comment
+Error (line 106): must begin only by tabulations
+Error (line 106): bad indentation
+Error (line 111): missing newline after if
+Error (line 111, col 10): no newline before block
+Error (line 112): bad indentation
+Error (line 112): C++ comment
+Error (line 113): bad indentation
+Error (line 113): must begin only by tabulations
+Error (line 114): bad indentation
+Error (line 114): must begin only by tabulations
+Error (line 114): C++ comment
+Error (line 115): must begin only by tabulations
+Error (line 115): C++ comment
+Error (line 115): bad indentation
+Error (line 116): bad indentation
+Error (line 116): must begin only by tabulations
+Error (line 117): must begin only by tabulations
+Error (line 117): bad indentation
+Error (line 117): C++ comment
+Error (line 118): bad indentation
+Error (line 118): C++ comment
+Error (line 118): must begin only by tabulations
+Error (line 119): bad indentation
+Error (line 119): must begin only by tabulations
+Error (line 120): bad indentation
+Error (line 120): must begin only by tabulations
+Error (line 121): must begin only by tabulations
+Error (line 121): bad indentation
+Error (line 122): bad indentation
+Error (line 122): must begin only by tabulations
+Error (line 123): C++ comment
+Error (line 123): bad indentation
+Error (line 123): must begin only by tabulations
+Error (line 124): must begin only by tabulations
+Error (line 124): bad indentation
+Error (line 125): missing newline after if
+Error (line 125, col 11): no newline before block
+Error (line 126): C++ comment
+Error (line 126): bad indentation
+Error (line 126): must begin only by tabulations
+Error (line 127): bad indentation
+Error (line 127): must begin only by tabulations
+Error (line 129): bad indentation
+Error (line 129): must begin only by tabulations
+Error (line 130): bad indentation
+Error (line 130): must begin only by tabulations
+Error (line 131): C++ comment
+Error (line 131): must begin only by tabulations
+Error (line 131): bad indentation
+Error (line 132): bad indentation
+Error (line 132): must begin only by tabulations
+Error (line 133, col 0): no newline after block
+Norme: srcs/tree/tree.c
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error: global scope bad aligned
+Error (line 3): Space before function name
+Error (line 3, col 14): bad spacing
+Error (line 17): Space before function name
+Error (line 17, col 14): bad spacing
+Error (line 21): line has 96 characters
+Error (line 31): Space before function name
+Error (line 31, col 14): bad spacing
+Error (line 45): function find_priority has 33 lines
+Error (line 45): Space before function name
+Error (line 45, col 14): bad spacing
+Error (line 48, col 8): bad spacing
+Error (line 55): Empty line
+Error (line 56): bad indentation
+Error (line 57): bad indentation
+Error (line 58): bad indentation
+Error (line 59): bad indentation
+Error (line 60): bad indentation
+Error (line 61): bad indentation
+Error (line 62): bad indentation
+Error (line 63): missing newline after if
+Error (line 63): bad indentation
+Error (line 63, col 19): no newline before block
+Error (line 64): bad indentation
+Error (line 65): bad indentation
+Error (line 66): bad indentation
+Error (line 67): bad indentation
+Error (line 68): missing newline after if
+Error (line 68): bad indentation
+Error (line 68, col 19): no newline before block
+Error (line 69): bad indentation
+Error (line 70): bad indentation
+Error (line 71): bad indentation
+Error (line 72): bad indentation
+Error (line 73): bad indentation
+Error (line 74): bad indentation
+Error (line 75): bad indentation
+Error (line 76): bad indentation
+Error (line 77): bad indentation
+Error (line 78): comment not well placed
+Error (line 78): comment not well formatted
+Error (line 79, col 8): missing parentheses in return statement
+Error (line 82): function get_tree has 126 lines
+Error (line 84, col 7): bad spacing
+Error (line 85, col 8): bad spacing
+Error (line 86, col 7): bad spacing
+Error (line 87, col 7): bad spacing
+Error (line 134): missing newline after if
+Error (line 134, col 66): no newline before block
+Error (line 143): line has 84 characters
+Error (line 195): missing newline after if
+Error (line 195, col 66): no newline before block
+Error (line 204): line has 84 characters
+Error (line 210, col 0): no newline after block
+Norme: srcs/tokens/token.c
+Error: 6 functions in the file
+Error: 42 header not at top of the file
+Error: global scope bad aligned
+Error: file must end with a single empty line
+Error (line 3): Space before function name
+Error (line 3, col 14): bad spacing
+Error (line 5, col 8): bad spacing
+Error (line 13): Space before function name
+Error (line 13, col 10): bad spacing
+Error (line 15, col 8): bad spacing
+Error (line 19): bad indentation
+Error (line 19): must begin only by tabulations
+Error (line 29): Space before function name
+Error (line 29, col 10): bad spacing
+Error (line 31): C++ comment
+Error (line 31): bad indentation
+Error (line 32): bad indentation
+Error (line 32): C++ comment
+Error (line 41): comment not well formatted
+Error (line 41): comment not well placed
+Error (line 41): bad indentation
+Error (line 42, col 8): missing parentheses in return statement
+Error (line 61, col 1): missing space after if
+Error (line 62): bad indentation
+Error (line 62): must begin only by tabulations
+Error (line 63): C++ comment
+Error (line 63): bad indentation
+Error (line 64): bad indentation
+Error (line 64): C++ comment
+Error (line 65): Empty line
+Error (line 66): comment not well formatted
+Error (line 66): comment not well placed
+Error (line 66): bad indentation
+Error (line 67, col 8): missing parentheses in return statement
+Error (line 70): Space before function name
+Error (line 70): function is_tokens_true has 28 lines
+Error (line 70, col 10): bad spacing
+Error (line 72, col 8): bad spacing
+Error (line 84, col 35): space before )
+Error (line 97): must begin only by tabulations
+Error (line 97): bad indentation
+Error (line 99): Empty line
+Error (line 100, col 0): no empty line before block
+Error (line 102): Space before function name
+Error (line 102, col 14): bad spacing
+Error (line 106, col 1): missing space after if
+Error (line 110, col 0): no newline after block
+Norme: srcs/cmd/get_cmd.c
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error: 11 functions in the file
+Error (line 12): missing newline after if
+Error (line 12, col 10): no newline before block
+Error (line 16, col 8): missing parentheses in return statement
+Error (line 19): function insert_env_val has 36 lines
+Error (line 19): line has 97 characters
+Error (line 19): insert_env_val have 6 parameters
+Error (line 30): line has 87 characters
+Error (line 31, col 46): bad spacing
+Error (line 59): declarations must be followed by one empty line in len_of_word
+Error (line 59): function len_of_word has 35 lines
+Error (line 64): Empty line
+Error (line 64): multiple empty lines
+Error (line 82): missing newline after while
+Error (line 82, col 29): no newline before block
+Error (line 90, col 3): missing space after break
+Error (line 118): function fill_str has 46 lines
+Error (line 118, col 0): fill_str has 6 variables
+Error (line 120, col 10): res is instanciated during declaration
+Error (line 121, col 9): j is instanciated during declaration
+Error (line 122, col 9): l is instanciated during declaration
+Error (line 124, col 4): bad spacing
+Error (line 124, col 9): course is instanciated during declaration
+Error (line 125, col 5): bad spacing
+Error (line 125, col 10): c is instanciated during declaration
+Error (line 130): Empty line
+Error (line 131): C++ comment
+Error (line 133): C++ comment
+Error (line 134): C++ comment
+Error (line 141): C++ comment
+Error (line 152): missing newline after if
+Error (line 152, col 27): no newline before block
+Error (line 158): C++ comment
+Error (line 160): C++ comment
+Error (line 161): C++ comment
+Error (line 162): C++ comment
+Error (line 165, col 1): missing space after return
+Error (line 182): Empty line
+Error (line 189): function how_much_words has 33 lines
+Error (line 226): declarations in s_to_arr must be at the top of the function
+Error (line 226): function s_to_arr has 30 lines
+Error (line 226): declarations in s_to_arr are bad aligned
+Error (line 226): declarations must be followed by one empty line in s_to_arr
+Error (line 226, col 0): s_to_arr has 7 variables
+Error (line 232, col 4): bad spacing
+Error (line 242, col 5): tmp is instanciated during declaration
+Error (line 252): C++ comment
+Error (line 278): declarations must be followed by one empty line in get_data_cmd
+Error (line 278): function get_data_cmd has 53 lines
+Error (line 278, col 7): get_data_cmd has 7 variables
+Error (line 281): C++ comment
+Error (line 281, col 4): bad spacing
+Error (line 291): Empty line
+Error (line 318): line has 92 characters
+Error (line 345, col 9): missing parentheses in return statement
+Error (line 347): bad indentation
+Norme: srcs/controls/state.c
+Error: 42 header not at top of the file
+Error: global scope bad aligned
+Error: file must end with a single empty line
+Error: 10 functions in the file
+Error (line 3): multiple empty lines
+Error (line 4): bad spacing before find_next_char
+Error (line 7, col 9): missing parentheses in return statement
+Error (line 11, col 10): missing parentheses in return statement
+Error (line 14, col 8): missing parentheses in return statement
+Error (line 20, col 9): missing parentheses in return statement
+Error (line 23): missing newline after if
+Error (line 23, col 22): no newline before block
+Error (line 24, col 10): space after [
+Error (line 25, col 11): missing parentheses in return statement
+Error (line 27, col 11): missing parentheses in return statement
+Error (line 29): bad indentation
+Error (line 33, col 9): missing parentheses in return statement
+Error (line 34, col 8): missing parentheses in return statement
+Error (line 39): line has 89 characters
+Error (line 40, col 9): missing parentheses in return statement
+Error (line 41, col 8): missing parentheses in return statement
+Error (line 44): declarations must be followed by one empty line in verify_end_arg
+Error (line 46, col 6): i is instanciated during declaration
+Error (line 48, col 9): missing parentheses in return statement
+Error (line 50, col 9): missing parentheses in return statement
+Error (line 51): missing newline after if
+Error (line 51): line has 84 characters
+Error (line 51): comment not well placed
+Error (line 51): comment not well formatted
+Error (line 52, col 9): missing parentheses in return statement
+Error (line 53): missing newline after if
+Error (line 53, col 29): no newline before block
+Error (line 55, col 10): missing parentheses in return statement
+Error (line 56, col 9): missing parentheses in return statement
+Error (line 59): comment not well formatted
+Error (line 59): comment not well placed
+Error (line 59, col 9): missing parentheses in return statement
+Error (line 60, col 8): missing parentheses in return statement
+Error (line 63): wrong number of spaces in preprocessor indentation
+Error (line 65): declarations in parse_incoming_subline are bad aligned
+Error (line 65): declarations in parse_incoming_subline must be at the top of the function
+Error (line 65): declarations must be followed by one empty line in parse_incoming_subline
+Error (line 65): function parse_incoming_subline has 126 lines
+Error (line 65): line has 84 characters
+Error (line 65, col 7): parse_incoming_subline has 6 variables
+Error (line 67, col 5): i is instanciated during declaration
+Error (line 68, col 5): doc is instanciated during declaration
+Error (line 69, col 5): state is instanciated during declaration
+Error (line 70, col 6): c is instanciated during declaration
+Error (line 71, col 6): flag is instanciated during declaration
+Error (line 73): missing newline after if
+Error (line 73, col 14): no newline before block
+Error (line 74): missing newline after if
+Error (line 74, col 27): no newline before block
+Error (line 78, col 9): missing parentheses in return statement
+Error (line 80): missing newline after while
+Error (line 80, col 16): no newline before block
+Error (line 81, col 7): b is instanciated during declaration
+Error (line 84): missing newline after if
+Error (line 84, col 23): no newline before block
+Error (line 85): missing newline after if
+Error (line 85, col 25): no newline before block
+Error (line 91): missing newline after if
+Error (line 91, col 2): no newline after block
+Error (line 91, col 29): no newline before block
+Error (line 92): Empty line
+Error (line 94): missing newline after if
+Error (line 94, col 25): no newline before block
+Error (line 95): C++ comment
+Error (line 95): bad indentation
+Error (line 102): bad indentation
+Error (line 103): bad indentation
+Error (line 104): bad indentation
+Error (line 105): line has 86 characters
+Error (line 105): missing newline after if
+Error (line 105): 2 instructions
+Error (line 105, col 32): no newline after block
+Error (line 105, col 32): no newline before block
+Error (line 107): bad indentation
+Error (line 108): missing newline after if
+Error (line 108): bad indentation
+Error (line 108): line has 82 characters
+Error (line 108, col 68): no newline before block
+Error (line 109): bad indentation
+Error (line 110): bad indentation
+Error (line 111): bad indentation
+Error (line 112): bad indentation
+Error (line 113): bad indentation
+Error (line 114): bad indentation
+Error (line 115): bad indentation
+Error (line 116): missing newline after if
+Error (line 116): bad indentation
+Error (line 117): bad indentation
+Error (line 117, col 49): no newline before block
+Error (line 118): bad indentation
+Error (line 119): bad indentation
+Error (line 120): bad indentation
+Error (line 121): bad indentation
+Error (line 122): bad indentation
+Error (line 122): missing newline after if
+Error (line 122, col 32): no newline before block
+Error (line 123): bad indentation
+Error (line 123): comment not well formatted
+Error (line 123): line has 91 characters
+Error (line 123): comment not well placed
+Error (line 123): missing newline after if
+Error (line 123, col 23): no newline before block
+Error (line 123, col 23): no newline after block
+Error (line 124): bad indentation
+Error (line 125): line has 90 characters
+Error (line 125): missing newline after if
+Error (line 125): 2 instructions
+Error (line 125, col 33): no newline before block
+Error (line 125, col 33): no newline after block
+Error (line 128): C++ comment
+Error (line 129): bad indentation
+Error (line 130): missing newline after if
+Error (line 130): bad indentation
+Error (line 130, col 55): no newline before block
+Error (line 131): bad indentation
+Error (line 132): 2 instructions
+Error (line 132): bad indentation
+Error (line 133): comment not well formatted
+Error (line 133): comment not well placed
+Error (line 133): bad indentation
+Error (line 133, col 5): no newline after block
+Error (line 133, col 12): no newline before block
+Error (line 134): bad indentation
+Error (line 134): spaces at the end of line
+Error (line 135): bad indentation
+Error (line 136): bad indentation
+Error (line 137): bad indentation
+Error (line 137): missing newline after if
+Error (line 137, col 22): no newline before block
+Error (line 138): bad indentation
+Error (line 139): bad indentation
+Error (line 140): comment not well placed
+Error (line 140): comment not well formatted
+Error (line 140): bad indentation
+Error (line 140, col 6): missing space after break
+Error (line 141): bad indentation
+Error (line 142): bad indentation
+Error (line 142): line has 116 characters
+Error (line 142): missing newline after if
+Error (line 142, col 4): no newline after block
+Error (line 142, col 102): no newline before block
+Error (line 143): bad indentation
+Error (line 144): bad indentation
+Error (line 145): missing newline after if
+Error (line 145): bad indentation
+Error (line 145, col 4): no newline after block
+Error (line 145, col 31): no newline before block
+Error (line 146): bad indentation
+Error (line 147): bad indentation
+Error (line 147): line has 88 characters
+Error (line 147): comment not well placed
+Error (line 147): comment not well formatted
+Error (line 147, col 4): no newline after block
+Error (line 152): bad indentation
+Error (line 152, col 3): no empty line before block
+Error (line 153): bad indentation
+Error (line 154): bad indentation
+Error (line 155): bad indentation
+Error (line 155, col 27): missing space around &&
+Error (line 156): bad indentation
+Error (line 157): bad indentation
+Error (line 157): missing newline after if
+Error (line 157, col 37): no newline before block
+Error (line 158): bad indentation
+Error (line 159): bad indentation
+Error (line 160): missing newline after if
+Error (line 160): bad indentation
+Error (line 160): line has 148 characters
+Error (line 160, col 3): no newline after block
+Error (line 160, col 57): missing space around &&
+Error (line 160, col 137): no newline before block
+Error (line 161): bad indentation
+Error (line 162): bad indentation
+Error (line 163): bad indentation
+Error (line 164): bad indentation
+Error (line 164): missing newline after if
+Error (line 164, col 32): no newline before block
+Error (line 165): bad indentation
+Error (line 166): bad indentation
+Error (line 167): missing newline after if
+Error (line 167): bad indentation
+Error (line 167): line has 144 characters
+Error (line 167, col 3): no newline after block
+Error (line 167, col 133): no newline before block
+Error (line 168): comment not well placed
+Error (line 168): bad indentation
+Error (line 168): line has 102 characters
+Error (line 168): comment not well formatted
+Error (line 169): bad indentation
+Error (line 169): C++ comment
+Error (line 170): spaces at the end of line
+Error (line 175): line has 89 characters
+Error (line 177): missing newline after if
+Error (line 177, col 44): no newline before block
+Error (line 181): missing newline after if
+Error (line 181, col 52): bad spacing
+Error (line 181, col 65): no newline before block
+Error (line 182, col 11): space after bitnot
+Error (line 183, col 11): space after bitnot
+Error (line 189): bad indentation
+Error (line 192, col 8): missing parentheses in return statement
+Error (line 195): comment not well formatted
+Error (line 196): Space before function name
+Error (line 196): bad spacing before append_main_line
+Error (line 196): function append_main_line has 40 lines
+Error (line 198): bad indentation
+Error (line 198): must begin only by tabulations
+Error (line 198, col 8): bad spacing
+Error (line 198, col 13): new is instanciated during declaration
+Error (line 199, col 6): var is instanciated during declaration
+Error (line 200): bad indentation
+Error (line 200): must begin only by tabulations
+Error (line 200, col 7): bad spacing
+Error (line 200, col 12): size is instanciated during declaration
+Error (line 201): must begin only by tabulations
+Error (line 201): bad indentation
+Error (line 201, col 7): bad spacing
+Error (line 205): Empty line
+Error (line 206): C++ comment
+Error (line 208): bad indentation
+Error (line 208): must begin only by tabulations
+Error (line 209): must begin only by tabulations
+Error (line 209): bad indentation
+Error (line 214): line has 88 characters
+Error (line 216): must begin only by tabulations
+Error (line 216): bad indentation
+Error (line 218): bad indentation
+Error (line 218): must begin only by tabulations
+Error (line 219): bad indentation
+Error (line 219): must begin only by tabulations
+Error (line 220): must begin only by tabulations
+Error (line 220): bad indentation
+Error (line 221): must begin only by tabulations
+Error (line 221): missing newline after if
+Error (line 221): bad indentation
+Error (line 221, col 24): no newline before block
+Error (line 224): C++ comment
+Error (line 226): missing newline after if
+Error (line 226, col 69): no newline before block
+Error (line 231): missing newline after if
+Error (line 231, col 17): no newline before block
+Error (line 240): Space before function name
+Error (line 248): bad indentation
+Error (line 248): C++ comment
+Error (line 249, col 8): missing parentheses in return statement
+Error (line 258): comment not well formatted
+Error (line 258): comment not well placed
+Error (line 258, col 9): missing parentheses in return statement
+Error (line 267, col 12): missing parentheses in return statement
+Error (line 268, col 11): missing parentheses in return statement
+Error (line 274, col 8): missing parentheses in return statement
+Error (line 277): declarations must be followed by one empty line in determine_next_io_step
+Error (line 279, col 6): res is instanciated during declaration
+Error (line 281): comment not well placed
+Error (line 281): comment not well formatted
+Error (line 281, col 9): missing parentheses in return statement
+Error (line 283): comment not well placed
+Error (line 283): comment not well formatted
+Error (line 283, col 9): missing parentheses in return statement
+Error (line 284): missing newline after if
+Error (line 284, col 36): no newline before block
+Error (line 286): missing newline after if
+Error (line 286, col 12): no newline before block
+Error (line 289): missing newline after if
+Error (line 289, col 11): no newline before block
+Error (line 294, col 6): no newline before block
+Error (line 298, col 8): missing parentheses in return statement
+Error (line 301): declarations must be followed by one empty line in consult_state
+Error (line 301): declarations in consult_state must be at the top of the function
+Error (line 304, col 6): ret is instanciated during declaration
+Error (line 305, col 6): small is instanciated during declaration
+Error (line 306): missing newline after if
+Error (line 306): comment not well formatted
+Error (line 306): comment not well placed
+Error (line 309): line has 112 characters
+Error (line 314): 2 instructions
+Error (line 315, col 6): no newline before block
+Error (line 316): line has 92 characters
+Error (line 320, col 8): missing parentheses in return statement
+Error (line 321, col 0): no newline after block
+Norme: srcs/input/input_utils.c
+Warning: srcs/input/input_utils.c may not compile or is invalid for some reasons.
+Norme: srcs/tokens/parse_tokens.c
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error (line 3): function get_data has 44 lines
+Error (line 3): line has 84 characters
+Error (line 3): Space before function name
+Error (line 3, col 11): bad spacing
+Error (line 5, col 5): bad spacing
+Error (line 6, col 4): bad spacing
+Error (line 12): missing newline after while
+Error (line 12, col 26): no newline before block
+Error (line 13): line has 91 characters
+Error (line 13): missing newline after while
+Error (line 14): bad indentation
+Error (line 14): must begin only by tabulations
+Error (line 14, col 43): no newline before block
+Error (line 16): line has 85 characters
+Error (line 29): missing newline after if
+Error (line 29, col 51): no newline before block
+Error (line 33): missing newline after if
+Error (line 33, col 14): no newline before block
+Error (line 65): Space before function name
+Error (line 75): function parsing_t has 36 lines
+Error (line 75): Space before function name
+Error (line 75): declarations in parsing_t are bad aligned
+Error (line 75, col 14): bad spacing
+Norme: srcs/utils/handle_err.c
+Error (line 25): bad spacing after handle_return_error
+Error (line 39): comment not well formatted
+Error (line 58): C++ comment
