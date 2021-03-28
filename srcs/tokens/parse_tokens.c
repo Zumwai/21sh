@@ -8,13 +8,24 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 	char			*buf;
 
 	j = 0;
-	while (line[*n] != '\0') {
-		while (line[*n] != '|' && line[*n] != ';' && line[*n] != '&' && line[*n] != '>' &&
-			   line[*n] != '<' && line[*n] != '\0') {
+	while (line[*n] != '\0')
+	{
+		while (line[*n] != '|' && line[*n] != ';' /*&& line[*n] != '&' */ && line[*n] != '>' &&
+			   line[*n] != '<' /*&& line[*n] != '\n' */&& line[*n] != '\0')
+		{
 			update_flag(flag, line[*n]);
 			if (line[*n] == ' ' && t->prev && (ft_strcmp(t->prev->data, "<<") == 0))
 			{
 				res[j] = '\0';
+				buf = ft_strdup(res);
+				ret = ft_strtrim(buf);
+				free(buf);
+				return (ret);
+			}
+			if (line[*n] == '\n')
+			{
+				res[j] = '\0';
+				*n += 1;
 				buf = ft_strdup(res);
 				ret = ft_strtrim(buf);
 				free(buf);
@@ -34,9 +45,10 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 			free(buf);
 			return (ret);
 		}
-		if (j == 0) {
+		if (j == 0){
 			ret = get_semantica_ret(line, n, res, j);
 			*n += 1;
+			///ft_putendl("ret is return");
 			return (ret);
 		}
 		else
@@ -70,13 +82,14 @@ int						is_empty(char *s)
 {
 	while (cur)
 	{
-		ft_putendl("new token");
+		ft_putendl("new token  ");
+		ft_putnbr(cur->c_type);
 		ft_putendl(cur->data);
 		cur = cur->next;
 	}
 }*/
 
-extern t_token 			*parsing_t(char *line)
+extern t_token 			*parsing_t(char *line, t_env **env)
 {
 	t_token *token;
 	int car;
@@ -97,22 +110,25 @@ extern t_token 			*parsing_t(char *line)
 	{
 		while (line[car] && line[car] == ' ')
 			car++;
+		if (line[car] == '\n' && line[car + 1] == '\0')
+			break;
 		if (line[car] != '\0')
 		{
 			token->next = init_token();
 			token->next->prev = token;
 			token = token->next;
 			token->data = get_data(line, &car, flag, token);
-			///ft_putendl(token->data);
 		}
 		if (ft_strcmp(token->data, "") == 0)
 			token->data = get_data(line, &car, flag, token);
 		flag = reset_flag(flag);
 	}
 	free(flag);
-	///print(cur);
-	if (is_tokens_true(cur))
+	if (is_tokens_true(cur, env))
+	{
+		//print(cur);
 		return (cur);
+	}
 	return (0);
 }
 
