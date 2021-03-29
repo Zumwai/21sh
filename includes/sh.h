@@ -76,6 +76,9 @@ int				sh_clear(__attribute__((unused))char **com, __attribute__((unused))t_env 
 int			sh_env(char **com, t_env **env, __attribute((unused))int fd, __attribute((unused))int cmd);
 int			sh_echo(char **com, t_env **env, int fd, __attribute((unused))int cmd);
 int			sh_cd(char **com, t_env **env);
+char	*create_first_part(char *com, t_env **env, int flag, int *size);
+extern char	*clear_dotdot(char *path, int flag);
+extern char	*concatenate_smart(char *path, char *sep, int *size);
 int				sh_exit(void);
 int				display_id_kid_parent(void);
 int				sh_pwd(char **com, t_env **env);

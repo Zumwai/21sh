@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/29 11:57:38 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/29 12:03:36 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 
 static void		change_working_dir(char *path, t_env **env, char *com, int flag)
@@ -24,90 +36,7 @@ static void		change_working_dir(char *path, t_env **env, char *com, int flag)
 	free(pwd);
 }
 
-char		*get_value_env(char *sought, t_env **env)
-{
-	t_env	*curs;
-	char	*new;
-
-	new = NULL;
-	curs = NULL;
-	curs = find_env_variable(env, sought);
-	if (curs && curs->value)
-		new = ft_strdup(curs->value);
-	return (new);
-}
-
-static char	*create_first_part(char *com, t_env **env, int flag, int *size)
-{
-	char *path;
-	char *pwd;
-
-	pwd = NULL;
-	path = ft_strnew(PATH_MAX);
-	if (com[0] != '/' && com[0] != '~')
-	{
-		if (flag == PHYSICAL)
-			pwd = getcwd(pwd, PATH_MAX);	
-		else
-			pwd = get_value_env("PWD", env);
-		if (!pwd)
-			pwd = getcwd(pwd, PATH_MAX);
-		ft_strcat(path, pwd);
-	}
-	if (com[0] == '~')
-	{
-		pwd = get_value_env("HOME", env);
-		if (pwd)
-			ft_strcat(path, pwd);
-	}
-	if (com[0] == '/')
-		path[0] = '/';
-	*size = PATH_MAX;
-	if (pwd)
-		free(pwd);
-	return (path);
-}
-
-char	*clear_dotdot(char *path, int flag)
-{
-	int	j;
-
-	j = ft_strlen(path);
-	while (path[j] != '/' && j > 0)
-	{
-		path[j] = 0;
-		j--;
-	}
-	while (j > 0 && path[j] == '/')
-	{
-		path[j] = 0;
-		j--;
-	}
-	return (path);
-}
-
-char	*concatenate_smart(char *path, char *sep, int *size)
-{
-	int		len_p;
-	int		len_s;
-	char	*new;
-
-	len_p = ft_strlen(path);
-	len_s = ft_strlen(sep);
-	if (len_p + len_s >= *size)
-	{
-		new = ft_strnew(len_p + len_s + 1);
-		ft_strcpy(new, path);
-		free(path);
-		path = new;
-		*size = len_p + len_s + 1;
-	}
-	ft_strcat(path, "/");
-	ft_strcat(path, sep);
-	return (path);
-}
-
-char		*trim_curpath(char *curpath, t_env **env) 
+char			*trim_curpath(char *curpath, t_env **env)
 {
 	char	*pwd;
 	int		i;
@@ -118,7 +47,7 @@ char		*trim_curpath(char *curpath, t_env **env)
 	size = ft_strlen(curpath);
 	if (size < 4096)
 		return (curpath);
-	if (!(pwd =  get_value_env("PWD", env)))
+	if (!(pwd = get_value_env("PWD", env)))
 	{
 		if (!(pwd = getcwd(pwd, PATH_MAX)))
 			return (NULL);
@@ -133,7 +62,7 @@ char		*trim_curpath(char *curpath, t_env **env)
 	return (curpath);
 }
 
-char	*create_path(char *com, t_env **env, int flag)
+char			*create_path(char *com, t_env **env, int flag)
 {
 	char	**sep;
 	char	*path;
@@ -161,7 +90,7 @@ char	*create_path(char *com, t_env **env, int flag)
 	return (path);
 }
 
-char	*get_stdpath(char **com, t_env **env)
+char			*get_stdpath(char **com, t_env **env)
 {
 	char *curpath;
 
@@ -177,7 +106,7 @@ char	*get_stdpath(char **com, t_env **env)
 	return (curpath);
 }
 
-int		sh_cd(char **com, t_env **env)
+int				sh_cd(char **com, t_env **env)
 {
 	char		*curpath;
 	int			i;
