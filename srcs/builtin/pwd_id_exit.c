@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd_id_exit.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/29 12:45:12 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/29 12:45:39 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 
 int		sh_exit(void)
@@ -6,7 +18,7 @@ int		sh_exit(void)
 	return (0);
 }
 
-int	display_id_kid_parent(void)
+int		display_id_kid_parent(void)
 {
 	pid_t	kid;
 	pid_t	par;
@@ -19,7 +31,7 @@ int	display_id_kid_parent(void)
 	par = (getppid());
 	ft_putnbr(par);
 	ft_putchar('\n');
-	return 1;
+	return (1);
 }
 
 int		sh_pwd(char **com, t_env **env)

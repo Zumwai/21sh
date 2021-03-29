@@ -2,11 +2,12 @@ NAME = 21sh
 COM = clang
 SRCS =	main.c \
 		builtin/cd.c \
-		builtin/env_list.c \
 		builtin/environ.c \
 		builtin/pwd_id_exit.c \
 		builtin/type.c \
 		builtin/cd_utils.c \
+		builtin/setnew.c \
+		builtin/unset.c \
 		cmd/get_cmd.c \
 		exec/builtin_fd.c \
 		exec/execute.c \

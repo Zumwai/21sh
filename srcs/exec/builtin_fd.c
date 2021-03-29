@@ -57,8 +57,3 @@ int				sh_clear(__attribute__((unused))char **com, __attribute__((unused))t_env 
 	write(1, " \e[1;1H\e[2J", 12);
 	return 1;
 }
-
-int				do_builtin()
-{
-	return 1;
-}

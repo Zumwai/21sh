@@ -6,7 +6,7 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/29 11:38:40 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/29 12:03:59 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/29 12:07:40 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,15 @@ static char		*insert_pwd(char *path, t_env **env, int flag)
 	char *pwd;
 
 	pwd = NULL;
-	if (flag == PHYSICAL )
-		pwd = getcwd(pwd, PATH_MAX);	
+	if (flag == PHYSICAL)
+		pwd = getcwd(pwd, PATH_MAX);
 	else
 		pwd = get_value_env("PWD", env);
 	if (!pwd)
 		pwd = getcwd(pwd, PATH_MAX);
 	if (pwd)
 	{
-		if (ft_strlen(pwd) < PATH_MAX))
+		if (ft_strlen(pwd) < PATH_MAX)
 			ft_strcat(path, pwd);
 		free(pwd);
 	}
