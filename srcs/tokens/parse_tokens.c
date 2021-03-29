@@ -119,8 +119,8 @@ extern t_token 			*parsing_t(char *line, t_env **env)
 			token = token->next;
 			token->data = get_data(line, &car, flag, token);
 		}
-		if (ft_strcmp(token->data, "") == 0)
-			token->data = get_data(line, &car, flag, token);
+		//if (ft_strcmp(token->data, "") != 0)
+			//token->data = get_data(line, &car, flag, token);
 		flag = reset_flag(flag);
 	}
 	free(flag);

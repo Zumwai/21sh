@@ -255,9 +255,9 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 				do_proc(read, wfd, cmd->target, cmd, env);
 			}
 		}
-		if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8)
+		if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9)
 		{
-        	while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8))
+        	while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9))
             	cmd = cmd->next;
     	}
 		///if (fd[1])

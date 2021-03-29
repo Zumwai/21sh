@@ -59,10 +59,6 @@ char			*str_todoc(char *s, int *qu, t_env **env)
 	q[1] = 0;
 	i = 0;
 	j = 0;
-	ft_putnbr(*qu);
-	ft_putendl("=== quots");
-	ft_putstr(s);
-	ft_putendl(" === src todoc");
 	if (*qu > 0)
 	{
 		if (*qu == 1)
@@ -72,7 +68,6 @@ char			*str_todoc(char *s, int *qu, t_env **env)
 	}
 	while (s[i] != '\0')
 	{
-		ft_putendl("in while");
 		if (s[i] == 39 && q[1] == 0)
 		{
 			q[0] = q[0] == 0 ? 1 : 0;
@@ -107,8 +102,6 @@ char			*str_todoc(char *s, int *qu, t_env **env)
 	}
 	buf[j] = '\0';
 	src = ft_strdup(buf);
-	ft_putstr(src);
-	ft_putendl(" === res of todoc");
 	return (src);
 }
 
@@ -120,8 +113,6 @@ char					*exec_name(char *s, int *q)
 	char				c;
 	int					j;
 
-	ft_putstr("exec_name arg ");
-	ft_putendl(s);
 	i = 0;
 	l = 0;
 	while (s[i])
@@ -139,8 +130,6 @@ char					*exec_name(char *s, int *q)
 		i++;
 		l++;
 	}
-	ft_putnbr(l);
-	ft_putendl("=== l");
 	res = (char *)malloc(sizeof(char) * l + 1);
 	i = 0;
 	j = 0;
@@ -165,8 +154,6 @@ char					*exec_name(char *s, int *q)
 		}
 	}
 	res[l] = '\0';
-	ft_putendl(res);
-	ft_putendl("=== nme");
 	return (res);
 }
 
@@ -180,7 +167,7 @@ extern t_token 			*get_last_token(t_token *t)
 	return (r);
 }
 
-void					*make_doc(char *tar, t_token *t, t_env **env)
+void					make_doc(char *tar, t_token *t, t_env **env)
 {
 	char *name;
 	int fd;
@@ -191,8 +178,6 @@ void					*make_doc(char *tar, t_token *t, t_env **env)
 
 	q = 0;
 	name = exec_name(tar, &q);
-	ft_putstr(name);
-	ft_putendl("   file_name");
 	fd = open(name, O_CREAT | O_RDWR | O_APPEND,
 			  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 	while (ft_strcmp(name, t->data) != 0)
@@ -219,21 +204,17 @@ static int				right_row(t_token *t, t_env **env)
 	///t_token 		*first;
 	char			*tar;
 
-	ft_putendl("right_row");
 	///first = t;
 	if (t->type == 1)
 		return (0);
 	if (t->next)
 	{
-		ft_putendl("wtf?! -- 1");
 		while (t->next)
 		{
 			if (t->c_type == 9)
 			{
-				ft_putendl("wtf?!");
 				t = t->next;
 				tar = t->data;
-				///tar = exec_name(first->data);
 				make_doc(tar, t->next, env);
 			}
 			//if (first->type == first->next->type)
@@ -241,7 +222,6 @@ static int				right_row(t_token *t, t_env **env)
 			t = t->next;
 		}
 	}
-	ft_putendl("right_row done");
 	return (1);
 }
 
@@ -289,7 +269,6 @@ extern int 				is_tokens_true(t_token *s, t_env **env)
 	t_token				*t;
 
 	t = s;
-	ft_putendl("is_tokens_true");
 	while (t)
 	{
 		if (ft_strcmp(t->data, BK) == 0 || ft_strcmp(t->data, SC) == 0 ||
@@ -314,8 +293,7 @@ extern int 				is_tokens_true(t_token *s, t_env **env)
 		return (1);
 	//else
 	    //ft_putendl_fd("error of parsing", 2);
-	//return (0);
-
+	return (0);
 }
 
 extern t_token 			*init_token(void)
