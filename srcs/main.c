@@ -13,7 +13,7 @@ int		main(int ac, char **av, char **env)
 	buffer = NULL;
 	ev = init_shell(ac, av, env, &buffer);
 	loop = 1;
-	while (loop > 0)
+	while (loop >= 0)
 	{
 		token = NULL;
 		line = NULL;
