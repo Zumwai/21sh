@@ -110,8 +110,8 @@ extern t_token 			*parsing_t(char *line, t_env **env)
 	{
 		while (line[car] && line[car] == ' ')
 			car++;
-		if (line[car] == '\n' && line[car + 1] == '\0')
-			break;
+		///if (line[car] == '\n' && line[car + 1] == '\0')
+			///break;
 		if (line[car] != '\0')
 		{
 			token->next = init_token();

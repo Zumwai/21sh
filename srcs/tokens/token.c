@@ -201,7 +201,7 @@ void					*make_doc(char *tar, t_token *t, t_env **env)
 		{
 			todoc = str_todoc(t->data, &q, env);
 			l = ft_strlen(todoc);
-			write(fd, todoc, l);
+			ft_putendl_fd(todoc, fd);
 			///fix = t;
 			///t->prev->next = fix->next;
 			t = t->next;
