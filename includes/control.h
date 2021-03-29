@@ -38,7 +38,7 @@ void 		free_history(t_history **history);
 void		envoke_history(t_yank *buffer, int key);
 char		*ft_strdup_size(char *old, size_t size);
 void		copy_word(t_term *pos, t_yank *buffer);
-char		*handle_input_stream(t_yank *buffer, t_env **env, int *fail);
+char		*handle_input_stream(t_yank *buffer, t_env **env);
 int			putchar_like(int n);
 void		handle_empty_error(char *name, char *description);
 int			handle_return_error(int num, char *name);

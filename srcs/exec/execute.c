@@ -63,6 +63,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 		return ;
 	if ((pid = fork()) == 0)
 	{
+		handle_all_signals(0);
 		if (read != 0)
 		{
 			dup2(read, 0);
@@ -84,6 +85,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 		close(read);
 	if (fd != 1 && fd != 2)
 		close(fd);
+	handle_all_signals(1);
 	set_free_null(&cmd->target);
 	ft_free_tab(environ);
 	environ = NULL;
@@ -239,7 +241,6 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	int ffd;
 	ffd = 1;
 	//create_file_is_it_doent_exist(cmd);
-	handle_all_signals(0);
 	if (!cmd->arr || !cmd->arr[0])
 		return 1;
 	while (cmd)
@@ -247,20 +248,20 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 		if (cmd->type == 6 || cmd->type == 7 || cmd->type == 2)
 			what_about_file(cmd);
 	    if (cmd->type == 6 || cmd->type == 7)
-	        wfd = get_fd_write(cmd);
+			 wfd = get_fd_write(cmd);
 	    if ((builtin = check_isbuiltin(cmd->arr[0])) != 0)
 	    {
-	       if ((cmd->type == 6 || cmd->type == 7) && wfd != 1)
-	            ffd = wfd;
-	       if (cmd->type == 2)
-	       {
-			   pipe(fd);
-			   ffd = fd[1];
-			   close(fd[0]);
-		   }
-	       if (cmd->type != 2 && cmd->type != 7 && cmd->type != 6)
-	           ffd = 1;
-	     res = exec_builtin(cmd->arr, env, ffd, builtin);		 
+			if ((cmd->type == 6 || cmd->type == 7) && wfd != 1)
+				ffd = wfd;
+			if (cmd->type == 2)
+			{
+				pipe(fd);
+				ffd = fd[1];
+				close(fd[0]);
+			}
+			if (cmd->type != 2 && cmd->type != 7 && cmd->type != 6)
+				ffd = 1;
+	    	res = exec_builtin(cmd->arr, env, ffd, builtin);		 
         }
 	    else
 	    {
@@ -298,7 +299,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 			///close(fd[1]);
 	    //close(fd[0]);
 		if (cmd->type == 2)
-		    read = fd[0];
+			read = fd[0];
 		if (wfd != 1 && wfd != 2 && wfd != 0)
 			close(wfd);
 		cmd = cmd->next;

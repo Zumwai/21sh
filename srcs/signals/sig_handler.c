@@ -6,7 +6,7 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 20:10:47 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 20:11:54 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/28 14:44:58 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void			handle_main_signal(int sig)
 				return ;
 			handle_empty_error("Signal recieved: ", ret);
 		ft_putstr("\n");
-		if (sig != SIGCHLD)
-			ft_putstr("shelp$>");
+		//if (sig != SIGCHLD)
+		//	ft_putstr("shelp$>");
 		signal(sig, SIG_IGN);
 	}
 }
@@ -86,10 +86,10 @@ void			handle_all_signals(int pid)
 {
 	if (pid)
 	{
-		//signal(SIGINT, handle_main_signal);
+		signal(SIGINT, handle_main_signal);
 		signal(SIGABRT, handle_main_signal);
 		//signal(SIGINT, handle_main_signal);
-		//signal(SIGSTOP, handle_main_signal);
+		signal(SIGSTOP, handle_main_signal);
 		signal(SIGCONT, handle_main_signal);
 		//signal(SIGTSTP, handle_main_signal);
 		//signal(SIGKILL, handle_main_signal);
@@ -101,7 +101,7 @@ void			handle_all_signals(int pid)
 	}
 	if (!pid)
 	{
-		//signal(SIGSTOP, handle_child_signal);
+		signal(SIGSTOP, handle_child_signal);
 		signal(SIGCONT, handle_child_signal);
 		signal(SIGINT, handle_child_signal);
 		signal(SIGABRT, handle_child_signal);

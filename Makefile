@@ -2,12 +2,14 @@ NAME = 21sh
 COM = clang
 SRCS =	main.c \
 		builtin/cd.c \
-		builtin/env_list.c \
+		builtin/cd_utils.c \
 		builtin/environ.c \
 		builtin/pwd_id_exit.c \
 		builtin/type.c \
+		builtin/setnew.c \
+		builtin/unset.c \
+		builtin/echo.c \
 		cmd/get_cmd.c \
-		exec/builtin_fd.c \
 		exec/execute.c \
 		exec/build_path.c \
 		tokens/ampersand.c \
@@ -19,6 +21,7 @@ SRCS =	main.c \
 		tokens/token.c \
 		tree/tree_ft.c \
 		tree/tree.c \
+		tree/priority.c \
 		utils/free.c \
 		utils/freemore.c \
 		utils/init.c \
@@ -30,6 +33,7 @@ SRCS =	main.c \
 		input/reader.c \
 		input/input_utils.c \
 		input/cursor.c \
+		input/input_inits.c \
 		history/history.c \
 		history/cpy_history.c \
 		history/scroll.c \

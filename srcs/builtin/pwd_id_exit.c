@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd_id_exit.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/29 12:45:12 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/29 12:48:23 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 
 int		sh_exit(void)
 {
 	tcsetattr(STDIN_FILENO, TCSADRAIN, &g_sig.old);
-	return (0);
+	return (-1);
 }
 
-int	display_id_kid_parent(void)
+int		display_id_kid_parent(void)
 {
 	pid_t	kid;
 	pid_t	par;
@@ -19,7 +31,7 @@ int	display_id_kid_parent(void)
 	par = (getppid());
 	ft_putnbr(par);
 	ft_putchar('\n');
-	return 1;
+	return (0);
 }
 
 int		sh_pwd(char **com, t_env **env)
@@ -30,9 +42,9 @@ int		sh_pwd(char **com, t_env **env)
 	curr = get_value_env("PWD", env);
 	if (!curr)
 		if (!(curr = getcwd(curr, PATH_MAX)))
-			return (-1);
+			return (1);
 	ft_putstr(curr);
 	ft_putchar('\n');
 	free(curr);
-	return (1);
+	return (0);
 }
