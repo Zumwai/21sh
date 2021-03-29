@@ -54,20 +54,18 @@ char			*str_todoc(char *s, int *qu, t_env **env)
 	char		buf[10000];
 	int			j;
 	char		*src;
-	int			w;
 
-	w = (*q);
 	q[0] = 0;
 	q[1] = 0;
 	i = 0;
 	j = 0;
-	ft_putnbr(w);
+	ft_putnbr(*qu);
 	ft_putendl("=== quots");
 	ft_putstr(s);
 	ft_putendl(" === src todoc");
-	if (w > 0)
+	if (*qu > 0)
 	{
-		if (w == 1)
+		if (*qu == 1)
 			q[0] = 1;
 		else
 			q[1] = 1;
@@ -199,16 +197,16 @@ void					*make_doc(char *tar, t_token *t, t_env **env)
 			  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 	while (ft_strcmp(name, t->data) != 0)
 	{
-		if (t->c_type != 9 && t->prev->c_type != 9)
+		if (t->c_type != 9 && t->prev && t->prev->c_type != 9)
 		{
 			todoc = str_todoc(t->data, &q, env);
 			l = ft_strlen(todoc);
 			write(fd, todoc, l);
-			fix = t;
-			t->prev->next = t->next;
-			free(fix->data);
-			free(fix);
+			///fix = t;
+			///t->prev->next = fix->next;
 			t = t->next;
+			///ft_strclr(fix->data);
+			///free(fix);
 		}
 		else
 			t = t->next;
