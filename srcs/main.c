@@ -7,27 +7,26 @@ int		main(int ac, char **av, char **env)
 	char		*line;
 	t_cmd		*cmd;
 	int			loop;
-	int			fail;
 	t_env	*ev;
 	t_yank	*buffer;
+
 	buffer = NULL;
 	ev = init_shell(ac, av, env, &buffer);
 	loop = 1;
 	while (loop > 0)
 	{
-		fail = 0;
 		token = NULL;
 		line = NULL;
 		handle_all_signals(1);
-		line = handle_input_stream(buffer, &ev, &fail);
+		line = handle_input_stream(buffer, &ev);
 		if (!line)
 		{
-			if (!(fail & (FAILED)))
+			if (!(buffer->state & (FAILED)))
 				break ;
 			else
 				ft_putchar('\n');
 		}
-		else if (line[0] && !(fail & (FAILED)))
+		else if (line[0] && !(buffer->state & (FAILED)))
 		{
 				token = parsing_t(line);
 				if (token)

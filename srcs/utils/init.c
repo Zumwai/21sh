@@ -33,7 +33,7 @@ static void		init_tty_attr(t_yank *buf)
 	tty.c_cc[VTIME] = 1;
 	g_sig.old = old_tty;
 	g_sig.work = tty;
-	tcsetattr(STDIN_FILENO, TCSANOW, &tty);
+	//tcsetattr(STDIN_FILENO, TCSANOW, &tty);
 }
 
 static t_yank	*init_buffer(void)

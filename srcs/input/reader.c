@@ -22,7 +22,6 @@ char	*get_buf_line(char **line, int *size, int increase)
 	return (*line);
 }
 
-
 static long long	incapsulate_read(void)
 {
 	long long key;
@@ -30,6 +29,7 @@ static long long	incapsulate_read(void)
 	int stdin_cpy;
 	ret = 0;
 	key = 0;
+	tcsetattr(STDIN_FILENO, TCSANOW, &(g_sig).work);
 	while (g_sig.winch == 0)
 	{
 		ret = 0;
@@ -39,6 +39,7 @@ static long long	incapsulate_read(void)
 		if (ret > 0)
 			break ;
 	}
+	tcsetattr(STDIN_FILENO, TCSANOW, &(g_sig).old);
 	return (key);
 }
 
@@ -77,25 +78,22 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 	t_term	*pos;
     struct winsize dimensions;
 
-	tcsetattr(STDIN_FILENO, TCSANOW, &(g_sig).work);
+	//tcsetattr(STDIN_FILENO, TCSANOW, &(g_sig).work);
 	pos = create_new_io_struct(NULL);
 	ft_putstr_size("shelp$>", 7);
 	pos->x += 7;
 	key = 0;
 	red = 0;
+	buffer->state = 0;
 	buffer->current = pos;
 	buffer->saved = NULL;
-	ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
-    buffer->win_x = dimensions.ws_col;
-    buffer->win_y = dimensions.ws_row;
 	while (1)
 	{
+			ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
+		    buffer->win_x = dimensions.ws_col;
+			buffer->win_y = dimensions.ws_row;
 			key = incapsulate_read();
-			//if (g_sad->winch == 0)
-				red = (read_key(key, buffer->current, buffer, env));
-			//else
-			//	red = 1;
-			//printf("! %zd - red\n", red);
+			red = (read_key(key, buffer->current, buffer, env));
 			if (red == DEFAULT || red == -5 || red == -1)
 				break ;
 			if (red == -2) {
@@ -107,47 +105,48 @@ static t_term *get_input(t_yank *buffer, t_env **env)
 				buffer->current->main->state ^= (FAILED);
 				break ;
 			}
-			if (red == HIST_UP || red == HIST_D) {
+			if (red == HIST_UP || red == HIST_D)
+			{
 				int tmp = buffer->current->y;
 				envoke_history(buffer, red);
 				recalc_y(buffer->current, tmp);
 			}
 			red = 0;
 			key = 0;
-			if (g_sig.winch) {
+			if (g_sig.winch)
+			{
+				//tcsetattr(STDIN_FILENO, TCSANOW, &(g_sig).old);
 				g_sig.winch = 0;
 				ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
 				buffer->diff = buffer->win_y - dimensions.ws_row;
 				if (buffer->current)
 				{
 					int tmp = dimensions.ws_row - buffer->win_y;
-					//if (tmp > 0)
-						//update_y_screensize(buffer->current, dimensions.ws_row - g_sad->win_y);
 				}
+				update_y_screensize(buffer->current, tmp);
 				buffer->win_x = dimensions.ws_col;
     			buffer->win_y = dimensions.ws_row;
+				//tcsetattr(STDIN_FILENO, TCSANOW, &(g_sig).work);
 			}
-			display_input(buffer->current, 0);
+			//else
+				display_input(buffer->current, 0);
 	}
 	if (red == 0)
 		buffer->current->main->state = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &(g_sig).old);
 	return (buffer->current);
 }
 
-char	*handle_input_stream(t_yank *buffer, t_env **env, int *fail)
+char	*handle_input_stream(t_yank *buffer, t_env **env)
 {
 	char	*line;
 
 	line =  NULL;
 	buffer->current = get_input(buffer, env);
 	if (buffer->current) {
-		if ((buffer->current->main->state & FAILED)) {
-			(*fail) |= (FAILED);
-		}
 		line = ft_strdup(buffer->current->main->line);
 		buffer->current->main->size = ft_strlen(line);
 		//buffer->current->main->state &= ~(FAILED);
+		buffer->state = buffer->current->main->state;
 		buffer->history = save_history(buffer);
 		free_input_line(&buffer->current);
 		if (buffer->saved)

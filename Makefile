@@ -19,6 +19,7 @@ SRCS =	main.c \
 		tokens/token.c \
 		tree/tree_ft.c \
 		tree/tree.c \
+		tree/priority.c \
 		utils/free.c \
 		utils/freemore.c \
 		utils/init.c \

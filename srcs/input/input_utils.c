@@ -6,10 +6,9 @@
 /*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/27 19:33:25 by aophion           #+#    #+#             */
-/*   Updated: 2021/03/27 19:33:25 by aophion          ###   ########.fr       */
+/*   Updated: 2021/03/29 10:20:23 by aophion          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "sh.h"
 
@@ -25,6 +24,7 @@ static void get_coordinates(int *start_y, int *start_x)
 	size_t	index = 0;
 	int		red = 0;
 	ft_bzero(buf, 32);
+	tcsetattr(STDIN_FILENO, TCSANOW, &(g_sig).work);
 	if (write(1, "\033[6n", 4) != 4)
 		handle_exit_errors("Write returns Error");
 	while (index < sizeof(buf) - 1)
