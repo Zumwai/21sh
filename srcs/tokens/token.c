@@ -102,6 +102,7 @@ char			*str_todoc(char *s, int *qu, t_env **env)
 	}
 	buf[j] = '\0';
 	src = ft_strdup(buf);
+	///free(s);
 	return (src);
 }
 
@@ -189,9 +190,9 @@ void					make_doc(char *tar, t_token *t, t_env **env)
 			t = t->next;
 			prev->next = t;
 			t->prev = prev;
-			ft_strclr(fix->data);
+			set_free_null(&fix->data);
 			free(fix);
-			free(todoc);
+			set_free_null(&todoc);
 	}
 	prev = t->prev;
 	fix = t;
@@ -199,7 +200,7 @@ void					make_doc(char *tar, t_token *t, t_env **env)
 	prev->next = t;
 	if (t)
 		t->prev = prev;
-	ft_strclr(fix->data);
+	set_free_null(&fix->data);
 	free(fix);
 	free(name);
 	close(fd);
