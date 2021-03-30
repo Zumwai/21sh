@@ -78,7 +78,7 @@ int						is_empty(char *s)
 	return (1);
 }
 
-/*void print(t_token *cur)
+void print(t_token *cur)
 {
 	while (cur)
 	{
@@ -87,7 +87,7 @@ int						is_empty(char *s)
 		ft_putendl(cur->data);
 		cur = cur->next;
 	}
-}*/
+}
 
 extern t_token 			*parsing_t(char *line, t_env **env)
 {
@@ -126,7 +126,7 @@ extern t_token 			*parsing_t(char *line, t_env **env)
 	free(flag);
 	if (is_tokens_true(cur, env))
 	{
-		//print(cur);
+		print(cur);
 		return (cur);
 	}
 	return (0);

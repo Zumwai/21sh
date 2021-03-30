@@ -171,7 +171,7 @@ void					make_doc(char *tar, t_token *t, t_env **env)
 {
 	char *name;
 	int fd;
-	int		l;
+	t_token *prev;
 	t_token		*fix;
 	int			q;
 	char		*todoc;
@@ -182,20 +182,26 @@ void					make_doc(char *tar, t_token *t, t_env **env)
 			  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 	while (ft_strcmp(name, t->data) != 0)
 	{
-		if (t->c_type != 9 && t->prev && t->prev->c_type != 9)
-		{
 			todoc = str_todoc(t->data, &q, env);
-			l = ft_strlen(todoc);
 			ft_putendl_fd(todoc, fd);
-			///fix = t;
-			///t->prev->next = fix->next;
+			prev = t->prev;
+			fix = t;
 			t = t->next;
-			///ft_strclr(fix->data);
-			///free(fix);
-		}
-		else
-			t = t->next;
+			prev->next = t;
+			t->prev = prev;
+			ft_strclr(fix->data);
+			free(fix);
+			free(todoc);
 	}
+	prev = t->prev;
+	fix = t;
+	t = t->next;
+	prev->next = t;
+	if (t)
+		t->prev = prev;
+	ft_strclr(fix->data);
+	free(fix);
+	free(name);
 	close(fd);
 }
 
@@ -207,9 +213,9 @@ static int				right_row(t_token *t, t_env **env)
 	///first = t;
 	if (t->type == 1)
 		return (0);
-	if (t->next)
-	{
-		while (t->next)
+	///if (t->next)
+	///{
+		while (t)
 		{
 			if (t->c_type == 9)
 			{
@@ -221,7 +227,7 @@ static int				right_row(t_token *t, t_env **env)
 			//return (0);
 			t = t->next;
 		}
-	}
+	///}
 	return (1);
 }
 
