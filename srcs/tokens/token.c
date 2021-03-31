@@ -102,7 +102,6 @@ char			*str_todoc(char *s, int *qu, t_env **env)
 	}
 	buf[j] = '\0';
 	src = ft_strdup(buf);
-	///free(s);
 	return (src);
 }
 
@@ -183,6 +182,11 @@ void					make_doc(char *tar, t_token *t, t_env **env)
 			  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 	while (ft_strcmp(name, t->data) != 0)
 	{
+	    if (t->c_type == 9 || t->next->c_type == 9 || t->prev->c_type == 9 || t->type == 1 || t->prev->type == 1)
+        {
+	        t = t->next;
+	        continue ;
+        }
 			todoc = str_todoc(t->data, &q, env);
 			ft_putendl_fd(todoc, fd);
 			prev = t->prev;
@@ -208,27 +212,22 @@ void					make_doc(char *tar, t_token *t, t_env **env)
 
 static int				right_row(t_token *t, t_env **env)
 {
-	///t_token 		*first;
 	char			*tar;
 
-	///first = t;
 	if (t->type == 1)
 		return (0);
-	///if (t->next)
-	///{
-		while (t)
-		{
-			if (t->c_type == 9)
-			{
-				t = t->next;
-				tar = t->data;
-				make_doc(tar, t->next, env);
-			}
-			//if (first->type == first->next->type)
-			//return (0);
-			t = t->next;
-		}
-	///}
+	while (t)
+	{
+	    if (t->c_type == 9)
+	    {
+	        t = t->next;
+	        tar = t->data;
+	        make_doc(tar, t->next, env);
+	    }
+	    //if (first->type == first->next->type)
+	    //return (0);
+	    t = t->next;
+	}
 	return (1);
 }
 
@@ -297,6 +296,28 @@ extern int 				is_tokens_true(t_token *s, t_env **env)
 	}
 	t = s;
 	if (right_row(t, env))
+    {
+        t = s;
+        while (t)
+        {
+            if (ft_strcmp(t->data, BK) == 0 || ft_strcmp(t->data, SC) == 0 ||
+                ft_strcmp(t->data, OR) == 0 ||
+                ft_strcmp(t->data, AND) == 0 ||
+                ft_strcmp(t->data, PIPE) == 0 ||
+                ft_strcmp(t->data, GREAT) == 0 ||
+                ft_strcmp(t->data, GGREAT) == 0 ||
+                ft_strcmp(t->data, LESS) == 0 ||
+                ft_strcmp(t->data, LLESS) == 0 )
+            {
+                t->type = 1;
+                t->c_type = get_cmd_type(t->data);
+                t->priority = get_priority(t->data);
+            }
+            else
+                t->type = 0;
+            t = t->next;
+        }
+    }
 		return (1);
 	//else
 	    //ft_putendl_fd("error of parsing", 2);

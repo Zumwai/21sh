@@ -48,7 +48,6 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 		if (j == 0){
 			ret = get_semantica_ret(line, n, res, j);
 			*n += 1;
-			///ft_putendl("ret is return");
 			return (ret);
 		}
 		else
@@ -78,7 +77,7 @@ int						is_empty(char *s)
 	return (1);
 }
 
-void print(t_token *cur)
+/*void print(t_token *cur)
 {
 	while (cur)
 	{
@@ -87,7 +86,7 @@ void print(t_token *cur)
 		ft_putendl(cur->data);
 		cur = cur->next;
 	}
-}
+}*/
 
 extern t_token 			*parsing_t(char *line, t_env **env)
 {
@@ -110,8 +109,6 @@ extern t_token 			*parsing_t(char *line, t_env **env)
 	{
 		while (line[car] && line[car] == ' ')
 			car++;
-		///if (line[car] == '\n' && line[car + 1] == '\0')
-			///break;
 		if (line[car] != '\0')
 		{
 			token->next = init_token();
@@ -125,10 +122,7 @@ extern t_token 			*parsing_t(char *line, t_env **env)
 	}
 	free(flag);
 	if (is_tokens_true(cur, env))
-	{
-		print(cur);
 		return (cur);
-	}
 	return (0);
 }
 

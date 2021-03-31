@@ -56,34 +56,26 @@ int						len_of_word(char *s, int i)
 
 	res = 0;
 	c = 0;
-	///printf("len s == %s i == %d\n", s, i);
 	while (s[i] && s[i] != ' ')
 	{
 		if (s[i] == c)
 			c = 0;
 		else if (s[i] != ' ' && s[i] != 34 && s[i] != 39)
-		{
-			///printf("s[%d] === %c\n", i, s[i]);
 			res++;
-		}
 		else if (s[i] == '"' || s[i] == '\'')
 		{
 			c = s[i];
 			i++;
-			///printf("c === %c\n", c);
-			while (s[i] != c && s[i]) {
-				///printf("sss[%d] === %c\n", i, s[i]);
+			while (s[i] != c && s[i])
+			{
 				i++;
 				res++;
 			}
 		}
 		else if (s[i] == ' ' && !c)
-		{
 			break;
-		}
 		i++;
 	}
-	///printf("len_of_word === %d\n", res);
 	return (res);
 }
 
@@ -120,17 +112,12 @@ char					*fill_str(char *s, int *i)
 	course = 0;
 	course = (*i);
 
-	///ft_putendl("BEWARE");
 	ft_strclr(buf);
-	///printf("start course === %d\n", course);
-	///printf("st.course === %c\n", s[course]);
 	if (s[course] == ' ')
 	{
 		while (s[course] == ' ' && s[course])
 			course++;
 	}
-	///printf("s === %s\n", s);
-	///printf("course === %d\n", course);
 	l = len_of_word(s, course);
 	res = NULL;
 	while (j < l && s[course])
@@ -147,13 +134,11 @@ char					*fill_str(char *s, int *i)
 		}
 		course = course + 1;
 	}
-	///*i = *i + 1;
 	buf[j] = '\0';
 	///if (its_redir(buf))
 	///fill_str(s, &i);
 	///else
 	res = ft_strdup(buf);
-	///printf("res == %s\n", res);
 	(*i) = course;
 	return(res);
 }
@@ -230,7 +215,6 @@ char					**s_to_arr(char *s)
 	f = how_much_words(s);
 	g = how_much_restreams(s);
 	i = f - g;
-	///printf("%d === words\n", i);
 	res = (char **)malloc(sizeof(char *) * (i + 1));
 	int tmp = 0;
 	while (tmp < i)
@@ -242,7 +226,6 @@ char					**s_to_arr(char *s)
 	{
 		res[j] = fill_str(s, &c);
 		j++;
-		///printf("s_to_arr c === %d\n", c);
 		if (s[c] != 0)
 			c = c + 1;
 	}
@@ -318,7 +301,6 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	}
 	buf[j] = '\0';
 	src = ft_strdup(buf);
-	///printf("src === %s\n", src);
 	c->arr = s_to_arr(src);
 	free(src);
 	return (c);

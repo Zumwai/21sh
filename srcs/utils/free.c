@@ -27,6 +27,8 @@ void			free_cmd_list(t_cmd **cmd)
 	while (curs)
 	{
 		tmp = curs->next;
+		if (curs->type == 9)
+		    remove(curs->next->arr[0]);
 		if (curs->arr)
 			ft_free_tab(curs->arr);
 		if (curs->target)

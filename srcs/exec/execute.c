@@ -40,7 +40,7 @@ static char	**convert_env_array(t_env **ev)
 
 int				next_two(t_cmd * cmd)
 {
-	while (cmd && cmd->type == 8)
+	while (cmd && (cmd->type == 8 || cmd->type == 9))
 		cmd = cmd->next;
 	if (cmd->type == 2)
 		return (1);
@@ -60,7 +60,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 			dup2(read, 0);
 			close(read);
 		}
-		if (fd != 1 && (cmd->type == 2 || cmd->type == 6 || cmd->type == 7 || (cmd->type == 8 && next_two(cmd))))
+		if (fd != 1 && (cmd->type == 2 || cmd->type == 6 || cmd->type == 7  || ((cmd->type == 8 || cmd->type == 9) && next_two(cmd))))
 		{
 			dup2(fd, 1);
 			close(fd);
@@ -114,7 +114,7 @@ int             get_fd_write(t_cmd *cmd)
 
     fd = 0;
     cur = cmd;
-    while ((cur->type == 6 || cur->type == 7 || cur->type == 8) && cur->next)
+    while ((cur->type == 6 || cur->type == 7 || cur->type == 8 || cur->type == 9) && cur->next)
     {
         if (cur->type == 7)
             fd = open(cur->next->arr[0], O_CREAT | O_RDWR | O_APPEND,
@@ -122,7 +122,7 @@ int             get_fd_write(t_cmd *cmd)
         if (cur->type == 6)
             fd = open(cur->next->arr[0], O_CREAT | O_RDWR | O_TRUNC,
                       S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-        if (cur->type == 8)
+        if (cur->type == 8 || cur->type == 9)
             fd = open(cur->next->arr[0], O_RDONLY);
         if (cur->next->type == 6 || cur->next->type == 7)
             close(fd);
@@ -133,30 +133,12 @@ int             get_fd_write(t_cmd *cmd)
 
 static int 		get_cmd_type(t_cmd *cmd, int fd)
 {
-	while (cmd && cmd->type == 8)
+	while (cmd && (cmd->type == 8 || cmd->type == 9))
 		cmd = cmd->next;
 	if (cmd->type == 2)
 		return (fd);
 	return (1);
 }
-
-/*void			create_file_is_it_doent_exist(t_cmd *cmd)
-{
-	int fd;
-
-	fd = 0;
-	cmd = cmd->next;
-	while (cmd)
-	{
-		if (cmd->prev->type == 7 || cmd->prev->type == 6)
-		{
-			fd = open(cmd->arr[0], O_CREAT | O_RDWR | O_APPEND,
-					  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-			close(fd);
-		}
-		cmd = cmd->next;
-	}
-}*/
 
 void		what_about_file(t_cmd *cmd)
 {
@@ -246,13 +228,15 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 				do_proc(read, wfd, cmd->target, cmd, env);
 				close(wfd);
 			}
-			if (cmd->target != NULL && cmd->type == 8)
+			if (cmd->target != NULL && (cmd->type == 8 || cmd->type == 9))
 			{
 				pipe(fd);
 				read = get_fd_write(cmd);
 				wfd = get_cmd_type(cmd, fd[1]);
-				dup2(read, fd[0]);
+				//dup2(read, fd[0]);
 				do_proc(read, wfd, cmd->target, cmd, env);
+				///if (cmd->type == 9)
+				    ///remove(cmd->next->arr[0]);
 			}
 		}
 		if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9)
