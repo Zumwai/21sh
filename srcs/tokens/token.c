@@ -107,7 +107,33 @@ char			*str_todoc(char *s, int *qu, t_env **env)
 
 char					*exec_name(char *s, int *q)
 {
-	char				*res;
+    char buf[256];
+    char c;
+    int i;
+    int j;
+    char *res;
+
+    j = 0;
+    i = 0;
+    while (s[i])
+    {
+        if (s[i] == '"' || s[i] == '\'')
+        {
+            c = s[i++];
+            *q = c == '"' ? 2 : 1;
+            while (s[i] != c)
+                buf[j++] = s[i++];
+            if (s[i] == c)
+                i++;
+        }
+        else
+            buf[j++] = s[i++];
+    }
+    buf[j] = '\0';
+    res = ft_strdup(buf);
+    return (res);
+}
+	/*char				*res;
 	int					i;
 	int					l;
 	char				c;
@@ -154,8 +180,10 @@ char					*exec_name(char *s, int *q)
 		}
 	}
 	res[l] = '\0';
+	ft_putstr("exec_name == ");
+	ft_putendl(res);
 	return (res);
-}
+}*/
 
 extern t_token 			*get_last_token(t_token *t)
 {
