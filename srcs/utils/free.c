@@ -1,7 +1,6 @@
 #include "sh.h"
 
-/* UNUSED */
-void		free_token_list(t_token **t)
+void			free_token_list(t_token **t)
 {
 	t_token	*curs;
 	t_token	*tmp;
@@ -39,27 +38,7 @@ void			free_cmd_list(t_cmd **cmd)
 		curs = tmp;
 	}
 }
-/*
-void			free_cmd_list(t_cmd **cmd)
-{
-	t_cmd		*curs;
 
-	curs = *cmd;
-	while (*cmd)
-	{
-		curs = *cmd;
-		if ((*cmd)->next)
-			*cmd = (*cmd)->next;
-		if (curs->arr)
-			ft_strsplit_free(&curs->arr);
-		if (curs->target != NULL)
-			free(curs->target);
-		free(curs);
-		curs = NULL;
-	}
-}
-*/
-/* Will be used later on temp env list for execve */
 static void		delete_env_list(t_env **ev)
 {
 	t_env	*curs;
@@ -79,7 +58,7 @@ static void		delete_env_list(t_env **ev)
 	}
 }
 
-extern void	set_free_all(t_env *ev, t_yank *buffer)
+extern void		set_free_all(t_env *ev, t_yank *buffer)
 {
 	if (ev != NULL)
 		delete_env_list(&ev);
@@ -94,17 +73,16 @@ extern void	set_free_all(t_env *ev, t_yank *buffer)
 	}
 }
 
-void	ft_free_tab(char **tab)
+void			ft_free_tab(char **tab)
 {
 	int		i;
-	int		j = 0;
+	int		j;
 	char	**curs;
 
 	curs = tab;
 	i = 0;
+	j = 0;
 	if (!curs)
-		return ;
-	if (!curs[i])
 		return ;
 	while (curs[i])
 	{
@@ -114,87 +92,4 @@ void	ft_free_tab(char **tab)
 	if (tab)
 		free(tab);
 	tab = NULL;
-}
-
-void set_free_null(char **line)
-{
-	if (*line)
-		free(*line);
-	*line = NULL;
-}
-
-void		free_eot_list(t_hdoc **t)
-{
-	t_hdoc	*curs;
-	t_hdoc	*tmp;
-
-	curs = (*t);
-	while (curs)
-	{
-		tmp = curs->next;
-		if (curs->eot)
-			set_free_null(&curs->eot);
-		free(curs);
-		curs = NULL;
-		curs = tmp;
-	}
-	curs = NULL;
-	*t = NULL;
-}
-void	free_main_line(t_actual **main)
-{
-	t_actual *curs;
-
-	curs = *main;
-	if(!(*main))
-		return ;
-	if ((*main)->hdoc)
-		free_eot_list(&(*main)->hdoc);
-	if ((*main)->line)
-		set_free_null(&(*main)->line);
-	(*main)->line = NULL;
-	free(*main);
-	*main = NULL;
-	main = NULL;
-}
-
-void free_input_line(t_term **input)
-{
-	if (!(*input))
-		return ;
-	if (!(*input)->prev) {
-		free_main_line(&(*input)->main);
-		(*input)->main = NULL;
-	} else {
-		(*input)->main = NULL;
-	}
-	if ((*input)->new)
-		set_free_null(&(*input)->new);
-	if ((*input)->store) {
-		free((*input)->store);
-		(*input)->store = NULL;
-	}
-	if ((*input)->next)
-		free_input_line(&(*input)->next);
-	if (*input)
-		free(*input);
-	*input = NULL;
-}
-
-extern void free_history(t_history **history)
-{
-	t_history *curs;
-	t_history *tmp;
-
-	curs = (*history);
-	
-	while (curs)
-	{
-		tmp = curs;
-		if (curs->line)
-			free_input_line(&curs->line);
-		curs = curs->next;
-		free(tmp);
-		tmp = NULL;
-	}
 }

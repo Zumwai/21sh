@@ -4,6 +4,7 @@ int					check_rights(char *path, int cd)
 {
 	struct stat		per;
 	unsigned int	tmp;
+
 	if ((lstat(path, &per)) == -1)
 		return (LSTA);
 	tmp = (per.st_mode & S_IFMT);
@@ -26,94 +27,6 @@ int					check_rights(char *path, int cd)
 		return (IXUS);
 	return (0);
 }
-/*
-static int					is_it_avalible(char *s)
-{
-	if (access(s, F_OK) == -1)
-	{
-        handle_empty_error(s, "invalid command\n");
-        return (0);
-	}
-	return (1);
-}
-*/
-/* UNUSED
-static void				only_sp(char **line, char target, char change)
-{
-	int				i;
-
-	i = 0;
-	while ((*line)[i] != '\0')
-	{
-		if ((*line)[i] == target)
-			(*line)[i] = change;
-		i++;
-	}
-}
-
-static char				**get_path_variable(t_env **env)
-{
-	char			**res;
-    t_env           *curs;
-
-    if (!(curs = find_env_variable(env, "PATH")))
-    {
-        //no path variable set
-        return NULL;
-    }
-    return (res = ft_strsplit(curs->value, ':'));
-}
-
-static char			*it_path(char *s, t_env **env)
-{
-	char		**way;
-	int			i;
-	char		*buf;
-
-	buf = NULL;
-	i = 0;
-	way = get_path_variable(env);
-	if (way == NULL)
-		return (s);
-	else if (way)
-	{
-		while (way[i] != NULL)
-		{
-			if ((buf = ft_strdup(way[i]))) {
-				ft_strcat(buf, "/");
-				ft_strcat(buf, s);
-				if (!check_rights(buf, 0))
-					break ;
-				set_free_null(&buf);
-		//	if (access(buf, F_OK) != -1)
-		//		break ;
-			}
-			i++;
-
-		}
-	}
-	ft_strsplit_free(&way);
-	return (buf);
-}
-
-char				*get_path(char *s, t_env **env)
-{
-	char			*res;
-	int				ret;
-
-	ret = 0;
-	if (!(res = it_path(s, env)))
-		return NULL;
-	if (!(ret = check_rights(res, 0)))
-	{
-		ft_putnbr_fd(ret, 1);
-		return (res);
-	}
-			ft_putnbr_fd(ret, 1);
-    set_free_null(&res);
-	return (NULL);
-}
-*/
 
 static char			*is_system_wide(char *com, t_env **ev, int *res)
 {
@@ -123,7 +36,7 @@ static char			*is_system_wide(char *com, t_env **ev, int *res)
 	int		i;
 
 	*res = 0;
-	path = ft_strnew(PATH_MAX);
+	path = ft_strnew(PATH_MAX + ft_strlen(com));
 	if (!(curs = find_env_variable(ev, "PATH")))
 		return (0);
 	if (!(env_path = ft_strsplit(curs->value, ':')))
@@ -150,6 +63,8 @@ static char			*is_local(char *com, t_env **ev, int *res)
 	char	*path;
 
 	path = NULL;
+	if (!com)
+		return NULL;
 	if (com[0] != '.' && com[0] != '/')
 		return NULL;
 	*res = 0;

@@ -1,146 +1,111 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sig_handler.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/27 20:10:47 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/28 14:44:58 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 
-static char *lookup_sig(int sig)
+static char		*lookup_sig(int sig)
 {
-    char    *signame[] = {
-        "SIGINT",
-        "SIGQUIT",
-        "SIGABRT",
-        "SIGSTOP",
-        "SIGCONT",
-        "SIGCHILD"
-    };
-    if (sig == SIGINT)
-        return (signame[0]);
-    if (sig == SIGQUIT)
-        return (signame[1]);
-    if (sig == SIGABRT)
-        return (signame[2]);
-    if (sig == SIGSTOP)
-        return (signame[3]);
-    if (sig == SIGCONT)
-        return (signame[4]);
-    if (sig == SIGCHLD)
-        return (signame[5]);
-    return (NULL);
+	if (sig == SIGINT)
+		return ("SIGINT");
+	if (sig == SIGQUIT)
+		return ("SIGQUIT");
+	if (sig == SIGABRT)
+		return ("SIGABRT");
+	if (sig == SIGSTOP)
+		return ("SIGSTOP");
+	if (sig == SIGCONT)
+		return ("SIGCONT");
+	if (sig == SIGCHLD)
+		return ("SIGCHILD");
+	return (NULL);
 }
 
-void	handle_child_signal(int sig)
+void			handle_child_signal(int sig)
 {
-    char    *ret;
+	char	*ret;
 
-    ret = NULL;
+	ret = NULL;
 	if (sig)
 	{
 		ft_putstr("\n");
-        ret = lookup_sig(sig);
-        if (sig != SIGCHLD) {
-                handle_empty_error("Signal recieved: ", ret);
-            ft_putstr("\n");
-        }
+		ret = lookup_sig(sig);
+		if (sig != SIGCHLD)
+		{
+			handle_empty_error("Signal recieved: ", ret);
+			ft_putstr("\n");
+		}
 		signal(sig, handle_child_signal);
 	}
 }
 
-
-int     check_sig(int sig)
+int				check_sig(int sig)
 {
-    if (sig == SIGINT || sig == SIGABRT
-     || sig == SIGSTOP || sig == SIGQUIT
-      || sig == SIGCONT || sig == SIGSTOP
-      || sig == SIGTSTP)
-        return (1);
-    return (0);
+	if (sig == SIGINT || sig == SIGABRT
+	|| sig == SIGSTOP || sig == SIGQUIT
+	|| sig == SIGCONT || sig == SIGSTOP
+	|| sig == SIGTSTP)
+		return (1);
+	return (0);
 }
 
-void    changer_y(t_yank *curr)
+void			handle_main_signal(int sig)
 {
-    t_term *pos = NULL;
+	struct winsize	dimensions;
+	char			*ret;
 
-    pos = curr->input;
-    while (pos)
-    {
-        
-    }
-}
-void    erase_printed(int printed)
-{
-    int i = 0;
-    while (i < printed)
-    {
-		ft_printf("\010 \010");
-        
+	ret = NULL;
+	if (sig == SIGWINCH)
+	{
+		g_sig.winch = 1;
+	}
+	else if (check_sig(sig))
+	{
+		if (sig == SIGINT)
+			ft_putstr("^C");
+			ret = lookup_sig(sig);
+			if (ret == NULL)
+				return ;
+			handle_empty_error("Signal recieved: ", ret);
+		ft_putstr("\n");
+		//if (sig != SIGCHLD)
+		//	ft_putstr("shelp$>");
+		signal(sig, SIG_IGN);
 	}
 }
 
-void    modify_yyz(t_term *pos)
+void			handle_all_signals(int pid)
 {
-
-}
-
-void	handle_main_signal(int sig)
-{
-    char    *ret;
-    ret = NULL;
-    struct winsize dimensions;
-    if (sig == SIGWINCH)
-    {
-        g_sad->winch = 1;
-        //tcsetattr(STDIN_FILENO, TCSANOW, &g_sad->work);
-        if (g_sad->current) {
-            /*
-            ioctl(STDIN_FILENO, TIOCGWINSZ, &dimensions);
-
-            //tputs (tgoto (tgetstr("cm", NULL), 0, g_sad->current->y - 1), 1, putchar_like);  for reentrancy 
-            g_sad->win_x = dimensions.ws_col;
-            g_sad->win_y = dimensions.ws_col;
-            display_input(g_sad->current, 0);
-            tcsetattr(STDIN_FILENO, TCSANOW, &g_sad->work);
-            //modify yyz
-            //erase_printed(g_sad->current->main->size);
-            // */
-        }
-    } else if (check_sig(sig)) {
-        if (sig == SIGINT)
-            ft_putstr("^C");
-	//if (sig == SIGINT || sig == SIGABRT)
-	//{
-        //if (sig == SIGCHLD) {
-            ret = lookup_sig(sig);
-            if (ret == NULL)
-                return ;
-            handle_empty_error("Signal recieved: ", ret);
-       // }
-		ft_putstr("\n");
-        if (sig != SIGCHLD)
-		    ft_putstr("shelp$>");
-		signal(sig, SIG_IGN);
-	//}
-    }
-}
-
-void	handle_all_signals(int pid)
-{
-	if (pid) {
+	if (pid)
+	{
+		signal(SIGINT, handle_main_signal);
+		signal(SIGABRT, handle_main_signal);
 		//signal(SIGINT, handle_main_signal);
-    	signal(SIGABRT, handle_main_signal);
-    	//signal(SIGINT, handle_main_signal);
-    	//signal(SIGSTOP, handle_main_signal);
-    	signal(SIGCONT, handle_main_signal);
-    	//signal(SIGTSTP, handle_main_signal);
-    	//signal(SIGKILL, handle_main_signal);
-    	signal(SIGQUIT, handle_main_signal);
-    	signal(SIGCHLD, handle_main_signal);
-        signal(SIGWINCH, handle_main_signal);
-        signal(SIGPIPE, handle_main_signal);
-        //signal(SIGTERM, handle_main_signal);
-    }
-	if (!pid) {
-        //signal(SIGSTOP, handle_child_signal);
-    	signal(SIGCONT, handle_child_signal);
+		signal(SIGSTOP, handle_main_signal);
+		signal(SIGCONT, handle_main_signal);
+		//signal(SIGTSTP, handle_main_signal);
+		//signal(SIGKILL, handle_main_signal);
+		signal(SIGQUIT, handle_main_signal);
+		signal(SIGCHLD, handle_main_signal);
+		signal(SIGWINCH, handle_main_signal);
+		signal(SIGPIPE, handle_main_signal);
+		//signal(SIGTERM, handle_main_signal);
+	}
+	if (!pid)
+	{
+		signal(SIGSTOP, handle_child_signal);
+		signal(SIGCONT, handle_child_signal);
 		signal(SIGINT, handle_child_signal);
-        signal(SIGABRT, handle_child_signal);
-        signal(SIGQUIT, handle_child_signal);
-        //signal(SIGKILL, handle_child_signal);
-    }
+		signal(SIGABRT, handle_child_signal);
+		signal(SIGQUIT, handle_child_signal);
+		//signal(SIGKILL, handle_child_signal);
+	}
 }

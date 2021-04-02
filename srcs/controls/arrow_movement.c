@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arrow_movement.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/27 12:37:39 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/27 17:49:34 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 
-void move_left(t_term *pos)
+void	move_left(t_term *pos)
 {
 	if ((pos->index + pos->delta_x) != 0)
 		pos->delta_x--;
@@ -8,22 +20,21 @@ void move_left(t_term *pos)
 		tputs(tgetstr("bl", NULL), 1, putchar_like);
 }
 
-void move_right(t_term *pos)
+void	move_right(t_term *pos)
 {
-	if	(pos->delta_x != 0)
-			pos->delta_x++;
+	if (pos->delta_x != 0)
+		pos->delta_x++;
 	else
 		tputs(tgetstr("bl", NULL), 1, putchar_like);
 }
 
-void change_line_down(t_term *pos)
+void	change_line_down(t_term *pos)
 {
-	struct winsize dimensions;
+	struct winsize	dimensions;
+	int				tmp;
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-
-	int tmp = pos->delta_x + dimensions.ws_col;
-
+	tmp = pos->delta_x + dimensions.ws_col;
 	if (tmp > 0)
 	{
 		tputs(tgetstr("bl", NULL), 1, putchar_like);
@@ -33,16 +44,13 @@ void change_line_down(t_term *pos)
 		pos->delta_x = tmp;
 }
 
-void change_line_up(t_term *pos)
+void	change_line_up(t_term *pos)
 {
-	struct winsize dimensions;
+	struct winsize	dimensions;
+	int				tmp;
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &dimensions);
-
-	int tmp = pos->delta_x - dimensions.ws_col;
-
-				//tputs (tgoto (tgetstr("cm", NULL), 0, 0), 1, putchar_like);
-				//tputs(tgetstr("sr", NULL), 1, putchar_like);
+	tmp = pos->delta_x - dimensions.ws_col;
 	tmp = ft_abs(tmp);
 	if (tmp > pos->index)
 	{
@@ -51,4 +59,16 @@ void change_line_up(t_term *pos)
 	}
 	else
 		pos->delta_x = -tmp;
+}
+
+void	move_cursor(t_term *curs, long long key)
+{
+	if (key == RIGHT)
+		move_right(curs);
+	else if (key == LEFT)
+		move_left(curs);
+	else if (key == L_UP)
+		change_line_up(curs);
+	else if (key == L_DOWN)
+		change_line_down(curs);
 }

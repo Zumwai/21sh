@@ -11,3 +11,4 @@ changes
 cmake-build-debug
 vgcore.*
 CMakeLists.txt
+redir.c

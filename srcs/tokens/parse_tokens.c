@@ -2,25 +2,23 @@
 
 static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 {
-	char 			res[1000];
+	char 			*res;
 	int 			j;
 	char			*ret;
-	char			*buf;
+	char            *buf;
 
 	j = 0;
-	while (line[*n] != '\0')
-	{
-		while (line[*n] != '|' && line[*n] != ';' /*&& line[*n] != '&' */ && line[*n] != '>' &&
-			   line[*n] != '<' /*&& line[*n] != '\n' */&& line[*n] != '\0')
-		{
+	ret = NULL;
+	res = ft_strdup(line);
+	while (line[*n] != '\0') {
+		while (line[*n] != '|' && line[*n] != ';' && line[*n] != '&' && line[*n] != '>' &&
+			   line[*n] != '<' && line[*n] != '\0') {
 			update_flag(flag, line[*n]);
 			if (line[*n] == ' ' && t->prev && (ft_strcmp(t->prev->data, "<<") == 0))
 			{
 				res[j] = '\0';
-				buf = ft_strdup(res);
-				ret = ft_strtrim(buf);
-				free(buf);
-				return (ret);
+				ret = ft_strtrim(res);
+				break ;
 			}
 			if (line[*n] == '\n')
 			{
@@ -40,15 +38,12 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 			continue;
 		if (semantica(flag, line, n, &j) == 1 && j != 0) {
 			res[j] = '\0';
-			buf = ft_strdup(res);
-			ret = ft_strtrim(buf);
-			free(buf);
-			return (ret);
+			break ;
 		}
 		if (j == 0){
 			ret = get_semantica_ret(line, n, res, j);
 			*n += 1;
-			return (ret);
+			break ;
 		}
 		else
 		{
@@ -57,9 +52,9 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 			j += 1;
 		}
 	}
-	buf = ft_strdup(res);
-	ret = ft_strtrim(buf);
-	free(buf);
+	if (!ret)
+		ret = ft_strtrim(res);
+	free(res);
 	return (ret);
 }
 

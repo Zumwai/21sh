@@ -1,6 +1,6 @@
 #include "sh.h"
 
-static void 			*set_child(t_tree *child, t_tree *parent, int f)
+static void 			set_child(t_tree *child, t_tree *parent, int f)
 {
 	if (f == ext) /// правый
 		parent->right = child;

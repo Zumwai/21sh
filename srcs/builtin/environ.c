@@ -1,42 +1,47 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   environ.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aophion <aophion@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/29 12:28:42 by aophion           #+#    #+#             */
+/*   Updated: 2021/03/29 12:32:45 by aophion          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "sh.h"
 
-int					sh_setnew(char *nm, char *value, t_env **env)
+int					display_env_list(char **com, t_env **ev, int scope)
 {
-	t_env	*curs;
+	t_env	*cur;
 
-	curs = *env;
-	if (value == NULL)
-		return (0);
-	while (curs)
+	if (com)
+		(void)com;
+	cur = (*ev);
+	while (cur)
 	{
-		if (ft_strcmp(nm, curs->name) == 0)
+		if (cur->scope == scope)
 		{
-			free(curs->value);
-			curs->value = ft_strdup(value);
-			return (1);
+			ft_putstr(cur->name);
+			ft_putchar('=');
+			ft_putstr(cur->value);
+			ft_putchar('\n');
 		}
-		if (curs->next == NULL)
-		{
-			if (!(curs->next = (t_env *)malloc(sizeof(t_env))))
-				return (0);
-			curs = curs->next;
-			curs->name = ft_strdup(nm);
-			curs->value = ft_strdup(value);
-			curs->next = NULL;
-			return (1);
-		}
-		curs = curs->next;
+		cur = cur->next;
 	}
 	return (1);
 }
 
-extern int			sh_setenv(char **cmd, t_env **env, __attribute((unused))int fd)
+extern int			sh_setenv(char **cmd, t_env **env, int scope)
 {
-	int m = 0;
-	while (cmd[m])
-		ft_putendl(cmd[m++]);
+	int i;
+
+	i = 0;
+	while (cmd[i])
+		ft_putendl(cmd[i++]);
 	if (cmd[1] == NULL)
-		display_env_list(cmd, env);
+		display_env_list(cmd, env, scope);
 	else if (ft_strsplit_len(cmd) > 3)
 	{
 		ft_putendl("setenv% TOO few arguments");
@@ -47,44 +52,32 @@ extern int			sh_setenv(char **cmd, t_env **env, __attribute((unused))int fd)
 		ft_putstr("setenv: nothing to set for this variable ");
 		ft_putendl(cmd[1]);
 	}
-	sh_setnew(cmd[1], cmd[2], env);
-	return 1;
+	else
+		sh_setnew(cmd[1], cmd[2], env, scope);
+	return (1);
 }
 
-
-static void				do_unset(char *nm, t_env **env)
+extern int			sh_set(char **cmd, t_env **env)
 {
-	t_env			*tmp;
-	t_env			*prev;
-
-	tmp = *env;
-	while (tmp)
-	{
-		if (ft_strcmp(nm, tmp->name) == 0)
-		{
-			set_free_null(&tmp->name);
-			set_free_null(&tmp->value);
-			if (tmp == *env)
-				env = &(*env)->next;
-			else
-				prev->next = tmp->next;
-			free(tmp);
-			break ;
-		}
-		prev = tmp;
-		tmp = tmp->next;
-	}
+	return (sh_setenv(cmd, env, 0));
 }
 
-
-extern t_env				*sh_unset(char **nm, t_env **env, __attribute((unused))int fd)
+extern int			sh_export(char **com, t_env **env)
 {
-	t_env			*cur;
-	int				i;
+	t_env	*curs;
+	char	**set;
+	int		i;
 
 	i = 1;
-	cur = *env;
-	while (nm[i] != NULL)
-		do_unset(nm[i++], env);
-	return (cur);
+	set = NULL;
+	if (!com[1])
+		return (1);
+	while (com[i])
+	{
+		set = ft_strsplit(com[i], '=');
+		sh_setnew(set[0], set[1], env, 1);
+		i++;
+		ft_free_tab(set);
+	}
+	return (1);
 }
