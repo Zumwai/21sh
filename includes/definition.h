@@ -90,15 +90,15 @@ typedef enum {
 }				t_type_token;
 
 typedef enum {
-	sc = 1,
-	pi = 2,
-	and = 3,
-	ro = 4,
-	bk = 5,
-	out_w = 6,
-	out_add = 7,
-	in = 8,
-	heredoc = 9,
+	sc = 1, /// ;
+	pi = 2, /// :
+	and = 3, /// &&
+	ro = 4, /// ||
+	bk = 5, /// &
+	out_w = 6, /// >
+	out_add = 7, /// >>
+	in = 8, /// <
+	heredoc = 9, /// <<
 }			t_type_cmd;
 
 typedef struct			s_cmd
@@ -128,6 +128,12 @@ typedef struct 			s_tree
 	struct s_tree		*left;
 	struct s_tree		*right;
 }						t_tree;
+
+typedef struct 			s_eot
+{
+	char				*str;
+	int					q;
+}						t_eot;
 
 typedef struct			s_token
 {

@@ -28,7 +28,7 @@ int		main(int ac, char **av, char **env)
 		}
 		else if (line[0] && !(buffer->state & (FAILED)))
 		{
-				token = parsing_t(line);
+				token = parsing_t(line, &ev);
 				if (token)
 				{
 					cmd = get_cmd(token, &ev);

@@ -5,6 +5,7 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 	char 			*res;
 	int 			j;
 	char			*ret;
+	char            *buf;
 
 	j = 0;
 	ret = NULL;
@@ -19,6 +20,15 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 				ret = ft_strtrim(res);
 				break ;
 			}
+			if (line[*n] == '\n')
+			{
+				res[j] = '\0';
+				*n += 1;
+				buf = ft_strdup(res);
+				ret = ft_strtrim(buf);
+				free(buf);
+				return (ret);
+			}
 			res[j] = line[*n];
 			*n += 1;
 			j += 1;
@@ -30,7 +40,7 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 			res[j] = '\0';
 			break ;
 		}
-		if (j == 0) {
+		if (j == 0){
 			ret = get_semantica_ret(line, n, res, j);
 			*n += 1;
 			break ;
@@ -66,13 +76,14 @@ int						is_empty(char *s)
 {
 	while (cur)
 	{
-		ft_putendl("new token");
+		ft_putendl("new token  ");
+		ft_putnbr(cur->c_type);
 		ft_putendl(cur->data);
 		cur = cur->next;
 	}
 }*/
 
-extern t_token 			*parsing_t(char *line)
+extern t_token 			*parsing_t(char *line, t_env **env)
 {
 	t_token *token;
 	int car;
@@ -99,15 +110,13 @@ extern t_token 			*parsing_t(char *line)
 			token->next->prev = token;
 			token = token->next;
 			token->data = get_data(line, &car, flag, token);
-			///ft_putendl(token->data);
 		}
-		if (ft_strcmp(token->data, "") == 0)
-			token->data = get_data(line, &car, flag, token);
+		//if (ft_strcmp(token->data, "") != 0)
+			//token->data = get_data(line, &car, flag, token);
 		flag = reset_flag(flag);
 	}
 	free(flag);
-	///print(cur);
-	if (is_tokens_true(cur))
+	if (is_tokens_true(cur, env))
 		return (cur);
 	return (0);
 }
