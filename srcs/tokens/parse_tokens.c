@@ -72,16 +72,18 @@ int						is_empty(char *s)
 	return (1);
 }
 
-/*void print(t_token *cur)
+void print(t_token *t)
 {
+ t_token *cur;
+
+ cur = t;
 	while (cur)
 	{
-		ft_putendl("new token  ");
-		ft_putnbr(cur->c_type);
+		ft_putstr("new token  ");
 		ft_putendl(cur->data);
 		cur = cur->next;
 	}
-}*/
+}
 
 extern t_token 			*parsing_t(char *line, t_env **env)
 {
@@ -116,6 +118,7 @@ extern t_token 			*parsing_t(char *line, t_env **env)
 		flag = reset_flag(flag);
 	}
 	free(flag);
+	print(cur);
 	if (is_tokens_true(cur, env))
 		return (cur);
 	return (0);
