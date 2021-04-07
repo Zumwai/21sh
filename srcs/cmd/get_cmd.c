@@ -91,23 +91,45 @@ int						its_redir(char *s)
 {
 	int					i;
 
+	///ft_putendl(s);
 	i = 0;
 	if (s[i] == '"' || s[i] == '\'')
 		return (0);
 	while (s[i])
 	{
 		if (s[i] == '>' && s[i] && s[i + 1] == '&')
-			return (1);
+		{
+		    ft_putendl("redirect ");
+            return (1);
+        }
 		if (s[i] == '<' && s[i] && s[i + 1] == '&')
 			return (1);
 		if (s[i] == '>' && s[i - 1] && s[i - 1] == '&')
 			return (1);
 		i++;
 	}
+    ///ft_putendl("its redir chack");
 	return (0);
 }
 
-char					*fill_str(char *s, int *i)
+t_cmd                   *fill_aggr(char *s, t_cmd *c)
+{
+    if (c->fd1 != 0)
+        return (c);
+    if (s[0] == '1' || s[0] == '2')
+        c->fd1 = ft_atoi(s);
+    if (s[3] == '1' || s[3] == '1')
+        c->fd2 = s[3] - '0';
+    if (s[3] == '-')
+        c->fd2 = -1;
+    ft_putnbr(c->fd1);
+    ft_putchar(' ');
+    ft_putnbr(c->fd2);
+    ft_putchar('\n');
+    return (c);
+}
+
+char					*fill_str(char *s, int *i, t_cmd *cmd)
 {
 	char				*res = NULL;
 	int					j = 0;
@@ -142,11 +164,21 @@ char					*fill_str(char *s, int *i)
 		course = course + 1;
 	}
 	buf[j] = '\0';
-	///if (its_redir(buf))
+	ft_putendl(buf);
+    (*i) = course;
+    if (its_redir(buf))
+    {
+	    cmd = fill_aggr(buf, cmd);
+	    free(buf);
+	    if (s[*i])
+	        fill_str(s, &i, cmd);
+	    else
+	        return (NULL);
+    }
 	///fill_str(s, &i);
 	///else
 	///res = ft_strdup(buf);
-	(*i) = course;
+	///(*i) = course;
 	return(buf);
 }
 
@@ -208,7 +240,7 @@ int					how_much_words(char *s)
 	return (res);
 }
 
-char					**s_to_arr(char *s)
+char					**s_to_arr(char *s, t_cmd *cmd)
 {
 	int					i;
 	char				**res;
@@ -231,11 +263,13 @@ char					**s_to_arr(char *s)
 	}
 	while (j < i)
 	{
-		res[j] = fill_str(s, &c);
+		res[j] = fill_str(s, &c, cmd);
 		j++;
 		if (s[c] != 0)
 			c = c + 1;
 	}
+	if (s[c])
+	    res[j] = fill_str(s, &c, cmd);
 	res[j] = NULL;
 	return (res);
 }
@@ -308,7 +342,7 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	}
 	buf[j] = '\0';
 	src = ft_strdup(buf);
-	c->arr = s_to_arr(src);
+	c->arr = s_to_arr(src, c);
 	free(src);
 	free(buf);
 	return (c);

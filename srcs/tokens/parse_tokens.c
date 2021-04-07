@@ -118,7 +118,7 @@ extern t_token 			*parsing_t(char *line, t_env **env)
 		flag = reset_flag(flag);
 	}
 	free(flag);
-	print(cur);
+	///print(cur);
 	if (is_tokens_true(cur, env))
 		return (cur);
 	return (0);
