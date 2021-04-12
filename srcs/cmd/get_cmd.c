@@ -99,7 +99,7 @@ int						its_redir(char *s)
 	{
 		if (s[i] == '>' && s[i] && s[i + 1] == '&')
 		{
-		    ft_putendl("redirect ");
+		    ///ft_putendl("redirect ");
             return (1);
         }
 		if (s[i] == '<' && s[i] && s[i + 1] == '&')
@@ -122,10 +122,10 @@ t_cmd                   *fill_aggr(char *s, t_cmd *c)
         c->fd2 = s[3] - '0';
     if (s[3] == '-')
         c->fd2 = -1;
-    ft_putnbr(c->fd1);
+    /*ft_putnbr(c->fd1);
     ft_putchar(' ');
     ft_putnbr(c->fd2);
-    ft_putchar('\n');
+    ft_putchar('\n');*/
     return (c);
 }
 
@@ -164,7 +164,7 @@ char					*fill_str(char *s, int *i, t_cmd *cmd)
 		course = course + 1;
 	}
 	buf[j] = '\0';
-	ft_putendl(buf);
+	///ft_putendl(buf);
     (*i) = course;
     if (its_redir(buf))
     {

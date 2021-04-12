@@ -190,10 +190,10 @@ void		what_about_file(t_cmd *cmd)
 	{
 		while (cur->type == 6 || cur->type == 7)
 			cur = cur->next;
-		ft_putendl(cur->arr[0]);
+		///ft_putendl(cur->arr[0]);
 		if (stat(cur->arr[0], &buf) == -1)
 		{
-			ft_putendl(cur->arr[0]);
+			///ft_putendl(cur->arr[0]);
 			fd = open(cur->arr[0], O_CREAT | O_RDWR | O_APPEND,
 					  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 			close(fd);
@@ -207,11 +207,27 @@ int        prepare_to(t_cmd *cmd)
     int    res;
 
     res = 1;
+    if (cmd->fd1 == 1)
+       return (res);
     if (cmd->type == 6 || cmd->type == 7 || cmd->type == 2)
         what_about_file(cmd);
     if (cmd->type == 6 || cmd->type == 7)
         res = get_fd_write(cmd);
     return (res);
+}
+
+int         last_check(t_cmd * cmd, int fd)
+{
+    int     tmp;
+    if (cmd->fd1 == 1 && cmd->fd2 == 2)
+        return (2);
+    if (cmd->fd1 == 1 && cmd->fd2 == -1)
+    {
+        tmp = open("/dev/NULL", O_CREAT | O_RDWR | O_TRUNC,
+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+        return (tmp);
+    }
+    return (fd);
 }
 
 int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
@@ -251,6 +267,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 			}
 			if (cmd->type != 2 && cmd->type != 7 && cmd->type != 6)
 				ffd = 1;
+			ffd = last_check(cmd, ffd);
 	    	res = exec_builtin(cmd->arr, env, ffd, builtin);		 
         }
 	    else
@@ -259,15 +276,20 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 			if (cmd->target != NULL && cmd->type == 2)
 			{
 				pipe(fd);
+                ///wfd = last_check(cmd, fd[1]);
 				do_proc(read, fd[1], cmd->target, cmd, env);
 				close(fd[1]);
 			}
 			if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0))
-				do_proc(read, wfd, cmd->target, cmd, env);
+			{
+			    wfd = last_check(cmd, wfd);
+                do_proc(read, wfd, cmd->target, cmd, env);
+            }
 			if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
 			{
 				pipe(fd);
 				dup2(wfd, fd[1]);
+				wfd = last_check(cmd, wfd);
 				do_proc(read, wfd, cmd->target, cmd, env);
 				close(wfd);
 			}
