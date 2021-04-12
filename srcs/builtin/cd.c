@@ -106,7 +106,7 @@ char			*get_stdpath(char **com, t_env **env)
 	return (curpath);
 }
 
-int				sh_cd(char **com, t_env **env)
+int				sh_cd(t_cmd *com, t_env **env)
 {
 	char		*curpath;
 	int			i;
@@ -116,18 +116,18 @@ int				sh_cd(char **com, t_env **env)
 	curpath = NULL;
 	flag = DEFAULT;
 	i = 1;
-	if (!com[1] || ft_strequ(com[1], "-"))
-		curpath = get_stdpath(com, env);
-	else if (ft_strequ(com[1], "-P"))
+	if (!com->arr[1] || ft_strequ(com->arr[1], "-"))
+		curpath = get_stdpath(com->arr, env);
+	else if (ft_strequ(com->arr[1], "-P"))
 		flag = PHYSICAL;
-	else if (ft_strequ(com[1], "-L"))
+	else if (ft_strequ(com->arr[1], "-L"))
 		flag = LOGICAL;
 	if (flag != DEFAULT)
 		i++;
 	if (!curpath)
-		curpath = create_path(com[i], env, flag);
+		curpath = create_path(com->arr[i], env, flag);
 	if (curpath)
-		change_working_dir(curpath, env, com[i], flag);
+		change_working_dir(curpath, env, com->arr[i], flag);
 	free(curpath);
 	return (1);
 }

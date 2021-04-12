@@ -1,21 +1,21 @@
 #include "sh.h"
 
-int			sh_echo(char **com, t_env **env, int fd, int cmd)
+int			sh_echo(t_cmd *com, t_env **env, int fd, int cmd)
 {
 	int			i;
 	int			n;
 
 	i = 1;
 	n = 0;
-	if (com[i] && ft_strequ(com[1], "-n"))
+	if (com->arr[i] && ft_strequ(com->arr[1], "-n"))
 	{
 		n = 1;
 		i++;
 	}
-	while (com[i])
+	while (com->arr[i])
 	{
-		ft_putstr_fd(com[i], fd);
-		if (com[i + 1])
+		ft_putstr_fd(com->arr[i], fd);
+		if (com->arr[i + 1])
 			ft_putchar_fd(' ', fd);
 		i++;
 	}

@@ -116,7 +116,7 @@ static int	check_isbuiltin(char *com)
 	return 0;
 }
 
-int	exec_builtin(char **com, t_env **env, int fd, int num)
+int	exec_builtin(t_cmd *com, t_env **env, int fd, int num)
 {
 	if (num == 1)
 		return (sh_cd(com, env));
@@ -133,7 +133,7 @@ int	exec_builtin(char **com, t_env **env, int fd, int num)
 	if (num == 7)
 		return (sh_type(com, env));
 	if (num == 8)
-		return (sh_pwd(com, env));
+		return (sh_pwd(com, env, fd));
 	if (num == 9)
 		return (sh_set(com, env));
 	if (num == 10)
@@ -268,7 +268,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 			if (cmd->type != 2 && cmd->type != 7 && cmd->type != 6)
 				ffd = 1;
 			ffd = last_check(cmd, ffd);
-	    	res = exec_builtin(cmd->arr, env, ffd, builtin);		 
+	    	res = exec_builtin(cmd, env, ffd, builtin);
         }
 	    else
 	    {
@@ -282,14 +282,17 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 			}
 			if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0))
 			{
-			    wfd = last_check(cmd, wfd);
+			    ///ft_putendl("was here");
+			    ///wfd = last_check(cmd, wfd);
+			    ///printf("%d and %d\n", wfd, cmd->type);
                 do_proc(read, wfd, cmd->target, cmd, env);
             }
 			if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
 			{
 				pipe(fd);
+                wfd = last_check(cmd, wfd);
 				dup2(wfd, fd[1]);
-				wfd = last_check(cmd, wfd);
+
 				do_proc(read, wfd, cmd->target, cmd, env);
 				close(wfd);
 			}

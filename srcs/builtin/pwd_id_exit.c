@@ -34,7 +34,7 @@ int		display_id_kid_parent(void)
 	return (0);
 }
 
-int		sh_pwd(char **com, t_env **env)
+int		sh_pwd(t_cmd *com, t_env **env, int fd)
 {
 	char	*curr;
 
@@ -43,8 +43,7 @@ int		sh_pwd(char **com, t_env **env)
 	if (!curr)
 		if (!(curr = getcwd(curr, PATH_MAX)))
 			return (1);
-	ft_putstr(curr);
-	ft_putchar('\n');
+	ft_putendl_fd(curr, fd);
 	free(curr);
 	return (0);
 }
