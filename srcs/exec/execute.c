@@ -201,6 +201,19 @@ void		what_about_file(t_cmd *cmd)
 	}
 }
 
+
+int        prepare_to(t_cmd *cmd)
+{
+    int    res;
+
+    res = 1;
+    if (cmd->type == 6 || cmd->type == 7 || cmd->type == 2)
+        what_about_file(cmd);
+    if (cmd->type == 6 || cmd->type == 7)
+        res = get_fd_write(cmd);
+    return (res);
+}
+
 int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 {
 	int			read;
@@ -213,7 +226,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	fd[0] = 0;
 	fd[1] = 1;
 	int res;
-	wfd = 1;
+	///wfd = 1;
 	res = 1;
 	head = cmd;
 	read = 0;
@@ -225,10 +238,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 		return 1;
 	while (cmd)
 	{
-		if (cmd->type == 6 || cmd->type == 7 || cmd->type == 2)
-			what_about_file(cmd);
-	    if (cmd->type == 6 || cmd->type == 7)
-			 wfd = get_fd_write(cmd);
+	    wfd = prepare_to(cmd);
 	    if ((builtin = check_isbuiltin(cmd->arr[0])) != 0)
 	    {
 			if ((cmd->type == 6 || cmd->type == 7) && wfd != 1)
