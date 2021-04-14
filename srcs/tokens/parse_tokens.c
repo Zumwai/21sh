@@ -51,7 +51,8 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 		res[j] = line[*n];
 		if (semantica(flag, line, n, &j) == 0)
 			continue;
-		if (semantica(flag, line, n, &j) == 1 && j != 0) {
+		if (semantica(flag, line, n, &j) == 1 && j != 0)
+		{
 			res[j] = '\0';
 			break ;
 		}

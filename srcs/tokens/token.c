@@ -298,6 +298,21 @@ static int					get_cmd_type(char *s)
 	return 0;
 }
 
+int                     is_it_command(t_token *t)
+{
+    if (ft_strcmp(t->data, BK) == 0 || ft_strcmp(t->data, SC) == 0 ||
+     ft_strcmp(t->data, OR) == 0 ||
+     ft_strcmp(t->data, AND) == 0 ||
+     ft_strcmp(t->data, PIPE) == 0 ||
+     ft_strcmp(t->data, GREAT) == 0 ||
+     ft_strcmp(t->data, GGREAT) == 0 ||
+     ft_strcmp(t->data, LESS) == 0 ||
+     ft_strcmp(t->data, LLESS) == 0 )
+        return (1);
+    else
+        return (0);
+}
+
 extern int 				is_tokens_true(t_token *s, t_env **env)
 {
 	t_token				*t;
@@ -305,14 +320,7 @@ extern int 				is_tokens_true(t_token *s, t_env **env)
 	t = s;
 	while (t)
 	{
-		if (ft_strcmp(t->data, BK) == 0 || ft_strcmp(t->data, SC) == 0 ||
-				ft_strcmp(t->data, OR) == 0 ||
-				ft_strcmp(t->data, AND) == 0 ||
-				ft_strcmp(t->data, PIPE) == 0 ||
-				ft_strcmp(t->data, GREAT) == 0 ||
-				ft_strcmp(t->data, GGREAT) == 0 ||
-				ft_strcmp(t->data, LESS) == 0 ||
-				ft_strcmp(t->data, LLESS) == 0 )
+	    if (is_it_command(t))
 		{
 			t->type = 1;
 			t->c_type = get_cmd_type(t->data);
@@ -328,14 +336,7 @@ extern int 				is_tokens_true(t_token *s, t_env **env)
         t = s;
         while (t)
         {
-            if (ft_strcmp(t->data, BK) == 0 || ft_strcmp(t->data, SC) == 0 ||
-                ft_strcmp(t->data, OR) == 0 ||
-                ft_strcmp(t->data, AND) == 0 ||
-                ft_strcmp(t->data, PIPE) == 0 ||
-                ft_strcmp(t->data, GREAT) == 0 ||
-                ft_strcmp(t->data, GGREAT) == 0 ||
-                ft_strcmp(t->data, LESS) == 0 ||
-                ft_strcmp(t->data, LLESS) == 0 )
+            if (is_it_command(t))
             {
                 t->type = 1;
                 t->c_type = get_cmd_type(t->data);

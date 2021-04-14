@@ -61,7 +61,6 @@ int						len_of_word(char *s, int i)
 	int					res;
 	char				c;
 
-
 	res = 0;
 	c = 0;
 	while (s[i] && s[i] != ' ')
@@ -309,18 +308,12 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 		{
 			i++;
 			if (q[1] == 0 && q[0] == 0)
-			{
 				buf[j++] = t->data[i];
-			}
 			else
-			{
 				buf[j++] = get_spec(t->data[i]);
-			}
 		}
 		else if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
-		{
 			buf = insert_env_val(buf, &j, t->data, &i, env, &size);
-		}
 		else if (t->data[i] && t->data[i] != 92)
 			buf[j++] = t->data[i];
 		i++;
@@ -332,6 +325,15 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	free(buf);
 	return (c);
 }
+
+t_cmd           *get_next_cmd(t_cmd *cmd, t_token *token)
+{
+    cmd->type = token->next->c_type;
+    cmd->next = new_cmd(cmd);
+    cmd = cmd->next;
+    return (cmd);
+}
+
 
 t_cmd			*get_cmd(t_token *t, t_env **env)
 {
@@ -345,18 +347,15 @@ t_cmd			*get_cmd(t_token *t, t_env **env)
 	if (!head)
 		return NULL;
 	while (cur_t)
-{
+    {
 		cur = get_data_cmd(cur_t, cur, env);
 		if (cur_t->next && cur_t->next->next)
 		{
-			cur->type = cur_t->next->c_type;
+			cur = get_next_cmd(cur, cur_t);
 			cur_t = cur_t->next->next;
-			cur->next = new_cmd(cur);
-			cur = cur->next;
 		}
 		else
 			break ;
 	}
-
 	return (head);
 }
