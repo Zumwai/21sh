@@ -66,61 +66,58 @@ int						is_empty(char *s)
 	while (s[i])
 	{
 		if (s[i] != ' ' && s[i] != '\t')
-			return (0);
+			return (1);
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
-void print(t_token *t)
+int                     check_line(char *s)
 {
- t_token *cur;
+    if (!ft_strlen(s) || !is_empty(s))
+        return (0);
+    return (1);
+}
 
- cur = t;
-	while (cur)
-	{
-		ft_putstr("new token  ");
-		ft_putendl(cur->data);
-		cur = cur->next;
-	}
+t_token                 *making_tokens(char *line, t_token *t, t_flag *flag)
+{
+    int                 car;
+    int                 l;
+    t_token             *head;
+
+    car = 0;
+    head = t;
+    l = ft_strlen(line);
+    t->data = get_data(line, &car, flag, t);
+    while (car < l)
+    {
+        while (line[car] && line[car] == ' ')
+            car++;
+        if (line[car] != '\0')
+        {
+            t->next = init_token();
+            t->next->prev = t;
+            t = t->next;
+            t->data = get_data(line, &car, flag, t);
+        }
+        flag = reset_flag(flag);
+    }
+    return (head);
 }
 
 extern t_token 			*parsing_t(char *line, t_env **env)
 {
 	t_token *token;
-	int car;
 	t_flag *flag;
-	int l;
-	t_token *cur;
 
-	car = 0;
-	if (!(l = ft_strlen(line)))
-		return (0);
-	if (is_empty(line))
-		return (0);
+	if (check_line(line) == 0)
+	    return (0);
 	token = init_token();
-	cur = token;
 	flag = init_flag();
-	token->data = get_data(line, &car, flag, token);
-	while (car < l)
-	{
-		while (line[car] && line[car] == ' ')
-			car++;
-		if (line[car] != '\0')
-		{
-			token->next = init_token();
-			token->next->prev = token;
-			token = token->next;
-			token->data = get_data(line, &car, flag, token);
-		}
-		//if (ft_strcmp(token->data, "") != 0)
-			//token->data = get_data(line, &car, flag, token);
-		flag = reset_flag(flag);
-	}
+	token = making_tokens(line, token, flag);
 	free(flag);
-	///print(cur);
-	if (is_tokens_true(cur, env))
-		return (cur);
+	if (is_tokens_true(token, env))
+		return (token);
 	return (0);
 }
 

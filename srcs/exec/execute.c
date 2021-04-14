@@ -199,10 +199,8 @@ void		what_about_file(t_cmd *cmd)
 	{
 		while (cur->type == 6 || cur->type == 7)
 			cur = cur->next;
-		///ft_putendl(cur->arr[0]);
 		if (stat(cur->arr[0], &buf) == -1)
 		{
-			///ft_putendl(cur->arr[0]);
 			fd = open(cur->arr[0], O_CREAT | O_RDWR | O_APPEND,
 					  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 			close(fd);
@@ -258,7 +256,6 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	builtin = 0;
 	int ffd;
 	ffd = 1;
-	//create_file_is_it_doent_exist(cmd);
 	if (!cmd->arr || !cmd->arr[0])
 		return 1;
 	while (cmd)
@@ -286,20 +283,11 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 			{
 				pipe(fd);
                 wfd = last_check(cmd, fd[1]);
-                ft_putnbr(wfd);
-                ft_putendl(" == wfd");
-                ft_putnbr(cmd->fd1);
-                ft_putchar(' ');
-                ft_putnbr(cmd->fd2);
-                ft_putendl(" == fd");
 				do_proc(read, /*fd[1]*/ wfd, cmd->target, cmd, env);
 				close(wfd);
 			}
 			if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0))
-			{
-			    ///ft_putendl("was here");
-			    ///wfd = last_check(cmd, wfd);
-			    ///printf("%d and %d\n", wfd, cmd->type);
+            {
                 do_proc(read, wfd, cmd->target, cmd, env);
             }
 			if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
@@ -315,10 +303,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 				pipe(fd);
 				read = get_fd_write(cmd);
 				wfd = get_cmd_type(cmd, fd[1]);
-				//dup2(read, fd[0]);
 				do_proc(read, wfd, cmd->target, cmd, env);
-				///if (cmd->type == 9)
-				    ///remove(cmd->next->arr[0]);
 			}
 		}
 		if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9)
@@ -326,9 +311,6 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
         	while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9))
             	cmd = cmd->next;
     	}
-		///if (fd[1])
-			///close(fd[1]);
-	    //close(fd[0]);
 		if (cmd->type == 2)
 			read = fd[0];
 		if (wfd != 1 && wfd != 2 && wfd != 0)

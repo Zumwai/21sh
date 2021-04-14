@@ -60,8 +60,6 @@ void		handle_cd_err(int num, /*char *name*/t_cmd *cmd)
     fd = 2;
     if (cmd->fd1 == 2)
         fd = new_err_fd(cmd);
-    ft_putnbr(fd);
-    ////ft_putendl(" === FD");
 	ft_putstr_fd("-shelp!: ", /*STDERR_FILENO*/ fd);
 	ft_putstr_fd(/*name*/cmd->arr[1], /*STDERR_FILENO*/ fd);
 	if (num == -4)
