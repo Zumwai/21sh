@@ -1,5 +1,26 @@
 #include "sh.h"
 
+char                        *eot_str(char *res, int j, int *n)
+{
+    char                       *buf;
+    char                        *ret;
+
+    res[j] = '\0';
+    *n += 1;
+    buf = ft_strdup(res);
+    ret = ft_strtrim(buf);
+    free(buf);
+    return (ret);
+}
+
+int                         not_command(char c)
+{
+    if (c != '|' && c != ';' && c != '&' && c != '>' &&
+    c != '<' && c != '\0')
+        return (1);
+    return (0);
+}
+
 static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 {
 	char 			*res;
@@ -10,9 +31,10 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 	j = 0;
 	ret = NULL;
 	res = ft_strdup(line);
-	while (line[*n] != '\0') {
-		while (line[*n] != '|' && line[*n] != ';' && line[*n] != '&' && line[*n] != '>' &&
-			   line[*n] != '<' && line[*n] != '\0') {
+	while (line[*n] != '\0')
+	{
+		while(not_command(line[*n]))
+        {
 			update_flag(flag, line[*n]);
 			if (line[*n] == ' ' && t->prev && (ft_strcmp(t->prev->data, "<<") == 0))
 			{
@@ -21,14 +43,7 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 				break ;
 			}
 			if (line[*n] == '\n')
-			{
-				res[j] = '\0';
-				*n += 1;
-				buf = ft_strdup(res);
-				ret = ft_strtrim(buf);
-				free(buf);
-				return (ret);
-			}
+				return (eot_str(res, j, n));
 			res[j] = line[*n];
 			*n += 1;
 			j += 1;
@@ -40,7 +55,8 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 			res[j] = '\0';
 			break ;
 		}
-		if (j == 0){
+		if (j == 0)
+		{
 			ret = get_semantica_ret(line, n, res, j);
 			*n += 1;
 			break ;
