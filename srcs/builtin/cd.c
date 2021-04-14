@@ -12,7 +12,7 @@
 
 #include "sh.h"
 
-static void		change_working_dir(char *path, t_env **env, char *com, int flag)
+static void		change_working_dir(char *path, t_env **env, /*char *com*/ t_cmd *com, int flag)
 {
 	char		*pwd;
 	t_env		*cur;
@@ -127,7 +127,7 @@ int				sh_cd(t_cmd *com, t_env **env)
 	if (!curpath)
 		curpath = create_path(com->arr[i], env, flag);
 	if (curpath)
-		change_working_dir(curpath, env, com->arr[i], flag);
+		change_working_dir(curpath, env, /*com->arr[i]*/ com, flag);
 	free(curpath);
 	return (1);
 }
