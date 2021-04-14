@@ -69,7 +69,8 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 			dup2(read, 0);
 			close(read);
 		}
-		if (fd != 1 && (cmd->type == 2 || cmd->type == 6 || cmd->type == 7  || ((cmd->type == 8 || cmd->type == 9) && next_two(cmd))))
+		if (fd != 1 && (cmd->type == 2 || cmd->type == 6 || cmd->type == 7  ||
+		((cmd->type == 8 || cmd->type == 9) && next_two(cmd))))
 		{
 			dup2(fd, 1);
 			close(fd);
@@ -276,9 +277,15 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 			if (cmd->target != NULL && cmd->type == 2)
 			{
 				pipe(fd);
-                ///wfd = last_check(cmd, fd[1]);
-				do_proc(read, fd[1], cmd->target, cmd, env);
-				close(fd[1]);
+                wfd = last_check(cmd, fd[1]);
+                ft_putnbr(wfd);
+                ft_putendl(" == wfd");
+                ft_putnbr(cmd->fd1);
+                ft_putchar(' ');
+                ft_putnbr(cmd->fd2);
+                ft_putendl(" == fd");
+				do_proc(read, /*fd[1]*/ wfd, cmd->target, cmd, env);
+				close(wfd);
 			}
 			if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0))
 			{

@@ -117,8 +117,8 @@ t_cmd                   *fill_aggr(char *s, t_cmd *c)
     if (c->fd1 != 0)
         return (c);
     if (s[0] == '1' || s[0] == '2')
-        c->fd1 = ft_atoi(s);
-    if (s[3] == '1' || s[3] == '1')
+        c->fd1 = s[0] - '0';
+    if (s[3] == '1' || s[3] == '2')
         c->fd2 = s[3] - '0';
     if (s[3] == '-')
         c->fd2 = -1;
