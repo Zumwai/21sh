@@ -58,12 +58,19 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 {
 	pid_t		pid;
 	char		**environ;
+	int         err_fd;
 
+	err_fd = 0;
 	if (!(environ = convert_env_array(env)))
 		return ;
 	if ((pid = fork()) == 0)
 	{
 		handle_all_signals(0);
+        if (cmd->fd1 == 2)
+        {
+            err_fd = new_err_fd(cmd);
+            dup2(err_fd, 2);
+        }
 		if (read != 0)
 		{
 			dup2(read, 0);
@@ -75,6 +82,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 			dup2(fd, 1);
 			close(fd);
 		}
+
 		if (execve(path, cmd->arr, environ) == -1)
 			terminate_child(path);
 //		ft_free_tab(&environ);
@@ -299,7 +307,6 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 				pipe(fd);
                 wfd = last_check(cmd, wfd);
 				dup2(wfd, fd[1]);
-
 				do_proc(read, wfd, cmd->target, cmd, env);
 				close(wfd);
 			}

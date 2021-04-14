@@ -122,5 +122,6 @@ char					get_spec(char s);
 t_env		*create_env_list(char **env);
 void		handle_cd_err(int num, /*char *name*/ t_cmd *cmd);
 int             get_fd_write(t_cmd *cmd);
+int     new_err_fd(t_cmd *cmd);
 
 #endif
