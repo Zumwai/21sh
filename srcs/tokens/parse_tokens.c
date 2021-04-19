@@ -9,7 +9,8 @@ char                        *eot_str(char *res, int j, int *n)
     *n += 1;
     buf = ft_strdup(res);
     ret = ft_strtrim(buf);
-    free(buf);
+    set_free_null(&buf);
+    ///set_free_null(&res);
     return (ret);
 }
 
@@ -43,7 +44,10 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 				break ;
 			}
 			if (line[*n] == '\n' && ((flag->u_quot % 2 == 0) && (flag->d_quot % 2 == 0)))
-                return (eot_str(res, j, n));
+            {
+                ret = eot_str(res, j, n);
+                break ;
+            }
 			res[j] = line[*n];
 			*n += 1;
 			j += 1;
@@ -71,7 +75,7 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 	}
 	if (!ret)
 		ret = ft_strtrim(res);
-	free(res);
+    set_free_null(&res);
 	return (ret);
 }
 

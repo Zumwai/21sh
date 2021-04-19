@@ -22,20 +22,15 @@ char 				*get_semantica_ret(char *line, int *i, char *res, int j)
 
 int 				semantica(t_flag *flag, char *line, int *i, int *j)
 {
-	if (((flag->d_quot > 0) && (flag->d_quot % 2 != 0)) || ((flag->u_quot > 0)
+	if ((((flag->d_quot > 0) && (flag->d_quot % 2 != 0)) || ((flag->u_quot > 0)
 															&& (flag->u_quot % 2 != 0)) ||
-		(line[*i - 1] && line[*i - 1] == 92)) /// если открыты кавычки или есть бек-слэш
+		(line[*i - 1] && line[*i - 1] == 92) || (line[*i] == '>' && line[*i + 1] == '&') ||
+		(line[*i] == '&' && line[*i - 1] == '>')))/// если открыты кавычки или есть бек-слэш
 	{
 		*i += 1;
 		*j += 1;
 		return (0);
 	}
-	if ((line[*i] == '>' && line[*i + 1] == '&') || (line[*i] == '&' && line[*i - 1] == '>'))
-    {
-        *i += 1;
-        *j += 1;
-        return (0);
-    }
 	if (*j != 0 || ((flag->d_quot % 2 != 0) || (flag->u_quot % 2 != 0) || /// если открыты кавычки или есть бек-слэш
 					(line[*i - 1] && line[*i - 1] != 92)))
 		return (1);
@@ -43,5 +38,4 @@ int 				semantica(t_flag *flag, char *line, int *i, int *j)
 		return (2);
     return (0);
 ///	return (-1); /* control path ZAGLUSHKO, fix pls ^^ */
-///>>>>>>> master
 }

@@ -195,6 +195,14 @@ extern t_token 			*get_last_token(t_token *t)
 	return (r);
 }
 
+void                    settle_all(t_token *fix, char *name, int fd)
+{
+    set_free_null(&fix->data);
+    free(fix);
+    free(name);
+    close(fd);
+}
+
 void					make_doc(char *tar, t_token *t, t_env **env)
 {
 	char *name;
@@ -232,6 +240,7 @@ void					make_doc(char *tar, t_token *t, t_env **env)
 	prev->next = t;
 	if (t)
 		t->prev = prev;
+	///settle_all(fix, name, fd);
 	set_free_null(&fix->data);
 	free(fix);
 	free(name);
@@ -242,6 +251,7 @@ static int				right_row(t_token *t, t_env **env)
 {
 	char			*tar;
 
+	tar = NULL;
 	if (t->type == 1)
 		return (0);
 	while (t)
@@ -252,8 +262,6 @@ static int				right_row(t_token *t, t_env **env)
 	        tar = t->data;
 	        make_doc(tar, t->next, env);
 	    }
-	    //if (first->type == first->next->type)
-	    //return (0);
 	    t = t->next;
 	}
 	return (1);
@@ -313,23 +321,28 @@ int                     is_it_command(t_token *t)
         return (0);
 }
 
+void                    make_command_state(t_token *t)
+{
+    while (t)
+    {
+        if (is_it_command(t))
+        {
+            t->type = 1;
+            t->c_type = get_cmd_type(t->data);
+            t->priority = get_priority(t->data);
+        }
+        else
+            t->type = 0;
+        t = t->next;
+    }
+}
+
 extern int 				is_tokens_true(t_token *s, t_env **env)
 {
 	t_token				*t;
 
 	t = s;
-	while (t)
-	{
-	    if (is_it_command(t))
-		{
-			t->type = 1;
-			t->c_type = get_cmd_type(t->data);
-			t->priority = get_priority(t->data);
-		}
-		else
-			t->type = 0;
-		t = t->next;
-	}
+	make_command_state(t);
 	t = s;
 	if (right_row(t, env))
     {
@@ -347,10 +360,7 @@ extern int 				is_tokens_true(t_token *s, t_env **env)
             t = t->next;
         }
     }
-		return (1);
-	//else
-	    //ft_putendl_fd("error of parsing", 2);
-	return (0);
+	return (1);
 }
 
 extern t_token 			*init_token(void)
