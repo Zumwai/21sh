@@ -174,20 +174,52 @@ void                    settle_all(t_token *fix, char *name, int fd)
     close(fd);
 }
 
+t_token                    *str_in_doc(t_token *t, int *q, int fd, t_env **env)
+{
+    t_token *prev;
+    t_token		*fix;
+    char		*todoc;
+
+    todoc = str_todoc(t->data, q, env);
+    ft_putendl_fd(todoc, fd);
+    prev = t->prev;
+    fix = t;
+    t = t->next;
+    prev->next = t;
+    t->prev = prev;
+    set_free_null(&fix->data);
+    free(fix);
+    set_free_null(&todoc);
+    return (t);
+}
+
+t_token                 *get_t(t_token *t)
+{
+    t_token *prev;
+    t_token		*fix;
+
+    prev = t->prev;
+    fix = t;
+    t = t->next;
+    prev->next = t;
+    if (t)
+        t->prev = prev;
+    set_free_null(&fix->data);
+    free(fix);
+    return (t);
+}
+
 void					make_doc(char *tar, t_token *t, t_env **env)
 {
 	char *name;
 	int fd;
-	t_token *prev;
-	t_token		*fix;
 	int			q;
-	char		*todoc;
 
 	q = 0;
 	name = exec_name(tar, &q);
 	fd = open(name, O_CREAT | O_RDWR | O_APPEND,
 			  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
-	while (ft_strcmp(name, t->data) != 0)
+	while (t->data && ft_strcmp(name, t->data) != 0)
 	{
 	   if (t->c_type == 9 || t->next->c_type == 9 || t->prev->c_type == 9
 	    || t->type == 1 || t->prev->type == 1)
@@ -195,25 +227,9 @@ void					make_doc(char *tar, t_token *t, t_env **env)
 	        t = t->next;
 	        continue ;
         }
-	    todoc = str_todoc(t->data, &q, env);
-	    ft_putendl_fd(todoc, fd);
-	    prev = t->prev;
-	    fix = t;
-	    t = t->next;
-	    prev->next = t;
-	    t->prev = prev;
-	    set_free_null(&fix->data);
-	    free(fix);
-	    set_free_null(&todoc);
+	   t = str_in_doc(t, &q, fd, env);
 	}
-	prev = t->prev;
-	fix = t;
-	t = t->next;
-	prev->next = t;
-	if (t)
-		t->prev = prev;
-	set_free_null(&fix->data);
-	free(fix);
+	t = get_t(t);
 	free(name);
 	close(fd);
 }
