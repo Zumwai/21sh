@@ -255,6 +255,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	pid_t		pid;
 	t_cmd 		*head;
 	int		builtin;
+	int ffd;
 
 	fd[0] = 0;
 	fd[1] = 1;
