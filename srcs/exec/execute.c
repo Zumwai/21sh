@@ -269,7 +269,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 			{
 				pipe(fd);
 				ffd = fd[1];
-				close(fd[0]);
+				///close(fd[0]);
 			}
 			if (cmd->type != 2 && cmd->type != 7 && cmd->type != 6)
 				ffd = 1;
