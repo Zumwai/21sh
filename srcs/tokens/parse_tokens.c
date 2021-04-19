@@ -42,8 +42,8 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 				ret = ft_strtrim(res);
 				break ;
 			}
-			if (line[*n] == '\n')
-				return (eot_str(res, j, n));
+			if (line[*n] == '\n' && ((flag->u_quot % 2 == 0) && (flag->d_quot % 2 == 0)))
+                return (eot_str(res, j, n));
 			res[j] = line[*n];
 			*n += 1;
 			j += 1;
@@ -122,6 +122,20 @@ t_token                 *making_tokens(char *line, t_token *t, t_flag *flag)
     return (head);
 }
 
+/*void            print(t_token *t)
+{
+    int i;
+    i = 1;
+    while (t)
+    {
+        ft_putnbr(i);
+        ft_putchar('=');
+        ft_putendl(t->data);
+        t = t->next;
+        i++;
+    }
+}*/
+
 extern t_token 			*parsing_t(char *line, t_env **env)
 {
 	t_token *token;
@@ -133,6 +147,7 @@ extern t_token 			*parsing_t(char *line, t_env **env)
 	flag = init_flag();
 	token = making_tokens(line, token, flag);
 	free(flag);
+	///print(token);
 	if (is_tokens_true(token, env))
 		return (token);
 	return (0);
