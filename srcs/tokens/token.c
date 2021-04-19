@@ -34,7 +34,7 @@ static void			getter_val(char *buf, int *j, char *t, int *i, t_env **env) //.в�
 	t_tmp = ge_value(tmp, env);
 	if (t_tmp)
 	{
-		u = 0;
+        u = 0;
 		while (t_tmp[u])
 		{
 			buf[*j] = t_tmp[u];
@@ -42,23 +42,69 @@ static void			getter_val(char *buf, int *j, char *t, int *i, t_env **env) //.в�
 			u++;
 		}
 	}
-	*i = *i - 1;
+	*i = *i;
 	if (t_tmp)
 		set_free_null(&t_tmp);
 }
 
+char            get_litera(char *s, int *i, int *q)
+{
+    char res;
+
+    if (*q == 0)
+        *q = 1;
+    else
+        *q = 0;
+   res = s[*i];
+   *i = *i + 1;
+    return (res);
+}
+
+char            get_litera_move_point(int *q, char *s, int *i)
+{
+    char        res;
+
+    *i = *i + 1;
+    if (q[1] == 0 && q[0] == 0)
+        res = s[*i];
+    else
+        res = get_spec(s[*i]);
+    *i = *i + 1;
+    return (res);
+}
+
+char *get_str_for_eot(char *s, int *q, t_env **env)
+{
+    int			i;
+    char		buf[10000];
+    int			j;
+
+    i = 0;
+    j = 0;
+    while (s[i] != '\0')
+    {
+        if (s[i] == 39 && q[1] == 0)
+            buf[j++] = get_litera(s, &i, &q[0]);
+        if (s[i] == 34 && q[0] == 0)
+            buf[j++] = get_litera(s, &i, &q[1]);
+        if (s[i] == 92 && s[i + 1])
+            buf[j++] = get_litera_move_point(q, s, &i);
+        if (s[i] == '$' && q[0] == 0 && s[i + 1] && s[i + 1] != '$' && s[i + 1] != ' ')
+            getter_val(buf, &j, s, &i, env);
+        if (s[i] && s[i] != 92)
+            buf[j++] = s[i++];
+    }
+    buf[j] = '\0';
+    return (ft_strdup(buf));
+}
+
 char			*str_todoc(char *s, int *qu, t_env **env)
 {
-	int			i;
 	int 		q[2]; /// 0 для одинарного, 1 для двойного
-	char		buf[10000];
-	int			j;
 	char		*src;
 
 	q[0] = 0;
 	q[1] = 0;
-	i = 0;
-	j = 0;
 	if (*qu > 0)
 	{
 		if (*qu == 1)
@@ -66,42 +112,7 @@ char			*str_todoc(char *s, int *qu, t_env **env)
 		else
 			q[1] = 1;
 	}
-	while (s[i] != '\0')
-	{
-		if (s[i] == 39 && q[1] == 0)
-		{
-			q[0] = q[0] == 0 ? 1 : 0;
-			buf[j++] = s[i++];
-		}
-		if (s[i] == 34 && q[0] == 0)
-		{
-			q[1] = q[1] == 0 ? 1 : 0;
-			buf[j++] = s[i++];
-		}
-		if (s[i] == 92 && s[i + 1])
-		{
-			if (q[1] == 0 && q[0] == 0)
-			{
-				i++;
-				buf[j++] = s[i++];
-			}
-			else
-			{
-				i++;
-				buf[j++] = get_spec(s[i]);
-				i++;
-			}
-		}
-		if (s[i] == '$' && q[0] == 0 && s[i + 1] && s[i + 1] != '$' && s[i + 1] != ' ')
-		{
-			getter_val(buf, &j, s, &i, env);
-			i++;
-		}
-		if (s[i] && s[i] != 92)
-			buf[j++] = s[i++];
-	}
-	buf[j] = '\0';
-	src = ft_strdup(buf);
+	src = get_str_for_eot(s, q, env);
 	return (src);
 }
 
@@ -133,57 +144,6 @@ char					*exec_name(char *s, int *q)
     res = ft_strdup(buf);
     return (res);
 }
-	/*char				*res;
-	int					i;
-	int					l;
-	char				c;
-	int					j;
-
-	i = 0;
-	l = 0;
-	while (s[i])
-	{
-		if (s[i] == '"' || s[i] == '\'')
-		{
-			c = s[i];
-			i++;
-			while (s[i] != c || s[i])
-			{
-				l++;
-				i++;
-			}
-		}
-		i++;
-		l++;
-	}
-	res = (char *)malloc(sizeof(char) * l + 1);
-	i = 0;
-	j = 0;
-	while (s[i]) {
-		if (s[i] != '"' && s[i] != '\'')
-		{
-			res[j] = s[i];
-			j++;
-			i++;
-	}
-		if (s[i] == '"' || s[i] == '\'')
-		{
-			c = s[i];
-			*q = c == '"' ? 2 : 1;
-			i++;
-			while (s[i] != c || s[i])
-			{
-				res[j] = s[i];
-				j++;
-				i++;
-			}
-		}
-	}
-	res[l] = '\0';
-	ft_putstr("exec_name == ");
-	ft_putendl(res);
-	return (res);
-}*/
 
 extern t_token 			*get_last_token(t_token *t)
 {
@@ -218,21 +178,22 @@ void					make_doc(char *tar, t_token *t, t_env **env)
 			  S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 	while (ft_strcmp(name, t->data) != 0)
 	{
-	    if (t->c_type == 9 || t->next->c_type == 9 || t->prev->c_type == 9 || t->type == 1 || t->prev->type == 1)
+	   if (t->c_type == 9 || t->next->c_type == 9 || t->prev->c_type == 9
+	    || t->type == 1 || t->prev->type == 1)
         {
 	        t = t->next;
 	        continue ;
         }
-			todoc = str_todoc(t->data, &q, env);
-			ft_putendl_fd(todoc, fd);
-			prev = t->prev;
-			fix = t;
-			t = t->next;
-			prev->next = t;
-			t->prev = prev;
-			set_free_null(&fix->data);
-			free(fix);
-			set_free_null(&todoc);
+	    todoc = str_todoc(t->data, &q, env);
+	    ft_putendl_fd(todoc, fd);
+	    prev = t->prev;
+	    fix = t;
+	    t = t->next;
+	    prev->next = t;
+	    t->prev = prev;
+	    set_free_null(&fix->data);
+	    free(fix);
+	    set_free_null(&todoc);
 	}
 	prev = t->prev;
 	fix = t;
@@ -240,7 +201,6 @@ void					make_doc(char *tar, t_token *t, t_env **env)
 	prev->next = t;
 	if (t)
 		t->prev = prev;
-	///settle_all(fix, name, fd);
 	set_free_null(&fix->data);
 	free(fix);
 	free(name);
