@@ -54,6 +54,18 @@ int				next_two(t_cmd * cmd)
 	return (0);
 }
 
+int             new_err_fd_fork(t_cmd *cmd, int fd)
+{
+    int         err;
+
+    if (cmd->fd2 == -1)
+        err = open("/dev/NULL", O_CREAT | O_RDWR | O_TRUNC,
+                   S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    if (cmd->fd2 == 1)
+        err = fd;
+    return (err);
+}
+
 void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 {
 	pid_t		pid;
@@ -68,7 +80,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 		handle_all_signals(0);
         if (cmd->fd1 == 2)
         {
-            err_fd = new_err_fd(cmd);
+            err_fd = new_err_fd_fork(cmd, fd);
             dup2(err_fd, 2);
         }
 		if (read != 0)
@@ -207,7 +219,6 @@ void		what_about_file(t_cmd *cmd)
 		}
 	}
 }
-
 
 int        prepare_to(t_cmd *cmd)
 {
