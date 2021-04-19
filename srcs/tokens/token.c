@@ -13,28 +13,13 @@ static char				*ge_value(char *name, t_env **env)
 	return res;
 }
 
-static void			getter_val(char *buf, int *j, /*char *t,*/ int *i,/* t_env **env*/ char *t_tmp) //.вынуть переменную среды
+static void			getter_val(char *buf, int *j, int *i, char *t_tmp) //.вынуть переменную среды
 {
-	///char			tmp[246];
 	int				u;
-	///char			*t_tmp;
 
 	u = 0;
-	/**i = *i + 1;
-	while (t[*i] != ' ' && t[*i] != '/' && t[*i] != 92
-		   && t[*i] != 34 && t[*i] !=39 && t[*i])
-	{
-		tmp[u] = t[*i];
-		*i = *i + 1;
-		u++;
-	}
-	tmp[u] = '\0';
-	if (t[*i] == '"')
-		*i = *i + 1;
-	t_tmp = ge_value(tmp, env);*/
 	if (t_tmp)
 	{
-       /// u = 0;
 		while (t_tmp[u])
 		{
 			buf[*j] = t_tmp[u];
