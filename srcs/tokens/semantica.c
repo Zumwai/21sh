@@ -17,6 +17,7 @@ char 				*get_semantica_ret(char *line, int *i, char *res, int j)
 		ret = if_ampersand(line, i, res, j);
 	else if (line[*i] == '>' || line[*i] == '<')
 		ret = get_redirect(line, i, res, j);
+	*i = *i + 1;
 	return (ret);
 }
 

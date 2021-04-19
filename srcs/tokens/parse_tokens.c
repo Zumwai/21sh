@@ -10,7 +10,6 @@ char                        *eot_str(char *res, int j, int *n)
     buf = ft_strdup(res);
     ret = ft_strtrim(buf);
     set_free_null(&buf);
-    ///set_free_null(&res);
     return (ret);
 }
 
@@ -53,8 +52,6 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 			j += 1;
 		}
 		res[j] = line[*n];
-		if (semantica(flag, line, n, &j) == 0)
-			continue;
 		if (semantica(flag, line, n, &j) == 1 && j != 0)
 		{
 			res[j] = '\0';
@@ -63,7 +60,6 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 		if (j == 0)
 		{
 			ret = get_semantica_ret(line, n, res, j);
-			*n += 1;
 			break ;
 		}
 		else
@@ -126,20 +122,6 @@ t_token                 *making_tokens(char *line, t_token *t, t_flag *flag)
     return (head);
 }
 
-/*void            print(t_token *t)
-{
-    int i;
-    i = 1;
-    while (t)
-    {
-        ft_putnbr(i);
-        ft_putchar('=');
-        ft_putendl(t->data);
-        t = t->next;
-        i++;
-    }
-}*/
-
 extern t_token 			*parsing_t(char *line, t_env **env)
 {
 	t_token *token;
@@ -151,7 +133,6 @@ extern t_token 			*parsing_t(char *line, t_env **env)
 	flag = init_flag();
 	token = making_tokens(line, token, flag);
 	free(flag);
-	///print(token);
 	if (is_tokens_true(token, env))
 		return (token);
 	return (0);

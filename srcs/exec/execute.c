@@ -255,35 +255,27 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	pid_t		pid;
 	t_cmd 		*head;
 	int		builtin;
-	int     wfd;
 
 	fd[0] = 0;
 	fd[1] = 1;
 	int res;
-	///wfd = 1;
 	res = 1;
 	head = cmd;
 	read = 0;
 	builtin = 0;
-	int ffd;
 	ffd = 1;
 	if (!cmd->arr || !cmd->arr[0])
 		return 1;
 	while (cmd)
 	{
-	    wfd = prepare_to(cmd);
+	    ffd = prepare_to(cmd);
 	    if ((builtin = check_isbuiltin(cmd->arr[0])) != 0)
 	    {
-			if ((cmd->type == 6 || cmd->type == 7) && wfd != 1)
-				ffd = wfd;
 			if (cmd->type == 2)
 			{
 				pipe(fd);
 				ffd = fd[1];
-				///close(fd[0]);
 			}
-			if (cmd->type != 2 && cmd->type != 7 && cmd->type != 6)
-				ffd = 1;
 			ffd = last_check(cmd, ffd);
 	    	res = exec_builtin(cmd, env, ffd, builtin);
         }
@@ -293,28 +285,28 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 			if (cmd->target != NULL && cmd->type == 2)
 			{
 				pipe(fd);
-                wfd = last_check(cmd, fd[1]);
-				do_proc(read, /*fd[1]*/ wfd, cmd->target, cmd, env);
-				close(wfd);
+                ffd = last_check(cmd, fd[1]);
+				do_proc(read, ffd, cmd->target, cmd, env);
+				close(ffd);
 			}
 			if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0))
             {
-                do_proc(read, wfd, cmd->target, cmd, env);
+                do_proc(read, ffd, cmd->target, cmd, env);
             }
 			if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
 			{
 				pipe(fd);
-                wfd = last_check(cmd, wfd);
-				dup2(wfd, fd[1]);
-				do_proc(read, wfd, cmd->target, cmd, env);
-				close(wfd);
+                ffd = last_check(cmd, ffd);
+				dup2(ffd, fd[1]);
+				do_proc(read, ffd, cmd->target, cmd, env);
+				close(ffd);
 			}
 			if (cmd->target != NULL && (cmd->type == 8 || cmd->type == 9))
 			{
 				pipe(fd);
 				read = get_fd_write(cmd);
-				wfd = get_cmd_type(cmd, fd[1]);
-				do_proc(read, wfd, cmd->target, cmd, env);
+				ffd = get_cmd_type(cmd, fd[1]);
+				do_proc(read, ffd, cmd->target, cmd, env);
 			}
 		}
 		if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9)
@@ -324,14 +316,10 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
     	}
 		if (cmd->type == 2)
 			read = fd[0];
-		if (wfd != 1 && wfd != 2 && wfd != 0)
-			close(wfd);
 		cmd = cmd->next;
 	}
 	if (read != 0)
 		close(read);
-	if (wfd != 1 && wfd != 2)
-		close (wfd);
 	if (fd[0] != 0)
 		close(fd[0]);
 	if (fd[1] != 1)
