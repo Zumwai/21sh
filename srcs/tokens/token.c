@@ -13,14 +13,14 @@ static char				*ge_value(char *name, t_env **env)
 	return res;
 }
 
-static void			getter_val(char *buf, int *j, char *t, int *i, t_env **env) //.вынуть переменную среды
+static void			getter_val(char *buf, int *j, /*char *t,*/ int *i,/* t_env **env*/ char *t_tmp) //.вынуть переменную среды
 {
-	char			tmp[246];
+	///char			tmp[246];
 	int				u;
-	char			*t_tmp;
+	///char			*t_tmp;
 
 	u = 0;
-	*i = *i + 1;
+	/**i = *i + 1;
 	while (t[*i] != ' ' && t[*i] != '/' && t[*i] != 92
 		   && t[*i] != 34 && t[*i] !=39 && t[*i])
 	{
@@ -31,10 +31,10 @@ static void			getter_val(char *buf, int *j, char *t, int *i, t_env **env) //.в�
 	tmp[u] = '\0';
 	if (t[*i] == '"')
 		*i = *i + 1;
-	t_tmp = ge_value(tmp, env);
+	t_tmp = ge_value(tmp, env);*/
 	if (t_tmp)
 	{
-        u = 0;
+       /// u = 0;
 		while (t_tmp[u])
 		{
 			buf[*j] = t_tmp[u];
@@ -73,11 +73,34 @@ char            get_litera_move_point(int *q, char *s, int *i)
     return (res);
 }
 
+char                    *env_for_eot(char *t, int *i, t_env **env)
+{
+    char			tmp[246];
+    int				u;
+    char			*t_tmp;
+
+    u = 0;
+    *i = *i + 1;
+    while (t[*i] != ' ' && t[*i] != '/' && t[*i] != 92
+           && t[*i] != 34 && t[*i] !=39 && t[*i])
+    {
+        tmp[u] = t[*i];
+        *i = *i + 1;
+        u++;
+    }
+    tmp[u] = '\0';
+    if (t[*i] == '"')
+        *i = *i + 1;
+    t_tmp = ge_value(tmp, env);
+    return (t_tmp);
+}
+
 char *get_str_for_eot(char *s, int *q, t_env **env)
 {
     int			i;
     char		buf[10000];
     int			j;
+    char        *tmp;
 
     i = 0;
     j = 0;
@@ -90,7 +113,10 @@ char *get_str_for_eot(char *s, int *q, t_env **env)
         if (s[i] == 92 && s[i + 1])
             buf[j++] = get_litera_move_point(q, s, &i);
         if (s[i] == '$' && q[0] == 0 && s[i + 1] && s[i + 1] != '$' && s[i + 1] != ' ')
-            getter_val(buf, &j, s, &i, env);
+        {
+            tmp = env_for_eot(s, &i, env);
+            getter_val(buf, &j, &i, tmp);
+        }
         if (s[i] && s[i] != 92)
             buf[j++] = s[i++];
     }
