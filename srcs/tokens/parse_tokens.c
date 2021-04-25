@@ -21,6 +21,20 @@ int                         not_command(char c)
     return (0);
 }
 
+char                        *its_ret(char *line, int *n, char *res, int j)
+{
+    char                    *ret;
+
+    if (j == 0)
+        ret = get_semantica_ret(line, n, res, j);
+    else
+    {
+        res[j] = '\0';
+        ret = ft_strtrim(res);
+    }
+    return (ret);
+}
+
 static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 {
 	char 			*res;
@@ -52,22 +66,14 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 			j += 1;
 		}
 		res[j] = line[*n];
-		if (semantica(flag, line, n, &j) == 1 && j != 0)
+		if ((semantica(flag, line, n, &j) == 1 && j != 0) || j == 0)
 		{
-			res[j] = '\0';
-			break ;
-		}
-		if (j == 0)
-		{
-			ret = get_semantica_ret(line, n, res, j);
-			break ;
-		}
-		else
-		{
-			res[j] = line[*n];
-			*n += 1;
-			j += 1;
-		}
+            ret = its_ret(line, n, res, j);
+            break ;
+        }
+		res[j] = line[*n];
+		*n += 1;
+		j += 1;
 	}
 	if (!ret)
 		ret = ft_strtrim(res);
