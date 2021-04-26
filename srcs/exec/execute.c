@@ -195,6 +195,15 @@ static int 		get_cmd_type(t_cmd *cmd, int fd)
 	return (1);
 }
 
+void            print(t_cmd *c)
+{
+    while (c)
+    {
+        ft_putendl(c->arr[0]);
+        c = c->next;
+    }
+}
+
 void		what_about_file(t_cmd *cmd)
 {
 	t_cmd 	*cur;
@@ -256,6 +265,9 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	t_cmd 		*head;
 	int		builtin;
 	int ffd;
+	int err_fd;
+
+	err_fd = 0;
 
 	fd[0] = 0;
 	fd[1] = 1;
@@ -267,58 +279,61 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	ffd = 1;
 	if (!cmd->arr || !cmd->arr[0])
 		return 1;
+	///print(cmd);
 	while (cmd)
 	{
 	    ffd = prepare_to(cmd);
 	    if ((builtin = check_isbuiltin(cmd->arr[0])) != 0)
 	    {
-			if (cmd->type == 2)
-			{
-				pipe(fd);
-				ffd = fd[1];
-			}
-			ffd = last_check(cmd, ffd);
-	    	res = exec_builtin(cmd, env, ffd, builtin);
-        }
-	    else
-	    {
-			cmd->target = get_path(cmd->arr[0], env);
-			if (cmd->target != NULL && cmd->type == 2)
-			{
-				pipe(fd);
-                ffd = last_check(cmd, fd[1]);
-				do_proc(read, ffd, cmd->target, cmd, env);
-				close(ffd);
-			}
-			if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0))
-            {
-                do_proc(read, ffd, cmd->target, cmd, env);
+	        if (cmd->type == 2)
+	        {
+	            pipe(fd);
+	            ffd = last_check(cmd, fd[1]);
+	            res = exec_builtin(cmd, env, ffd, builtin);
+	        }
+	        else
+	            {
+                    ffd = last_check(cmd, ffd);
+                    res = exec_builtin(cmd, env, ffd, builtin);
+                }
+                if (ffd != 1)
+                    close(ffd);
             }
-			if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
-			{
-				pipe(fd);
-                ffd = last_check(cmd, ffd);
-				dup2(ffd, fd[1]);
-				do_proc(read, ffd, cmd->target, cmd, env);
-				close(ffd);
-			}
-			if (cmd->target != NULL && (cmd->type == 8 || cmd->type == 9))
-			{
-				pipe(fd);
-				read = get_fd_write(cmd);
-				ffd = get_cmd_type(cmd, fd[1]);
-				do_proc(read, ffd, cmd->target, cmd, env);
-			}
-		}
-		if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9)
-		{
-        	while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9))
-            	cmd = cmd->next;
-    	}
-		if (cmd->type == 2)
-			read = fd[0];
-		cmd = cmd->next;
-	}
+            if ((builtin = check_isbuiltin(cmd->arr[0])) == 0) {
+                cmd->target = get_path(cmd->arr[0], env);
+                if (cmd->target != NULL && cmd->type == 2) {
+                    pipe(fd);
+                    ffd = last_check(cmd, fd[1]);
+                    do_proc(read, ffd, cmd->target, cmd, env);
+                    close(ffd);
+                }
+                if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0)) {
+                    ft_putendl("delay chto mogu");
+                    do_proc(read, ffd, cmd->target, cmd, env);
+                }
+                if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7)) {
+                    pipe(fd);
+                    ffd = last_check(cmd, ffd);
+                    dup2(ffd, fd[1]);
+                    do_proc(read, ffd, cmd->target, cmd, env);
+                    close(ffd);
+                }
+                if (cmd->target != NULL && (cmd->type == 8 || cmd->type == 9)) {
+                    pipe(fd);
+                    read = get_fd_write(cmd);
+                    ffd = get_cmd_type(cmd, fd[1]);
+                    do_proc(read, ffd, cmd->target, cmd, env);
+                }
+            }
+            if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9) {
+                while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9))
+                    cmd = cmd->next;
+            }
+            if (cmd->type == 2) {
+                read = fd[0];
+            }
+            cmd = cmd->next;
+        }
 	if (read != 0)
 		close(read);
 	if (fd[0] != 0)
