@@ -12,7 +12,7 @@
 
 #include "sh.h"
 
-static void		change_working_dir(char *path, t_env **env, /*char *com*/ t_cmd *com, int flag)
+static void		change_working_dir(char *path, t_env **env, t_cmd *com, int flag)
 {
 	char		*pwd;
 	t_env		*cur;

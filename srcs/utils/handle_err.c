@@ -25,6 +25,8 @@ int     new_err_fd(t_cmd *cmd)
     if (cmd->fd2 == -1)
         new = open("/dev/NULL", O_CREAT | O_RDWR | O_TRUNC,
                    S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    ft_putnbr(new);
+    ft_putendl(" == er_fd");
     return (new);
 }
 

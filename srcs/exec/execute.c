@@ -59,8 +59,10 @@ int             new_err_fd_fork(t_cmd *cmd, int fd)
     int         err;
 
     if (cmd->fd2 == -1)
-        err = open("/dev/NULL", O_CREAT | O_RDWR | O_TRUNC,
+    {
+        err = open("/dev/null", O_CREAT | O_RDWR | O_TRUNC,
                    S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+    }
     if (cmd->fd2 == 1)
         err = fd;
     return (err);
@@ -72,7 +74,7 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 	char		**environ;
 	int         err_fd;
 
-	err_fd = 0;
+	err_fd = 2;
 	if (!(environ = convert_env_array(env)))
 		return ;
 	if ((pid = fork()) == 0)
@@ -94,7 +96,6 @@ void			do_proc(int read, int fd, char *path, t_cmd *cmd, t_env **env)
 			dup2(fd, 1);
 			close(fd);
 		}
-
 		if (execve(path, cmd->arr, environ) == -1)
 			terminate_child(path);
 //		ft_free_tab(&environ);
@@ -261,14 +262,12 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 {
 	int			read;
 	int			fd[2];
-	pid_t		pid;
 	t_cmd 		*head;
 	int		builtin;
 	int ffd;
 	int err_fd;
 
 	err_fd = 0;
-
 	fd[0] = 0;
 	fd[1] = 1;
 	int res;
@@ -279,7 +278,6 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	ffd = 1;
 	if (!cmd->arr || !cmd->arr[0])
 		return 1;
-	///print(cmd);
 	while (cmd)
 	{
 	    ffd = prepare_to(cmd);
@@ -299,7 +297,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
                 if (ffd != 1)
                     close(ffd);
             }
-            if ((builtin = check_isbuiltin(cmd->arr[0])) == 0) {
+            if ((builtin = check_isbuiltin(cmd->arr[0])) == 0 && get_path(cmd->arr[0], env) != NULL) {
                 cmd->target = get_path(cmd->arr[0], env);
                 if (cmd->target != NULL && cmd->type == 2) {
                     pipe(fd);
@@ -308,7 +306,6 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
                     close(ffd);
                 }
                 if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0)) {
-                    ft_putendl("delay chto mogu");
                     do_proc(read, ffd, cmd->target, cmd, env);
                 }
                 if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7)) {
@@ -318,7 +315,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
                     do_proc(read, ffd, cmd->target, cmd, env);
                     close(ffd);
                 }
-                if (cmd->target != NULL && (cmd->type == 8 || cmd->type == 9)) {
+                if (cmd->target != NULL && ((cmd->type == 8 || cmd->type == 9) || (cmd->prev->type == 8 || cmd->prev->type == 9))) {
                     pipe(fd);
                     read = get_fd_write(cmd);
                     ffd = get_cmd_type(cmd, fd[1]);
