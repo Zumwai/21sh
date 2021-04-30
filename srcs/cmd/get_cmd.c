@@ -56,6 +56,30 @@ static char		*insert_env_val(char *buf, int *j, char *orig, int *i, t_env **env,
 	return (buf);
 }
 
+int                     get_res_for_len(char *s, int i, char c, int res)
+{
+    while (s[i] && s[i] != ' ')
+    {
+        if (s[i] == c)
+            c = 0;
+        else if (s[i] != ' ' && s[i] != 34 && s[i] != 39)
+            res++;
+        else if (s[i] == '"' || s[i] == '\'')
+        {
+            c = s[i++];
+            while (s[i] != c && s[i])
+            {
+                i++;
+                res++;
+            }
+        }
+        else if (s[i] == ' ' && !c)
+            break;
+        i++;
+    }
+    return (res);
+}
+
 int						len_of_word(char *s, int i)
 {
 	int					res;
@@ -63,25 +87,7 @@ int						len_of_word(char *s, int i)
 
 	res = 0;
 	c = 0;
-	while (s[i] && s[i] != ' ')
-	{
-		if (s[i] == c)
-			c = 0;
-		else if (s[i] != ' ' && s[i] != 34 && s[i] != 39)
-			res++;
-		else if (s[i] == '"' || s[i] == '\'')
-		{
-			c = s[i++];
-			while (s[i] != c && s[i])
-			{
-				i++;
-				res++;
-			}
-		}
-		else if (s[i] == ' ' && !c)
-			break;
-		i++;
-	}
+	res = get_res_for_len(s, i, c, res);
 	return (res);
 }
 
