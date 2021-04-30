@@ -191,37 +191,40 @@ int						how_much_restreams(char *s)
 	return (res);
 }
 
+int                 moving_str_pointer(char *s, int i)
+{
+    char            c;
+
+    c = 0;
+    if (s[i] == 34 || s[i] == 39)
+    {
+        c = s[i];
+        i++;
+        while (s[i] && s[i] != c)
+            i++;
+        i = i + 1;
+    }
+    if (s[i] != '\0' && s[i] != ' ')
+    {
+        while (s[i] != '\0' && s[i] != ' ')
+            i++;
+    }
+    if (s[i] == ' ')
+        while (s[i] == ' ')
+            i++;
+    return (i);
+}
+
 int					how_much_words(char *s)
 {
 	int					i;
 	int					res;
-	char				c;
 
 	i = 0;
 	res = 0;
-	c = 0;
 	while (s[i])
 	{
-		if (s[i] == 34 || s[i] == 39)
-		{
-			c = s[i];
-			i++;
-			while (s[i] && s[i] != c)
-			{
-				i++;
-			}
-			i = i + 1;
-		}
-		if (s[i] != '\0' && s[i] != ' ')
-		{
-			while (s[i] != '\0' && s[i] != ' ')
-				i++;
-		}
-		if (s[i] == ' ')
-		{
-			while (s[i] == ' ')
-				i++;
-		}
+	    i = moving_str_pointer(s, i);
 		res++;
 	}
 	return (res);
