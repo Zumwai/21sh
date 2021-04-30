@@ -5,7 +5,6 @@ char                        *eot_str(char *res, int j, int *n)
     char                       *buf;
     char                        *ret;
 
-    res[j] = '\0';
     *n += 1;
     buf = ft_strdup(res);
     ret = ft_strtrim(buf);
@@ -19,6 +18,13 @@ int                         not_command(char c)
     c != '<' && c != '\0')
         return (1);
     return (0);
+}
+
+void                        standart_step(char *res, char *line, char *n, char *j)
+{
+    res[*j] = line[*n];
+    *n += 1;
+    *j += 1;
 }
 
 char                        *its_ret(char *line, int *n, char *res, int j)
@@ -35,12 +41,23 @@ char                        *its_ret(char *line, int *n, char *res, int j)
     return (ret);
 }
 
+char                        *go_for_ret(char *line, int j, char *res, int *n)
+{
+    char *ret;
+
+    res[j] = '\0';
+    if (line[*n] == '\n')
+        ret = eot_str(res, j, n);
+    if (line[*n] == ' ')
+        ret = ft_strtrim(res);
+    return (ret);
+}
+
 static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 {
 	char 			*res;
 	int 			j;
 	char			*ret;
-	char            *buf;
 
 	j = 0;
 	ret = NULL;
@@ -50,20 +67,13 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
 		while(not_command(line[*n]))
         {
 			update_flag(flag, line[*n]);
-			if (line[*n] == ' ' && t->prev && (ft_strcmp(t->prev->data, "<<") == 0))
-			{
-				res[j] = '\0';
-				ret = ft_strtrim(res);
-				break ;
-			}
-			if (line[*n] == '\n' && ((flag->u_quot % 2 == 0) && (flag->d_quot % 2 == 0)))
+			if ((line[*n] == ' ' && t->prev && (ft_strcmp(t->prev->data, "<<") == 0)) ||
+			(line[*n] == '\n' && ((flag->u_quot % 2 == 0) && (flag->d_quot % 2 == 0))))
             {
-                ret = eot_str(res, j, n);
-                break ;
+			    ret = go_for_ret(line, j, res, n);
+			    break ;
             }
-			res[j] = line[*n];
-			*n += 1;
-			j += 1;
+			standart_step(res, line, n, &j);
 		}
 		res[j] = line[*n];
 		if ((semantica(flag, line, n, &j) == 1 && j != 0) || j == 0)
@@ -71,9 +81,7 @@ static char 				*get_data(char *line, int *n, t_flag *flag, t_token *t)
             ret = its_ret(line, n, res, j);
             break ;
         }
-		res[j] = line[*n];
-		*n += 1;
-		j += 1;
+        standart_step(res, line, n, &j);
 	}
 	if (!ret)
 		ret = ft_strtrim(res);

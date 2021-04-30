@@ -71,8 +71,7 @@ int						len_of_word(char *s, int i)
 			res++;
 		else if (s[i] == '"' || s[i] == '\'')
 		{
-			c = s[i];
-			i++;
+			c = s[i++];
 			while (s[i] != c && s[i])
 			{
 				i++;
@@ -119,24 +118,28 @@ t_cmd                   *fill_aggr(char *s, t_cmd *c)
     return (c);
 }
 
+int                     get_course(char *s, int course)
+{
+    while (s[course] == ' ' && s[course])
+        course++;
+    return (course);
+}
+
 char					*fill_str(char *s, int *i, t_cmd *cmd)
 {
-	char				*res = NULL;
-	int					j = 0;
-	int					l = 0;
+	char				*res;
+	int					j;
+	int					l;
 	char				*buf;
-	int 				course = 0;
-	char 				c = 0;
+	int 				course;
+	char 				c;
 
+	c = 0;
 	j = 0;
-	course = 0;
 	course = (*i);
 	buf = ft_strdup(s);
 	if (s[course] == ' ')
-	{
-		while (s[course] == ' ' && s[course])
-			course++;
-	}
+	    course = get_course(s, course);
 	l = len_of_word(s, course);
 	res = NULL;
 	while (j < l && s[course])
@@ -230,25 +233,17 @@ char					**s_to_arr(char *s, t_cmd *cmd)
 	char				**res;
 	int					j;
 	int					c;
-	int 				f;
-	int					g;
 
 	c = 0;
 	j = 0;
-	f = how_much_words(s);
-	g = how_much_restreams(s);
-	i = f - g;
+	i = how_much_words(s) - how_much_restreams(s);
 	res = (char **)malloc(sizeof(char *) * (i + 1));
 	int tmp = 0;
 	while (tmp < i)
-	{
-		res[tmp] = NULL;
-		tmp++;
-	}
+		res[tmp++] = NULL;
 	while (j < i)
 	{
-		res[j] = fill_str(s, &c, cmd);
-		j++;
+		res[j++] = fill_str(s, &c, cmd);
 		if (s[c] != 0)
 			c = c + 1;
 	}

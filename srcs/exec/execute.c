@@ -297,7 +297,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
                 if (ffd != 1)
                     close(ffd);
             }
-            if ((builtin = check_isbuiltin(cmd->arr[0])) == 0 && get_path(cmd->arr[0], env) != NULL) {
+           else /* if ((builtin = check_isbuiltin(cmd->arr[0])) == 0 && get_path(cmd->arr[0], env) != NULL)*/ {
                 cmd->target = get_path(cmd->arr[0], env);
                 if (cmd->target != NULL && cmd->type == 2) {
                     pipe(fd);
