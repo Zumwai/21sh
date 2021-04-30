@@ -153,9 +153,7 @@ char					*fill_str(char *s, int *i, t_cmd *cmd)
 		if (s[course] == c)
 			c = 0;
 		else if (c == 0 && (s[course] == '"' || s[course] == 39))
-		{
 			c = s[course];
-		}
 		else if (s[course] != c) {
 			buf[j] = s[course];
 			j++;
@@ -259,6 +257,7 @@ char					**s_to_arr(char *s, t_cmd *cmd)
 	if (s[c])
 	    res[j] = fill_str(s, &c, cmd);
 	res[j] = NULL;
+	free(s);
 	return (res);
 }
 
@@ -280,53 +279,65 @@ char					get_spec(char s)
 	return (res);
 }
 
+int                     get_q(int q)
+{
+    if (q == 0)
+        return (1);
+    return (0);
+}
+
+char                    get_char(int *q, char *t, int i)
+{
+    char b;
+
+    if (t[i] == 39 && q[1] == 0)
+    {
+        q[0] = get_q(q[0]);
+        b = t[i];
+    }
+    else if (t[i] == 34 && q[0] == 0)
+    {
+        q[1] = get_q(q[1]);
+        b = t[i];
+    }
+    else if (t[i] == 92 && t[i + 1])
+    {
+        i++;
+        if (q[1] == 0 && q[0] == 0)
+            b = t[i];
+        else
+            b = get_spec(t[i]);
+    }
+    else if (t[i] && t[i] != 92)
+        b = t[i];
+    return (b);
+}
+
 static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 {
 	int			i;
 	int 		q[2]; /// 0 для одинарного, 1 для двойного
 	char		*buf;
 	int			j;
-	int			d;
-	char		*src;
 	int			size;
+
 	i = 0;
 	j = 0;
 	q[0] = 0;
 	q[1] = 0;
-
 	size = ft_strlen(t->data);
 	buf = ft_strnew(size);
 	while (t->data[i])
 	{
-		if (t->data[i] == 39 && q[1] == 0)
-		{
-			q[0] = (q[0] == 0) ? 1 : 0;
-			buf[j++] = t->data[i];
-		}
-		else if (t->data[i] == 34 && q[0] == 0)
-		{
-			q[1] = (q[1] == 0) ? 1 : 0;
-			buf[j++] = t->data[i];
-		}
-		else if (t->data[i] == 92 && t->data[i + 1])
-		{
-			i++;
-			if (q[1] == 0 && q[0] == 0)
-				buf[j++] = t->data[i];
-			else
-				buf[j++] = get_spec(t->data[i]);
-		}
+		if ((t->data[i] == 39 && q[1] == 0) || (t->data[i] == 34 && q[0] == 0)
+		|| (t->data[i] == 92 && t->data[i + 1]) || (t->data[i] && t->data[i] != 92))
+		    buf[j++] = get_char(q, t->data, i);
 		else if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
 			buf = insert_env_val(buf, &j, t->data, &i, env, &size);
-		else if (t->data[i] && t->data[i] != 92)
-			buf[j++] = t->data[i];
 		i++;
 	}
 	buf[j] = '\0';
-	src = ft_strdup(buf);
-	c->arr = s_to_arr(src, c);
-	free(src);
-	free(buf);
+	c->arr = s_to_arr(buf, c);
 	return (c);
 }
 
