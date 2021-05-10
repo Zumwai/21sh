@@ -147,9 +147,9 @@ int	exec_builtin(t_cmd *com, t_env **env, int fd, int num)
 	if (num == 3)
 		return (sh_exit());
 	if (num == 4)
-		return (sh_setenv(com, env, 1));
+		return (sh_setenv(com->arr, env, 1));
 	if (num == 5)
-		return (sh_unset(com, env, fd));
+		return (sh_unset(com->arr, env, fd));
 	if (num == 6)
 		return (display_id_kid_parent());
 	if (num == 7)

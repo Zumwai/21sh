@@ -12,25 +12,22 @@
 
 #include "sh.h"
 
-static void				do_unset(char *nm, t_env **env)
+static void				do_unset(char *nm, t_env *env)
 {
 	t_env			*tmp;
 	t_env			*prev;
 
-	tmp = *env;
+	tmp = env;
 	while (tmp)
 	{
-		if (ft_strcmp(nm, tmp->name) == 0)
-		{
-			set_free_null(&tmp->name);
-			set_free_null(&tmp->value);
-			if (tmp == *env)
-				env = &(*env)->next;
-			else
-				prev->next = tmp->next;
-			free(tmp);
-			break ;
-		}
+	    if (ft_strcmp(nm, tmp->name) == 0)
+	    {
+	        prev->next = tmp->next;
+            set_free_null(&tmp->name);
+            set_free_null(&tmp->value);
+            free(tmp);
+            break ;
+        }
 		prev = tmp;
 		tmp = tmp->next;
 	}
@@ -44,6 +41,6 @@ extern int				sh_unset(char **nm, t_env **env, int fd)
 	i = 1;
 	cur = *env;
 	while (nm[i] != NULL)
-		do_unset(nm[i++], env);
+		do_unset(nm[i++], cur);
 	return (1);
 }
