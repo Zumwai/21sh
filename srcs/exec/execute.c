@@ -262,7 +262,6 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 {
 	int			read;
 	int			fd[2];
-	t_cmd 		*head;
 	int		builtin;
 	int ffd;
 	int err_fd;
@@ -272,7 +271,6 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	fd[1] = 1;
 	int res;
 	res = 1;
-	head = cmd;
 	read = 0;
 	builtin = 0;
 	ffd = 1;
