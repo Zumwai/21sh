@@ -297,18 +297,20 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
                 if (ffd != 1)
                     close(ffd);
             }
-           else /* if ((builtin = check_isbuiltin(cmd->arr[0])) == 0 && get_path(cmd->arr[0], env) != NULL)*/ {
+           else
+               {
                 cmd->target = get_path(cmd->arr[0], env);
-                if (cmd->target != NULL && cmd->type == 2) {
+                if (cmd->target != NULL && cmd->type == 2)
+                {
                     pipe(fd);
                     ffd = last_check(cmd, fd[1]);
                     do_proc(read, ffd, cmd->target, cmd, env);
                     close(ffd);
                 }
-                if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0)) {
+                if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0))
                     do_proc(read, ffd, cmd->target, cmd, env);
-                }
-                if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7)) {
+                if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
+                {
                     pipe(fd);
                     ffd = last_check(cmd, ffd);
                     dup2(ffd, fd[1]);
@@ -322,13 +324,13 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
                     do_proc(read, ffd, cmd->target, cmd, env);
                 }
             }
-            if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9) {
+            if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9)
+            {
                 while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9))
                     cmd = cmd->next;
             }
-            if (cmd->type == 2) {
+            if (cmd->type == 2)
                 read = fd[0];
-            }
             cmd = cmd->next;
         }
 	if (read != 0)
