@@ -271,9 +271,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	int			fd[2];
 	int		builtin;
 	int ffd;
-	int err_fd;
 
-	err_fd = 0;
 	fd[0] = 0;
 	fd[1] = 1;
 	int res;
@@ -314,6 +312,7 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
                         ffd = last_check(cmd, fd[1]);
                         do_proc(read, ffd, cmd->target, cmd, env);
                         close(ffd);
+                        read = fd[0];
                     }
                     else if (cmd->type == 1 || cmd->type == 0)
                         do_proc(read, ffd, cmd->target, cmd, env);
@@ -337,8 +336,8 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
                 while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9))
                     cmd = cmd->next;
             }
-            if (cmd->type == 2)
-                read = fd[0];
+            /*if (cmd->type == 2)
+                read = fd[0];*/
             cmd = cmd->next;
         }
 	if (read != 0)
