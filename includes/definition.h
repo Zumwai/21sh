@@ -109,6 +109,7 @@ typedef struct			s_cmd
 	int					fd2;
 	int					r_type; // тип редиректа для редиректа
 	int					type; //
+	int ffd;
 	char				*target; // имя файла в случае редиректа
 	struct s_cmd		*next;
 	struct s_cmd		*prev;
