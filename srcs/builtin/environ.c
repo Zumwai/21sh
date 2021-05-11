@@ -35,14 +35,14 @@ int					display_env_list(char **com, t_env **ev, int scope)
 
 extern int			sh_setenv(char **cmd, t_env **env, int scope)
 {
-	int i;
+	/*int i;
 
 	i = 0;
 	while (cmd[i])
 	{
         ft_putendl("zachem etot while v sh_setenv????");
         ft_putendl(cmd[i++]);
-    }
+    }*/
 	if (cmd[1] == NULL)
 		display_env_list(cmd, env, scope);
 	else if (ft_strsplit_len(cmd) > 3)

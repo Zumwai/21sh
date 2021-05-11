@@ -34,9 +34,6 @@ static int			set_existing_env(t_env *curs,
 
 static int			set_new_env(t_env *curs, char *nm, char *value, int scope)
 {
-    ft_putstr("names === ");
-    ft_putstr(nm);
-    ft_putendl(value);
 	if (ft_strlen(nm) < NAME_MAX && ft_strlen(value) < MAX_ARG_STRLEN)
 	{
 		if (!(curs->next = (t_env *)malloc(sizeof(t_env))))
@@ -61,7 +58,6 @@ int					sh_setnew(char *nm, char *value, t_env **env, int scope)
 {
 	t_env	*curs;
 
-	ft_putendl("in sh_setnew");
 	curs = *env;
 	if (value == NULL)
 		return (1);
@@ -70,13 +66,9 @@ int					sh_setnew(char *nm, char *value, t_env **env, int scope)
 	while (curs)
 	{
 		if (ft_strcmp(nm, curs->name) == 0)
-		{
 			return (set_existing_env(curs, nm, value, scope));
-		}
 		else if (curs->next == NULL)
-		{
 			return (set_new_env(curs, nm, value, scope));
-		}
 		curs = curs->next;
 	}
 	return (0);

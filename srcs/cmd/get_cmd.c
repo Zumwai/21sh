@@ -329,11 +329,11 @@ static t_cmd			*get_data_cmd(t_token *t, t_cmd *c, t_env **env)
 	buf = ft_strnew(size);
 	while (t->data[i])
 	{
-		if ((t->data[i] == 39 && q[1] == 0) || (t->data[i] == 34 && q[0] == 0)
+       if (t->data[i] == '$' && q[0] == 0 && (t->data[i + 1] && t->data[i + 1] != ' '))
+            buf = insert_env_val(buf, &j, t->data, &i, env, &size);
+		else if ((t->data[i] == 39 && q[1] == 0) || (t->data[i] == 34 && q[0] == 0)
 		|| (t->data[i] == 92 && t->data[i + 1]) || (t->data[i] && t->data[i] != 92))
 		    buf[j++] = get_char(q, t->data, i);
-		else if (t->data[i] == '$' && q[0] == 0 && t->data[i + 1] && t->data[i + 1] != ' ')
-			buf = insert_env_val(buf, &j, t->data, &i, env, &size);
 		i++;
 	}
 	buf[j] = '\0';
