@@ -258,6 +258,13 @@ int         last_check(t_cmd * cmd, int fd)
     return (fd);
 }
 
+int         need_pipe(int p)
+{
+    if (p == 6 || p == 7 || p == 8 || p == 9 || p == 2)
+        return (1);
+    return (0);
+}
+
 int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 {
 	int			read;
@@ -298,28 +305,31 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
            else
                {
                 cmd->target = get_path(cmd->arr[0], env);
-                if (cmd->target != NULL && cmd->type == 2)
+                if (cmd->target != NULL)
                 {
-                    pipe(fd);
-                    ffd = last_check(cmd, fd[1]);
-                    do_proc(read, ffd, cmd->target, cmd, env);
-                    close(ffd);
-                }
-                if (cmd->target != NULL && (cmd->type == 1 || cmd->type == 0))
-                    do_proc(read, ffd, cmd->target, cmd, env);
-                if (cmd->target != NULL && (cmd->type == 6 || cmd->type == 7))
-                {
-                    pipe(fd);
-                    ffd = last_check(cmd, ffd);
-                    dup2(ffd, fd[1]);
-                    do_proc(read, ffd, cmd->target, cmd, env);
-                    close(ffd);
-                }
-                if (cmd->target != NULL && ((cmd->type == 8 || cmd->type == 9) || (cmd->prev->type == 8 || cmd->prev->type == 9))) {
-                    pipe(fd);
-                    read = get_fd_write(cmd);
-                    ffd = get_cmd_type(cmd, fd[1]);
-                    do_proc(read, ffd, cmd->target, cmd, env);
+                    if (need_pipe(cmd->type))
+                        pipe(fd);
+                    if (cmd->type == 2)
+                    {
+                        ffd = last_check(cmd, fd[1]);
+                        do_proc(read, ffd, cmd->target, cmd, env);
+                        close(ffd);
+                    }
+                    else if (cmd->type == 1 || cmd->type == 0)
+                        do_proc(read, ffd, cmd->target, cmd, env);
+                    else if (cmd->type == 6 || cmd->type == 7)
+                    {
+                        ffd = last_check(cmd, ffd);
+                        dup2(ffd, fd[1]);
+                        do_proc(read, ffd, cmd->target, cmd, env);
+                        close(ffd);
+                    }
+                    else if ((cmd->type == 8 || cmd->type == 9) || (cmd->prev->type == 8 || cmd->prev->type == 9))
+                    {
+                        read = get_fd_write(cmd);
+                        ffd = get_cmd_type(cmd, fd[1]);
+                        do_proc(read, ffd, cmd->target, cmd, env);
+                    }
                 }
             }
             if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9)
