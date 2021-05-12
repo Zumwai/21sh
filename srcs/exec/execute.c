@@ -280,6 +280,52 @@ int         do_do_do(t_cmd *cmd, int *fd, t_env **env, int builtin)
     return (res);
 }
 
+
+t_cmd       *mov_cmd_list(t_cmd *cmd)
+{
+    if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9)
+    {
+        while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9))
+            cmd = cmd->next;
+    }
+    return (cmd);
+}
+
+void        do_exec_do(t_cmd *cmd, int *fd, int read, t_env **env)
+{
+    if (cmd->type == 2)
+    {
+        cmd->ffd = last_check(cmd, fd[1]);
+        do_proc(read, cmd->ffd, cmd->target, cmd, env);
+        close(cmd->ffd);
+    }
+    else if (cmd->type == 1 || cmd->type == 0)
+        do_proc(read, cmd->ffd, cmd->target, cmd, env);
+    else if (cmd->type == 6 || cmd->type == 7)
+    {
+        cmd->ffd = last_check(cmd, cmd->ffd);
+        dup2(cmd->ffd, fd[1]);
+        do_proc(read, cmd->ffd, cmd->target, cmd, env);
+        close(cmd->ffd);
+    }
+    else if ((cmd->type == 8 || cmd->type == 9) || (cmd->prev->type == 8 || cmd->prev->type == 9))
+    {
+        read = get_fd_write(cmd);
+        cmd->ffd = get_cmd_type(cmd, fd[1]);
+        do_proc(read, cmd->ffd, cmd->target, cmd, env);
+    }
+}
+
+void        close_all(int *fd, int read)
+{
+    if (read != 0)
+        close(read);
+    if (fd[0] != 0)
+        close(fd[0]);
+    if (fd[1] != 1)
+        close(fd[1]);
+}
+
 int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 {
 	int			read;
@@ -302,46 +348,15 @@ int			execute(t_cmd *cmd, t_env **env, t_yank *buf)
 	        res = do_do_do(cmd, fd, env, builtin);
 	    else
 	        {
-	        cmd->target = get_path(cmd->arr[0], env);
-	        if (cmd->target != NULL)
-	        {
-	            if (cmd->type == 2)
-	            {
-	                cmd->ffd = last_check(cmd, fd[1]);
-	                do_proc(read, cmd->ffd, cmd->target, cmd, env);
-	                close(cmd->ffd);
-	            }
-	            else if (cmd->type == 1 || cmd->type == 0)
-	                do_proc(read, cmd->ffd, cmd->target, cmd, env);
-	            else if (cmd->type == 6 || cmd->type == 7)
-	            {
-	                cmd->ffd = last_check(cmd, cmd->ffd);
-	                dup2(cmd->ffd, fd[1]);
-	                do_proc(read, cmd->ffd, cmd->target, cmd, env);
-	                close(cmd->ffd);
-	            }
-	            else if ((cmd->type == 8 || cmd->type == 9) || (cmd->prev->type == 8 || cmd->prev->type == 9))
-	            {
-	                read = get_fd_write(cmd);
-	                cmd->ffd = get_cmd_type(cmd, fd[1]);
-	                do_proc(read, cmd->ffd, cmd->target, cmd, env);
-	            }
-	        }
-	        }
-            if (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9)
-            {
-                while (cmd->next && (cmd->type == 6 || cmd->type == 7 || cmd->type == 8 || cmd->type == 9))
-                    cmd = cmd->next;
-            }
-            if (cmd->type == 2)
-                read = fd[0];
-            cmd = cmd->next;
+            cmd->target = get_path(cmd->arr[0], env);
+            if (cmd->target != NULL)
+                do_exec_do(cmd, fd, read, env);
         }
-	if (read != 0)
-		close(read);
-	if (fd[0] != 0)
-		close(fd[0]);
-	if (fd[1] != 1)
-		close(fd[1]);
+	    cmd = mov_cmd_list(cmd);
+	    if (cmd->type == 2)
+	        read = fd[0];
+	    cmd = cmd->next;
+        }
+	close_all(fd, read);
 	return (res);
 }
